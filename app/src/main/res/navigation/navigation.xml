@@ -10,4 +10,24 @@
         android:name="com.aqua.hoophelper.home.HomeFragment"
         android:label="home_fragment"
         tools:layout="@layout/home_fragment" />
+    <fragment
+        android:id="@+id/chartFragment"
+        android:name="com.aqua.hoophelper.chart.ChartFragment"
+        android:label="chart_fragment"
+        tools:layout="@layout/chart_fragment" />
+    <fragment
+        android:id="@+id/matchFragment"
+        android:name="com.aqua.hoophelper.match.MatchFragment"
+        android:label="match_fragment"
+        tools:layout="@layout/match_fragment" />
+    <fragment
+        android:id="@+id/liveFragment"
+        android:name="com.aqua.hoophelper.live.LiveFragment"
+        android:label="live_fragment"
+        tools:layout="@layout/live_fragment" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.aqua.hoophelper.profile.ProfileFragment"
+        android:label="profile_fragment"
+        tools:layout="@layout/profile_fragment" />
 </navigation>
