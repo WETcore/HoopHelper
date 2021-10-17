@@ -17,9 +17,29 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment = findNavController(R.id.nav_host)
         NavigationUI.setupWithNavController(binding.bottomBar,navHostFragment)
 
+        binding.bottomBar.menu.getItem(2).isEnabled = false
+
         // nav to match
         binding.fab.setOnClickListener {
+            binding.appBar.behavior.slideDown(binding.appBar)
             navHostFragment.navigate(NavigationDirections.navToMatch())
+        }
+        
+        navHostFragment.addOnDestinationChangedListener { _, destination, _ ->
+            when(destination.id) {
+                R.id.homeFragment -> {
+                    binding.appBar.behavior.slideUp(binding.appBar)
+                }
+                R.id.chartFragment -> {
+                    binding.appBar.behavior.slideUp(binding.appBar)
+                }
+                R.id.liveFragment -> {
+                    binding.appBar.behavior.slideUp(binding.appBar)
+                }
+                R.id.profileFragment -> {
+                    binding.appBar.behavior.slideUp(binding.appBar)
+                }
+            }
         }
     }
 }

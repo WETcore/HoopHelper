@@ -8,7 +8,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".match.MatchFragment">
+    tools:context=".match.MatchFragment"
+    android:background="@color/hoop_background">
 
     <TextView
         android:id="@+id/game_clock_sec"
@@ -45,6 +46,7 @@
             android:layout_marginTop="8dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/basketball"
             tools:src="@tools:sample/avatars" />
 
         <ImageView
@@ -54,6 +56,7 @@
             android:layout_marginStart="16dp"
             app:layout_constraintBottom_toBottomOf="@+id/imageView"
             app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:srcCompat="@drawable/basketball"
             tools:src="@tools:sample/avatars" />
 
         <ImageView
@@ -63,6 +66,7 @@
             android:layout_marginStart="16dp"
             app:layout_constraintBottom_toBottomOf="@+id/imageView2"
             app:layout_constraintStart_toEndOf="@+id/imageView2"
+            app:srcCompat="@drawable/basketball"
             tools:src="@tools:sample/avatars" />
 
         <ImageView
@@ -72,6 +76,7 @@
             android:layout_marginStart="16dp"
             app:layout_constraintBottom_toBottomOf="@+id/imageView3"
             app:layout_constraintStart_toEndOf="@+id/imageView3"
+            app:srcCompat="@drawable/basketball"
             tools:src="@tools:sample/avatars" />
 
         <ImageView
@@ -81,6 +86,7 @@
             android:layout_marginStart="16dp"
             app:layout_constraintBottom_toBottomOf="@+id/imageView4"
             app:layout_constraintStart_toEndOf="@+id/imageView4"
+            app:srcCompat="@drawable/basketball"
             tools:src="@tools:sample/avatars" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -101,6 +107,24 @@
         android:textSize="48sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+
+    <Button
+        android:id="@+id/zone_1_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="168dp"
+        android:layout_marginTop="172dp"
+        android:text="Zone1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+
+    <Button
+        android:id="@+id/zone_2_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Zone2"
+        app:layout_constraintStart_toStartOf="@+id/zone_1_button"
+        app:layout_constraintTop_toBottomOf="@+id/zone_1_button" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

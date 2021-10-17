@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable/ball_icon.xml" value="0.27037037037037037" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.24114583333333334" />
         <entry key="app/src/main/res/layout/chart_fragment.xml" value="0.2484375" />
         <entry key="app/src/main/res/layout/home_fragment.xml" value="0.2625" />

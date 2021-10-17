@@ -11,6 +11,9 @@
     <color name="hoop_orange">#F44336</color>
     <color name="hoop_yellow">#FF9800</color>
     <color name="hoop_red">#C60000</color>
+    <color name="hoop_orange_light">#FF6600</color>
+    <color name="hoop_background">#FFE9A3</color>
+
 
     <color name="transparent">#00000000</color>
 
