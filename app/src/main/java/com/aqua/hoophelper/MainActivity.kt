@@ -16,5 +16,10 @@ class MainActivity : AppCompatActivity() {
         // nav host
         val navHostFragment = findNavController(R.id.nav_host)
         NavigationUI.setupWithNavController(binding.bottomBar,navHostFragment)
+
+        // nav to match
+        binding.fab.setOnClickListener {
+            navHostFragment.navigate(NavigationDirections.navToMatch())
+        }
     }
 }

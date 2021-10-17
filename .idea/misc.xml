@@ -5,10 +5,11 @@
       <map>
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.24114583333333334" />
         <entry key="app/src/main/res/layout/chart_fragment.xml" value="0.2484375" />
-        <entry key="app/src/main/res/layout/home_fragment.xml" value="0.4375" />
+        <entry key="app/src/main/res/layout/home_fragment.xml" value="0.2625" />
         <entry key="app/src/main/res/layout/live_fragment.xml" value="0.2625" />
         <entry key="app/src/main/res/layout/match_fragment.xml" value="0.2484375" />
         <entry key="app/src/main/res/layout/profile_fragment.xml" value="0.2484375" />
+        <entry key="app/src/main/res/layout/team_item.xml" value="0.2625" />
         <entry key="app/src/main/res/menu/menu.xml" value="0.2625" />
       </map>
     </option>

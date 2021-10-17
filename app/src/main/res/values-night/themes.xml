@@ -3,7 +3,7 @@
     <style name="Theme.HoopHelper" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/hoop_orange</item>
-        <item name="colorPrimaryVariant">@color/hoop_orange</item>
+        <item name="colorPrimaryVariant">@color/hoop_yellow</item>
         <item name="colorOnPrimary">@color/black</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>

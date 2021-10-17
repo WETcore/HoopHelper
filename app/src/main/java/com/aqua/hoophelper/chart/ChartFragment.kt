@@ -6,27 +6,26 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import com.aqua.hoophelper.R
+import com.aqua.hoophelper.databinding.ChartFragmentBinding
+import com.aqua.hoophelper.databinding.MatchFragmentBinding
+import com.aqua.hoophelper.match.MatchViewModel
 
 class ChartFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = ChartFragment()
+    private val viewModel: ChartViewModel by lazy {
+        ViewModelProvider(this).get(ChartViewModel::class.java)
     }
-
-    private lateinit var viewModel: ChartViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.chart_fragment, container, false)
-    }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(ChartViewModel::class.java)
-        // TODO: Use the ViewModel
+        // binding
+        val binding: ChartFragmentBinding =
+            DataBindingUtil.inflate(inflater, R.layout.chart_fragment, container,false)
+        return binding.root
     }
-
 }

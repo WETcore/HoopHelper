@@ -30,4 +30,21 @@
         android:name="com.aqua.hoophelper.profile.ProfileFragment"
         android:label="profile_fragment"
         tools:layout="@layout/profile_fragment" />
+
+<!--  action  -->
+    <action android:id="@+id/nav_to_home" app:destination="@id/homeFragment"
+        app:popUpTo="@id/homeFragment"
+        app:popUpToInclusive="true" />
+    <action android:id="@+id/nav_to_chart" app:destination="@id/chartFragment"
+        app:popUpTo="@id/chartFragment"
+        app:popUpToInclusive="true" />
+    <action android:id="@+id/nav_to_match" app:destination="@id/matchFragment"
+        app:popUpTo="@id/matchFragment"
+        app:popUpToInclusive="true" />
+    <action android:id="@+id/nav_to_live" app:destination="@id/liveFragment"
+        app:popUpTo="@id/liveFragment"
+        app:popUpToInclusive="true" />
+    <action android:id="@+id/nav_to_profile" app:destination="@id/profileFragment"
+        app:popUpTo="@id/profileFragment"
+        app:popUpToInclusive="true" />
 </navigation>

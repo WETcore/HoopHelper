@@ -6,27 +6,26 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import com.aqua.hoophelper.R
+import com.aqua.hoophelper.databinding.MatchFragmentBinding
+import com.aqua.hoophelper.databinding.ProfileFragmentBinding
+import com.aqua.hoophelper.match.MatchViewModel
 
 class ProfileFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = ProfileFragment()
+    private val viewModel: ProfileViewModel by lazy {
+        ViewModelProvider(this).get(ProfileViewModel::class.java)
     }
-
-    private lateinit var viewModel: ProfileViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.profile_fragment, container, false)
-    }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(ProfileViewModel::class.java)
-        // TODO: Use the ViewModel
+        // binding
+        val binding: ProfileFragmentBinding =
+            DataBindingUtil.inflate(inflater, R.layout.profile_fragment, container,false)
+        return binding.root
     }
-
 }
