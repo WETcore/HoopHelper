@@ -5,127 +5,191 @@
 
     </data>
 
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".match.MatchFragment"
-    android:background="@color/hoop_background">
-
-    <TextView
-        android:id="@+id/game_clock_sec"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="00"
-        android:textSize="48sp"
-        app:layout_constraintBottom_toBottomOf="@+id/textView4"
-        app:layout_constraintStart_toEndOf="@+id/textView4" />
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=":"
-        android:textSize="48sp"
-        app:layout_constraintBottom_toBottomOf="@+id/game_clock_min"
-        app:layout_constraintStart_toEndOf="@+id/game_clock_min" />
-
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:background="@color/hoop_yellow"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent"
+        android:background="@color/hoop_background"
+        tools:context=".match.MatchFragment">
 
         <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="16dp"
+            android:id="@+id/timeout_button"
+            android:layout_width="31dp"
+            android:layout_height="33dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:src="@drawable/timeout"
+            app:layout_constraintStart_toEndOf="@+id/freeThrow_chip"
+            app:layout_constraintTop_toTopOf="@+id/freeThrow_chip" />
+
+        <TextView
+            android:id="@+id/game_clock_sec"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/black"
+            android:text="00"
+            android:textColor="@color/clock_yellow"
+            android:textSize="40sp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView4"
+            app:layout_constraintStart_toEndOf="@+id/textView4" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/black"
+            android:text=":"
+            android:textColor="@color/clock_yellow"
+            android:textSize="40sp"
+            app:layout_constraintBottom_toBottomOf="@+id/game_clock_min"
+            app:layout_constraintStart_toEndOf="@+id/game_clock_min" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:background="@color/hoop_yellow"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/basketball"
-            tools:src="@tools:sample/avatars" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/basketball"
+                tools:src="@tools:sample/avatars" />
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="16dp"
+                app:layout_constraintBottom_toBottomOf="@+id/imageView"
+                app:layout_constraintStart_toEndOf="@+id/imageView"
+                app:srcCompat="@drawable/basketball"
+                tools:src="@tools:sample/avatars" />
+
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="16dp"
+                app:layout_constraintBottom_toBottomOf="@+id/imageView2"
+                app:layout_constraintStart_toEndOf="@+id/imageView2"
+                app:srcCompat="@drawable/basketball"
+                tools:src="@tools:sample/avatars" />
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="16dp"
+                app:layout_constraintBottom_toBottomOf="@+id/imageView3"
+                app:layout_constraintStart_toEndOf="@+id/imageView3"
+                app:srcCompat="@drawable/basketball"
+                tools:src="@tools:sample/avatars" />
+
+            <ImageView
+                android:id="@+id/imageView5"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="16dp"
+                app:layout_constraintBottom_toBottomOf="@+id/imageView4"
+                app:layout_constraintStart_toEndOf="@+id/imageView4"
+                app:srcCompat="@drawable/basketball"
+                tools:src="@tools:sample/avatars" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/game_clock_min"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/black"
+            android:text="12"
+            android:textColor="@color/clock_yellow"
+            android:textSize="40sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+
+        <TextView
+            android:id="@+id/shot_clock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/black"
+            android:text="24"
+            android:textColor="@color/clock_red"
+            android:textSize="40sp"
+            app:layout_constraintStart_toEndOf="@+id/game_clock_sec"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
         <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="16dp"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView"
-            app:layout_constraintStart_toEndOf="@+id/imageView"
-            app:srcCompat="@drawable/basketball"
-            tools:src="@tools:sample/avatars" />
+            android:id="@+id/court"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/basketball_court"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/game_clock_min"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <Button
+            android:id="@+id/zone_1_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="160dp"
+            android:layout_marginTop="172dp"
+            android:text="Zone1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+
+        <Button
+            android:id="@+id/zone_2_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="88dp"
+            android:text="Zone2"
+            app:layout_constraintStart_toStartOf="@+id/zone_1_button"
+            app:layout_constraintTop_toBottomOf="@+id/zone_1_button" />
 
         <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="16dp"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView2"
-            app:layout_constraintStart_toEndOf="@+id/imageView2"
-            app:srcCompat="@drawable/basketball"
-            tools:src="@tools:sample/avatars" />
+            android:id="@+id/exit_match_button"
+            android:layout_width="34dp"
+            android:layout_height="27dp"
+            android:layout_marginStart="8dp"
+            android:src="@drawable/logout"
+            app:layout_constraintStart_toEndOf="@+id/timeout_button"
+            app:layout_constraintTop_toTopOf="@+id/timeout_button" />
 
-        <ImageView
-            android:id="@+id/imageView4"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="16dp"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView3"
-            app:layout_constraintStart_toEndOf="@+id/imageView3"
-            app:srcCompat="@drawable/basketball"
-            tools:src="@tools:sample/avatars" />
+        <com.google.android.material.chip.Chip
+            android:id="@+id/pause_match_chip"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="Timeout"
+            android:textColor="@color/hoop_background"
+            app:chipBackgroundColor="@color/button"
+            app:layout_constraintStart_toEndOf="@+id/shot_clock"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
-        <ImageView
-            android:id="@+id/imageView5"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="16dp"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView4"
-            app:layout_constraintStart_toEndOf="@+id/imageView4"
-            app:srcCompat="@drawable/basketball"
-            tools:src="@tools:sample/avatars" />
+        <com.google.android.material.chip.Chip
+            android:id="@+id/freeThrow_chip"
+            style="@style/Widget.MaterialComponents.Chip.Action"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="FT"
+            android:textColor="@color/hoop_background"
+            app:chipBackgroundColor="@color/button"
+            app:chipIcon="@drawable/resource_throw"
+            app:layout_constraintStart_toEndOf="@+id/pause_match_chip"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <TextView
-        android:id="@+id/game_clock_min"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="12"
-        android:textSize="48sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
-
-    <TextView
-        android:id="@+id/shot_clock"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="24"
-        android:textSize="48sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
-
-    <Button
-        android:id="@+id/zone_1_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="168dp"
-        android:layout_marginTop="172dp"
-        android:text="Zone1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
-
-    <Button
-        android:id="@+id/zone_2_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Zone2"
-        app:layout_constraintStart_toStartOf="@+id/zone_1_button"
-        app:layout_constraintTop_toBottomOf="@+id/zone_1_button" />
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

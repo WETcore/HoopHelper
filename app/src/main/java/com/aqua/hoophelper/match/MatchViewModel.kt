@@ -5,16 +5,17 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.aqua.hoophelper.database.Event
 
 class MatchViewModel : ViewModel() {
 
     // shot clock
-    private var _shotClock = MutableLiveData<Long>(60L)
+    private var _shotClock = MutableLiveData<Long>(24L)
     val shotClock: LiveData<Long>
         get() = _shotClock
 
     // game clock
-    private var _gameClockSec = MutableLiveData<Long>()
+    private var _gameClockSec = MutableLiveData<Long>(59L)
     val gameClockSec: LiveData<Long>
         get() = _gameClockSec
 
@@ -75,9 +76,19 @@ class MatchViewModel : ViewModel() {
     val date: LiveData<String>
         get() = _date
 
-    val shotClockTimer = object : CountDownTimer(24000L, 1000L) {
+    //////////////////
+    // record
+    private var _record = MutableLiveData<Boolean?>()
+    val record: LiveData<Boolean?>
+        get() = _record
+    // event data
+    var events = Event()
+
+
+    var shotClockTimer = object : CountDownTimer(_shotClock.value!! * 1000L, 1000L) {
         override fun onTick(millisUntilFinished: Long) {
-            _shotClock.value = millisUntilFinished/1000L
+//                        Log.d("clock","timer ${_shotClock.value}")
+            _shotClock.value = _shotClock.value?.minus(1L) //millisUntilFinished/1000L
         }
 
         override fun onFinish() {
@@ -86,22 +97,36 @@ class MatchViewModel : ViewModel() {
 
     }
 
-    val gameClockSecTimer = object : CountDownTimer(59000L, 1000L) {
+    val gameClockSecTimer = object : CountDownTimer(_gameClockSec.value!! * 1000L, 1000L) {
         override fun onTick(millisUntilFinished: Long) {
-            _gameClockSec.value = millisUntilFinished/1000L
+            _gameClockSec.value = _gameClockSec.value?.minus(1L) //millisUntilFinished/1000L
         }
 
         override fun onFinish() {
             //TODO("Not yet implemented")
         }
 
+    }
+
+    fun resetTime() {
+        _shotClock.value = 24L
+//        _gameClockSec =
     }
 
     fun setGameClockMin(sec: Long) {
-        Log.d("clock","${sec}")
         if (sec == 0L) {
             _gameClockMin.value = _gameClockMin.value?.minus(1L)
         }
+    }
+
+    fun setScoreData(zone: Int) {
+        events.zone = mutableMapOf()
+        _record.value = true
+        events.zone.put(zone, record.value)
+    }
+
+    fun setFTData() {
+        _record.value = true
     }
 
 }

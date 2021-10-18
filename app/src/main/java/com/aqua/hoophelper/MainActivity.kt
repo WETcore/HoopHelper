@@ -2,6 +2,7 @@ package com.aqua.hoophelper
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.aqua.hoophelper.databinding.ActivityMainBinding
@@ -17,14 +18,15 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment = findNavController(R.id.nav_host)
         NavigationUI.setupWithNavController(binding.bottomBar,navHostFragment)
 
-        binding.bottomBar.menu.getItem(2).isEnabled = false
+        binding.bottomBar.menu.getItem(2).isCheckable = false
+//        binding.bottomBar.menu.getItem(2).isVisible = false
 
         // nav to match
         binding.fab.setOnClickListener {
             binding.appBar.behavior.slideDown(binding.appBar)
             navHostFragment.navigate(NavigationDirections.navToMatch())
         }
-        
+
         navHostFragment.addOnDestinationChangedListener { _, destination, _ ->
             when(destination.id) {
                 R.id.homeFragment -> {

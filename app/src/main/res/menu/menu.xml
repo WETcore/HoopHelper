@@ -9,7 +9,7 @@
         android:icon="@drawable/bar_chart"
         android:title="Chart"/>
     <item
-        android:id="@+id/placeholder"
+        android:id="@+id/matchFragment"
         android:title=""/>
     <item
         android:id="@+id/liveFragment"

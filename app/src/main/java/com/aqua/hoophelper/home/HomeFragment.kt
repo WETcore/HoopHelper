@@ -2,6 +2,7 @@ package com.aqua.hoophelper.home
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.transition.TransitionManager
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -30,6 +31,11 @@ class HomeFragment : Fragment() {
         // spinner
         val teamAdapter = ArrayAdapter(requireContext(), R.layout.team_item, viewModel.teamList)
         binding.teamText.setAdapter(teamAdapter)
+
+        // expand card view
+        binding.scoreLeaderCard.setOnClickListener {
+            TransitionManager.beginDelayedTransition(binding.scoreLeaderCard)
+        }
 
         return binding.root
     }
