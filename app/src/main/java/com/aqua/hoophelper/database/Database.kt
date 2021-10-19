@@ -24,12 +24,12 @@ data class Match(
     var currentGameClock: String = "",
     var currentShotClock: String = "",
     var currentQuarter: String = "",
-    var RemainingTimeout: String = "",
+    var RemainingTimeout: Int = 0,
     )
 
 
 data class Event(
-    var playerId: String = "-1",
+    var playerPos: String = "-1",
     var matchTimeMin: String = "",
     var matchTimeSec: String = "",
     var score: MutableMap<Int, Boolean> = mutableMapOf(),
@@ -41,4 +41,4 @@ data class Event(
     var foul: Boolean = false,
     var freeThrow: Boolean = false,
 
-)
+    )

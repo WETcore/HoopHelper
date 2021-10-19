@@ -2,6 +2,7 @@ package com.aqua.hoophelper.match
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,11 +10,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
 import com.aqua.hoophelper.NavigationDirections
 import com.aqua.hoophelper.R
 import com.aqua.hoophelper.databinding.MatchFragmentBinding
-import com.google.firebase.firestore.FirebaseFirestore
 
 enum class DataType {
     REBOUND, ASSIST, STEAL, BLOCK, TURNOVER, FOUL, FREETHROW
@@ -35,24 +36,42 @@ class MatchFragment : Fragment() {
         val binding: MatchFragmentBinding =
             DataBindingUtil.inflate(inflater, R.layout.match_fragment, container,false)
 
+
+
         // set shot clock
         viewModel.shotClockTimer.start()
         viewModel.shotClock.observe(viewLifecycleOwner) {
             binding.shotClock.text = it.toString()
+            if (it == 0L) {
+                viewModel._shotClock.value = 24L
+            }
         }
 
         // set game clock
-        viewModel.setGameClockMin(binding.gameClockSec.text.toString().toLong())
         viewModel.gameClockSecTimer.start()
         viewModel.gameClockSec.observe(viewLifecycleOwner) {
             binding.gameClockSec.text = it.toString()
-            viewModel.gameClockSec.value?.let { sec -> viewModel.setGameClockMin(sec) }
+            viewModel.setGameClockMin(viewModel.gameClockSec.value!!)
+            if (it == 0L) {
+                viewModel._gameClockSec.value = 60L
+            }
         }
-
         viewModel.gameClockMin.observe(viewLifecycleOwner) {
             binding.gameClockMin.text = it.toString()
+            if (it == 0L) {
+                viewModel._quarter.value = viewModel._quarter.value?.plus(1)
+                viewModel._gameClockMin.value = 12L
+            }
         }
-
+        viewModel.quarter.observe(viewLifecycleOwner) {
+            if (it == 5) {
+                findNavController().navigate(NavigationDirections.navToHome())
+                viewModel.shotClockTimer.cancel()
+                viewModel.gameClockSecTimer.cancel()
+                Toast.makeText(requireContext(),"Game over.",Toast.LENGTH_SHORT).show()
+            }
+            binding.quarter.text = it.toString()
+        }
         // set pause
         binding.pauseMatchChip.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
@@ -64,11 +83,6 @@ class MatchFragment : Fragment() {
             }
             binding.shotClock.text = viewModel.shotClock.value.toString()
             binding.gameClockSec.text = viewModel.gameClockSec.value.toString()
-        }
-        
-        // count free throw
-        binding.freeThrowChip.setOnClickListener {
-
         }
 
         // set exit match
@@ -92,12 +106,12 @@ class MatchFragment : Fragment() {
         // score
         binding.zone1Button.setOnClickListener {
             viewModel.selectZone(1)
-            Log.d("zone1","zone1 ${viewModel.events}")
+            Log.d("zone1","zone1 ${viewModel.event}")
         }
 
         binding.zone2Button.setOnClickListener {
             viewModel.selectZone(2)
-            Log.d("zone2","zone2 ${viewModel.events}")
+            Log.d("zone2","zone2 ${viewModel.event}")
         }
 
 
@@ -112,12 +126,11 @@ class MatchFragment : Fragment() {
                     buttonView.isChecked = false
                 }
             } else {
-                viewModel.db.collection("Events").add(viewModel.events)
-                Log.d("record","${viewModel.events}")
+                viewModel.db.collection("Events").add(viewModel.event)
+                Log.d("record","${viewModel.event}")
                 binding.chipGroup.visibility = View.GONE
             }
         }
-
 
         binding.chipGroup.setOnCheckedChangeListener { group, checkedId ->
             when(checkedId) {

@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.aqua.hoophelper.database.Event
+import com.aqua.hoophelper.database.Match
 import com.google.firebase.firestore.FirebaseFirestore
 
 class MatchViewModel : ViewModel() {
@@ -14,18 +15,23 @@ class MatchViewModel : ViewModel() {
     val db = FirebaseFirestore.getInstance()
 
     // shot clock
-    private var _shotClock = MutableLiveData<Long>(24L)
+     var _shotClock = MutableLiveData<Long>(24L)
     val shotClock: LiveData<Long>
         get() = _shotClock
 
     // game clock
-    private var _gameClockSec = MutableLiveData<Long>(59L)
+     var _gameClockSec = MutableLiveData<Long>(60L)
     val gameClockSec: LiveData<Long>
         get() = _gameClockSec
 
-    private var _gameClockMin = MutableLiveData<Long>(12L)
+     var _gameClockMin = MutableLiveData<Long>(12L)
     val gameClockMin: LiveData<Long>
         get() = _gameClockMin
+
+    // quarter
+     var _quarter = MutableLiveData<Int>(1)
+    val quarter: LiveData<Int>
+        get() = _quarter
 
     // date
     private var _date = MutableLiveData<String>()
@@ -35,39 +41,40 @@ class MatchViewModel : ViewModel() {
     //////////////////
     var player = -1
     var zone = -1
+
     // record
     private var _record = MutableLiveData<Boolean>()
     val record: LiveData<Boolean>
         get() = _record
-    // event data
-    var events = Event()
+
+    // database
+    var event = Event()
+    var match = Match()
 
 
-    var shotClockTimer = object : CountDownTimer(_shotClock.value!! * 1000L, 1000L) {
+
+
+    val shotClockTimer = object : CountDownTimer(Long.MAX_VALUE, 10L) {
         override fun onTick(millisUntilFinished: Long) {
-//                        Log.d("clock","timer ${_shotClock.value}")
-            _shotClock.value = _shotClock.value?.minus(1L) //millisUntilFinished/1000L
+            if (_shotClock.value!! == 0L) {} else {
+                _shotClock.value = _shotClock.value?.minus(1L)
+                Log.d("clock","${shotClock.value}")
+            }
         }
-
-        override fun onFinish() {
-            //TODO("Not yet implemented")
-        }
-
+        override fun onFinish() {}
     }
 
-    val gameClockSecTimer = object : CountDownTimer(_gameClockSec.value!! * 1000L, 1000L) {
+    val gameClockSecTimer = object : CountDownTimer(Long.MAX_VALUE, 10L) {
         override fun onTick(millisUntilFinished: Long) {
-            _gameClockSec.value = _gameClockSec.value?.minus(1L) //millisUntilFinished/1000L
+            if (_gameClockSec.value!! == 0L) {} else {
+                _gameClockSec.value = _gameClockSec.value?.minus(1L)
+            }
         }
-
-        override fun onFinish() {
-            //TODO("Not yet implemented")
-        }
-
+        override fun onFinish() {}
     }
 
     fun setGameClockMin(sec: Long) {
-        if (sec == 0L) {
+        if ( sec >= 60) {
             _gameClockMin.value = _gameClockMin.value?.minus(1L)
         }
     }
@@ -82,52 +89,52 @@ class MatchViewModel : ViewModel() {
 
     fun setScoreData(selectedPlayer: Int, selectedZone: Int, timerMin: String, timerSec: String) {
         resetData()
-        events.matchTimeMin = timerMin
-        events.matchTimeSec = timerSec
+        event.matchTimeMin = timerMin
+        event.matchTimeSec = timerSec
         _record.value = true
-        events.playerId = selectedPlayer.toString()
-        record.value?.let { events.score.put(selectedZone, it) }
+        event.playerPos = selectedPlayer.toString()
+        record.value?.let { event.score.put(selectedZone, it) }
     }
 
     private fun resetData() {
-        events.score = mutableMapOf()
+        event.score = mutableMapOf()
         false.let {
-            events.rebound = it
-            events.assist = it
-            events.steal = it
-            events.block = it
-            events.turnover = it
-            events.foul = it
+            event.rebound = it
+            event.assist = it
+            event.steal = it
+            event.block = it
+            event.turnover = it
+            event.foul = it
         }
     }
 
     fun setStatData(selectedPlayer: Int, type: DataType, timerMin: String, timerSec: String) {
         resetData()
-        events.playerId = selectedPlayer.toString()
-        events.matchTimeMin = timerMin
-        events.matchTimeSec = timerSec
+        event.playerPos = selectedPlayer.toString()
+        event.matchTimeMin = timerMin
+        event.matchTimeSec = timerSec
         _record.value = true
         when(type) {
             DataType.REBOUND -> {
-                events.rebound = _record.value!!
+                event.rebound = _record.value!!
             }
             DataType.ASSIST -> {
-                events.assist = _record.value!!
+                event.assist = _record.value!!
             }
             DataType.STEAL -> {
-                events.steal = _record.value!!
+                event.steal = _record.value!!
             }
             DataType.BLOCK -> {
-                events.block = _record.value!!
+                event.block = _record.value!!
             }
             DataType.TURNOVER -> {
-                events.turnover = _record.value!!
+                event.turnover = _record.value!!
             }
             DataType.FOUL -> {
-                events.foul = _record.value!!
+                event.foul = _record.value!!
             }
             DataType.FREETHROW -> {
-                events.freeThrow = _record.value!!
+                event.freeThrow = _record.value!!
             }
         }
     }
