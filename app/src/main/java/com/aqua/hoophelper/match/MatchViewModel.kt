@@ -43,7 +43,7 @@ class MatchViewModel : ViewModel() {
     var zone = -1
 
     // record
-    private var _record = MutableLiveData<Boolean>()
+    private var _record = MutableLiveData<Boolean>(false)
     val record: LiveData<Boolean>
         get() = _record
 
@@ -92,8 +92,8 @@ class MatchViewModel : ViewModel() {
         event.matchTimeMin = timerMin
         event.matchTimeSec = timerSec
         _record.value = true
-        event.playerPos = selectedPlayer.toString()
-        record.value?.let { event.score.put(selectedZone, it) }
+        event.playerNum = selectedPlayer.toString()
+        event.score[selectedZone.toString()] = _record.value!!
     }
 
     private fun resetData() {
@@ -110,7 +110,7 @@ class MatchViewModel : ViewModel() {
 
     fun setStatData(selectedPlayer: Int, type: DataType, timerMin: String, timerSec: String) {
         resetData()
-        event.playerPos = selectedPlayer.toString()
+        event.playerNum = selectedPlayer.toString()
         event.matchTimeMin = timerMin
         event.matchTimeSec = timerSec
         _record.value = true
