@@ -6,8 +6,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.aqua.hoophelper.database.Event
+import com.google.firebase.firestore.FirebaseFirestore
 
 class MatchViewModel : ViewModel() {
+
+    // Firebase
+    val db = FirebaseFirestore.getInstance()
 
     // shot clock
     private var _shotClock = MutableLiveData<Long>(24L)
@@ -23,63 +27,13 @@ class MatchViewModel : ViewModel() {
     val gameClockMin: LiveData<Long>
         get() = _gameClockMin
 
-    // score
-    private var _twoPt = MutableLiveData<String>()
-    val twoPt: LiveData<String>
-        get() = _twoPt
-    private var _twoPtM = MutableLiveData<String>()
-    val twoPtM: LiveData<String>
-        get() = _twoPtM
-    private var _threePt = MutableLiveData<String>()
-    val threePt: LiveData<String>
-        get() = _threePt
-    private var _threePtM = MutableLiveData<String>()
-    val threePtM: LiveData<String>
-        get() = _threePtM
-    // rebound
-    private var _rebound = MutableLiveData<String>()
-    val rebound: LiveData<String>
-        get() = _rebound
-    // assist
-    private var _assist = MutableLiveData<String>()
-    val assist: LiveData<String>
-        get() = _assist
-    // steal
-    private var _steal = MutableLiveData<String>()
-    val steal: LiveData<String>
-        get() = _steal
-    // block
-    private var _block = MutableLiveData<String>()
-    val block: LiveData<String>
-        get() = _block
-    // turnover
-    private var _turnover = MutableLiveData<String>()
-    val turnover: LiveData<String>
-        get() = _turnover
-    // foul
-    private var _foul = MutableLiveData<String>()
-    val foul: LiveData<String>
-        get() = _foul
-    // freeThrow
-    private var _freeThrow = MutableLiveData<String>()
-    val freeThrow: LiveData<String>
-        get() = _freeThrow
-    private var _freeThrowM = MutableLiveData<String>()
-    val freeThrowM: LiveData<String>
-        get() = _freeThrowM
-    // onCourtTime
-    private var _onCourtTime = MutableLiveData<String>()
-    val onCourtTime: LiveData<String>
-        get() = _onCourtTime
     // date
     private var _date = MutableLiveData<String>()
     val date: LiveData<String>
         get() = _date
 
     //////////////////
-    //    private var _zone = MutableLiveData<Int>()
-//    val zone: LiveData<Int>
-//        get() = _zone
+    var player = -1
     var zone = -1
     // record
     private var _record = MutableLiveData<Boolean>()
@@ -118,17 +72,25 @@ class MatchViewModel : ViewModel() {
         }
     }
 
-    fun setScoreData(selectedZone: Int) {
-        events.score = mutableMapOf()
-        _record.value = true
-        record.value?.let { events.score.put(selectedZone, it) }
+    fun selectPlayer(selectedPlayer: Int) {
+        player = selectedPlayer
     }
 
     fun selectZone(selectedZone: Int) {
         zone = selectedZone
     }
 
-    fun resetData() {
+    fun setScoreData(selectedPlayer: Int, selectedZone: Int, timerMin: String, timerSec: String) {
+        resetData()
+        events.matchTimeMin = timerMin
+        events.matchTimeSec = timerSec
+        _record.value = true
+        events.playerId = selectedPlayer.toString()
+        record.value?.let { events.score.put(selectedZone, it) }
+    }
+
+    private fun resetData() {
+        events.score = mutableMapOf()
         false.let {
             events.rebound = it
             events.assist = it
@@ -139,8 +101,11 @@ class MatchViewModel : ViewModel() {
         }
     }
 
-    fun setStatData(type: DataType) {
+    fun setStatData(selectedPlayer: Int, type: DataType, timerMin: String, timerSec: String) {
         resetData()
+        events.playerId = selectedPlayer.toString()
+        events.matchTimeMin = timerMin
+        events.matchTimeSec = timerSec
         _record.value = true
         when(type) {
             DataType.REBOUND -> {

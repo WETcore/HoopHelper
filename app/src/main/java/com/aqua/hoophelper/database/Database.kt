@@ -29,8 +29,9 @@ data class Match(
 
 
 data class Event(
-    var playerId: String = "",
-    var time: String = "",
+    var playerId: String = "-1",
+    var matchTimeMin: String = "",
+    var matchTimeSec: String = "",
     var score: MutableMap<Int, Boolean> = mutableMapOf(),
     var rebound: Boolean = false,
     var assist: Boolean = false,

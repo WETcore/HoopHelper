@@ -3,6 +3,7 @@ package com.aqua.hoophelper
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.aqua.hoophelper.databinding.ActivityMainBinding
@@ -23,22 +24,27 @@ class MainActivity : AppCompatActivity() {
 
         // nav to match
         binding.fab.setOnClickListener {
-            binding.appBar.behavior.slideDown(binding.appBar)
             navHostFragment.navigate(NavigationDirections.navToMatch())
+            binding.toolbar.visibility = View.GONE
+            binding.appBar.behavior.slideDown(binding.appBar)
         }
 
         navHostFragment.addOnDestinationChangedListener { _, destination, _ ->
             when(destination.id) {
                 R.id.homeFragment -> {
+                    binding.toolbar.visibility = View.VISIBLE
                     binding.appBar.behavior.slideUp(binding.appBar)
                 }
                 R.id.chartFragment -> {
+                    binding.toolbar.visibility = View.VISIBLE
                     binding.appBar.behavior.slideUp(binding.appBar)
                 }
                 R.id.liveFragment -> {
+                    binding.toolbar.visibility = View.VISIBLE
                     binding.appBar.behavior.slideUp(binding.appBar)
                 }
                 R.id.profileFragment -> {
+                    binding.toolbar.visibility = View.VISIBLE
                     binding.appBar.behavior.slideUp(binding.appBar)
                 }
             }

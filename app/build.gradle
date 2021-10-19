@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-parcelize'
     id 'kotlin-kapt'
     id 'androidx.navigation.safeargs.kotlin'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -126,5 +127,13 @@ dependencies {
 
     //fab
     implementation 'com.github.clans:fab:1.6.4'
+
+    ///////////////////////// Firebase
+    implementation platform('com.google.firebase:firebase-bom:28.4.1')
+    implementation 'com.google.firebase:firebase-analytics-ktx:19.0.1'
+    implementation 'com.google.firebase:firebase-messaging-ktx:22.0.0'
+    implementation 'com.google.firebase:firebase-firestore-ktx:23.0.3'
+    implementation 'com.google.firebase:firebase-core:19.0.1'
+    implementation 'com.google.firebase:firebase-messaging-directboot:22.0.0'
 
 }

@@ -11,16 +11,6 @@
         android:background="@color/hoop_background"
         tools:context=".match.MatchFragment">
 
-        <ImageView
-            android:id="@+id/timeout_button"
-            android:layout_width="31dp"
-            android:layout_height="33dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:src="@drawable/timeout"
-            app:layout_constraintStart_toEndOf="@+id/freeThrow_chip"
-            app:layout_constraintTop_toTopOf="@+id/freeThrow_chip" />
-
         <TextView
             android:id="@+id/game_clock_sec"
             android:layout_width="wrap_content"
@@ -46,62 +36,57 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
-            android:layout_height="70dp"
+            android:layout_height="wrap_content"
             android:background="@color/hoop_yellow"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
-                android:id="@+id/player1_image"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/player_chip_group"
+                style="@style/Widget.MaterialComponents.ChipGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:chipSpacing="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/basketball"
-                tools:src="@tools:sample/avatars" />
+                app:selectionRequired="true"
+                app:singleLine="false"
+                app:singleSelection="true">
 
-            <ImageView
-                android:id="@+id/player2_image"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginStart="16dp"
-                app:layout_constraintBottom_toBottomOf="@+id/player1_image"
-                app:layout_constraintStart_toEndOf="@+id/player1_image"
-                app:srcCompat="@drawable/basketball"
-                tools:src="@tools:sample/avatars" />
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/player1_chip"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-            <ImageView
-                android:id="@+id/player3_image"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginStart="16dp"
-                app:layout_constraintBottom_toBottomOf="@+id/player2_image"
-                app:layout_constraintStart_toEndOf="@+id/player2_image"
-                app:srcCompat="@drawable/basketball"
-                tools:src="@tools:sample/avatars" />
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/player2_chip"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-            <ImageView
-                android:id="@+id/player4_image"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginStart="16dp"
-                app:layout_constraintBottom_toBottomOf="@+id/player3_image"
-                app:layout_constraintStart_toEndOf="@+id/player3_image"
-                app:srcCompat="@drawable/basketball"
-                tools:src="@tools:sample/avatars" />
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/player3_chip"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-            <ImageView
-                android:id="@+id/player5_image"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginStart="16dp"
-                app:layout_constraintBottom_toBottomOf="@+id/player4_image"
-                app:layout_constraintStart_toEndOf="@+id/player4_image"
-                app:srcCompat="@drawable/basketball"
-                tools:src="@tools:sample/avatars" />
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/player4_chip"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/player5_chip"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </com.google.android.material.chip.ChipGroup>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
@@ -119,6 +104,7 @@
             android:id="@+id/shot_clock"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:background="@color/hoop_background"
             android:text="24"
             android:textColor="@color/clock_red"
@@ -160,10 +146,11 @@
             android:id="@+id/exit_match_button"
             android:layout_width="34dp"
             android:layout_height="27dp"
-            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
             android:src="@drawable/logout"
-            app:layout_constraintStart_toEndOf="@+id/timeout_button"
-            app:layout_constraintTop_toTopOf="@+id/timeout_button" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/pause_match_chip"
@@ -175,19 +162,6 @@
             android:textColor="@color/hoop_background"
             app:chipBackgroundColor="@color/button"
             app:layout_constraintStart_toEndOf="@+id/shot_clock"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/freeThrow_chip"
-            style="@style/Widget.MaterialComponents.Chip.Action"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="FT"
-            android:textColor="@color/hoop_background"
-            app:chipBackgroundColor="@color/button"
-            app:chipIcon="@drawable/resource_throw"
-            app:layout_constraintStart_toEndOf="@+id/pause_match_chip"
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
         <com.google.android.material.chip.Chip
