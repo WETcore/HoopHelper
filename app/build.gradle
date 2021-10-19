@@ -124,4 +124,7 @@ dependencies {
     //okhttp
     implementation 'com.squareup.okhttp3:okhttp:4.9.1'
 
+    //fab
+    implementation 'com.github.clans:fab:1.6.4'
+
 }

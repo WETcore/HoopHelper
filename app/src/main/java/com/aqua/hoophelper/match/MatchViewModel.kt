@@ -77,9 +77,13 @@ class MatchViewModel : ViewModel() {
         get() = _date
 
     //////////////////
+    //    private var _zone = MutableLiveData<Int>()
+//    val zone: LiveData<Int>
+//        get() = _zone
+    var zone = -1
     // record
-    private var _record = MutableLiveData<Boolean?>()
-    val record: LiveData<Boolean?>
+    private var _record = MutableLiveData<Boolean>()
+    val record: LiveData<Boolean>
         get() = _record
     // event data
     var events = Event()
@@ -108,25 +112,58 @@ class MatchViewModel : ViewModel() {
 
     }
 
-    fun resetTime() {
-        _shotClock.value = 24L
-//        _gameClockSec =
-    }
-
     fun setGameClockMin(sec: Long) {
         if (sec == 0L) {
             _gameClockMin.value = _gameClockMin.value?.minus(1L)
         }
     }
 
-    fun setScoreData(zone: Int) {
-        events.zone = mutableMapOf()
+    fun setScoreData(selectedZone: Int) {
+        events.score = mutableMapOf()
         _record.value = true
-        events.zone.put(zone, record.value)
+        record.value?.let { events.score.put(selectedZone, it) }
     }
 
-    fun setFTData() {
-        _record.value = true
+    fun selectZone(selectedZone: Int) {
+        zone = selectedZone
     }
 
+    fun resetData() {
+        false.let {
+            events.rebound = it
+            events.assist = it
+            events.steal = it
+            events.block = it
+            events.turnover = it
+            events.foul = it
+        }
+    }
+
+    fun setStatData(type: DataType) {
+        resetData()
+        _record.value = true
+        when(type) {
+            DataType.REBOUND -> {
+                events.rebound = _record.value!!
+            }
+            DataType.ASSIST -> {
+                events.assist = _record.value!!
+            }
+            DataType.STEAL -> {
+                events.steal = _record.value!!
+            }
+            DataType.BLOCK -> {
+                events.block = _record.value!!
+            }
+            DataType.TURNOVER -> {
+                events.turnover = _record.value!!
+            }
+            DataType.FOUL -> {
+                events.foul = _record.value!!
+            }
+            DataType.FREETHROW -> {
+                events.freeThrow = _record.value!!
+            }
+        }
+    }
 }

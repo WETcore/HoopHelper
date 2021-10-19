@@ -25,7 +25,7 @@
             android:id="@+id/game_clock_sec"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/black"
+            android:background="@color/hoop_orange_light"
             android:text="00"
             android:textColor="@color/clock_yellow"
             android:textSize="40sp"
@@ -36,7 +36,7 @@
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/black"
+            android:background="@color/hoop_orange_light"
             android:text=":"
             android:textColor="@color/clock_yellow"
             android:textSize="40sp"
@@ -53,7 +53,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/player1_image"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="16dp"
@@ -64,42 +64,42 @@
                 tools:src="@tools:sample/avatars" />
 
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/player2_image"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="16dp"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView"
-                app:layout_constraintStart_toEndOf="@+id/imageView"
+                app:layout_constraintBottom_toBottomOf="@+id/player1_image"
+                app:layout_constraintStart_toEndOf="@+id/player1_image"
                 app:srcCompat="@drawable/basketball"
                 tools:src="@tools:sample/avatars" />
 
             <ImageView
-                android:id="@+id/imageView3"
+                android:id="@+id/player3_image"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="16dp"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView2"
-                app:layout_constraintStart_toEndOf="@+id/imageView2"
+                app:layout_constraintBottom_toBottomOf="@+id/player2_image"
+                app:layout_constraintStart_toEndOf="@+id/player2_image"
                 app:srcCompat="@drawable/basketball"
                 tools:src="@tools:sample/avatars" />
 
             <ImageView
-                android:id="@+id/imageView4"
+                android:id="@+id/player4_image"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="16dp"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView3"
-                app:layout_constraintStart_toEndOf="@+id/imageView3"
+                app:layout_constraintBottom_toBottomOf="@+id/player3_image"
+                app:layout_constraintStart_toEndOf="@+id/player3_image"
                 app:srcCompat="@drawable/basketball"
                 tools:src="@tools:sample/avatars" />
 
             <ImageView
-                android:id="@+id/imageView5"
+                android:id="@+id/player5_image"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="16dp"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView4"
-                app:layout_constraintStart_toEndOf="@+id/imageView4"
+                app:layout_constraintBottom_toBottomOf="@+id/player4_image"
+                app:layout_constraintStart_toEndOf="@+id/player4_image"
                 app:srcCompat="@drawable/basketball"
                 tools:src="@tools:sample/avatars" />
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -108,7 +108,7 @@
             android:id="@+id/game_clock_min"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/black"
+            android:background="@color/hoop_orange_light"
             android:text="12"
             android:textColor="@color/clock_yellow"
             android:textSize="40sp"
@@ -119,7 +119,7 @@
             android:id="@+id/shot_clock"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/black"
+            android:background="@color/hoop_background"
             android:text="24"
             android:textColor="@color/clock_red"
             android:textSize="40sp"
@@ -130,7 +130,7 @@
             android:id="@+id/court"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/basketball_court"
+            android:background="@drawable/basketball_court"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -151,7 +151,7 @@
             android:id="@+id/zone_2_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="88dp"
+            android:layout_marginTop="164dp"
             android:text="Zone2"
             app:layout_constraintStart_toStartOf="@+id/zone_1_button"
             app:layout_constraintTop_toBottomOf="@+id/zone_1_button" />
@@ -160,7 +160,7 @@
             android:id="@+id/exit_match_button"
             android:layout_width="34dp"
             android:layout_height="27dp"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="16dp"
             android:src="@drawable/logout"
             app:layout_constraintStart_toEndOf="@+id/timeout_button"
             app:layout_constraintTop_toTopOf="@+id/timeout_button" />
@@ -190,6 +190,79 @@
             app:layout_constraintStart_toEndOf="@+id/pause_match_chip"
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
+        <com.google.android.material.chip.Chip
+            android:id="@+id/launch_chip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chip_group"
+            android:layout_width="300dp"
+            android:layout_height="100dp"
+            style="@style/Widget.MaterialComponents.ChipGroup"
+            app:chipSpacing="0dp"
+            app:singleLine="false"
+            app:singleSelection="true"
+            app:selectionRequired="true"
+            android:visibility="gone"
+            tools:visibility="visible"
+            app:layout_constraintBottom_toTopOf="@+id/launch_chip"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/score_chip"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:text="S"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/rebound_chip"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:text="Reb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/assist_chip"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:text="Ast"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <com.google.android.material.chip.Chip
+                android:id="@+id/steal_chip"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:text="Stl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <com.google.android.material.chip.Chip
+                android:id="@+id/block_chip"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:text="Blk"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <com.google.android.material.chip.Chip
+                android:id="@+id/turnover_chip"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:text="TO"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <com.google.android.material.chip.Chip
+                android:id="@+id/foul_chip"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:text="F"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <com.google.android.material.chip.Chip
+                android:id="@+id/free_throw_chip"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:text="FT"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </com.google.android.material.chip.ChipGroup>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

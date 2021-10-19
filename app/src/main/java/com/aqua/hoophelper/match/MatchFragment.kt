@@ -2,20 +2,21 @@ package com.aqua.hoophelper.match
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.os.CountDownTimer
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
 import com.aqua.hoophelper.NavigationDirections
 import com.aqua.hoophelper.R
-import com.aqua.hoophelper.database.Event
-import com.aqua.hoophelper.databinding.HomeFragmentBinding
 import com.aqua.hoophelper.databinding.MatchFragmentBinding
-import com.aqua.hoophelper.home.HomeViewModel
+
+enum class DataType {
+    REBOUND, ASSIST, STEAL, BLOCK, TURNOVER, FOUL, FREETHROW
+}
 
 class MatchFragment : Fragment() {
 
@@ -77,19 +78,75 @@ class MatchFragment : Fragment() {
         }
 
 
-        // record data
+        /// record data
+        // score
         binding.zone1Button.setOnClickListener {
-            viewModel.setScoreData(1)
-            Log.d("record","zone1 ${viewModel.events.zone}")
+            viewModel.selectZone(1)
+            Log.d("zone1","zone1 ${viewModel.events}")
         }
 
         binding.zone2Button.setOnClickListener {
-            viewModel.setScoreData(2)
-            Log.d("record","zone2 ${viewModel.events.zone}")
+            viewModel.selectZone(2)
+            Log.d("zone2","zone2 ${viewModel.events}")
+        }
+
+
+
+
+        binding.launchChip.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                binding.chipGroup.visibility = View.VISIBLE
+            } else {
+                Log.d("record","score ${viewModel.events}")
+                binding.chipGroup.visibility = View.GONE
+            }
+        }
+
+        binding.chipGroup.setOnCheckedChangeListener { group, checkedId ->
+            when(checkedId) {
+                R.id.score_chip -> {
+                    if (viewModel.zone != -1) {
+                        viewModel.setScoreData(viewModel.zone)
+                        viewModel.selectZone(-1)
+                    } else {
+                        Toast.makeText(requireContext(),"Selected Zone first.",Toast.LENGTH_SHORT).show()
+                    }
+                    group.clearCheck()
+                }
+                R.id.rebound_chip -> {
+                    viewModel.setStatData(DataType.REBOUND)
+                    group.clearCheck()
+                }
+                R.id.assist_chip -> {
+                    viewModel.setStatData(DataType.ASSIST)
+                    group.clearCheck()
+                }
+                R.id.steal_chip -> {
+                    viewModel.setStatData(DataType.STEAL)
+                    group.clearCheck()
+                }
+                R.id.block_chip -> {
+                    viewModel.setStatData(DataType.BLOCK)
+                    group.clearCheck()
+                }
+                R.id.turnover_chip -> {
+                    viewModel.setStatData(DataType.TURNOVER)
+                    group.clearCheck()
+                }
+                R.id.foul_chip -> {
+                    viewModel.setStatData(DataType.FOUL)
+                    group.clearCheck()
+                }
+                R.id.free_throw_chip -> {
+                    viewModel.setStatData(DataType.FREETHROW)
+                    group.clearCheck()
+                }
+            }
+            binding.launchChip.isChecked = false
+
         }
 
         return binding.root
     }
-
 
 }
