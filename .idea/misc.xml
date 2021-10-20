@@ -3,9 +3,15 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable-v24/zone_elbow.xml" value="0.2791666666666667" />
         <entry key="app/src/main/res/drawable/ball_icon.xml" value="0.27037037037037037" />
         <entry key="app/src/main/res/drawable/button_selector.xml" value="0.4212962962962963" />
+        <entry key="app/src/main/res/drawable/test.xml" value="0.2635416666666667" />
         <entry key="app/src/main/res/drawable/text_selector.xml" value="0.4212962962962963" />
+        <entry key="app/src/main/res/drawable/zone_baseline.xml" value="0.2791666666666667" />
+        <entry key="app/src/main/res/drawable/zone_corner.xml" value="0.2791666666666667" />
+        <entry key="app/src/main/res/drawable/zone_elbow.xml" value="0.2791666666666667" />
+        <entry key="app/src/main/res/drawable/zone_rim.xml" value="0.2791666666666667" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.24114583333333334" />
         <entry key="app/src/main/res/layout/chart_fragment.xml" value="0.2484375" />
         <entry key="app/src/main/res/layout/home_fragment.xml" value="0.2625" />

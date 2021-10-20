@@ -136,4 +136,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:19.0.1'
     implementation 'com.google.firebase:firebase-messaging-directboot:22.0.0'
 
+    //custom shape view
+    implementation 'com.yxf:clippathlayout:1.0.4'
+    implementation 'io.github.florent37:shapeofview:1.4.7'
+
 }

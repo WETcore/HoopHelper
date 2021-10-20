@@ -58,7 +58,6 @@ class MatchViewModel : ViewModel() {
         override fun onTick(millisUntilFinished: Long) {
             if (_shotClock.value!! == 0L) {} else {
                 _shotClock.value = _shotClock.value?.minus(1L)
-                Log.d("clock","${shotClock.value}")
             }
         }
         override fun onFinish() {}
@@ -108,11 +107,11 @@ class MatchViewModel : ViewModel() {
         }
     }
 
-    fun setStatData(selectedPlayer: Int, type: DataType, timerMin: String, timerSec: String) {
+    fun setStatData(selectedPlayer: Int, type: DataType, timerMin: Long?, timerSec: Long?) {
         resetData()
         event.playerNum = selectedPlayer.toString()
-        event.matchTimeMin = timerMin
-        event.matchTimeSec = timerSec
+        event.matchTimeMin = timerMin.toString()
+        event.matchTimeSec = timerSec.toString()
         _record.value = true
         when(type) {
             DataType.REBOUND -> {

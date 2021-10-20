@@ -1,20 +1,22 @@
 package com.aqua.hoophelper.match
 
+import android.os.Build
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
 import com.aqua.hoophelper.NavigationDirections
 import com.aqua.hoophelper.R
 import com.aqua.hoophelper.databinding.MatchFragmentBinding
+import com.yxf.clippathlayout.PathInfo
+import com.yxf.clippathlayout.pathgenerator.CirclePathGenerator
 
 enum class DataType {
     REBOUND, ASSIST, STEAL, BLOCK, TURNOVER, FOUL, FREETHROW
@@ -27,6 +29,7 @@ class MatchFragment : Fragment() {
         ViewModelProvider(this).get(MatchViewModel::class.java)
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -35,7 +38,6 @@ class MatchFragment : Fragment() {
         // binding
         val binding: MatchFragmentBinding =
             DataBindingUtil.inflate(inflater, R.layout.match_fragment, container,false)
-
 
 
         // set shot clock
@@ -106,7 +108,7 @@ class MatchFragment : Fragment() {
         // score
         binding.zone1Button.setOnClickListener {
             viewModel.selectZone(1)
-            Log.d("zone1","zone1 ${viewModel.event}")
+            Log.d("zone1","zone1 ${binding.launchChip.x} ${binding.launchChip.y} ${binding.chipGroup.x}")
         }
 
         binding.zone2Button.setOnClickListener {
@@ -116,21 +118,58 @@ class MatchFragment : Fragment() {
 
 
 
-
+        //開啟子選單
         binding.launchChip.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
-                if (viewModel.player != -1) {
-                    binding.chipGroup.visibility = View.VISIBLE
-                } else {
-                    Toast.makeText(requireContext(),"Selected Player first.",Toast.LENGTH_SHORT).show()
-                    buttonView.isChecked = false
-                }
+                binding.chipGroup.visibility = View.VISIBLE
             } else {
-                viewModel.db.collection("Events").add(viewModel.event)
-                Log.d("record","${viewModel.event}")
                 binding.chipGroup.visibility = View.GONE
             }
         }
+
+        // 拖曳
+        binding.launchChip.setOnLongClickListener {
+            // 震動
+            it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
+            if (viewModel.player != -1) {
+                // 拖曳
+                val shadow = View.DragShadowBuilder(it)
+                it.startDragAndDrop(null, shadow, it,0)
+                true
+            } else {
+                Toast.makeText(requireContext(),"Selected Player first.",Toast.LENGTH_SHORT).show()
+                false
+            }
+        }
+        binding.root.setOnDragListener{ v, event ->
+            when(event.action) {
+                DragEvent.ACTION_DROP -> {
+
+                    binding.chipGroup.x = event.x - binding.bufferChip.x
+                    binding.chipGroup.y = event.y - binding.bufferChip.y
+                    binding.launchChip.x = event.x
+                    binding.launchChip.y = event.y
+                }
+            }
+            true
+        }
+
+
+//        binding.launchChip.setOnCheckedChangeListener { buttonView, isChecked ->
+//            if (isChecked) {
+//                if (viewModel.player != -1) {
+//                    binding.chipGroup.visibility = View.VISIBLE
+//                } else {
+//                    Toast.makeText(requireContext(),"Selected Player first.",Toast.LENGTH_SHORT).show()
+//                    buttonView.isChecked = false
+//                }
+//            } else {
+//                viewModel.db.collection("Events").add(viewModel.event)
+//                Log.d("record","${viewModel.event}")
+//                binding.chipGroup.visibility = View.GONE
+//            }
+//        }
+
 
         binding.chipGroup.setOnCheckedChangeListener { group, checkedId ->
             when(checkedId) {
@@ -146,42 +185,41 @@ class MatchFragment : Fragment() {
                 }
                 R.id.rebound_chip -> {
                     viewModel.setStatData(viewModel.player, DataType.REBOUND,
-                        viewModel.gameClockMin.value.toString(), viewModel.gameClockSec.value.toString())
+                        viewModel.gameClockMin.value, viewModel.gameClockSec.value)
                     group.clearCheck()
                 }
                 R.id.assist_chip -> {
                     viewModel.setStatData(viewModel.player, DataType.ASSIST,
-                        viewModel.gameClockMin.value.toString(), viewModel.gameClockSec.value.toString())
+                        viewModel.gameClockMin.value, viewModel.gameClockSec.value)
                     group.clearCheck()
                 }
                 R.id.steal_chip -> {
                     viewModel.setStatData(viewModel.player, DataType.STEAL,
-                        viewModel.gameClockMin.value.toString(), viewModel.gameClockSec.value.toString())
+                        viewModel.gameClockMin.value, viewModel.gameClockSec.value)
                     group.clearCheck()
                 }
                 R.id.block_chip -> {
                     viewModel.setStatData(viewModel.player, DataType.BLOCK,
-                        viewModel.gameClockMin.value.toString(), viewModel.gameClockSec.value.toString())
+                        viewModel.gameClockMin.value, viewModel.gameClockSec.value)
                     group.clearCheck()
                 }
                 R.id.turnover_chip -> {
                     viewModel.setStatData(viewModel.player, DataType.TURNOVER,
-                        viewModel.gameClockMin.value.toString(), viewModel.gameClockSec.value.toString())
+                        viewModel.gameClockMin.value, viewModel.gameClockSec.value)
                     group.clearCheck()
                 }
                 R.id.foul_chip -> {
                     viewModel.setStatData(viewModel.player, DataType.FOUL,
-                        viewModel.gameClockMin.value.toString(), viewModel.gameClockSec.value.toString())
+                        viewModel.gameClockMin.value, viewModel.gameClockSec.value)
                     group.clearCheck()
                 }
                 R.id.free_throw_chip -> {
                     viewModel.setStatData(viewModel.player, DataType.FREETHROW,
-                        viewModel.gameClockMin.value.toString(), viewModel.gameClockSec.value.toString())
+                        viewModel.gameClockMin.value, viewModel.gameClockSec.value)
                     group.clearCheck()
                 }
             }
             binding.launchChip.isChecked = false
-
         }
 
         return binding.root

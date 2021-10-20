@@ -116,12 +116,12 @@
             android:id="@+id/quarter_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             android:background="@color/hoop_background"
             android:text="Qtr"
             android:textColor="@color/hoop_orange"
             android:textSize="20sp"
-            app:layout_constraintStart_toEndOf="@+id/shot_clock"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/shot_clock" />
 
         <TextView
@@ -135,17 +135,6 @@
             android:textSize="40sp"
             app:layout_constraintStart_toEndOf="@+id/quarter_label"
             app:layout_constraintTop_toTopOf="@+id/quarter_label" />
-
-        <ImageView
-            android:id="@+id/court"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/basketball_court"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/game_clock_min"
-            app:layout_constraintVertical_bias="0.0" />
 
         <Button
             android:id="@+id/zone_1_button"
@@ -174,37 +163,31 @@
             android:layout_marginEnd="8dp"
             android:src="@drawable/logout"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+            app:layout_constraintTop_toTopOf="@+id/pause_match_chip" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/pause_match_chip"
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="50dp"
             android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
             android:text="Timeout"
             android:textColor="@color/hoop_background"
             app:chipBackgroundColor="@color/button"
-            app:layout_constraintStart_toEndOf="@+id/quarter"
+            app:layout_constraintEnd_toStartOf="@+id/exit_match_button"
             app:layout_constraintTop_toTopOf="@+id/quarter" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/launch_chip"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
 
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/chip_group"
             style="@style/Widget.MaterialComponents.ChipGroup"
-            android:layout_width="300dp"
-            android:layout_height="100dp"
+            android:layout_width="163dp"
+            android:layout_height="148dp"
+            android:layout_marginStart="124dp"
+            android:layout_marginBottom="60dp"
             android:visibility="gone"
             app:chipSpacing="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/launch_chip"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:selectionRequired="true"
             app:singleLine="false"
@@ -240,6 +223,13 @@
                 android:text="Stl" />
 
             <com.google.android.material.chip.Chip
+                android:id="@+id/buffer_chip"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="" />
+
+            <com.google.android.material.chip.Chip
                 android:id="@+id/block_chip"
                 style="@style/Widget.MaterialComponents.Chip.Choice"
                 android:layout_width="wrap_content"
@@ -268,6 +258,22 @@
                 android:text="FT" />
 
         </com.google.android.material.chip.ChipGroup>
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/launch_chip"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="180dp"
+            android:layout_marginBottom="112dp"
+            android:backgroundTint="@color/hoop_red"
+            app:chipStartPadding="9dp"
+            app:chipEndPadding="9dp"
+            app:chipStrokeColor="@color/hoop_yellow"
+            app:chipStrokeWidth="3dp"
+            android:text=""
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
