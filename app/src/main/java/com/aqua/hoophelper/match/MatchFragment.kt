@@ -155,7 +155,7 @@ class MatchFragment : Fragment() {
             when(event.action) {
                 DragEvent.ACTION_DROP -> {
                     Log.d("pos","${viewModel.getDiameter(event.x,event.y,displayMetrics.widthPixels,displayMetrics.heightPixels).toInt()} ${event.x.toInt()} ${event.y.toInt()}")
-                    viewModel.getChipPos(event.x, event.y, displayMetrics.widthPixels, displayMetrics.heightPixels)
+//                    viewModel.getChipPos(event.x, event.y, displayMetrics.widthPixels, displayMetrics.heightPixels)
                     binding.chipGroup.x = event.x - binding.bufferChip.x - 60
                     binding.chipGroup.y = event.y - binding.bufferChip.y - 60
                     binding.launchChip.x = (event.x - 60)

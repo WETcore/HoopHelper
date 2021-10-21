@@ -157,51 +157,65 @@ class MatchViewModel : ViewModel() {
 
         if (y/h < 0.585 && y/h > 0.175) {
             if (dm < (w * 0.083)) {
+                selectZone(1)
                 Log.d("dia","in zone 1")
             }
             else if (dm < (w * 0.153)) {
                 if (slope < tan((80.0 * PI)/180) && slope > tan((0.0 * PI)/180)) {
+                    selectZone(4)
                     Log.d("dia","in zone 2-1 ${atan(slope)/PI*180}")
                 }
                 else if (slope > tan((80.0 * PI)/180) || slope < tan((-80.0 * PI)/180)) {
+                    selectZone(3)
                     Log.d("dia","in zone 2-2 ${atan(slope)/PI*180}")
                 }
                 else {
+                    selectZone(2)
                     Log.d("dia","in zone 2-3 ${atan(slope)/PI*180}")
                 }
             }
             else if (dm < (w * 0.241) && x < (0.9 * w) && x > (0.09 * w)) {
                 if(slope < tan((65.0 * PI)/180) && slope > tan((0.0 * PI)/180) && (x/w) < 0.9) {
+                    selectZone(5)
                     Log.d("dia","in zone 3-1 ${atan(slope)/PI*180}")
                 }
                 else if (slope < tan((80.0 * PI)/180) && slope > tan((65.0 * PI)/180)) {
+                    selectZone(9)
                     Log.d("dia","in zone 3-2 ${atan(slope)/PI*180}")
                 }
                 else if (slope > tan((80.0 * PI)/180) || slope < tan((-80.0 * PI)/180)) {
+                    selectZone(8)
                     Log.d("dia","in zone 3-3 ${atan(slope)/PI*180}")
                 }
                 else if (slope > tan((-80.0 * PI)/180) && slope < tan((-65.0 * PI)/180)) {
+                    selectZone(7)
                     Log.d("dia","in zone 3-4 ${atan(slope)/PI*180}")
                 }
                 else if (slope > tan((-65.0 * PI)/180) && (x/w) > 0.09) {
+                    selectZone(6)
                     Log.d("dia","in zone 3-5 ${atan(slope)/PI*180}")
                 }
                 else Log.d("dia","${x} ${w} ${atan(slope)/PI*180} in zone 3 error")
             }
             else if (x > (0.9 * w) && y <= h * 0.342) {
+                selectZone(14)
                 Log.d("dia","in zone 4-1 ${x}")
             }
             else if (x < (0.09 * w) && y <= h * 0.342) {
+                selectZone(10)
                 Log.d("dia","in zone 4-5 ${x}")
             }
             else if(dm > (w * 0.241)) {
                 if (slope < tan((80.0 * PI)/180) && slope > tan((0.0 * PI)/180)) {
+                    selectZone(13)
                     Log.d("dia","in zone 4-2 ${atan(slope)/PI*180}")
                 }
                 else if (slope > tan((80.0 * PI)/180) || slope < tan((-80.0 * PI)/180)) {
+                    selectZone(12)
                     Log.d("dia","in zone 4-3 ${atan(slope)/PI*180}")
                 }
                 else if (slope > tan((-80.0 * PI)/180) && slope < tan((0.0 * PI)/180)) {
+                    selectZone(11)
                     Log.d("dia","in zone 4-4 ${atan(slope)/PI*180}")
                 }
             }
