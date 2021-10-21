@@ -29,7 +29,6 @@ class ProfileFragment : Fragment() {
         ViewModelProvider(this).get(ProfileViewModel::class.java)
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

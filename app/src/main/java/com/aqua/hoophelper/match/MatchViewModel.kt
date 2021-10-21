@@ -8,6 +8,8 @@ import androidx.lifecycle.ViewModel
 import com.aqua.hoophelper.database.Event
 import com.aqua.hoophelper.database.Match
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlin.math.pow
+import kotlin.math.sqrt
 
 class MatchViewModel : ViewModel() {
 
@@ -40,7 +42,11 @@ class MatchViewModel : ViewModel() {
 
     //////////////////
     var player = -1
-    var zone = -1
+
+    // zone
+    private var _zone = MutableLiveData<String>()
+    val zone: LiveData<String>
+        get() = _zone
 
     // record
     private var _record = MutableLiveData<Boolean>(false)
@@ -83,7 +89,7 @@ class MatchViewModel : ViewModel() {
     }
 
     fun selectZone(selectedZone: Int) {
-        zone = selectedZone
+        _zone.value = selectedZone.toString()
     }
 
     fun setScoreData(selectedPlayer: Int, selectedZone: Int, timerMin: String, timerSec: String) {
@@ -136,5 +142,25 @@ class MatchViewModel : ViewModel() {
                 event.freeThrow = _record.value!!
             }
         }
+    }
+
+    fun getChipPos(x: Float, y: Float, w: Int, h: Int) {
+        if (x > w/2) {
+            selectZone(2)
+        } else {
+            selectZone(1)
+        }
+    }
+
+    fun getDiameter(x: Float, y: Float, w: Int, h: Int): Double {
+        var dm = sqrt((x-(w*0.5)).pow(2) + (y-(h*0.22)).pow(2))/2
+        if (dm < (w * 0.083)) {
+            Log.d("dia","in zone 1")
+        } else if (dm < (w * 0.153)) {
+            Log.d("dia","in zone 2")
+        } else if (dm < (w * 0.241)) {
+            Log.d("dia","in zone 3")
+        }
+        return dm
     }
 }

@@ -1,9 +1,11 @@
 package com.aqua.hoophelper.match
 
+import android.app.Application
 import android.os.Build
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
@@ -29,7 +31,6 @@ class MatchFragment : Fragment() {
         ViewModelProvider(this).get(MatchViewModel::class.java)
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -116,6 +117,10 @@ class MatchFragment : Fragment() {
             Log.d("zone2","zone2 ${viewModel.event}")
         }
 
+        // 改變launch顯示文字
+        viewModel.zone.observe(viewLifecycleOwner) {
+            binding.launchChip.text = it
+        }
 
 
         //開啟子選單
@@ -123,6 +128,7 @@ class MatchFragment : Fragment() {
             if (isChecked) {
                 binding.chipGroup.visibility = View.VISIBLE
             } else {
+                Log.d("record","${viewModel.event}")
                 binding.chipGroup.visibility = View.GONE
             }
         }
@@ -141,41 +147,29 @@ class MatchFragment : Fragment() {
                 false
             }
         }
+        // 獲取螢幕解析度
+        val displayMetrics = DisplayMetrics()
+        requireActivity().display?.getRealMetrics(displayMetrics)
+        // 拖曳
         binding.root.setOnDragListener{ v, event ->
             when(event.action) {
                 DragEvent.ACTION_DROP -> {
-
-                    binding.chipGroup.x = event.x - binding.bufferChip.x
-                    binding.chipGroup.y = event.y - binding.bufferChip.y
-                    binding.launchChip.x = event.x
-                    binding.launchChip.y = event.y
+                    Log.d("pos","${viewModel.getDiameter(event.x,event.y,displayMetrics.widthPixels,displayMetrics.heightPixels).toInt()} ${event.x.toInt()} ${event.y.toInt()}")
+                    viewModel.getChipPos(event.x, event.y, displayMetrics.widthPixels, displayMetrics.heightPixels)
+                    binding.chipGroup.x = event.x - binding.bufferChip.x - 60
+                    binding.chipGroup.y = event.y - binding.bufferChip.y - 60
+                    binding.launchChip.x = (event.x - 60)
+                    binding.launchChip.y = (event.y - 60)
                 }
             }
             true
         }
 
-
-//        binding.launchChip.setOnCheckedChangeListener { buttonView, isChecked ->
-//            if (isChecked) {
-//                if (viewModel.player != -1) {
-//                    binding.chipGroup.visibility = View.VISIBLE
-//                } else {
-//                    Toast.makeText(requireContext(),"Selected Player first.",Toast.LENGTH_SHORT).show()
-//                    buttonView.isChecked = false
-//                }
-//            } else {
-//                viewModel.db.collection("Events").add(viewModel.event)
-//                Log.d("record","${viewModel.event}")
-//                binding.chipGroup.visibility = View.GONE
-//            }
-//        }
-
-
         binding.chipGroup.setOnCheckedChangeListener { group, checkedId ->
             when(checkedId) {
                 R.id.score_chip -> {
-                    if (viewModel.zone != -1) {
-                        viewModel.setScoreData(viewModel.player, viewModel.zone,
+                    if (viewModel.zone.value?.toInt() != -1) {
+                        viewModel.setScoreData(viewModel.player, viewModel.zone.value!!.toInt(),
                             viewModel.gameClockMin.value.toString(), viewModel.gameClockSec.value.toString())
                         viewModel.selectZone(-1)
                     } else {
