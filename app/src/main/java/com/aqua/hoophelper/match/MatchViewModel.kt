@@ -8,8 +8,7 @@ import androidx.lifecycle.ViewModel
 import com.aqua.hoophelper.database.Event
 import com.aqua.hoophelper.database.Match
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlin.math.pow
-import kotlin.math.sqrt
+import kotlin.math.*
 
 class MatchViewModel : ViewModel() {
 
@@ -17,21 +16,21 @@ class MatchViewModel : ViewModel() {
     val db = FirebaseFirestore.getInstance()
 
     // shot clock
-     var _shotClock = MutableLiveData<Long>(24L)
+    var _shotClock = MutableLiveData<Long>(24L)
     val shotClock: LiveData<Long>
         get() = _shotClock
 
     // game clock
-     var _gameClockSec = MutableLiveData<Long>(60L)
+    var _gameClockSec = MutableLiveData<Long>(60L)
     val gameClockSec: LiveData<Long>
         get() = _gameClockSec
 
-     var _gameClockMin = MutableLiveData<Long>(12L)
+    var _gameClockMin = MutableLiveData<Long>(12L)
     val gameClockMin: LiveData<Long>
         get() = _gameClockMin
 
     // quarter
-     var _quarter = MutableLiveData<Int>(1)
+    var _quarter = MutableLiveData<Int>(1)
     val quarter: LiveData<Int>
         get() = _quarter
 
@@ -154,13 +153,24 @@ class MatchViewModel : ViewModel() {
 
     fun getDiameter(x: Float, y: Float, w: Int, h: Int): Double {
         var dm = sqrt((x-(w*0.5)).pow(2) + (y-(h*0.22)).pow(2))/2
+        var slope = y/(x-(w/2))
         if (dm < (w * 0.083)) {
             Log.d("dia","in zone 1")
-        } else if (dm < (w * 0.153)) {
-            Log.d("dia","in zone 2")
-        } else if (dm < (w * 0.241)) {
-            Log.d("dia","in zone 3")
         }
+        else if (dm < (w * 0.153)) {
+            if (slope < tan((80.0 * PI)/180) && slope > tan((0.0 * PI)/180)) {
+                Log.d("dia","in zone 2-1 ${atan(slope)/PI*180}")
+            }
+            else if (slope > tan((80.0 * PI)/180) || slope < tan((-80.0 * PI)/180)) {
+                Log.d("dia","in zone 2-2 ${atan(slope)/PI*180}")
+            }
+            else {
+                Log.d("dia","in zone 2-3 ${atan(slope)/PI*180}")
+            }
+        }
+        else if (dm < (w * 0.241)) {
+            Log.d("dia","in zone 3 ${atan(slope)/PI*180}")
+        } else Log.d("dia","in zone 4 ${atan(slope)/PI*180}")
         return dm
     }
 }
