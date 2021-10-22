@@ -29,7 +29,7 @@ data class Match(
 
 
 data class Event(
-    var playerNum: String = "-1",
+    var playerNum: String = "0",
     var matchTimeMin: String = "",
     var matchTimeSec: String = "",
     var score: MutableMap<String, Boolean> = mutableMapOf(),

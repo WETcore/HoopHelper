@@ -98,7 +98,6 @@ class MatchFragment : Fragment() {
             findNavController().navigate(NavigationDirections.navToHome())
         }
 
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // select player
         binding.playerChipGroup.setOnCheckedChangeListener { group, checkedId ->
             when(checkedId) {
@@ -189,7 +188,10 @@ class MatchFragment : Fragment() {
             when(event.action) {
                 DragEvent.ACTION_DROP -> {
                     Log.d("pos","${event.x.toInt()} ${event.y.toInt()}")
-                    viewModel.getDiameter(event.x,event.y,displayMetrics.widthPixels,displayMetrics.heightPixels)
+                    if (viewModel.getDiameter(event.x,event.y,displayMetrics.widthPixels,displayMetrics.heightPixels)) {
+                        binding.launchChip.isCheckable = false
+                        Toast.makeText(requireContext(),"請將小紅點移至球場",Toast.LENGTH_SHORT).show()
+                    } else binding.launchChip.isCheckable = true
                     binding.chipGroup.x = event.x - binding.bufferChip.x - 60
                     binding.chipGroup.y = event.y - binding.bufferChip.y - 60
                     binding.launchChip.x = (event.x - 60)
@@ -202,48 +204,40 @@ class MatchFragment : Fragment() {
         binding.chipGroup.setOnCheckedChangeListener { group, checkedId ->
             when(checkedId) {
                 R.id.score_chip -> {
-                    if (viewModel.zone.value?.toInt() != -1) {
-                        viewModel.setScoreData(viewModel.player, viewModel.zone.value!!.toInt(),
-                            viewModel.gameClockMin.value.toString(), viewModel.gameClockSec.value.toString())
-                        viewModel.selectZone(-1)
+                    if (viewModel.zone.value?.toInt() != 0) {
+                        viewModel.setScoreData()
+                        viewModel.selectZone(0)
                     } else {
                         Toast.makeText(requireContext(),"Selected Zone first.",Toast.LENGTH_SHORT).show()
                     }
                     group.clearCheck()
                 }
                 R.id.rebound_chip -> {
-                    viewModel.setStatData(viewModel.player, DataType.REBOUND,
-                        viewModel.gameClockMin.value, viewModel.gameClockSec.value)
+                    viewModel.setStatData(DataType.REBOUND)
                     group.clearCheck()
                 }
                 R.id.assist_chip -> {
-                    viewModel.setStatData(viewModel.player, DataType.ASSIST,
-                        viewModel.gameClockMin.value, viewModel.gameClockSec.value)
+                    viewModel.setStatData(DataType.ASSIST)
                     group.clearCheck()
                 }
                 R.id.steal_chip -> {
-                    viewModel.setStatData(viewModel.player, DataType.STEAL,
-                        viewModel.gameClockMin.value, viewModel.gameClockSec.value)
+                    viewModel.setStatData(DataType.STEAL)
                     group.clearCheck()
                 }
                 R.id.block_chip -> {
-                    viewModel.setStatData(viewModel.player, DataType.BLOCK,
-                        viewModel.gameClockMin.value, viewModel.gameClockSec.value)
+                    viewModel.setStatData(DataType.BLOCK)
                     group.clearCheck()
                 }
                 R.id.turnover_chip -> {
-                    viewModel.setStatData(viewModel.player, DataType.TURNOVER,
-                        viewModel.gameClockMin.value, viewModel.gameClockSec.value)
+                    viewModel.setStatData(DataType.TURNOVER)
                     group.clearCheck()
                 }
                 R.id.foul_chip -> {
-                    viewModel.setStatData(viewModel.player, DataType.FOUL,
-                        viewModel.gameClockMin.value, viewModel.gameClockSec.value)
+                    viewModel.setStatData(DataType.FOUL)
                     group.clearCheck()
                 }
                 R.id.free_throw_chip -> {
-                    viewModel.setStatData(viewModel.player, DataType.FREETHROW,
-                        viewModel.gameClockMin.value, viewModel.gameClockSec.value)
+                    viewModel.setStatData(DataType.FREETHROW)
                     group.clearCheck()
                 }
             }

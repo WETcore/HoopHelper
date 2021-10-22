@@ -119,13 +119,13 @@ class MatchViewModel : ViewModel() {
         _zone.value = selectedZone.toString()
     }
 
-    fun setScoreData(selectedPlayer: String, selectedZone: Int, timerMin: String, timerSec: String) {
+    fun setScoreData() {
         resetData()
-        event.matchTimeMin = timerMin
-        event.matchTimeSec = timerSec
+        event.matchTimeMin = gameClockMin.value.toString()
+        event.matchTimeSec = gameClockSec.value.toString()
         _record.value = true
-        event.playerNum = selectedPlayer
-        event.score[selectedZone.toString()] = _record.value!!
+        event.playerNum = player
+        event.score[zone.toString()] = _record.value!!
     }
 
     private fun resetData() {
@@ -140,11 +140,11 @@ class MatchViewModel : ViewModel() {
         }
     }
 
-    fun setStatData(selectedPlayer: String, type: DataType, timerMin: Long?, timerSec: Long?) {
+    fun setStatData(type: DataType) {
         resetData()
-        event.playerNum = selectedPlayer
-        event.matchTimeMin = timerMin.toString()
-        event.matchTimeSec = timerSec.toString()
+        event.playerNum = player
+        event.matchTimeMin = gameClockMin.value.toString()
+        event.matchTimeSec = gameClockSec.value.toString()
         _record.value = true
         when(type) {
             DataType.REBOUND -> {
@@ -171,7 +171,7 @@ class MatchViewModel : ViewModel() {
         }
     }
 
-    fun getDiameter(x: Float, y: Float, w: Int, h: Int) {
+    fun getDiameter(x: Float, y: Float, w: Int, h: Int): Boolean {
 //        Log.d("dia","x: $x y: $y  x/w ${x/w} ${y/h}")
         var dm = sqrt((x-(w*0.5)).pow(2) + (y-(h*0.24)).pow(2))/2
         var slope = y/(x-(w/2))
@@ -226,8 +226,9 @@ class MatchViewModel : ViewModel() {
                     selectZone(11)
                 }
             }
+            return false
         }
-        else Log.d("dia","請將小紅點移至球場") // TODO Toast
+        else return true// Log.d("dia","請將小紅點移至球場") // TODO Toast
     }
 
     fun getSubPlayer(subPlayer: String) {
