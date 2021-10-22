@@ -40,7 +40,35 @@ class MatchViewModel : ViewModel() {
         get() = _date
 
     //////////////////
-    var player = -1
+    // player 當下選擇的球員
+    var player = ""
+
+    // selectPlayerPos 紀錄按那個 chip
+    var selectPlayerPos = 0
+
+    // player pos 先發
+    var _playerNum = MutableLiveData<MutableList<String>>(
+        mutableListOf<String>(
+            "01",
+            "02",
+            "03",
+            "04",
+            "05",
+        )
+    )
+    val playerNum: LiveData<MutableList<String>>
+        get() = _playerNum
+
+    // substitutionPlayer 替補
+    private var _substitutionPlayer = MutableLiveData<MutableList<String>>(mutableListOf<String>(
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+    ))
+    val substitutionPlayer: LiveData<MutableList<String>>
+        get() = _substitutionPlayer
 
     // zone
     private var _zone = MutableLiveData<String>()
@@ -55,8 +83,6 @@ class MatchViewModel : ViewModel() {
     // database
     var event = Event()
     var match = Match()
-
-
 
 
     val shotClockTimer = object : CountDownTimer(Long.MAX_VALUE, 10L) {
@@ -83,20 +109,22 @@ class MatchViewModel : ViewModel() {
         }
     }
 
-    fun selectPlayer(selectedPlayer: Int) {
-        player = selectedPlayer
+    fun selectPlayer(pos: Int): String {
+        selectPlayerPos = pos
+        player = _playerNum.value!![pos]
+        return playerNum.value!![pos]
     }
 
     fun selectZone(selectedZone: Int) {
         _zone.value = selectedZone.toString()
     }
 
-    fun setScoreData(selectedPlayer: Int, selectedZone: Int, timerMin: String, timerSec: String) {
+    fun setScoreData(selectedPlayer: String, selectedZone: Int, timerMin: String, timerSec: String) {
         resetData()
         event.matchTimeMin = timerMin
         event.matchTimeSec = timerSec
         _record.value = true
-        event.playerNum = selectedPlayer.toString()
+        event.playerNum = selectedPlayer
         event.score[selectedZone.toString()] = _record.value!!
     }
 
@@ -112,9 +140,9 @@ class MatchViewModel : ViewModel() {
         }
     }
 
-    fun setStatData(selectedPlayer: Int, type: DataType, timerMin: Long?, timerSec: Long?) {
+    fun setStatData(selectedPlayer: String, type: DataType, timerMin: Long?, timerSec: Long?) {
         resetData()
-        event.playerNum = selectedPlayer.toString()
+        event.playerNum = selectedPlayer
         event.matchTimeMin = timerMin.toString()
         event.matchTimeSec = timerSec.toString()
         _record.value = true
@@ -143,7 +171,7 @@ class MatchViewModel : ViewModel() {
         }
     }
 
-    fun getDiameter(x: Float, y: Float, w: Int, h: Int): Double {
+    fun getDiameter(x: Float, y: Float, w: Int, h: Int) {
 //        Log.d("dia","x: $x y: $y  x/w ${x/w} ${y/h}")
         var dm = sqrt((x-(w*0.5)).pow(2) + (y-(h*0.24)).pow(2))/2
         var slope = y/(x-(w/2))
@@ -200,6 +228,17 @@ class MatchViewModel : ViewModel() {
             }
         }
         else Log.d("dia","請將小紅點移至球場") // TODO Toast
-        return dm
     }
+
+    fun getSubPlayer(player: String) {
+        _playerNum.value!![selectPlayerPos] = player
+        _playerNum.value = _playerNum.value
+    }
+
+    fun changeSubPlayer(onCourtPlayer: String, spinnerPos: Int) {
+        _substitutionPlayer.value!![spinnerPos] = onCourtPlayer
+        _substitutionPlayer.value = _substitutionPlayer.value
+        Log.d("poss","sub ${spinnerPos} ${_substitutionPlayer.value}")
+    }
+
 }

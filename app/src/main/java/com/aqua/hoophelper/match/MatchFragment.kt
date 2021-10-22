@@ -8,15 +8,18 @@ import android.os.CountDownTimer
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.*
+import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.view.get
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
 import com.aqua.hoophelper.NavigationDirections
 import com.aqua.hoophelper.R
 import com.aqua.hoophelper.databinding.MatchFragmentBinding
+import com.google.android.material.chip.Chip
 import com.yxf.clippathlayout.PathInfo
 import com.yxf.clippathlayout.pathgenerator.CirclePathGenerator
 
@@ -95,16 +98,47 @@ class MatchFragment : Fragment() {
             findNavController().navigate(NavigationDirections.navToHome())
         }
 
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // select player
         binding.playerChipGroup.setOnCheckedChangeListener { group, checkedId ->
             when(checkedId) {
-                R.id.player1_chip -> viewModel.selectPlayer(1)
-                R.id.player2_chip -> viewModel.selectPlayer(2)
-                R.id.player3_chip -> viewModel.selectPlayer(3)
-                R.id.player4_chip -> viewModel.selectPlayer(4)
-                R.id.player5_chip -> viewModel.selectPlayer(5)
+                R.id.player1_chip -> {
+                    viewModel.selectPlayer(0)
+                }
+                R.id.player2_chip -> {
+                    viewModel.selectPlayer(1)
+                }
+                R.id.player3_chip -> {
+                    viewModel.selectPlayer(2)
+                }
+                R.id.player4_chip -> {
+                    viewModel.selectPlayer(3)
+                }
+                R.id.player5_chip -> {
+                    viewModel.selectPlayer(4)
+                }
             }
         }
+        // select sub player
+        var teamAdapter = ArrayAdapter(requireContext(), R.layout.team_item, viewModel.substitutionPlayer.value!!)
+        binding.subPlayerText.setAdapter(teamAdapter)
+
+        binding.subPlayerText.setOnItemClickListener { parent, view, position, id ->
+            var buffer = viewModel.playerNum.value!![viewModel.selectPlayerPos]
+            viewModel.getSubPlayer(parent.getItemAtPosition(position).toString())
+            viewModel.changeSubPlayer(buffer, position)
+            Log.d("poss","${viewModel.selectPlayerPos} ${parent.getItemAtPosition(position)}")
+        }
+
+        viewModel.playerNum.observe(viewLifecycleOwner) {
+            Log.d("poss", "${viewModel.playerNum.value}")
+            binding.player1Chip.text = it[0]
+            binding.player2Chip.text = it[1]
+            binding.player3Chip.text = it[2]
+            binding.player4Chip.text = it[3]
+            binding.player5Chip.text = it[4]
+        }
+
         /// record data
         // score
         binding.zone1Button.setOnClickListener {
@@ -137,7 +171,7 @@ class MatchFragment : Fragment() {
         binding.launchChip.setOnLongClickListener {
             // 震動
             it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
-            if (viewModel.player != -1) {
+            if (viewModel.player != "") {
                 // 拖曳
                 val shadow = View.DragShadowBuilder(it)
                 it.startDragAndDrop(null, shadow, it,0)
@@ -150,12 +184,12 @@ class MatchFragment : Fragment() {
         // 獲取螢幕解析度
         val displayMetrics = DisplayMetrics()
         requireActivity().display?.getRealMetrics(displayMetrics)
-        // 拖曳
+        // 拖曳 get zone data
         binding.root.setOnDragListener{ v, event ->
             when(event.action) {
                 DragEvent.ACTION_DROP -> {
-                    Log.d("pos","${viewModel.getDiameter(event.x,event.y,displayMetrics.widthPixels,displayMetrics.heightPixels).toInt()} ${event.x.toInt()} ${event.y.toInt()}")
-//                    viewModel.getChipPos(event.x, event.y, displayMetrics.widthPixels, displayMetrics.heightPixels)
+                    Log.d("pos","${event.x.toInt()} ${event.y.toInt()}")
+                    viewModel.getDiameter(event.x,event.y,displayMetrics.widthPixels,displayMetrics.heightPixels)
                     binding.chipGroup.x = event.x - binding.bufferChip.x - 60
                     binding.chipGroup.y = event.y - binding.bufferChip.y - 60
                     binding.launchChip.x = (event.x - 60)
@@ -164,7 +198,7 @@ class MatchFragment : Fragment() {
             }
             true
         }
-
+        // write data
         binding.chipGroup.setOnCheckedChangeListener { group, checkedId ->
             when(checkedId) {
                 R.id.score_chip -> {
@@ -215,6 +249,9 @@ class MatchFragment : Fragment() {
             }
             binding.launchChip.isChecked = false
         }
+
+
+
 
         return binding.root
     }
