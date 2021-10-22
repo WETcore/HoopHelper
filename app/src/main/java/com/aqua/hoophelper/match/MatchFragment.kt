@@ -119,7 +119,7 @@ class MatchFragment : Fragment() {
                 }
             }
         }
-        // select sub player
+        // select substitution player
         var teamAdapter = ArrayAdapter(requireContext(), R.layout.team_item, viewModel.substitutionPlayer.value!!)
         binding.subPlayerText.setAdapter(teamAdapter)
 

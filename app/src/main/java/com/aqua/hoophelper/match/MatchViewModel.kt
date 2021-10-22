@@ -230,9 +230,10 @@ class MatchViewModel : ViewModel() {
         else Log.d("dia","請將小紅點移至球場") // TODO Toast
     }
 
-    fun getSubPlayer(player: String) {
-        _playerNum.value!![selectPlayerPos] = player
+    fun getSubPlayer(subPlayer: String) {
+        _playerNum.value!![selectPlayerPos] = subPlayer
         _playerNum.value = _playerNum.value
+        player = _playerNum.value!![selectPlayerPos]
     }
 
     fun changeSubPlayer(onCourtPlayer: String, spinnerPos: Int) {
