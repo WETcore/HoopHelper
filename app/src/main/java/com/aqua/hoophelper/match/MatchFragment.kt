@@ -43,6 +43,8 @@ class MatchFragment : Fragment() {
         val binding: MatchFragmentBinding =
             DataBindingUtil.inflate(inflater, R.layout.match_fragment, container,false)
 
+        // Hint for user
+        Toast.makeText(requireContext(), "drag the red dot to the court.", Toast.LENGTH_SHORT).show()
 
         // set shot clock
         viewModel.shotClockTimer.start()
@@ -159,10 +161,13 @@ class MatchFragment : Fragment() {
         //開啟子選單
         binding.launchChip.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
+
                 binding.chipGroup.visibility = View.VISIBLE
+                Log.d("launch","open ${binding.chipGroup.visibility} ${binding.scoreChip.x} ${binding.launchChip.x}")
             } else {
                 Log.d("record","${viewModel.event}")
                 binding.chipGroup.visibility = View.GONE
+                Log.d("launch","close ${binding.chipGroup.visibility}")
             }
         }
 
@@ -170,19 +175,15 @@ class MatchFragment : Fragment() {
         binding.launchChip.setOnLongClickListener {
             // 震動
             it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
-            if (viewModel.player != "") {
-                // 拖曳
-                val shadow = View.DragShadowBuilder(it)
-                it.startDragAndDrop(null, shadow, it,0)
-                true
-            } else {
-                Toast.makeText(requireContext(),"Selected Player first.",Toast.LENGTH_SHORT).show()
-                false
-            }
+            // 拖曳
+            val shadow = View.DragShadowBuilder(it)
+            it.startDragAndDrop(null, shadow, it,0)
+            false
         }
         // 獲取螢幕解析度
         val displayMetrics = DisplayMetrics()
         requireActivity().display?.getRealMetrics(displayMetrics)
+
         // 拖曳 get zone data
         binding.root.setOnDragListener{ v, event ->
             when(event.action) {
@@ -190,10 +191,8 @@ class MatchFragment : Fragment() {
                     Log.d("pos","${event.x.toInt()} ${event.y.toInt()}")
                     if (viewModel.getDiameter(event.x,event.y,displayMetrics.widthPixels,displayMetrics.heightPixels)) {
                         binding.launchChip.isCheckable = false
-                        Toast.makeText(requireContext(),"請將小紅點移至球場",Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(),"drag the red dot to the court.",Toast.LENGTH_SHORT).show()
                     } else binding.launchChip.isCheckable = true
-                    binding.chipGroup.x = event.x - binding.bufferChip.x - 60
-                    binding.chipGroup.y = event.y - binding.bufferChip.y - 60
                     binding.launchChip.x = (event.x - 60)
                     binding.launchChip.y = (event.y - 60)
                 }
@@ -205,8 +204,15 @@ class MatchFragment : Fragment() {
             when(checkedId) {
                 R.id.score_chip -> {
                     if (viewModel.zone.value?.toInt() != 0) {
-                        viewModel.setScoreData()
-                        viewModel.selectZone(0)
+                        viewModel.setScoreData(true)
+                    } else {
+                        Toast.makeText(requireContext(),"Selected Zone first.",Toast.LENGTH_SHORT).show()
+                    }
+                    group.clearCheck()
+                }
+                R.id.miss_chip -> {
+                    if (viewModel.zone.value?.toInt() != 0) {
+                        viewModel.setScoreData(false)
                     } else {
                         Toast.makeText(requireContext(),"Selected Zone first.",Toast.LENGTH_SHORT).show()
                     }
@@ -243,7 +249,6 @@ class MatchFragment : Fragment() {
             }
             binding.launchChip.isChecked = false
         }
-
 
 
 

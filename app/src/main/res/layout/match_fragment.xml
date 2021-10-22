@@ -47,6 +47,7 @@
                 style="@style/Widget.MaterialComponents.ChipGroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                app:checkedChip="@+id/player1_chip"
                 app:chipSpacing="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -216,86 +217,92 @@
             app:layout_constraintVertical_bias="0.0"
             app:srcCompat="@drawable/boeder_130913_blankchart" />
 
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/chip_group"
-            style="@style/Widget.MaterialComponents.ChipGroup"
-            android:layout_width="163dp"
-            android:layout_height="148dp"
-            android:layout_marginStart="124dp"
-            android:layout_marginBottom="60dp"
-            android:visibility="gone"
-            app:chipSpacing="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+        <HorizontalScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:selectionRequired="true"
-            app:singleLine="false"
-            app:singleSelection="true"
-            tools:visibility="visible">
+            app:layout_constraintTop_toBottomOf="@+id/basketball_court">
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/score_chip"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chip_group"
+                style="@style/Widget.MaterialComponents.ChipGroup"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="S" />
+                android:visibility="gone"
+                app:chipSpacing="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/basketball_court"
+                app:selectionRequired="true"
+                app:singleLine="true"
+                app:singleSelection="true"
+                tools:visibility="visible">
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/rebound_chip"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Reb" />
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/score_chip"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Score" />
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/miss_chip"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Miss" />
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/assist_chip"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Ast" />
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/rebound_chip"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Reb" />
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/steal_chip"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Stl" />
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/assist_chip"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ast" />
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/buffer_chip"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="" />
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/steal_chip"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Stl" />
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/block_chip"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Blk" />
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/block_chip"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Blk" />
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/turnover_chip"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="TO" />
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/turnover_chip"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TO" />
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/foul_chip"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="F" />
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/foul_chip"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Foul" />
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/free_throw_chip"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="FT" />
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/free_throw_chip"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="FT" />
 
-        </com.google.android.material.chip.ChipGroup>
+            </com.google.android.material.chip.ChipGroup>
+        </HorizontalScrollView>
 
         <com.google.android.material.chip.Chip
             android:id="@+id/launch_chip"
@@ -303,8 +310,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="180dp"
-            android:layout_marginBottom="112dp"
+            android:layout_marginBottom="104dp"
             android:backgroundTint="@color/hoop_red"
+            android:checkable="false"
             android:text="0"
             app:chipEndPadding="5dp"
             app:chipStartPadding="5dp"

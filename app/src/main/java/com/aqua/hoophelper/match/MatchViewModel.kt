@@ -41,7 +41,7 @@ class MatchViewModel : ViewModel() {
 
     //////////////////
     // player 當下選擇的球員
-    var player = ""
+    var player = "01"
 
     // selectPlayerPos 紀錄按那個 chip
     var selectPlayerPos = 0
@@ -66,6 +66,11 @@ class MatchViewModel : ViewModel() {
         "13",
         "14",
         "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
     ))
     val substitutionPlayer: LiveData<MutableList<String>>
         get() = _substitutionPlayer
@@ -119,13 +124,13 @@ class MatchViewModel : ViewModel() {
         _zone.value = selectedZone.toString()
     }
 
-    fun setScoreData() {
+    fun setScoreData(countIn: Boolean) {
         resetData()
         event.matchTimeMin = gameClockMin.value.toString()
         event.matchTimeSec = gameClockSec.value.toString()
-        _record.value = true
+        _record.value = countIn
         event.playerNum = player
-        event.score[zone.toString()] = _record.value!!
+        event.score[zone.value.toString()] = _record.value!!
     }
 
     private fun resetData() {
@@ -228,7 +233,7 @@ class MatchViewModel : ViewModel() {
             }
             return false
         }
-        else return true// Log.d("dia","請將小紅點移至球場") // TODO Toast
+        else return true
     }
 
     fun getSubPlayer(subPlayer: String) {
