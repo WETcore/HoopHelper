@@ -6,18 +6,16 @@ import androidx.lifecycle.MutableLiveData
 import com.aqua.hoophelper.database.Event
 import com.aqua.hoophelper.database.HoopRepository
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
 
 object HoopRemoteDataSource: HoopRepository {
     override fun getEvents(): LiveData<List<Event>> {
         val db = FirebaseFirestore.getInstance()
         val result = MutableLiveData<List<Event>>()
         result.let {
-            db.collection("Events").orderBy("createdTime", Query.Direction.DESCENDING).addSnapshotListener { value, error ->
+            db.collection("Events").addSnapshotListener { value, error ->
                 it.value = value?.toObjects(Event::class.java) ?: mutableListOf()
             }
         }
-        Log.d("test","getArticles running")
         return result
     }
 

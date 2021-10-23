@@ -82,12 +82,14 @@
             app:layout_constraintTop_toTopOf="@+id/quarter_label_live" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/live_recycler"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/game_clock_min_live" />
+            app:layout_constraintTop_toBottomOf="@+id/game_clock_min_live"
+            tools:listitem="@layout/live_event_item"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

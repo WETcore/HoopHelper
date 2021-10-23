@@ -74,7 +74,7 @@ class MatchViewModel : ViewModel() {
         get() = _substitutionPlayer
 
     // zone
-    private var _zone = MutableLiveData<Int>()
+    private var _zone = MutableLiveData<Int>(0)
     val zone: LiveData<Int>
         get() = _zone
 
@@ -128,19 +128,20 @@ class MatchViewModel : ViewModel() {
         event.matchTimeSec = gameClockSec.value.toString()
         _record.value = countIn
         event.playerNum = player
+        event.zone = zone.value!!
         if (zone.value!! in 1..9)  {
-            event.score2[zone.value!!.toString()] = _record.value!!
+            event.score2 = _record.value!!
         }
         else if (zone.value!! in 10..14) {
-            event.score3[zone.value!!.toString()] = _record.value!!
+            event.score3 = _record.value!!
         }
         db.collection("Events").add(event)
     }
 
     private fun resetData() {
-        event.score2 = mutableMapOf()
-        event.score3 = mutableMapOf()
         false.let {
+            event.score2 = it
+            event.score3 = it
             event.rebound = it
             event.assist = it
             event.steal = it
@@ -148,6 +149,7 @@ class MatchViewModel : ViewModel() {
             event.turnover = it
             event.foul = it
         }
+        event.zone = 0
         event.freeThrow = null
     }
 
@@ -165,6 +167,7 @@ class MatchViewModel : ViewModel() {
         event.playerNum = player
         event.matchTimeMin = gameClockMin.value.toString()
         event.matchTimeSec = gameClockSec.value.toString()
+        event.zone = zone.value!!
         _record.value = true
         when(type) {
             DataType.REBOUND -> {
