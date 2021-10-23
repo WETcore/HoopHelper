@@ -69,8 +69,6 @@ class MatchViewModel : ViewModel() {
         "16",
         "17",
         "18",
-        "19",
-        "20",
     ))
     val substitutionPlayer: LiveData<MutableList<String>>
         get() = _substitutionPlayer
@@ -145,6 +143,14 @@ class MatchViewModel : ViewModel() {
         }
     }
 
+    fun setFreeThrowData(bool: Boolean) {
+        resetData()
+        event.playerNum = player
+        event.matchTimeMin = gameClockMin.value.toString()
+        event.matchTimeSec = gameClockSec.value.toString()
+        event.freeThrow = bool
+    }
+
     fun setStatData(type: DataType) {
         resetData()
         event.playerNum = player
@@ -169,9 +175,6 @@ class MatchViewModel : ViewModel() {
             }
             DataType.FOUL -> {
                 event.foul = _record.value!!
-            }
-            DataType.FREETHROW -> {
-                event.freeThrow = _record.value!!
             }
         }
     }

@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:text="全隊排行榜"
             android:textSize="50sp"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/textInputLayout"
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.textfield.TextInputLayout

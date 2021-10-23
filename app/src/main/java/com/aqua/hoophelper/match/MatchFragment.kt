@@ -24,7 +24,7 @@ import com.yxf.clippathlayout.PathInfo
 import com.yxf.clippathlayout.pathgenerator.CirclePathGenerator
 
 enum class DataType {
-    REBOUND, ASSIST, STEAL, BLOCK, TURNOVER, FOUL, FREETHROW
+    REBOUND, ASSIST, STEAL, BLOCK, TURNOVER, FOUL
 }
 
 class MatchFragment : Fragment() {
@@ -76,7 +76,7 @@ class MatchFragment : Fragment() {
                 findNavController().navigate(NavigationDirections.navToHome())
                 viewModel.shotClockTimer.cancel()
                 viewModel.gameClockSecTimer.cancel()
-                Toast.makeText(requireContext(),"Game over.",Toast.LENGTH_SHORT).show()
+                Toast.makeText (requireContext(),"Game over.",Toast.LENGTH_SHORT).show()
             }
             binding.quarter.text = it.toString()
         }
@@ -141,16 +141,6 @@ class MatchFragment : Fragment() {
         }
 
         /// record data
-        // score
-        binding.zone1Button.setOnClickListener {
-            viewModel.selectZone(1)
-            Log.d("zone1","zone1 ${binding.launchChip.x} ${binding.launchChip.y} ${binding.chipGroup.x}")
-        }
-
-        binding.zone2Button.setOnClickListener {
-            viewModel.selectZone(2)
-            Log.d("zone2","zone2 ${viewModel.event}")
-        }
 
         // 改變launch顯示文字
         viewModel.zone.observe(viewLifecycleOwner) {
@@ -242,14 +232,30 @@ class MatchFragment : Fragment() {
                     viewModel.setStatData(DataType.FOUL)
                     group.clearCheck()
                 }
-                R.id.free_throw_chip -> {
-                    viewModel.setStatData(DataType.FREETHROW)
-                    group.clearCheck()
-                }
             }
             binding.launchChip.isChecked = false
         }
 
+        // 罰球
+        binding.freeThrowSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                binding.ftChipGroup.visibility = View.VISIBLE
+                viewModel.shotClockTimer.cancel()
+                viewModel.gameClockSecTimer.cancel()
+            } else {
+                binding.ftChipGroup.visibility = View.GONE
+                viewModel.shotClockTimer.start()
+                viewModel.gameClockSecTimer.start()
+            }
+        }
+        binding.ftInChip.setOnClickListener {
+            viewModel.setFreeThrowData(true)
+            Log.d("record","${viewModel.event}")
+        }
+        binding.ftOutChip.setOnClickListener {
+            viewModel.setFreeThrowData(false)
+            Log.d("record","${viewModel.event}")
+        }
 
 
         return binding.root
