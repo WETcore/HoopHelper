@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
             binding.toolbar.visibility = View.GONE
             binding.appBar.behavior.slideDown(binding.appBar)
             viewModel.getMatchInfo()
-//            viewModel.db.collection("Matches").add(viewModel.match)
+            viewModel.db.collection("Matches").add(viewModel.match)
         }
 
         navHostFragment.addOnDestinationChangedListener { _, destination, _ ->

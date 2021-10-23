@@ -144,7 +144,7 @@ class MatchFragment : Fragment() {
 
         // 改變launch顯示文字
         viewModel.zone.observe(viewLifecycleOwner) {
-            binding.launchChip.text = it
+            binding.launchChip.text = it.toString()
         }
 
 

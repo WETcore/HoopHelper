@@ -39,34 +39,6 @@ class ProfileFragment : Fragment() {
         val binding: ProfileFragmentBinding =
             DataBindingUtil.inflate(inflater, R.layout.profile_fragment, container,false)
 
-
-        binding.chipTest.setOnLongClickListener {
-
-            // 震動
-            it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
-            // 拖曳
-            val shadowBuilder = View.DragShadowBuilder(it)
-            it.startDragAndDrop(null,shadowBuilder, it,0)
-            it.visibility = View.INVISIBLE
-
-            return@setOnLongClickListener true
-        }
-
-        binding.root.setOnDragListener{ v, event ->
-            val action = event.action
-            when(action) {
-                DragEvent.ACTION_DRAG_LOCATION -> {
-//                    Log.d("drag","${x},${y}")
-                }
-                DragEvent.ACTION_DROP -> {
-                    binding.chipTest.x = event.x
-                    binding.chipTest.y = event.y
-                    binding.chipTest.visibility = View.VISIBLE
-                }
-            }
-            return@setOnDragListener true
-        }
-
         return binding.root
     }
 }

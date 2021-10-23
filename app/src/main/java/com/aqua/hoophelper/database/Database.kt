@@ -32,13 +32,14 @@ data class Event(
     var playerNum: String = "0",
     var matchTimeMin: String = "",
     var matchTimeSec: String = "",
-    var score: MutableMap<String, Boolean> = mutableMapOf(),
+    var score2: MutableMap<String, Boolean> = mutableMapOf(),
+    var score3: MutableMap<String, Boolean> = mutableMapOf(),
     var rebound: Boolean = false,
     var assist: Boolean = false,
     var steal: Boolean = false,
     var block: Boolean = false,
     var turnover: Boolean = false,
     var foul: Boolean = false,
-    var freeThrow: Boolean = false,
+    var freeThrow: Boolean? = null,
 
     )

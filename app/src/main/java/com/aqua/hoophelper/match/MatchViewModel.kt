@@ -74,8 +74,8 @@ class MatchViewModel : ViewModel() {
         get() = _substitutionPlayer
 
     // zone
-    private var _zone = MutableLiveData<String>()
-    val zone: LiveData<String>
+    private var _zone = MutableLiveData<Int>()
+    val zone: LiveData<Int>
         get() = _zone
 
     // record
@@ -119,7 +119,7 @@ class MatchViewModel : ViewModel() {
     }
 
     fun selectZone(selectedZone: Int) {
-        _zone.value = selectedZone.toString()
+        _zone.value = selectedZone
     }
 
     fun setScoreData(countIn: Boolean) {
@@ -128,11 +128,18 @@ class MatchViewModel : ViewModel() {
         event.matchTimeSec = gameClockSec.value.toString()
         _record.value = countIn
         event.playerNum = player
-        event.score[zone.value.toString()] = _record.value!!
+        if (zone.value!! in 1..9)  {
+            event.score2[zone.value!!.toString()] = _record.value!!
+        }
+        else if (zone.value!! in 10..14) {
+            event.score3[zone.value!!.toString()] = _record.value!!
+        }
+        db.collection("Events").add(event)
     }
 
     private fun resetData() {
-        event.score = mutableMapOf()
+        event.score2 = mutableMapOf()
+        event.score3 = mutableMapOf()
         false.let {
             event.rebound = it
             event.assist = it
@@ -141,6 +148,7 @@ class MatchViewModel : ViewModel() {
             event.turnover = it
             event.foul = it
         }
+        event.freeThrow = null
     }
 
     fun setFreeThrowData(bool: Boolean) {
@@ -149,6 +157,7 @@ class MatchViewModel : ViewModel() {
         event.matchTimeMin = gameClockMin.value.toString()
         event.matchTimeSec = gameClockSec.value.toString()
         event.freeThrow = bool
+        db.collection("Events").add(event)
     }
 
     fun setStatData(type: DataType) {
@@ -177,6 +186,7 @@ class MatchViewModel : ViewModel() {
                 event.foul = _record.value!!
             }
         }
+        db.collection("Events").add(event)
     }
 
     fun getDiameter(x: Float, y: Float, w: Int, h: Int): Boolean {
