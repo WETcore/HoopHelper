@@ -16,40 +16,40 @@ class LiveViewModel : ViewModel() {
     fun filterEventType(event: Event): String {
         return when {
             event.assist -> {
-                "Number " + event.playerNum + " made " + "assist" + " in zone " + event.zone
+                "Number" + event.playerNum + " sent " + "assist" + " in zone" + event.zone
             }
             event.block -> {
-                "Number " + event.playerNum + " sent " + "block" + " in zone " + event.zone
+                "Number" + event.playerNum + " sent " + "block" + " in zone" + event.zone
             }
             event.foul -> {
-                "Number " + event.playerNum + " got " + "foul" + " in zone " + event.zone
+                "Number" + event.playerNum + " got " + "foul" + " in zone" + event.zone
             }
             event.rebound -> {
-                "Number " + event.playerNum + " got " + "rebound" + " in zone " + event.zone
+                "Number" + event.playerNum + " got " + "rebound" + " in zone" + event.zone
             }
             event.steal -> {
-                "Number " + event.playerNum + " got " + "steal" + " in zone " + event.zone
+                "Number" + event.playerNum + " got " + "steal" + " in zone" + event.zone
             }
             event.turnover -> {
-                "Number " + event.playerNum + " was " + "turnover" + " in zone " + event.zone
+                "Number" + event.playerNum + " got " + "turnover" + " in zone" + event.zone
             }
             event.score2 == true -> {
-                "Number " + event.playerNum + " got " + "2 points" + " in zone " + event.zone
+                "Number" + event.playerNum + " got " + "2 points" + " in zone" + event.zone
             }
             event.score2 == false -> {
-                "Number " + event.playerNum + " miss " + "2 points" + " in zone " + event.zone
+                "Number" + event.playerNum + " miss " + "2 points" + " in zone" + event.zone
             }
             event.score3 == true -> {
-                "Number " + event.playerNum + " got " + "3 points" + " in zone " + event.zone
+                "Number" + event.playerNum + " got " + "3 points" + " in zone" + event.zone
             }
             event.score3 == false -> {
-                "Number " + event.playerNum + " miss " + "3 points" + " in zone " + event.zone
+                "Number" + event.playerNum + " miss " + "3 points" + " in zone" + event.zone
             }
             event.freeThrow == true -> {
-                "Number " + event.playerNum + "made a free throw"
+                "Number" + event.playerNum + " made a free throw"
             }
             event.freeThrow == false -> {
-                "Number " + event.playerNum + "miss a free throw"
+                "Number" + event.playerNum + " miss a free throw"
             }
             else -> "else"
         }

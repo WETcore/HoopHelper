@@ -21,6 +21,7 @@ import com.aqua.hoophelper.NavigationDirections
 import com.aqua.hoophelper.R
 import com.aqua.hoophelper.databinding.MatchFragmentBinding
 import com.google.android.material.chip.Chip
+import com.google.firebase.firestore.Query
 import com.yxf.clippathlayout.PathInfo
 import com.yxf.clippathlayout.pathgenerator.CirclePathGenerator
 
@@ -44,7 +45,7 @@ class MatchFragment : Fragment() {
         val binding: MatchFragmentBinding =
             DataBindingUtil.inflate(inflater, R.layout.match_fragment, container,false)
 
-        // get matchId
+        // safe arg
         val args: MatchFragmentArgs by navArgs()
 
         // Hint for user
@@ -261,6 +262,16 @@ class MatchFragment : Fragment() {
             Log.d("record","${viewModel.event}")
         }
 
+        // cancel event
+        binding.cancelChip.setOnClickListener {
+            viewModel.db.collection("Events")
+                .orderBy("actualTime", Query.Direction.DESCENDING)
+                .limit(1).get().addOnSuccessListener {
+                    it.forEach {
+                        it.reference.delete()
+                    }
+                }
+        }
 
         return binding.root
     }

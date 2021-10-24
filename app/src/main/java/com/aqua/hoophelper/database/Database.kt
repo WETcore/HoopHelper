@@ -21,10 +21,6 @@ data class Match(
     var teamId: String = "",
     var date: String = "",
     var time: String = "",
-    var currentGameClock: String = "",
-    var currentShotClock: String = "",
-    var currentQuarter: String = "",
-    var RemainingTimeout: Int = 0,
     )
 
 

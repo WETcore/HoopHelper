@@ -324,5 +324,14 @@
                 android:text="miss"/>
         </com.google.android.material.chip.ChipGroup>
 
+        <com.google.android.material.chip.Chip
+            android:id="@+id/cancel_chip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.Chip.Action"
+            android:text="cancel"
+            app:layout_constraintStart_toEndOf="@+id/free_throw_switch"
+            app:layout_constraintTop_toBottomOf="@+id/basketball_court" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
