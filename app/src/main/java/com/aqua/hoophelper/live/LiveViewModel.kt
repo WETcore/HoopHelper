@@ -13,8 +13,39 @@ class LiveViewModel : ViewModel() {
         get() = _events
 
     // TODO 區別動作
-    fun filterEventType(pos: Int) {
-        events.value?.forEachIndexed { index, event ->
+    fun filterEventType(event: Event): String {
+        return when {
+            event.assist -> {
+                "assist"
+            }
+            event.block -> {
+                "block"
+            }
+            event.foul -> {
+                "foul"
+            }
+            event.rebound -> {
+                "rebound"
+            }
+            event.steal -> {
+                "steal"
+            }
+            event.turnover -> {
+                "turnover"
+            }
+            event.score2 -> {
+                "2pt"
+            }
+            event.score3 -> {
+                "3pt"
+            }
+            event.freeThrow == true -> {
+                "make a free throw"
+            }
+            event.freeThrow == false -> {
+                "miss a free throw"
+            }
+            else -> "else"
         }
     }
 

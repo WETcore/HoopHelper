@@ -11,6 +11,7 @@ import com.aqua.hoophelper.R
 import com.aqua.hoophelper.database.Event
 import com.aqua.hoophelper.databinding.LiveEventItemBinding
 
+
 class LiveEventAdapter(val viewModel: LiveViewModel): ListAdapter<Event, LiveEventAdapter.EventViewHolder>(DiffCallback) {
 
     class EventViewHolder(var binding: LiveEventItemBinding) :
@@ -49,13 +50,20 @@ class LiveEventAdapter(val viewModel: LiveViewModel): ListAdapter<Event, LiveEve
         } else {
             holder.binding.liveMessageCard.setCardBackgroundColor(Color.parseColor("#FF6600"))
         }
-//        holder.binding.liveMessage.text = viewModel.countFreeThrows()
+
+        holder.binding.liveMessage.text = viewModel.filterEventType(event)
+
+
 
 
         holder.bind(event)
     }
 
+    override fun getItemViewType(position: Int): Int {
+        return super.getItemViewType(position)
+    }
+
 }
 
-enum class EventType(var data: Event) {
+sealed class EventType(var data: Event) {
 }
