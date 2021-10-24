@@ -16,6 +16,7 @@ import androidx.core.view.get
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.aqua.hoophelper.NavigationDirections
 import com.aqua.hoophelper.R
 import com.aqua.hoophelper.databinding.MatchFragmentBinding
@@ -42,6 +43,9 @@ class MatchFragment : Fragment() {
         // binding
         val binding: MatchFragmentBinding =
             DataBindingUtil.inflate(inflater, R.layout.match_fragment, container,false)
+
+        // get matchId
+        val args: MatchFragmentArgs by navArgs()
 
         // Hint for user
         Toast.makeText(requireContext(), "drag the red dot to the court.", Toast.LENGTH_SHORT).show()
@@ -194,7 +198,7 @@ class MatchFragment : Fragment() {
             when(checkedId) {
                 R.id.score_chip -> {
                     if (viewModel.zone.value?.toInt() != 0) {
-                        viewModel.setScoreData(true)
+                        viewModel.setScoreData(true, args.matchId)
                     } else {
                         Toast.makeText(requireContext(),"Selected Zone first.",Toast.LENGTH_SHORT).show()
                     }
@@ -202,34 +206,34 @@ class MatchFragment : Fragment() {
                 }
                 R.id.miss_chip -> {
                     if (viewModel.zone.value?.toInt() != 0) {
-                        viewModel.setScoreData(false)
+                        viewModel.setScoreData(false, args.matchId)
                     } else {
                         Toast.makeText(requireContext(),"Selected Zone first.",Toast.LENGTH_SHORT).show()
                     }
                     group.clearCheck()
                 }
                 R.id.rebound_chip -> {
-                    viewModel.setStatData(DataType.REBOUND)
+                    viewModel.setStatData(DataType.REBOUND, args.matchId)
                     group.clearCheck()
                 }
                 R.id.assist_chip -> {
-                    viewModel.setStatData(DataType.ASSIST)
+                    viewModel.setStatData(DataType.ASSIST, args.matchId)
                     group.clearCheck()
                 }
                 R.id.steal_chip -> {
-                    viewModel.setStatData(DataType.STEAL)
+                    viewModel.setStatData(DataType.STEAL, args.matchId)
                     group.clearCheck()
                 }
                 R.id.block_chip -> {
-                    viewModel.setStatData(DataType.BLOCK)
+                    viewModel.setStatData(DataType.BLOCK, args.matchId)
                     group.clearCheck()
                 }
                 R.id.turnover_chip -> {
-                    viewModel.setStatData(DataType.TURNOVER)
+                    viewModel.setStatData(DataType.TURNOVER, args.matchId)
                     group.clearCheck()
                 }
                 R.id.foul_chip -> {
-                    viewModel.setStatData(DataType.FOUL)
+                    viewModel.setStatData(DataType.FOUL, args.matchId)
                     group.clearCheck()
                 }
             }
@@ -249,11 +253,11 @@ class MatchFragment : Fragment() {
             }
         }
         binding.ftInChip.setOnClickListener {
-            viewModel.setFreeThrowData(true)
+            viewModel.setFreeThrowData(true, args.matchId)
             Log.d("record","${viewModel.event}")
         }
         binding.ftOutChip.setOnClickListener {
-            viewModel.setFreeThrowData(false)
+            viewModel.setFreeThrowData(false, args.matchId)
             Log.d("record","${viewModel.event}")
         }
 

@@ -16,34 +16,40 @@ class LiveViewModel : ViewModel() {
     fun filterEventType(event: Event): String {
         return when {
             event.assist -> {
-                "assist"
+                "Number " + event.playerNum + " made " + "assist" + " in zone " + event.zone
             }
             event.block -> {
-                "block"
+                "Number " + event.playerNum + " sent " + "block" + " in zone " + event.zone
             }
             event.foul -> {
-                "foul"
+                "Number " + event.playerNum + " got " + "foul" + " in zone " + event.zone
             }
             event.rebound -> {
-                "rebound"
+                "Number " + event.playerNum + " got " + "rebound" + " in zone " + event.zone
             }
             event.steal -> {
-                "steal"
+                "Number " + event.playerNum + " got " + "steal" + " in zone " + event.zone
             }
             event.turnover -> {
-                "turnover"
+                "Number " + event.playerNum + " was " + "turnover" + " in zone " + event.zone
             }
-            event.score2 -> {
-                "2pt"
+            event.score2 == true -> {
+                "Number " + event.playerNum + " got " + "2 points" + " in zone " + event.zone
             }
-            event.score3 -> {
-                "3pt"
+            event.score2 == false -> {
+                "Number " + event.playerNum + " miss " + "2 points" + " in zone " + event.zone
+            }
+            event.score3 == true -> {
+                "Number " + event.playerNum + " got " + "3 points" + " in zone " + event.zone
+            }
+            event.score3 == false -> {
+                "Number " + event.playerNum + " miss " + "3 points" + " in zone " + event.zone
             }
             event.freeThrow == true -> {
-                "make a free throw"
+                "Number " + event.playerNum + "made a free throw"
             }
             event.freeThrow == false -> {
-                "miss a free throw"
+                "Number " + event.playerNum + "miss a free throw"
             }
             else -> "else"
         }

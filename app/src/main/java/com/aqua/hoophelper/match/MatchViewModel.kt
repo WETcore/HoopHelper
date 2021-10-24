@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import com.aqua.hoophelper.database.Event
 import com.aqua.hoophelper.database.Match
 import com.google.firebase.firestore.FirebaseFirestore
+import java.util.*
 import kotlin.math.*
 
 class MatchViewModel : ViewModel() {
@@ -122,8 +123,11 @@ class MatchViewModel : ViewModel() {
         _zone.value = selectedZone
     }
 
-    fun setScoreData(countIn: Boolean) {
+    fun setScoreData(countIn: Boolean, mId: String) {
         resetData()
+        event.eventId = db.collection("Events").document().id
+        event.matchId = mId
+        event.actualTime = Calendar.getInstance().timeInMillis
         event.matchTimeMin = gameClockMin.value.toString()
         event.matchTimeSec = gameClockSec.value.toString()
         _record.value = countIn
@@ -140,8 +144,6 @@ class MatchViewModel : ViewModel() {
 
     private fun resetData() {
         false.let {
-            event.score2 = it
-            event.score3 = it
             event.rebound = it
             event.assist = it
             event.steal = it
@@ -151,10 +153,15 @@ class MatchViewModel : ViewModel() {
         }
         event.zone = 0
         event.freeThrow = null
+        event.score2 = null
+        event.score3 = null
     }
 
-    fun setFreeThrowData(bool: Boolean) {
+    fun setFreeThrowData(bool: Boolean, mId: String) {
         resetData()
+        event.eventId = db.collection("Events").document().id
+        event.matchId = mId
+        event.actualTime = Calendar.getInstance().timeInMillis
         event.playerNum = player
         event.matchTimeMin = gameClockMin.value.toString()
         event.matchTimeSec = gameClockSec.value.toString()
@@ -162,8 +169,11 @@ class MatchViewModel : ViewModel() {
         db.collection("Events").add(event)
     }
 
-    fun setStatData(type: DataType) {
+    fun setStatData(type: DataType, mId: String) {
         resetData()
+        event.eventId = db.collection("Events").document().id
+        event.matchId = mId
+        event.actualTime = Calendar.getInstance().timeInMillis
         event.playerNum = player
         event.matchTimeMin = gameClockMin.value.toString()
         event.matchTimeSec = gameClockSec.value.toString()
@@ -194,15 +204,15 @@ class MatchViewModel : ViewModel() {
 
     fun getDiameter(x: Float, y: Float, w: Int, h: Int): Boolean {
 //        Log.d("dia","x: $x y: $y  x/w ${x/w} ${y/h}")
-        var dm = sqrt((x-(w*0.5)).pow(2) + (y-(h*0.24)).pow(2))/2
+        var dm = sqrt((x-(w/2)).pow(2) + (y-(h*0.24)).pow(2))/2
         var slope = y/(x-(w/2))
 
-        if (y/h < 0.605 && y/h > 0.195) {
-            if (dm < (w * 0.083)) {
+        if (y/h in 0.195..0.605) {
+            if (dm/w < 0.083) {
                 selectZone(1)
             }
-            else if (dm < (w * 0.153)) {
-                if (slope < tan((80.0 * PI)/180) && slope > tan((0.0 * PI)/180)) {
+            else if (dm/w < 0.153) {
+                if (slope in 0.0..tan((80.0 * PI)/180)) {
                     selectZone(4)
                 }
                 else if (slope > tan((80.0 * PI)/180) || slope < tan((-80.0 * PI)/180)) {
@@ -212,38 +222,38 @@ class MatchViewModel : ViewModel() {
                     selectZone(2)
                 }
             }
-            else if (dm < (w * 0.241) && x < (0.9 * w) && x > (0.09 * w)) {
-                if(slope < tan((65.0 * PI)/180) && slope > tan((0.0 * PI)/180) && (x/w) < 0.9) {
-                    selectZone(5)
-                }
-                else if (slope < tan((80.0 * PI)/180) && slope > tan((65.0 * PI)/180)) {
+            else if (dm < (w * 0.241) && x in (0.09 * w)..(0.9 * w)) {
+                if(slope in 0.0..tan((65.0 * PI)/180) && (x/w) < 0.9) {
                     selectZone(9)
                 }
-                else if (slope > tan((80.0 * PI)/180) || slope < tan((-80.0 * PI)/180)) {
+                else if (slope in tan((65.0 * PI)/180)..tan((80.0 * PI)/180)) {
                     selectZone(8)
                 }
-                else if (slope > tan((-80.0 * PI)/180) && slope < tan((-65.0 * PI)/180)) {
+                else if (slope > tan((80.0 * PI)/180) || slope < tan((-80.0 * PI)/180)) {
                     selectZone(7)
                 }
-                else if (slope > tan((-65.0 * PI)/180) && (x/w) > 0.09) {
+                else if (slope in tan((-80.0 * PI)/180)..tan((-65.0 * PI)/180)) {
                     selectZone(6)
+                }
+                else if (slope > tan((-65.0 * PI)/180) && (x/w) > 0.09) {
+                    selectZone(5)
                 }
                 else Log.d("dia","${x} ${w} ${atan(slope)/PI*180} in zone 3 error")
             }
-            else if (x > (0.9 * w) && y <= h * 0.362) {
+            else if (x/w > 0.9 && y/h <= 0.362) {
                 selectZone(14)
             }
-            else if (x < (0.09 * w) && y <= h * 0.362) {
+            else if (x/w < 0.09 && y/h <= 0.362) {
                 selectZone(10)
             }
-            else if(dm > (w * 0.241)) {
-                if (slope < tan((80.0 * PI)/180) && slope > tan((0.0 * PI)/180)) {
+            else if(dm/w > 0.241) {
+                if (slope in 0.0..tan((80.0 * PI)/180)) {
                     selectZone(13)
                 }
                 else if (slope > tan((80.0 * PI)/180) || slope < tan((-80.0 * PI)/180)) {
                     selectZone(12)
                 }
-                else if (slope > tan((-80.0 * PI)/180) && slope < tan((0.0 * PI)/180)) {
+                else if (slope in tan((-80.0 * PI)/180)..0.0) {
                     selectZone(11)
                 }
             }

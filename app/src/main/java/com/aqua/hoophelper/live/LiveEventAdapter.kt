@@ -51,10 +51,7 @@ class LiveEventAdapter(val viewModel: LiveViewModel): ListAdapter<Event, LiveEve
             holder.binding.liveMessageCard.setCardBackgroundColor(Color.parseColor("#FF6600"))
         }
 
-        holder.binding.liveMessage.text = viewModel.filterEventType(event)
-
-
-
+        holder.binding.liveEventTypeText.text = viewModel.filterEventType(event)
 
         holder.bind(event)
     }

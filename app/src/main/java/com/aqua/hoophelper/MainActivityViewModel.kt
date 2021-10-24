@@ -11,8 +11,10 @@ class MainActivityViewModel: ViewModel() {
 
     var match = Match()
 
+    val cal = Calendar.getInstance()
+
     fun getMatchInfo() {
-        val cal = Calendar.getInstance()
+        match.matchId = db.collection("Matches").document().id
         match.date = cal.get(Calendar.DATE).toString()
         match.time = cal.get(Calendar.HOUR_OF_DAY).toString()
     }

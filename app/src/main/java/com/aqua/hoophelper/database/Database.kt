@@ -29,12 +29,15 @@ data class Match(
 
 
 data class Event(
+    var matchId: String = "",
+    var eventId: String = "",
+    var actualTime: Long = 0L,
     var playerNum: String = "0",
     var matchTimeMin: String = "",
     var matchTimeSec: String = "",
     var zone: Int = 0,
-    var score2: Boolean = false,
-    var score3: Boolean = false,
+    var score2: Boolean? = null,
+    var score3: Boolean? = null,
     var rebound: Boolean = false,
     var assist: Boolean = false,
     var steal: Boolean = false,
@@ -42,5 +45,4 @@ data class Event(
     var turnover: Boolean = false,
     var foul: Boolean = false,
     var freeThrow: Boolean? = null,
-
     )

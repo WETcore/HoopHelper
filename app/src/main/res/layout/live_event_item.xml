@@ -16,12 +16,12 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/live_message"
+            android:id="@+id/live_event_type_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:text="Hi"
-            android:textSize="36sp"
+            android:text="Type"
+            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

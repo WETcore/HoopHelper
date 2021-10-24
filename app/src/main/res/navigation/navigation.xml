@@ -19,7 +19,11 @@
         android:id="@+id/matchFragment"
         android:name="com.aqua.hoophelper.match.MatchFragment"
         android:label="match_fragment"
-        tools:layout="@layout/match_fragment" />
+        tools:layout="@layout/match_fragment" >
+        <argument
+            android:name="matchId"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/liveFragment"
         android:name="com.aqua.hoophelper.live.LiveFragment"
