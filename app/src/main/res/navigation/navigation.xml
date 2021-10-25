@@ -11,10 +11,10 @@
         android:label="home_fragment"
         tools:layout="@layout/home_fragment" />
     <fragment
-        android:id="@+id/chartFragment"
-        android:name="com.aqua.hoophelper.chart.ChartFragment"
+        android:id="@+id/teamFragment"
+        android:name="com.aqua.hoophelper.team.TeamFragment"
         android:label="chart_fragment"
-        tools:layout="@layout/chart_fragment" />
+        tools:layout="@layout/team_fragment" />
     <fragment
         android:id="@+id/matchFragment"
         android:name="com.aqua.hoophelper.match.MatchFragment"
@@ -39,8 +39,8 @@
     <action android:id="@+id/nav_to_home" app:destination="@id/homeFragment"
         app:popUpTo="@id/homeFragment"
         app:popUpToInclusive="true" />
-    <action android:id="@+id/nav_to_chart" app:destination="@id/chartFragment"
-        app:popUpTo="@id/chartFragment"
+    <action android:id="@+id/nav_to_chart" app:destination="@id/teamFragment"
+        app:popUpTo="@id/teamFragment"
         app:popUpToInclusive="true" />
     <action android:id="@+id/nav_to_match" app:destination="@id/matchFragment"
         app:popUpTo="@id/matchFragment"

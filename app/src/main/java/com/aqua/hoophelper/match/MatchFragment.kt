@@ -1,29 +1,20 @@
 package com.aqua.hoophelper.match
 
-import android.app.Application
-import android.os.Build
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.os.CountDownTimer
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.*
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import android.widget.Toast
-import androidx.annotation.RequiresApi
-import androidx.core.view.get
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.aqua.hoophelper.NavigationDirections
 import com.aqua.hoophelper.R
 import com.aqua.hoophelper.databinding.MatchFragmentBinding
-import com.google.android.material.chip.Chip
 import com.google.firebase.firestore.Query
-import com.yxf.clippathlayout.PathInfo
-import com.yxf.clippathlayout.pathgenerator.CirclePathGenerator
 
 enum class DataType {
     REBOUND, ASSIST, STEAL, BLOCK, TURNOVER, FOUL
@@ -126,7 +117,7 @@ class MatchFragment : Fragment() {
             }
         }
         // select substitution player
-        var teamAdapter = ArrayAdapter(requireContext(), R.layout.team_item, viewModel.substitutionPlayer.value!!)
+        var teamAdapter = ArrayAdapter(requireContext(), R.layout.home_team_item, viewModel.substitutionPlayer.value!!)
         binding.subPlayerText.setAdapter(teamAdapter)
 
         binding.subPlayerText.setOnItemClickListener { parent, view, position, id ->

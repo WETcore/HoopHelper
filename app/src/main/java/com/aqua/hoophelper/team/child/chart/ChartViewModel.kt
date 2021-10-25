@@ -1,4 +1,4 @@
-package com.aqua.hoophelper.chart
+package com.aqua.hoophelper.team.child.chart
 
 import androidx.lifecycle.ViewModel
 

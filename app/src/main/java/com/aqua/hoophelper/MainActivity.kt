@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity() {
                     binding.toolbar.visibility = View.VISIBLE
                     binding.appBar.behavior.slideUp(binding.appBar)
                 }
-                R.id.chartFragment -> {
+                R.id.teamFragment -> {
                     binding.toolbar.visibility = View.VISIBLE
                     binding.appBar.behavior.slideUp(binding.appBar)
                 }

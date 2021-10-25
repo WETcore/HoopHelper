@@ -18,8 +18,11 @@
         <entry key="app/src/main/res/layout/live_event_item.xml" value="0.2953125" />
         <entry key="app/src/main/res/layout/live_fragment.xml" value="0.2625" />
         <entry key="app/src/main/res/layout/live_message_item.xml" value="0.32864583333333336" />
+        <entry key="app/src/main/res/layout/manage_fragment.xml" value="0.2635416666666667" />
         <entry key="app/src/main/res/layout/match_fragment.xml" value="0.37636080870917576" />
         <entry key="app/src/main/res/layout/profile_fragment.xml" value="0.2484375" />
+        <entry key="app/src/main/res/layout/tactic_fragment.xml" value="0.2635416666666667" />
+        <entry key="app/src/main/res/layout/team_fragment.xml" value="0.2635416666666667" />
         <entry key="app/src/main/res/layout/team_item.xml" value="0.2625" />
         <entry key="app/src/main/res/menu/menu.xml" value="0.2625" />
       </map>

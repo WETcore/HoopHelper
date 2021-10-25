@@ -29,7 +29,7 @@ class HomeFragment : Fragment() {
             DataBindingUtil.inflate(inflater, R.layout.home_fragment, container,false)
 
         // spinner
-        val teamAdapter = ArrayAdapter(requireContext(), R.layout.team_item, viewModel.teamList)
+        val teamAdapter = ArrayAdapter(requireContext(), R.layout.home_team_item, viewModel.teamList)
         binding.teamText.setAdapter(teamAdapter)
 
         // expand card view
