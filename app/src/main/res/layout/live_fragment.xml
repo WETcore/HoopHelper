@@ -1,0 +1,95 @@
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/hoop_background"
+        tools:context=".live.LiveFragment">
+
+
+        <TextView
+            android:id="@+id/game_clock_sec_live"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/hoop_orange_light"
+            android:text="00"
+            android:textColor="@color/clock_yellow"
+            android:textSize="40sp"
+            app:layout_constraintStart_toEndOf="@+id/textView2"
+            app:layout_constraintTop_toTopOf="@+id/textView2" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/hoop_orange_light"
+            android:text=":"
+            android:textColor="@color/clock_yellow"
+            android:textSize="40sp"
+            app:layout_constraintStart_toEndOf="@+id/game_clock_min_live"
+            app:layout_constraintTop_toTopOf="@+id/game_clock_min_live" />
+
+        <TextView
+            android:id="@+id/game_clock_min_live"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/hoop_orange_light"
+            android:text="12"
+            android:textColor="@color/clock_yellow"
+            android:textSize="40sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/shot_clock_live"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:background="@color/hoop_background"
+            android:text="24"
+            android:textColor="@color/clock_red"
+            android:textSize="40sp"
+            app:layout_constraintStart_toEndOf="@+id/game_clock_sec_live"
+            app:layout_constraintTop_toTopOf="@+id/game_clock_sec_live" />
+
+        <TextView
+            android:id="@+id/quarter_label_live"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:background="@color/hoop_background"
+            android:text="Qtr"
+            android:textColor="@color/hoop_orange"
+            android:textSize="20sp"
+            app:layout_constraintStart_toEndOf="@+id/shot_clock_live"
+            app:layout_constraintTop_toTopOf="@+id/shot_clock_live" />
+
+        <TextView
+            android:id="@+id/quarter_live"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:background="@color/hoop_background"
+            android:text="1"
+            android:textColor="@color/hoop_orange"
+            android:textSize="40sp"
+            app:layout_constraintStart_toEndOf="@+id/quarter_label_live"
+            app:layout_constraintTop_toTopOf="@+id/quarter_label_live" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/live_recycler"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/game_clock_min_live"
+            tools:listitem="@layout/live_event_item"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

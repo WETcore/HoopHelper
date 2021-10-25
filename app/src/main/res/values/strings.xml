@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">HoopHelper</string>
+
+<!--  team List  -->
+    <string-array name="Team">
+        <item>Jazz</item>
+        <item>Sun</item>
+    </string-array>
+
 </resources>

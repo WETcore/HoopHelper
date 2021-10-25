@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/homeFragment"
+        android:icon="@drawable/home"
+        android:title="Home"/>
+    <item
+        android:id="@+id/chartFragment"
+        android:icon="@drawable/bar_chart"
+        android:title="Chart"/>
+    <item
+        android:id="@+id/matchFragment"
+        android:title=""/>
+    <item
+        android:id="@+id/liveFragment"
+        android:icon="@drawable/radio"
+        android:title="Live"/>
+    <item
+        android:id="@+id/profileFragment"
+        android:icon="@drawable/user"
+        android:title="Profile"/>
+</menu>
