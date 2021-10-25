@@ -36,9 +36,9 @@ class ProfileFragment : BottomSheetDialogFragment() {
         // binding
         val binding: ProfileFragmentBinding =
             DataBindingUtil.inflate(inflater, R.layout.profile_fragment, container,false)
-
-        // TODO login
-        // Configure Google Sign In
+//
+//        // TODO login
+//        // Configure Google Sign In
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
