@@ -29,7 +29,7 @@
         android:name="com.aqua.hoophelper.live.LiveFragment"
         android:label="live_fragment"
         tools:layout="@layout/live_fragment" />
-    <fragment
+    <dialog
         android:id="@+id/profileFragment"
         android:name="com.aqua.hoophelper.profile.ProfileFragment"
         android:label="profile_fragment"

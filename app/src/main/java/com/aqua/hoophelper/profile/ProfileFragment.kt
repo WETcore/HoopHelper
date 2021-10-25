@@ -1,29 +1,27 @@
 package com.aqua.hoophelper.profile
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.graphics.*
-import android.os.Build
+import android.content.Intent
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.os.SystemClock
-import android.util.AttributeSet
 import android.util.Log
 import android.view.*
-import android.widget.Button
-import android.widget.LinearLayout
-import androidx.fragment.app.Fragment
-import android.widget.Toast
-import androidx.annotation.RequiresApi
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
 import com.aqua.hoophelper.R
-import com.aqua.hoophelper.databinding.MatchFragmentBinding
 import com.aqua.hoophelper.databinding.ProfileFragmentBinding
-import com.aqua.hoophelper.match.MatchViewModel
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 
-class ProfileFragment : Fragment() {
+class ProfileFragment : BottomSheetDialogFragment() {
+
+    private lateinit var auth: FirebaseAuth
 
     private val viewModel: ProfileViewModel by lazy {
         ViewModelProvider(this).get(ProfileViewModel::class.java)
@@ -39,6 +37,22 @@ class ProfileFragment : Fragment() {
         val binding: ProfileFragmentBinding =
             DataBindingUtil.inflate(inflater, R.layout.profile_fragment, container,false)
 
+        // TODO login
+        // Configure Google Sign In
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+
+        // getting the value of gso inside the GoogleSignInClient
+        val googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
+
+        binding.googleSignIn.setOnClickListener {
+            viewModel.signIn(googleSignInClient,requireActivity())
+        }
+
+
         return binding.root
     }
+
 }

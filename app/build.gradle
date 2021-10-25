@@ -135,9 +135,14 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore-ktx:23.0.3'
     implementation 'com.google.firebase:firebase-core:19.0.1'
     implementation 'com.google.firebase:firebase-messaging-directboot:22.0.0'
+    implementation 'com.google.firebase:firebase-auth-ktx:21.0.1'
+    implementation 'com.firebaseui:firebase-ui-auth:4.2.1'
 
     //custom shape view
     implementation 'com.yxf:clippathlayout:1.0.4'
     implementation 'io.github.florent37:shapeofview:1.4.7'
+
+    // google play service
+    implementation 'com.google.android.gms:play-services-auth:19.2.0'
 
 }
