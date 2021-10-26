@@ -22,22 +22,24 @@
         app:tabIndicatorAnimationMode="elastic"
         app:tabIndicatorColor="@color/hoop_red"
         app:tabIndicatorHeight="3dp"
-        app:tabSelectedTextColor="@color/hoop_red"
-        app:tabTextColor="@color/hoop_background">
+        app:tabSelectedTextColor="@color/hoop_red">
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:icon="@drawable/bar_chart"
             android:text="Chart" />
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:icon="@drawable/management"
             android:text="Manage" />
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:icon="@drawable/tactic"
             android:text="Tactic" />
 
     </com.google.android.material.tabs.TabLayout>
