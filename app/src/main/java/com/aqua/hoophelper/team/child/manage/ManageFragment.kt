@@ -35,6 +35,11 @@ class ManageFragment : Fragment() {
         val binding: ManageFragmentBinding =
             DataBindingUtil.inflate(inflater, R.layout.manage_fragment, container,false)
 
+        viewModel.lineup.observe(viewLifecycleOwner) { its ->
+            its.sortBy {
+                it.toInt()
+            }
+        }
         // spinner
         val teamAdapter = ArrayAdapter(requireContext(), R.layout.team_start5_item, viewModel.lineup.value!!)
         binding.apply {
