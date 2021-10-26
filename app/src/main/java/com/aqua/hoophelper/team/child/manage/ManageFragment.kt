@@ -1,23 +1,16 @@
 package com.aqua.hoophelper.team.child.manage
 
-import android.annotation.SuppressLint
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.text.Spanned
-import android.text.style.ImageSpan
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import com.aqua.hoophelper.R
 import com.aqua.hoophelper.databinding.ManageFragmentBinding
-import com.aqua.hoophelper.team.TeamViewModel
-import com.google.android.material.chip.Chip
-import com.google.android.material.chip.ChipDrawable
 
 class ManageFragment : Fragment() {
 
@@ -35,16 +28,15 @@ class ManageFragment : Fragment() {
         val binding: ManageFragmentBinding =
             DataBindingUtil.inflate(inflater, R.layout.manage_fragment, container,false)
 
-        viewModel.lineup.observe(viewLifecycleOwner) { its ->
+        viewModel.subLineup.observe(viewLifecycleOwner) { its ->
             its.sortBy {
                 it.toInt()
             }
         }
         // spinner
-        val teamAdapter = ArrayAdapter(requireContext(), R.layout.team_start5_item, viewModel.lineup.value!!)
+        val teamAdapter = ArrayAdapter(requireContext(), R.layout.team_start5_item, viewModel.subLineup.value!!)
         binding.apply {
-            viewModel.lineup.observe(viewLifecycleOwner) {
-                teamAdapter
+            viewModel.subLineup.observe(viewLifecycleOwner) {
                 start5PgText.setAdapter(teamAdapter)
                 start5SgText.setAdapter(teamAdapter)
                 start5SfText.setAdapter(teamAdapter)
@@ -58,35 +50,47 @@ class ManageFragment : Fragment() {
                 Log.d("lineup","${viewModel.start5.value!![0]} to ${parent.getItemAtPosition(position)}")
                 buffer = viewModel._start5.value!![0]
                 viewModel._start5.value!![0] = parent.getItemAtPosition(position).toString()
-                viewModel._lineup.value!![position] = buffer
+                viewModel._subLineup.value!![position] = buffer
             }
             start5SgText.setOnItemClickListener { parent, view, position, id ->
                 Log.d("lineup","${viewModel.start5.value!![1]} to ${parent.getItemAtPosition(position)}")
                 buffer = viewModel._start5.value!![1]
                 viewModel._start5.value!![1] = parent.getItemAtPosition(position).toString()
-                viewModel._lineup.value!![position] = buffer
+                viewModel._subLineup.value!![position] = buffer
             }
             start5SfText.setOnItemClickListener { parent, view, position, id ->
                 Log.d("lineup","${viewModel.start5.value!![2]} to ${parent.getItemAtPosition(position)}")
                 buffer = viewModel._start5.value!![2]
                 viewModel._start5.value!![2] = parent.getItemAtPosition(position).toString()
-                viewModel._lineup.value!![position] = buffer
+                viewModel._subLineup.value!![position] = buffer
             }
             start5PfText.setOnItemClickListener { parent, view, position, id ->
                 Log.d("lineup","${viewModel.start5.value!![3]} to ${parent.getItemAtPosition(position)}")
                 buffer = viewModel._start5.value!![3]
                 viewModel._start5.value!![3] = parent.getItemAtPosition(position).toString()
-                viewModel._lineup.value!![position] = buffer
+                viewModel._subLineup.value!![position] = buffer
             }
             start5CText.setOnItemClickListener { parent, view, position, id ->
                 Log.d("lineup","${viewModel.start5.value!![4]} to ${parent.getItemAtPosition(position)}")
                 buffer = viewModel._start5.value!![4]
                 viewModel._start5.value!![4] = parent.getItemAtPosition(position).toString()
-                viewModel._lineup.value!![position] = buffer
+                viewModel._subLineup.value!![position] = buffer
             }
-
         }
 
+        // release
+        val teamLineup = (viewModel.subLineup.value!! + viewModel.start5.value!!).sortedBy {
+            it.toInt()
+        }
+
+        binding.releaseText.setAdapter(
+            ArrayAdapter(requireContext(), R.layout.team_start5_item, viewModel.lineup.value!!)
+        )
+
+        binding.releaseButton.setOnClickListener {
+            viewModel._lineup.value?.remove(binding.releaseText.text.toString())
+            binding.releaseInput.editText?.setText("")
+        }
 
         return binding.root
     }

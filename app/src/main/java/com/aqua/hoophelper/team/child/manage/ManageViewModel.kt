@@ -18,7 +18,7 @@ class ManageViewModel : ViewModel() {
     val start5: LiveData<MutableList<String>>
         get() = _start5
 
-    var _lineup = MutableLiveData(
+    var _subLineup = MutableLiveData(
         mutableListOf(
         "6",
         "7",
@@ -32,7 +32,12 @@ class ManageViewModel : ViewModel() {
         "15",
         )
     )
+    val subLineup: LiveData<MutableList<String>>
+        get() = _subLineup
+
+    var _lineup = MutableLiveData<MutableList<String>>(
+        (_subLineup.value!! + _start5.value!!).sortedBy { it.toInt() }.toMutableList()
+    )
     val lineup: LiveData<MutableList<String>>
         get() = _lineup
-
 }
