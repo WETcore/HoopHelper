@@ -29,8 +29,16 @@ class HomeFragment : Fragment() {
             DataBindingUtil.inflate(inflater, R.layout.home_fragment, container,false)
 
         // spinner
-        val teamAdapter = ArrayAdapter(requireContext(), R.layout.home_team_item, viewModel.teamList)
+        viewModel.teams.observe(viewLifecycleOwner) {
+            it[0].name
+        }
+        val teamAdapter = ArrayAdapter(requireContext(), R.layout.home_team_item, viewModel.setTeamList())
         binding.teamText.setAdapter(teamAdapter)
+
+        // set selected Team
+        binding.teamText.setOnItemClickListener { parent, view, position, id ->
+            viewModel.selectedTeam(position)
+        }
 
         // expand card view
         binding.scoreLeaderCard.setOnClickListener {

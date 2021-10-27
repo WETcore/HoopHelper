@@ -37,6 +37,7 @@
         <item name="cornerSizeBottomRight">50dp</item>
     </style>
 
+<!--  for textInputLayout  -->
     <style name="changeBackgroundColor"  parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu">
         <item name="colorSurface">@color/hoop_background</item>
     </style>
@@ -44,4 +45,14 @@
     <style name="changeBackgroundColorForMatch"  parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu">
         <item name="colorSurface">@color/hoop_background</item>
     </style>
+
+<!--  for bottomSheetDialog  -->
+    <style name="MyBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/MYBottomSheetStyle</item>
+    </style>
+
+    <style name="MYBottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@color/transparent</item>
+    </style>
+
 </resources>

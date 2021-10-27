@@ -39,6 +39,7 @@ class TeamFragment : Fragment() {
             resources.getDrawable(R.drawable.tactic),
         )
         vPager.adapter = TeamVPagerAdapter(requireActivity())
+
         TabLayoutMediator(tabLayout, vPager) { tab, position ->
             tab.text = title[position]
             tab.icon = titleIcon[position]

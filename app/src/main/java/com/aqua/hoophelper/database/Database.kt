@@ -3,6 +3,7 @@ package com.aqua.hoophelper.database
 data class Team(
     var id: String = "",
     var name: String = "",
+    var jerseyNumber: String = "",
 )
 
 data class Invitation(
@@ -12,8 +13,9 @@ data class Invitation(
 
 data class Player(
     var id: String = "",
-    var name: String = "",
+    var number: String = "",
     var teamId: String = "",
+    var email: String = "",
 )
 
 data class Match(
@@ -21,10 +23,14 @@ data class Match(
     var teamId: String = "",
     var date: String = "",
     var time: String = "",
+    var gaming: Boolean = false,
+    var actualTime: Long = 0L,
     )
 
 
 data class Event(
+    var teamId: String = "",
+    var playerId: String = "",
     var matchId: String = "",
     var eventId: String = "",
     var actualTime: Long = 0L,

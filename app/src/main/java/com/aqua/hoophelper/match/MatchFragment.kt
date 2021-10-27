@@ -11,8 +11,10 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.aqua.hoophelper.HoopInfo
 import com.aqua.hoophelper.NavigationDirections
 import com.aqua.hoophelper.R
+import com.aqua.hoophelper.database.Match
 import com.aqua.hoophelper.databinding.MatchFragmentBinding
 import com.google.firebase.firestore.Query
 
@@ -93,6 +95,15 @@ class MatchFragment : Fragment() {
         binding.exitMatchButton.setOnClickListener {
             viewModel.shotClockTimer.cancel()
             viewModel.gameClockSecTimer.cancel()
+            viewModel.db
+                .collection("Matches")
+                .whereEqualTo("matchId", args.matchId)
+                .get()
+                .addOnSuccessListener {
+                it.forEach {
+                    it.reference.update("gaming",false)
+                }
+            }
             findNavController().navigate(NavigationDirections.navToHome())
         }
 

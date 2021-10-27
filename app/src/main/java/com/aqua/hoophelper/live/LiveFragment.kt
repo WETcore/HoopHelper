@@ -31,7 +31,6 @@ class LiveFragment : Fragment() {
         binding.liveRecycler.adapter = adapter
 
         viewModel.events.observe(viewLifecycleOwner) {
-            Log.d("db","${it}")
             adapter.submitList(it)
         }
 
