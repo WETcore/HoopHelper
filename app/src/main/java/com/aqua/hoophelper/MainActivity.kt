@@ -58,8 +58,7 @@ class MainActivity : AppCompatActivity() {
 
         ///badge
         binding.bottomBar.getOrCreateBadge(R.id.liveFragment).apply {
-            viewModel.db.collection("Matches")
-                .whereEqualTo("teamId", "f7OBFWjc0cXk4I2mCWDT")
+            viewModel.db.collection("Matches") // TODO to model
                 .addSnapshotListener { value, error ->
                     var mlist = value?.toObjects(Match::class.java)?.sortedBy {
                         it.actualTime
@@ -148,8 +147,10 @@ class MainActivity : AppCompatActivity() {
 
 object User {
     var account: FirebaseUser? = null
+    var teamId = ""
+    var matchId = ""
 }
 
 object HoopInfo {
-    var teamId = ""
+    var spinnerSelectedTeamId = ""
 }

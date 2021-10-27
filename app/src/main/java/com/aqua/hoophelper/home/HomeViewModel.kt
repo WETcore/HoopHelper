@@ -30,7 +30,6 @@ class HomeViewModel : ViewModel() {
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     fun setTeamList(): List<String> {
-
         coroutineScope.launch {
             _teams = HoopRemoteDataSource.getTeams() as MutableLiveData<List<Team>>
             for (i in teams.value!!.indices) {
@@ -41,8 +40,7 @@ class HomeViewModel : ViewModel() {
     }
 
     fun selectedTeam(pos: Int) {
-        _teams.value!![pos]
-        HoopInfo.teamId = _teams.value!![pos].id
+        HoopInfo.spinnerSelectedTeamId = _teams.value!![pos].id
     }
 
 

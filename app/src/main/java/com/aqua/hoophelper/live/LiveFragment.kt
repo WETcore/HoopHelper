@@ -8,7 +8,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import com.aqua.hoophelper.HoopInfo
 import com.aqua.hoophelper.R
+import com.aqua.hoophelper.database.remote.HoopRemoteDataSource
 import com.aqua.hoophelper.databinding.LiveFragmentBinding
 
 class LiveFragment : Fragment() {
@@ -31,7 +33,11 @@ class LiveFragment : Fragment() {
         binding.liveRecycler.adapter = adapter
 
         viewModel.events.observe(viewLifecycleOwner) {
-            adapter.submitList(it)
+            adapter.submitList(
+                it.filter { its ->
+                    its.matchId == it[0].matchId && its.teamId == HoopInfo.spinnerSelectedTeamId
+                }
+            )
         }
 
         return binding.root

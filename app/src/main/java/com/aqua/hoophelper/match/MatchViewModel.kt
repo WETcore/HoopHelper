@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.aqua.hoophelper.User
 import com.aqua.hoophelper.database.Event
 import com.aqua.hoophelper.database.Match
 import com.google.firebase.firestore.FirebaseFirestore
@@ -127,6 +128,7 @@ class MatchViewModel : ViewModel() {
         resetData()
         event.eventId = db.collection("Events").document().id
         event.matchId = mId
+        event.teamId = User.teamId
         event.actualTime = Calendar.getInstance().timeInMillis
         event.matchTimeMin = gameClockMin.value.toString()
         event.matchTimeSec = gameClockSec.value.toString()
@@ -161,6 +163,7 @@ class MatchViewModel : ViewModel() {
         resetData()
         event.eventId = db.collection("Events").document().id
         event.matchId = mId
+        event.teamId = User.teamId
         event.actualTime = Calendar.getInstance().timeInMillis
         event.playerNum = player
         event.matchTimeMin = gameClockMin.value.toString()
@@ -173,6 +176,7 @@ class MatchViewModel : ViewModel() {
         resetData()
         event.eventId = db.collection("Events").document().id
         event.matchId = mId
+        event.teamId = User.teamId
         event.actualTime = Calendar.getInstance().timeInMillis
         event.playerNum = player
         event.matchTimeMin = gameClockMin.value.toString()
