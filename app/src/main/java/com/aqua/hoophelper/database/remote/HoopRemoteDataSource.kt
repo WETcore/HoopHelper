@@ -28,7 +28,7 @@ object HoopRemoteDataSource: HoopRepository {
         return result
     }
 
-     override fun getMatches(): LiveData<List<Match>> {
+    override fun getMatches(): LiveData<List<Match>> {
         val result = MutableLiveData<List<Match>>()
         result.let {
             FirebaseFirestore.getInstance()
@@ -42,35 +42,60 @@ object HoopRemoteDataSource: HoopRepository {
         return result
     }
 
-    override suspend fun getTeams(): LiveData<List<Team>> = suspendCoroutine { conti ->
-        val result = MutableLiveData<List<Team>>()
-        result.let {
-            FirebaseFirestore.getInstance()
-                .collection("Teams")
-                .get()
-                .addOnCompleteListener { value ->
-                    it.value = value.result?.toObjects(Team::class.java) ?: mutableListOf()
-
-                    conti.resume(result)
-                }
-        }
+    // captain participate the match. find captain's member
+    override suspend fun getMatchMembers(): List<Player> = suspendCoroutine { conti ->
+        val db = FirebaseFirestore.getInstance()
+            db.collection("Players")
+            .whereEqualTo("teamId", User.teamId)
+            .get()
+            .addOnCompleteListener { value ->
+                val result = value.result?.toObjects(Player::class.java) ?: mutableListOf()
+                User.teamMembers.value = result
+//                Log.d("roster","${User.teamMembers.value}")
+                conti.resume(result)
+            }
     }
 
-    override suspend fun getUserInfo(): LiveData<List<Player>> = suspendCoroutine { conti ->
-        val result = MutableLiveData<List<Player>>()
-        if (User.account != null) {
-            result.let { its ->
-                FirebaseFirestore.getInstance()
-                    .collection("Players")
-                    .whereEqualTo("email", User.account?.email)
-                    .get()
-                    .addOnCompleteListener {
-                        its.value = it.result?.toObjects(Player::class.java) ?: mutableListOf()
-                        User.teamId = its.value!![0].teamId
 
-                        conti.resume(result)
-                    }
+    override suspend fun getTeams(): List<Team> = suspendCoroutine { conti ->
+        FirebaseFirestore.getInstance()
+            .collection("Teams")
+            .get()
+            .addOnCompleteListener { value ->
+                val result = value.result?.toObjects(Team::class.java) ?: mutableListOf()
+
+                conti.resume(result)
             }
+    }
+
+    override suspend fun getTeamMembers(): List<Player> = suspendCoroutine { conti ->
+        FirebaseFirestore.getInstance()
+            .collection("Players")
+            .whereEqualTo("teamId", HoopInfo.spinnerSelectedTeamId)
+            .get()
+            .addOnCompleteListener { value ->
+                var result = value.result?.toObjects(Player::class.java) ?: mutableListOf()
+
+                conti.resume(result)
+
+            }
+    }
+
+    override suspend fun getUserInfo(): List<Player> = suspendCoroutine { conti ->
+        if (User.account != null) {
+            FirebaseFirestore.getInstance()
+                .collection("Players")
+                .whereEqualTo("email", User.account?.email)
+                .get()
+                .addOnCompleteListener {
+                    val result = it.result?.toObjects(Player::class.java) ?: mutableListOf()
+                    User.teamId = result[0].teamId
+
+                    Log.d("userInfo","${User.account?.email}")
+
+                    conti.resume(result)
+
+                }
         }
     }
 

@@ -8,9 +8,14 @@ import androidx.lifecycle.ViewModel
 import com.aqua.hoophelper.User
 import com.aqua.hoophelper.database.Event
 import com.aqua.hoophelper.database.Match
+import com.aqua.hoophelper.database.Player
 import com.aqua.hoophelper.database.remote.HoopRemoteDataSource
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.math.*
 
@@ -41,17 +46,17 @@ class MatchViewModel : ViewModel() {
     val quarter: LiveData<Int>
         get() = _quarter
 
-    // date
-    private var _date = MutableLiveData<String>()
-    val date: LiveData<String>
-        get() = _date
-
     //////////////////
     // player 當下選擇的球員
     var player = "01"
 
     // selectPlayerPos 紀錄按那個 chip
     var selectPlayerPos = 0
+
+    // roster
+    private var _roster = MutableLiveData<List<Player>>()
+    val roster: LiveData<List<Player>>
+        get() = _roster
 
     // player pos 先發
     var _playerNum = MutableLiveData<MutableList<String>>(
@@ -66,17 +71,13 @@ class MatchViewModel : ViewModel() {
     val playerNum: LiveData<MutableList<String>>
         get() = _playerNum
 
+    // startingPlayer
+    private var _startPlayer = MutableLiveData<MutableList<String>>(mutableListOf())
+    val startPlayer: LiveData<MutableList<String>>
+        get() = _startPlayer
+
     // substitutionPlayer 替補
-    private var _substitutionPlayer = MutableLiveData<MutableList<String>>(mutableListOf<String>(
-        "11",
-        "12",
-        "13",
-        "14",
-        "15",
-        "16",
-        "17",
-        "18",
-    ))
+    private var _substitutionPlayer = MutableLiveData<MutableList<String>>(mutableListOf())
     val substitutionPlayer: LiveData<MutableList<String>>
         get() = _substitutionPlayer
 
@@ -98,6 +99,12 @@ class MatchViewModel : ViewModel() {
     private var _lastEvent = HoopRemoteDataSource.getEvents()
     val lastEvent: LiveData<List<Event>>
         get() = _lastEvent
+
+    // Create a Coroutine scope using a job to be able to cancel when needed
+    private var viewModelJob = Job()
+
+    // the Coroutine runs using the Main (UI) dispatcher
+    private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
 
     val shotClockTimer = object : CountDownTimer(Long.MAX_VALUE, 10L) {
@@ -126,8 +133,8 @@ class MatchViewModel : ViewModel() {
 
     fun selectPlayer(pos: Int): String {
         selectPlayerPos = pos
-        player = _playerNum.value!![pos]
-        return playerNum.value!![pos]
+        player = _startPlayer.value!![pos]
+        return _startPlayer.value!![pos]
     }
 
     fun selectZone(selectedZone: Int) {
@@ -278,15 +285,15 @@ class MatchViewModel : ViewModel() {
     }
 
     fun getSubPlayer(subPlayer: String) {
-        _playerNum.value!![selectPlayerPos] = subPlayer
-        _playerNum.value = _playerNum.value
-        player = _playerNum.value!![selectPlayerPos]
+        _startPlayer.value!![selectPlayerPos] = subPlayer
+        _startPlayer.value = _startPlayer.value
+        player = _startPlayer.value!![selectPlayerPos]
     }
 
     fun changeSubPlayer(onCourtPlayer: String, spinnerPos: Int) {
         _substitutionPlayer.value!![spinnerPos] = onCourtPlayer
         _substitutionPlayer.value = _substitutionPlayer.value
-        Log.d("poss","sub ${spinnerPos} ${_substitutionPlayer.value}")
+        Log.d("poss","sub ${spinnerPos} ${substitutionPlayer.value}")
     }
 
     fun setHistoryText(it: List<Event>): String {
@@ -317,6 +324,39 @@ class MatchViewModel : ViewModel() {
                     it.reference.delete()
                 }
             }
+    }
+
+    fun setRoster() {
+        coroutineScope.launch {
+            val starPlayerList = mutableListOf<String>()
+            val subPlayerList = mutableListOf<String>()
+            _roster.value = HoopRemoteDataSource.getMatchMembers()
+            Log.d("roster", "${_roster.value}")
+            val lineUp = _roster.value!!
+
+            lineUp.filter {
+                !it.starting5
+            }.forEachIndexed { index, player ->
+                _substitutionPlayer.value!!.add(player.number)
+                subPlayerList.add(player.number)
+            }
+
+            lineUp.filter {
+                it.starting5
+            }.forEachIndexed { index, player ->
+                starPlayerList.add(player.number)
+            }
+            _startPlayer.value = starPlayerList
+            _substitutionPlayer.value = subPlayerList
+            Log.d("subPlayer2", "${_startPlayer.value}")
+            Log.d("subPlayer3", "${_substitutionPlayer.value}")
+        }
+    }
+
+    ////////////////
+    override fun onCleared() {
+        super.onCleared()
+        viewModelJob.cancel()
     }
 
 }

@@ -6,10 +6,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.aqua.hoophelper.database.Match
+import com.aqua.hoophelper.database.Player
 import com.aqua.hoophelper.databinding.ActivityMainBinding
 import com.aqua.hoophelper.match.MatchViewModel
 import com.aqua.hoophelper.profile.RC_SIGN_IN
@@ -38,6 +40,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         // binding
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -52,7 +55,6 @@ class MainActivity : AppCompatActivity() {
             binding.toolbar.visibility = View.GONE
             binding.appBar.behavior.slideDown(binding.appBar)
             viewModel.setMatchInfo()
-            viewModel.db.collection("Matches").add(viewModel.match)
             navHostFragment.navigate(NavigationDirections.navToMatch(viewModel.match.matchId))
         }
 
@@ -101,9 +103,8 @@ class MainActivity : AppCompatActivity() {
         val currentUser = auth.currentUser
         User.account = currentUser
         Log.d("currentUser","${currentUser?.email}")
-        updateUI(currentUser)
-
         viewModel.getUserInfo()
+        updateUI(currentUser)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -148,9 +149,10 @@ class MainActivity : AppCompatActivity() {
 object User {
     var account: FirebaseUser? = null
     var teamId = ""
-    var matchId = ""
+    var teamMembers = MutableLiveData(listOf<Player>())
 }
 
 object HoopInfo {
     var spinnerSelectedTeamId = ""
+    var matchId = ""
 }

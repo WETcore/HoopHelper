@@ -31,16 +31,20 @@ class HomeViewModel : ViewModel() {
 
     fun setTeamList(): List<String> {
         coroutineScope.launch {
-            _teams = HoopRemoteDataSource.getTeams() as MutableLiveData<List<Team>>
+            _teams.value = HoopRemoteDataSource.getTeams()
             for (i in teams.value!!.indices) {
                 teamList.add(teams.value!![i].name)
             }
+            HoopInfo.spinnerSelectedTeamId = _teams.value!![0].id
         }
         return teamList
     }
 
     fun selectedTeam(pos: Int) {
         HoopInfo.spinnerSelectedTeamId = _teams.value!![pos].id
+        coroutineScope.launch {
+            HoopRemoteDataSource.getTeamMembers()
+        }
     }
 
 

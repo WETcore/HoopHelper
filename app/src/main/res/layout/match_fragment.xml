@@ -238,7 +238,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="none"
                     android:singleLine="true"
-                    android:text="球員"
+                    android:text="Player"
                     android:textSize="14sp" />
             </com.google.android.material.textfield.TextInputLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -387,6 +387,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Foul"
+                    android:layout_marginEnd="20dp"
                     android:textColor="@color/hoop_orange"
                     app:chipBackgroundColor="@color/hoop_yellow"
                     app:chipStrokeColor="@color/hoop_orange"
@@ -464,6 +465,7 @@
             app:chipStrokeColor="@color/hoop_orange"
             app:chipStrokeWidth="1dp"
             app:closeIconVisible="false"
+            android:text="latest event"
             app:layout_constraintBottom_toBottomOf="@+id/free_throw_switch"
             app:layout_constraintStart_toEndOf="@+id/free_throw_switch" />
 

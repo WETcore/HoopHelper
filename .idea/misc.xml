@@ -22,6 +22,7 @@
         <entry key="app/src/main/res/layout/live_message_item.xml" value="0.32864583333333336" />
         <entry key="app/src/main/res/layout/manage_fragment.xml" value="0.5" />
         <entry key="app/src/main/res/layout/match_fragment.xml" value="0.4758942457231726" />
+        <entry key="app/src/main/res/layout/match_team_item.xml" value="0.3416666666666667" />
         <entry key="app/src/main/res/layout/player_chip.xml" value="0.2734375" />
         <entry key="app/src/main/res/layout/profile_fragment.xml" value="0.5" />
         <entry key="app/src/main/res/layout/tactic_fragment.xml" value="0.2635416666666667" />

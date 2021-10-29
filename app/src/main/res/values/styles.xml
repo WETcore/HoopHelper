@@ -43,7 +43,7 @@
     </style>
 
     <style name="changeBackgroundColorForMatch"  parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu">
-        <item name="colorSurface">@color/hoop_background</item>
+        <item name="colorSurface">@color/hoop_yellow</item>
     </style>
 
 <!--  for bottomSheetDialog  -->

@@ -40,6 +40,8 @@ class MatchFragment : Fragment() {
         val binding: MatchFragmentBinding =
             DataBindingUtil.inflate(inflater, R.layout.match_fragment, container,false)
 
+        viewModel.setRoster()
+
         // safe arg
         val args: MatchFragmentArgs by navArgs()
 
@@ -130,24 +132,29 @@ class MatchFragment : Fragment() {
             }
         }
         // select substitution player
-        var teamAdapter = ArrayAdapter(requireContext(), R.layout.home_team_item, viewModel.substitutionPlayer.value!!)
-        binding.subPlayerText.setAdapter(teamAdapter)
+        viewModel.substitutionPlayer.observe(viewLifecycleOwner) {
+            var teamAdapter = ArrayAdapter(requireContext(), R.layout.match_team_item, viewModel.substitutionPlayer.value!!)
+            binding.subPlayerText.setAdapter(teamAdapter)
+        }
+
 
         binding.subPlayerText.setOnItemClickListener { parent, view, position, id ->
-            var buffer = viewModel.playerNum.value!![viewModel.selectPlayerPos]
+            var buffer = viewModel.startPlayer.value!![viewModel.selectPlayerPos]
             viewModel.getSubPlayer(parent.getItemAtPosition(position).toString())
             viewModel.changeSubPlayer(buffer, position)
-            Log.d("poss","${viewModel.selectPlayerPos} ${parent.getItemAtPosition(position)}")
         }
 
-        viewModel.playerNum.observe(viewLifecycleOwner) {
-            Log.d("poss", "${viewModel.playerNum.value}")
-            binding.player1Chip.text = it[0]
-            binding.player2Chip.text = it[1]
-            binding.player3Chip.text = it[2]
-            binding.player4Chip.text = it[3]
-            binding.player5Chip.text = it[4]
+        viewModel.startPlayer.observe(viewLifecycleOwner) {
+            Log.d("tag","${it}")
+            if (!it.isNullOrEmpty()) {
+                binding.player1Chip.text = it[0]
+                binding.player2Chip.text = it[1]
+                binding.player3Chip.text = it[2]
+                binding.player4Chip.text = it[3]
+                binding.player5Chip.text = it[4]
+            }
         }
+
 
         /// record data
 

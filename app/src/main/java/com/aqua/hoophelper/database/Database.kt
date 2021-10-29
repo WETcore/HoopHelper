@@ -16,6 +16,7 @@ data class Player(
     var number: String = "",
     var teamId: String = "",
     var email: String = "",
+    var starting5: Boolean = false,
 )
 
 data class Match(

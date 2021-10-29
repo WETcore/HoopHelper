@@ -35,11 +35,15 @@ class MainActivityViewModel: ViewModel() {
     fun setMatchInfo() {
         match.gaming = true
         match.matchId = db.collection("Matches").document().id
-        User.matchId = match.matchId
+        HoopInfo.matchId = match.matchId
         match.teamId = User.teamId
         match.date = cal.get(Calendar.DATE).toString()
         match.time = cal.get(Calendar.HOUR_OF_DAY).toString()
         match.actualTime = Calendar.getInstance().timeInMillis
+        db.collection("Matches").add(match)
+        coroutineScope.launch {
+            HoopRemoteDataSource.getMatchMembers()
+        }
     }
 
     fun getUserInfo() {
