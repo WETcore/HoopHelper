@@ -14,9 +14,10 @@
     <color name="hoop_orange_light">#FF6600</color>
     <color name="hoop_background">#FFE9A3</color>
 
-    <color name="clock_yellow">#FFF200</color>
-    <color name="clock_red">#FF0000</color>
-    <color name="clock_green">#4E9F3D</color>
+    <color name="clock_yellow">#FFF87D</color>
+    <color name="clock_red">#FF6D24</color>
+    <color name="clock_green">#C2E8CE</color>
+    <color name="clock_background">#A35709</color>
 
 
 

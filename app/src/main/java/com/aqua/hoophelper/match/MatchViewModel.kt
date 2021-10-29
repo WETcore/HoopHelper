@@ -14,6 +14,9 @@ import com.google.firebase.firestore.Query
 import java.util.*
 import kotlin.math.*
 
+const val COURT_TOP = 0.15
+const val COURT_BOTTOM = 0.57
+
 class MatchViewModel : ViewModel() {
 
     // Firebase
@@ -213,12 +216,13 @@ class MatchViewModel : ViewModel() {
         db.collection("Events").add(event)
     }
 
+
     fun getDiameter(x: Float, y: Float, w: Int, h: Int): Boolean {
-//        Log.d("dia","x: $x y: $y  x/w ${x/w} ${y/h}")
-        var dm = sqrt((x-(w/2)).pow(2) + (y-(h*0.24)).pow(2))/2
+        Log.i("dia","x: $x y: $y  x/w ${x/w} ${y/h}")
+        var dm = sqrt((x-(w/2)).pow(2) + (y-(h*0.2)).pow(2))/2
         var slope = y/(x-(w/2))
 
-        if (y/h in 0.195..0.605) {
+        if (y/h in COURT_TOP..COURT_BOTTOM) {
             if (dm/w < 0.083) {
                 selectZone(1)
             }
@@ -251,7 +255,7 @@ class MatchViewModel : ViewModel() {
                 }
                 else Log.d("dia","${x} ${w} ${atan(slope)/PI*180} in zone 3 error")
             }
-            else if (x/w > 0.9 && y/h <= 0.362) {
+            else if (x/w > 0.9 && y/h <= (COURT_TOP + 0.167)) {
                 selectZone(14)
             }
             else if (x/w < 0.09 && y/h <= 0.362) {
