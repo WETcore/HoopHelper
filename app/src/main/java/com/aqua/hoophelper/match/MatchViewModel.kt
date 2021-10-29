@@ -8,7 +8,9 @@ import androidx.lifecycle.ViewModel
 import com.aqua.hoophelper.User
 import com.aqua.hoophelper.database.Event
 import com.aqua.hoophelper.database.Match
+import com.aqua.hoophelper.database.remote.HoopRemoteDataSource
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import java.util.*
 import kotlin.math.*
 
@@ -88,6 +90,11 @@ class MatchViewModel : ViewModel() {
     // database
     var event = Event()
     var match = Match()
+
+    // record
+    private var _lastEvent = HoopRemoteDataSource.getEvents()
+    val lastEvent: LiveData<List<Event>>
+        get() = _lastEvent
 
 
     val shotClockTimer = object : CountDownTimer(Long.MAX_VALUE, 10L) {
@@ -276,6 +283,36 @@ class MatchViewModel : ViewModel() {
         _substitutionPlayer.value!![spinnerPos] = onCourtPlayer
         _substitutionPlayer.value = _substitutionPlayer.value
         Log.d("poss","sub ${spinnerPos} ${_substitutionPlayer.value}")
+    }
+
+    fun setHistoryText(it: List<Event>): String {
+        it[0].run {
+            return when {
+                assist -> "assist"
+                block -> "block"
+                foul -> "foul"
+                freeThrow == true -> "FT In"
+                freeThrow == false -> "FT out"
+                rebound -> "rebound"
+                score2 == true -> "2pt In"
+                score2 == false -> "2pt Out"
+                score3 == true -> "3pt In"
+                score3 == false -> "3pt Out"
+                steal -> "steal"
+                turnover -> "turnover"
+                else -> "else"
+            }
+        }
+    }
+
+    fun cancelEvent() {
+        db.collection("Events")
+            .orderBy("actualTime", Query.Direction.DESCENDING)
+            .limit(1).get().addOnSuccessListener {
+                it.forEach {
+                    it.reference.delete()
+                }
+            }
     }
 
 }

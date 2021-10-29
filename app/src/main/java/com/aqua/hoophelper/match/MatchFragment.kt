@@ -14,7 +14,9 @@ import androidx.navigation.fragment.navArgs
 import com.aqua.hoophelper.HoopInfo
 import com.aqua.hoophelper.NavigationDirections
 import com.aqua.hoophelper.R
+import com.aqua.hoophelper.database.Event
 import com.aqua.hoophelper.database.Match
+import com.aqua.hoophelper.database.remote.HoopRemoteDataSource
 import com.aqua.hoophelper.databinding.MatchFragmentBinding
 import com.google.firebase.firestore.Query
 
@@ -100,10 +102,10 @@ class MatchFragment : Fragment() {
                 .whereEqualTo("matchId", args.matchId)
                 .get()
                 .addOnSuccessListener {
-                it.forEach {
-                    it.reference.update("gaming",false)
+                    it.forEach {
+                        it.reference.update("gaming",false)
+                    }
                 }
-            }
             findNavController().navigate(NavigationDirections.navToHome())
         }
 
@@ -264,18 +266,26 @@ class MatchFragment : Fragment() {
             Log.d("record","${viewModel.event}")
         }
 
-        // cancel event
-        binding.cancelChip.setOnClickListener {
-            viewModel.db.collection("Events")
-                .orderBy("actualTime", Query.Direction.DESCENDING)
-                .limit(1).get().addOnSuccessListener {
-                    it.forEach {
-                        it.reference.delete()
-                    }
-                }
+
+        // event history & cancel event
+        viewModel.lastEvent.observe(viewLifecycleOwner) {
+            if (!it.isNullOrEmpty()) {
+                binding.historyChip.text = viewModel.setHistoryText(it)
+            }
+        }
+
+        binding.historyChip.setOnCloseIconClickListener {
+            viewModel.cancelEvent()
+            binding.historyChip.isCloseIconVisible = false
+            binding.historyChip.isChecked = false
+        }
+        binding.historyChip.setOnCheckedChangeListener { buttonView, isChecked ->
+            binding.historyChip.isCloseIconVisible = isChecked
         }
 
         return binding.root
     }
+
+
 
 }
