@@ -77,9 +77,21 @@ object HoopRemoteDataSource: HoopRepository {
                 var result = value.result?.toObjects(Player::class.java) ?: mutableListOf()
 
                 conti.resume(result)
-
             }
     }
+
+    // TODO get playerId to get event
+//    override suspend fun getPlayerData(): List<Event> = suspendCoroutine { conti ->
+//        FirebaseFirestore.getInstance()
+//            .collection("Events")
+//            .whereEqualTo("playerId", HoopInfo.spinnerSelectedTeamId)
+//            .get()
+//            .addOnCompleteListener { value ->
+//                var result = value.result?.toObjects(Event::class.java) ?: mutableListOf()
+//
+//                conti.resume(result)
+//            }
+//    }
 
     override suspend fun getUserInfo(): List<Player> = suspendCoroutine { conti ->
         if (User.account != null) {

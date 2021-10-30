@@ -47,8 +47,8 @@ class MatchViewModel : ViewModel() {
         get() = _quarter
 
     //////////////////
-    // player 當下選擇的球員
-    var player = "01"
+    // player num send to db
+    var player = ""
 
     // selectPlayerPos 紀錄按那個 chip
     var selectPlayerPos = 0
@@ -58,27 +58,14 @@ class MatchViewModel : ViewModel() {
     val roster: LiveData<List<Player>>
         get() = _roster
 
-    // player pos 先發
-    var _playerNum = MutableLiveData<MutableList<String>>(
-        mutableListOf<String>(
-            "01",
-            "02",
-            "03",
-            "04",
-            "05",
-        )
-    )
-    val playerNum: LiveData<MutableList<String>>
-        get() = _playerNum
-
     // startingPlayer
-    private var _startPlayer = MutableLiveData<MutableList<String>>(mutableListOf())
-    val startPlayer: LiveData<MutableList<String>>
+    private var _startPlayer = MutableLiveData<MutableList<Player>>(mutableListOf())
+    val startPlayer: LiveData<MutableList<Player>>
         get() = _startPlayer
 
     // substitutionPlayer 替補
-    private var _substitutionPlayer = MutableLiveData<MutableList<String>>(mutableListOf())
-    val substitutionPlayer: LiveData<MutableList<String>>
+    private var _substitutionPlayer = MutableLiveData<MutableList<Player>>(mutableListOf())
+    val substitutionPlayer: LiveData<MutableList<Player>>
         get() = _substitutionPlayer
 
     // zone
@@ -133,12 +120,27 @@ class MatchViewModel : ViewModel() {
 
     fun selectPlayer(pos: Int): String {
         selectPlayerPos = pos
-        player = _startPlayer.value!![pos]
-        return _startPlayer.value!![pos]
+        player = _startPlayer.value!![pos].number
+        return _startPlayer.value!![pos].number
     }
 
     fun selectZone(selectedZone: Int) {
         _zone.value = selectedZone
+    }
+
+    private fun resetData() {
+        false.let {
+            event.rebound = it
+            event.assist = it
+            event.steal = it
+            event.block = it
+            event.turnover = it
+            event.foul = it
+        }
+        event.zone = 0
+        event.freeThrow = null
+        event.score2 = null
+        event.score3 = null
     }
 
     fun setScoreData(countIn: Boolean, mId: String) {
@@ -161,26 +163,12 @@ class MatchViewModel : ViewModel() {
         db.collection("Events").add(event)
     }
 
-    private fun resetData() {
-        false.let {
-            event.rebound = it
-            event.assist = it
-            event.steal = it
-            event.block = it
-            event.turnover = it
-            event.foul = it
-        }
-        event.zone = 0
-        event.freeThrow = null
-        event.score2 = null
-        event.score3 = null
-    }
-
     fun setFreeThrowData(bool: Boolean, mId: String) {
         resetData()
         event.eventId = db.collection("Events").document().id
         event.matchId = mId
         event.teamId = User.teamId
+        event.playerId = startPlayer.value?.get(selectPlayerPos)?.id ?: ""
         event.actualTime = Calendar.getInstance().timeInMillis
         event.playerNum = player
         event.matchTimeMin = gameClockMin.value.toString()
@@ -226,8 +214,8 @@ class MatchViewModel : ViewModel() {
 
     fun getDiameter(x: Float, y: Float, w: Int, h: Int): Boolean {
         Log.i("dia","x: $x y: $y  x/w ${x/w} ${y/h}")
-        var dm = sqrt((x-(w/2)).pow(2) + (y-(h*0.2)).pow(2))/2
-        var slope = y/(x-(w/2))
+        val dm = sqrt((x-(w/2)).pow(2) + (y-(h*0.2)).pow(2))/2
+        val slope = y/(x-(w/2))
 
         if (y/h in COURT_TOP..COURT_BOTTOM) {
             if (dm/w < 0.083) {
@@ -284,13 +272,13 @@ class MatchViewModel : ViewModel() {
         else return true
     }
 
-    fun getSubPlayer(subPlayer: String) {
-        _startPlayer.value!![selectPlayerPos] = subPlayer
+    fun getSubPlayer2Starting(position: Int) {
+        _startPlayer.value!![selectPlayerPos] = substitutionPlayer.value!![position]
         _startPlayer.value = _startPlayer.value
-        player = _startPlayer.value!![selectPlayerPos]
+        player = _startPlayer.value!![selectPlayerPos].number
     }
 
-    fun changeSubPlayer(onCourtPlayer: String, spinnerPos: Int) {
+    fun changeSubPlayer(onCourtPlayer: Player, spinnerPos: Int) {
         _substitutionPlayer.value!![spinnerPos] = onCourtPlayer
         _substitutionPlayer.value = _substitutionPlayer.value
         Log.d("poss","sub ${spinnerPos} ${substitutionPlayer.value}")
@@ -328,8 +316,8 @@ class MatchViewModel : ViewModel() {
 
     fun setRoster() {
         coroutineScope.launch {
-            val starPlayerList = mutableListOf<String>()
-            val subPlayerList = mutableListOf<String>()
+            val starPlayerList = mutableListOf<Player>()
+            val subPlayerList = mutableListOf<Player>()
             _roster.value = HoopRemoteDataSource.getMatchMembers()
             Log.d("roster", "${_roster.value}")
             val lineUp = _roster.value!!
@@ -337,14 +325,14 @@ class MatchViewModel : ViewModel() {
             lineUp.filter {
                 !it.starting5
             }.forEachIndexed { index, player ->
-                _substitutionPlayer.value!!.add(player.number)
-                subPlayerList.add(player.number)
+                _substitutionPlayer.value!!.add(player)
+                subPlayerList.add(player)
             }
 
             lineUp.filter {
                 it.starting5
             }.forEachIndexed { index, player ->
-                starPlayerList.add(player.number)
+                starPlayerList.add(player)
             }
             _startPlayer.value = starPlayerList
             _substitutionPlayer.value = subPlayerList

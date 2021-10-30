@@ -11,14 +11,9 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.aqua.hoophelper.HoopInfo
 import com.aqua.hoophelper.NavigationDirections
 import com.aqua.hoophelper.R
-import com.aqua.hoophelper.database.Event
-import com.aqua.hoophelper.database.Match
-import com.aqua.hoophelper.database.remote.HoopRemoteDataSource
 import com.aqua.hoophelper.databinding.MatchFragmentBinding
-import com.google.firebase.firestore.Query
 
 enum class DataType {
     REBOUND, ASSIST, STEAL, BLOCK, TURNOVER, FOUL
@@ -40,6 +35,7 @@ class MatchFragment : Fragment() {
         val binding: MatchFragmentBinding =
             DataBindingUtil.inflate(inflater, R.layout.match_fragment, container,false)
 
+        // get roster from db
         viewModel.setRoster()
 
         // safe arg
@@ -133,25 +129,30 @@ class MatchFragment : Fragment() {
         }
         // select substitution player
         viewModel.substitutionPlayer.observe(viewLifecycleOwner) {
-            var teamAdapter = ArrayAdapter(requireContext(), R.layout.match_team_item, viewModel.substitutionPlayer.value!!)
+            var subNum = mutableListOf<String>()
+            it.forEach { player ->
+                subNum.add(player.number)
+            }
+            var teamAdapter = ArrayAdapter(requireContext(), R.layout.match_team_item, subNum)
             binding.subPlayerText.setAdapter(teamAdapter)
         }
 
 
         binding.subPlayerText.setOnItemClickListener { parent, view, position, id ->
             var buffer = viewModel.startPlayer.value!![viewModel.selectPlayerPos]
-            viewModel.getSubPlayer(parent.getItemAtPosition(position).toString())
+            viewModel.getSubPlayer2Starting(position)
             viewModel.changeSubPlayer(buffer, position)
         }
 
         viewModel.startPlayer.observe(viewLifecycleOwner) {
             Log.d("tag","${it}")
             if (!it.isNullOrEmpty()) {
-                binding.player1Chip.text = it[0]
-                binding.player2Chip.text = it[1]
-                binding.player3Chip.text = it[2]
-                binding.player4Chip.text = it[3]
-                binding.player5Chip.text = it[4]
+                binding.player1Chip.text = it[0].number
+                if (viewModel.player == "") viewModel.player = binding.player1Chip.text.toString()
+                binding.player2Chip.text = it[1].number
+                binding.player3Chip.text = it[2].number
+                binding.player4Chip.text = it[3].number
+                binding.player5Chip.text = it[4].number
             }
         }
 

@@ -41,9 +41,6 @@ class MainActivityViewModel: ViewModel() {
         match.time = cal.get(Calendar.HOUR_OF_DAY).toString()
         match.actualTime = Calendar.getInstance().timeInMillis
         db.collection("Matches").add(match)
-        coroutineScope.launch {
-            HoopRemoteDataSource.getMatchMembers()
-        }
     }
 
     fun getUserInfo() {
