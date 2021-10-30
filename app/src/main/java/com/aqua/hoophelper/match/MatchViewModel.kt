@@ -94,7 +94,7 @@ class MatchViewModel : ViewModel() {
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
 
-    val shotClockTimer = object : CountDownTimer(Long.MAX_VALUE, 10L) {
+    val shotClockTimer = object : CountDownTimer(Long.MAX_VALUE, 1000L) {
         override fun onTick(millisUntilFinished: Long) {
             if (_shotClock.value!! == 0L) {} else {
                 _shotClock.value = _shotClock.value?.minus(1L)
@@ -103,7 +103,7 @@ class MatchViewModel : ViewModel() {
         override fun onFinish() {}
     }
 
-    val gameClockSecTimer = object : CountDownTimer(Long.MAX_VALUE, 10L) {
+    val gameClockSecTimer = object : CountDownTimer(Long.MAX_VALUE, 1000L) {
         override fun onTick(millisUntilFinished: Long) {
             if (_gameClockSec.value!! == 0L) {} else {
                 _gameClockSec.value = _gameClockSec.value?.minus(1L)
@@ -148,6 +148,7 @@ class MatchViewModel : ViewModel() {
         event.eventId = db.collection("Events").document().id
         event.matchId = mId
         event.teamId = User.teamId
+        event.playerId = startPlayer.value?.get(selectPlayerPos)?.id ?: ""
         event.actualTime = Calendar.getInstance().timeInMillis
         event.matchTimeMin = gameClockMin.value.toString()
         event.matchTimeSec = gameClockSec.value.toString()
@@ -182,6 +183,7 @@ class MatchViewModel : ViewModel() {
         event.eventId = db.collection("Events").document().id
         event.matchId = mId
         event.teamId = User.teamId
+        event.playerId = startPlayer.value?.get(selectPlayerPos)?.id ?: ""
         event.actualTime = Calendar.getInstance().timeInMillis
         event.playerNum = player
         event.matchTimeMin = gameClockMin.value.toString()

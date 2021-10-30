@@ -16,7 +16,7 @@ import com.aqua.hoophelper.R
 import com.aqua.hoophelper.databinding.MatchFragmentBinding
 
 enum class DataType {
-    REBOUND, ASSIST, STEAL, BLOCK, TURNOVER, FOUL
+    SCORE, REBOUND, ASSIST, STEAL, BLOCK, TURNOVER, FOUL
 }
 
 class MatchFragment : Fragment() {

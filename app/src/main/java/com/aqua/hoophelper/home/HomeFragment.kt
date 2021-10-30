@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
 import com.aqua.hoophelper.R
 import com.aqua.hoophelper.databinding.HomeFragmentBinding
+import com.aqua.hoophelper.match.DataType
 
 class HomeFragment : Fragment() {
 
@@ -29,11 +30,13 @@ class HomeFragment : Fragment() {
             DataBindingUtil.inflate(inflater, R.layout.home_fragment, container,false)
 
         // spinner
+        viewModel.getTeamList()
         viewModel.teams.observe(viewLifecycleOwner) {
-            it[0].name
+            // TODO 設定預設球隊
+            val teamAdapter =
+                ArrayAdapter(requireContext(), R.layout.home_team_item, viewModel.teamNameList)
+            binding.teamText.setAdapter(teamAdapter)
         }
-        val teamAdapter = ArrayAdapter(requireContext(), R.layout.home_team_item, viewModel.setTeamList())
-        binding.teamText.setAdapter(teamAdapter)
 
         // set selected Team
         binding.teamText.setOnItemClickListener { parent, view, position, id ->
@@ -43,6 +46,14 @@ class HomeFragment : Fragment() {
         // expand card view
         binding.scoreLeaderCard.setOnClickListener {
             TransitionManager.beginDelayedTransition(binding.scoreLeaderCard)
+        }
+
+        viewModel.teamStat.observe(viewLifecycleOwner) {
+            binding.scoreLeaderNum.text = viewModel.getLeaderboardData(DataType.SCORE)
+            binding.assistLeaderNum.text = viewModel.getLeaderboardData(DataType.ASSIST)
+            binding.reboundLeaderNum.text = viewModel.getLeaderboardData(DataType.REBOUND)
+            binding.stealLeaderNum.text = viewModel.getLeaderboardData(DataType.STEAL)
+            binding.blockLeaderNum.text = viewModel.getLeaderboardData(DataType.BLOCK)
         }
 
         return binding.root
