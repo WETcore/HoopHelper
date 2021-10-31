@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.aqua.hoophelper.HoopInfo
 import com.aqua.hoophelper.NavigationDirections
 import com.aqua.hoophelper.R
 import com.aqua.hoophelper.databinding.MatchFragmentBinding
@@ -134,11 +135,11 @@ class MatchFragment : Fragment() {
         }
         // select substitution player
         viewModel.substitutionPlayer.observe(viewLifecycleOwner) {
-            var subNum = mutableListOf<String>()
+            viewModel.subNum = mutableListOf<String>()
             it.forEach { player ->
-                subNum.add(player.number)
+                viewModel.subNum.add(player.number)
             }
-            var teamAdapter = ArrayAdapter(requireContext(), R.layout.match_team_item, subNum)
+            var teamAdapter = ArrayAdapter(requireContext(), R.layout.match_team_item, viewModel.subNum)
             binding.subPlayerText.setAdapter(teamAdapter)
         }
 
@@ -250,8 +251,10 @@ class MatchFragment : Fragment() {
                     viewModel.setStatData(DataType.TURNOVER, args.matchId)
                     group.clearCheck()
                 }
-                R.id.foul_chip -> {
+                R.id.foul_chip -> {//TODO ban player
                     viewModel.setStatData(DataType.FOUL, args.matchId)
+                    var buffer = viewModel.startPlayer.value!![viewModel.selectPlayerPos]
+                    viewModel.getFoulCount(viewModel.player, buffer)
                     group.clearCheck()
                 }
             }
@@ -283,7 +286,7 @@ class MatchFragment : Fragment() {
         // event history & cancel event
         viewModel.lastEvent.observe(viewLifecycleOwner) {
             if (!it.isNullOrEmpty()) {
-                binding.historyChip.text = viewModel.setHistoryText(it)
+                binding.historyChip.text = viewModel.setHistoryText(it.filter { it.matchId ==HoopInfo.matchId })
             }
         }
 

@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.aqua.hoophelper.HoopInfo
 import com.aqua.hoophelper.User
 import com.aqua.hoophelper.database.Event
 import com.aqua.hoophelper.database.Match
@@ -68,6 +69,8 @@ class MatchViewModel : ViewModel() {
     val substitutionPlayer: LiveData<MutableList<Player>>
         get() = _substitutionPlayer
 
+    var subNum = mutableListOf<String>()
+
     // zone
     private var _zone = MutableLiveData<Int>(0)
     val zone: LiveData<Int>
@@ -82,10 +85,15 @@ class MatchViewModel : ViewModel() {
     var event = Event()
     var match = Match()
 
-    // record
+    // last event
     private var _lastEvent = HoopRemoteDataSource.getEvents()
     val lastEvent: LiveData<List<Event>>
         get() = _lastEvent
+
+    // foul
+    private var _foul = HoopRemoteDataSource.getEvents()
+    val foul: LiveData<List<Event>>
+        get() = _foul
 
     // Create a Coroutine scope using a job to be able to cancel when needed
     private var viewModelJob = Job()
@@ -287,21 +295,26 @@ class MatchViewModel : ViewModel() {
     }
 
     fun setHistoryText(it: List<Event>): String {
-        it[0].run {
-            return when {
-                assist -> "assist"
-                block -> "block"
-                foul -> "foul"
-                freeThrow == true -> "FT In"
-                freeThrow == false -> "FT out"
-                rebound -> "rebound"
-                score2 == true -> "2pt In"
-                score2 == false -> "2pt Out"
-                score3 == true -> "3pt In"
-                score3 == false -> "3pt Out"
-                steal -> "steal"
-                turnover -> "turnover"
-                else -> "else"
+        if (it.isNullOrEmpty()){
+            return ""
+        }
+        else{
+            it[0].run {
+                return when {
+                    assist -> "assist"
+                    block -> "block"
+                    foul -> "foul"
+                    freeThrow == true -> "FT In"
+                    freeThrow == false -> "FT out"
+                    rebound -> "rebound"
+                    score2 == true -> "2pt In"
+                    score2 == false -> "2pt Out"
+                    score3 == true -> "3pt In"
+                    score3 == false -> "3pt Out"
+                    steal -> "steal"
+                    turnover -> "turnover"
+                    else -> "else"
+                }
             }
         }
     }
@@ -340,6 +353,20 @@ class MatchViewModel : ViewModel() {
             _substitutionPlayer.value = subPlayerList
             Log.d("subPlayer2", "${_startPlayer.value}")
             Log.d("subPlayer3", "${_substitutionPlayer.value}")
+        }
+    }
+
+    fun getFoulCount(playerNum: String, onCourtPlayer: Player) {
+        var count = _foul.value?.filter {
+            it.playerNum == playerNum && it.matchId == HoopInfo.matchId
+        }?.size?.plus(1)
+        if (count != null) {
+            if(count >= 6) {
+                getSubPlayer2Starting(0)
+                changeSubPlayer(onCourtPlayer, 0)
+//                player = subNum[0]
+                Log.d("foulLog","Hi $count")
+            }
         }
     }
 
