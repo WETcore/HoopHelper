@@ -12,6 +12,7 @@ import androidx.databinding.DataBindingUtil
 import com.aqua.hoophelper.R
 import com.aqua.hoophelper.databinding.HomeFragmentBinding
 import com.aqua.hoophelper.match.DataType
+import com.aqua.hoophelper.match.DetailDataType
 
 class HomeFragment : Fragment() {
 
@@ -45,7 +46,11 @@ class HomeFragment : Fragment() {
 
         // expand card view
         binding.scoreLeaderCard.setOnClickListener {
-            TransitionManager.beginDelayedTransition(binding.scoreLeaderCard)
+            if (binding.scoreLeaderDetail.visibility == View.GONE) {
+                binding.scoreLeaderDetail.visibility = View.VISIBLE
+            } else {
+                binding.scoreLeaderDetail.visibility = View.GONE
+            }
         }
 
         viewModel.teamStat.observe(viewLifecycleOwner) {
@@ -54,6 +59,27 @@ class HomeFragment : Fragment() {
             binding.reboundLeaderNum.text = viewModel.getLeaderboardData(DataType.REBOUND)
             binding.stealLeaderNum.text = viewModel.getLeaderboardData(DataType.STEAL)
             binding.blockLeaderNum.text = viewModel.getLeaderboardData(DataType.BLOCK)
+
+            binding.scoreDetailPts.text =
+                viewModel.getLeaderDetailData(DataType.SCORE, DetailDataType.PTS)
+            binding.scoreDetailFg.text =
+                viewModel.getLeaderDetailData(DataType.SCORE, DetailDataType.FG)
+            binding.scoreDetail3p.text =
+                viewModel.getLeaderDetailData(DataType.SCORE, DetailDataType.ThreeP)
+            binding.scoreDetailFt.text =
+                viewModel.getLeaderDetailData(DataType.SCORE, DetailDataType.FT)
+            binding.scoreDetailTov.text =
+                viewModel.getLeaderDetailData(DataType.SCORE, DetailDataType.TOV)
+            binding.scoreDetailReb.text =
+                viewModel.getLeaderDetailData(DataType.SCORE, DetailDataType.REB)
+            binding.scoreDetailAst.text =
+                viewModel.getLeaderDetailData(DataType.SCORE, DetailDataType.AST)
+            binding.scoreDetailStl.text =
+                viewModel.getLeaderDetailData(DataType.SCORE, DetailDataType.STL)
+            binding.scoreDetailBlk.text =
+                viewModel.getLeaderDetailData(DataType.SCORE, DetailDataType.BLK)
+            binding.scoreDetailPf.text =
+                viewModel.getLeaderDetailData(DataType.SCORE, DetailDataType.PF)
         }
 
         return binding.root

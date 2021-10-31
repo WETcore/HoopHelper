@@ -89,7 +89,7 @@ class ManageFragment : Fragment() {
 
         binding.releaseButton.setOnClickListener {
             viewModel._lineup.value?.remove(binding.releaseText.text.toString())
-            binding.releaseInput.editText?.setText("")
+//            binding.releaseInput.editText?.setText("")
         }
 
         return binding.root

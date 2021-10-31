@@ -238,7 +238,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="none"
                     android:singleLine="true"
-                    android:text="Player"
+                    android:text="Bench"
                     android:textSize="14sp" />
             </com.google.android.material.textfield.TextInputLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>

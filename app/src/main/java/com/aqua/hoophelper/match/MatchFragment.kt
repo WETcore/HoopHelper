@@ -19,6 +19,11 @@ enum class DataType {
     SCORE, REBOUND, ASSIST, STEAL, BLOCK, TURNOVER, FOUL
 }
 
+enum class DetailDataType {
+    PTS, FG, ThreeP, FT, TOV,
+    REB, AST, STL, BLK, PF
+}
+
 class MatchFragment : Fragment() {
 
 

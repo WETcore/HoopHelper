@@ -12,9 +12,9 @@ class TeamVPagerAdapter(fragmentActivity: FragmentActivity): FragmentStateAdapte
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
-            0 ->  ChartFragment()
-            1 ->  ManageFragment()
-            2 ->  TacticFragment()
+            0 -> ManageFragment()
+            1 -> ChartFragment()
+            2 -> TacticFragment()
             else -> TacticFragment()
         }
     }
