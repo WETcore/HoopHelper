@@ -3,8 +3,14 @@ package com.aqua.hoophelper.team.child.manage
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.aqua.hoophelper.database.Rule
+import com.google.firebase.firestore.FirebaseFirestore
 
 class ManageViewModel : ViewModel() {
+
+    val db = FirebaseFirestore.getInstance()
+
+    var rule = Rule()
 
     var _start5 = MutableLiveData(
         mutableListOf(
@@ -40,4 +46,8 @@ class ManageViewModel : ViewModel() {
     )
     val lineup: LiveData<MutableList<String>>
         get() = _lineup
+
+    fun setRule() {
+        db.collection("Rule").document("rule").set(rule)
+    }
 }

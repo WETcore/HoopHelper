@@ -51,16 +51,14 @@ class MatchFragment : Fragment() {
         Toast.makeText(requireContext(), "drag the red dot to the court.", Toast.LENGTH_SHORT).show()
 
         // set shot clock
-        viewModel.shotClockTimer.start()
         viewModel.shotClock.observe(viewLifecycleOwner) {
             binding.shotClock.text = it.toString()
             if (it == 0L) {
-                viewModel._shotClock.value = 24L
+                viewModel._shotClock.value = viewModel.shotClockLimit.value
             }
         }
 
         // set game clock
-        viewModel.gameClockSecTimer.start()
         viewModel.gameClockSec.observe(viewLifecycleOwner) {
             binding.gameClockSec.text = it.toString()
             viewModel.setGameClockMin(viewModel.gameClockSec.value!!)
@@ -71,12 +69,12 @@ class MatchFragment : Fragment() {
         viewModel.gameClockMin.observe(viewLifecycleOwner) {
             binding.gameClockMin.text = it.toString()
             if (it == 0L) {
+                viewModel._gameClockMin.value = viewModel.gameClockLimit.value!! - 1
                 viewModel._quarter.value = viewModel._quarter.value?.plus(1)
-                viewModel._gameClockMin.value = 12L
             }
         }
         viewModel.quarter.observe(viewLifecycleOwner) {
-            if (it == 5) {
+            if (it > viewModel.quarterLimit) {
                 findNavController().navigate(NavigationDirections.navToHome())
                 viewModel.shotClockTimer.cancel()
                 viewModel.gameClockSecTimer.cancel()
@@ -99,9 +97,9 @@ class MatchFragment : Fragment() {
 
         // set exit match
         binding.exitMatchButton.setOnClickListener {
-            viewModel.shotClockTimer.cancel()
-            viewModel.gameClockSecTimer.cancel()
-            viewModel.db
+//            viewModel.shotClockTimer.cancel()
+//            viewModel.gameClockSecTimer.cancel()
+            viewModel.db // TODO move to model, auto close game need same fun
                 .collection("Matches")
                 .whereEqualTo("matchId", args.matchId)
                 .get()

@@ -92,6 +92,21 @@ class ManageFragment : Fragment() {
 //            binding.releaseInput.editText?.setText("")
         }
 
+        // set rule
+        binding.apply {
+            setRuleButton.setOnClickListener { //TODO 初始值從db拿，以下放回VM
+                viewModel.rule.quarter = quarterEdit.text.toString()
+                viewModel.rule.gClock = gameClockEdit.text.toString()
+                viewModel.rule.sClock = shotClockEdit.text.toString()
+                viewModel.rule.foulOut = foulEdit.text.toString()
+                viewModel.rule.to1 = timeoutEdit1.text.toString()
+                viewModel.rule.to2 = timeoutEdit2.text.toString()
+                viewModel.setRule()
+            }
+        }
+
+
+
         return binding.root
     }
 }

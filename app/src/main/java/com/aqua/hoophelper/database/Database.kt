@@ -49,3 +49,12 @@ data class Event(
     var foul: Boolean = false,
     var freeThrow: Boolean? = null,
     )
+
+data class Rule(
+    var quarter: String = "4",
+    var gClock: String = "12",
+    var sClock: String = "24",
+    var foulOut: String = "6",
+    var to1: String = "2",
+    var to2: String = "3",
+)

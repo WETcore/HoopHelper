@@ -45,7 +45,7 @@ object HoopRemoteDataSource: HoopRepository {
     // captain participate the match. find captain's member
     override suspend fun getMatchMembers(): List<Player> = suspendCoroutine { conti ->
         val db = FirebaseFirestore.getInstance()
-            db.collection("Players")
+        db.collection("Players")
             .whereEqualTo("teamId", User.teamId)
             .get()
             .addOnCompleteListener { value ->
@@ -109,6 +109,21 @@ object HoopRemoteDataSource: HoopRepository {
 
                 }
         }
+    }
+
+    override suspend fun getRule(): Rule = suspendCoroutine { conti ->
+        FirebaseFirestore.getInstance()
+            .collection("Rule")
+            .document("rule")
+            .get()
+            .addOnCompleteListener {
+                val result = it.result?.toObject(Rule::class.java) ?: Rule()
+
+//                Log.d("gameRule","Hi")
+
+                conti.resume(result)
+
+            }
     }
 
 }

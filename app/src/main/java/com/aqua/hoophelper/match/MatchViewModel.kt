@@ -10,6 +10,7 @@ import com.aqua.hoophelper.User
 import com.aqua.hoophelper.database.Event
 import com.aqua.hoophelper.database.Match
 import com.aqua.hoophelper.database.Player
+import com.aqua.hoophelper.database.Rule
 import com.aqua.hoophelper.database.remote.HoopRemoteDataSource
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -28,8 +29,25 @@ class MatchViewModel : ViewModel() {
     // Firebase
     val db = FirebaseFirestore.getInstance()
 
+    // database
+    var event = Event()
+    var match = Match()
+    var rule = Rule()
+
+
+    var quarterLimit = 4
+
+    var _shotClockLimit = MutableLiveData<Long>(24L)
+    val shotClockLimit: LiveData<Long>
+    get() = _shotClockLimit
+
+//    var gameClockLimit = 12L
+    var _gameClockLimit = MutableLiveData<Long>(12L)
+    val gameClockLimit: LiveData<Long>
+        get() = _gameClockLimit
+
     // shot clock
-    var _shotClock = MutableLiveData<Long>(24L)
+    var _shotClock = MutableLiveData<Long>(shotClockLimit.value)
     val shotClock: LiveData<Long>
         get() = _shotClock
 
@@ -38,7 +56,7 @@ class MatchViewModel : ViewModel() {
     val gameClockSec: LiveData<Long>
         get() = _gameClockSec
 
-    var _gameClockMin = MutableLiveData<Long>(12L)
+    var _gameClockMin = MutableLiveData<Long>(gameClockLimit.value!!)
     val gameClockMin: LiveData<Long>
         get() = _gameClockMin
 
@@ -46,6 +64,8 @@ class MatchViewModel : ViewModel() {
     var _quarter = MutableLiveData<Int>(1)
     val quarter: LiveData<Int>
         get() = _quarter
+
+
 
     //////////////////
     // player num send to db
@@ -81,10 +101,6 @@ class MatchViewModel : ViewModel() {
     val record: LiveData<Boolean>
         get() = _record
 
-    // database
-    var event = Event()
-    var match = Match()
-
     // last event
     private var _lastEvent = HoopRemoteDataSource.getEvents()
     val lastEvent: LiveData<List<Event>>
@@ -101,10 +117,14 @@ class MatchViewModel : ViewModel() {
     // the Coroutine runs using the Main (UI) dispatcher
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
+    init {
+        getMatchRule()
+    }
 
     val shotClockTimer = object : CountDownTimer(Long.MAX_VALUE, 1000L) {
         override fun onTick(millisUntilFinished: Long) {
-            if (_shotClock.value!! == 0L) {} else {
+            Log.d("timer", "start")
+            if (shotClock.value!! == 0L) {} else {
                 _shotClock.value = _shotClock.value?.minus(1L)
             }
         }
@@ -113,7 +133,7 @@ class MatchViewModel : ViewModel() {
 
     val gameClockSecTimer = object : CountDownTimer(Long.MAX_VALUE, 1000L) {
         override fun onTick(millisUntilFinished: Long) {
-            if (_gameClockSec.value!! == 0L) {} else {
+            if (gameClockSec.value!! == 0L) {} else {
                 _gameClockSec.value = _gameClockSec.value?.minus(1L)
             }
         }
@@ -296,7 +316,7 @@ class MatchViewModel : ViewModel() {
 
     fun setHistoryText(it: List<Event>): String {
         if (it.isNullOrEmpty()){
-            return ""
+            return "latest event"
         }
         else{
             it[0].run {
@@ -361,7 +381,7 @@ class MatchViewModel : ViewModel() {
             it.playerNum == playerNum && it.matchId == HoopInfo.matchId
         }?.size?.plus(1)
         if (count != null) {
-            if(count >= 6) {
+            if(count >= 3) {
                 getSubPlayer2Starting(0)
                 changeSubPlayer(onCourtPlayer, 0)
 //                player = subNum[0]
@@ -370,10 +390,24 @@ class MatchViewModel : ViewModel() {
         }
     }
 
+    fun getMatchRule() {
+        coroutineScope.launch {
+            rule = HoopRemoteDataSource.getRule()
+            quarterLimit = rule.quarter.toInt() // TODO
+            _shotClockLimit.value = rule.sClock.toLong()
+            _gameClockLimit.value = rule.gClock.toLong()
+            _shotClock.value = _shotClockLimit.value
+            _gameClockMin.value = _gameClockLimit.value
+            shotClockTimer.start()
+            gameClockSecTimer.start()
+        }
+    }
+
     ////////////////
     override fun onCleared() {
         super.onCleared()
+        shotClockTimer.cancel()
+        gameClockSecTimer.cancel()
         viewModelJob.cancel()
     }
-
 }
