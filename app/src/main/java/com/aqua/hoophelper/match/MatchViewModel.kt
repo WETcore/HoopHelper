@@ -36,6 +36,7 @@ class MatchViewModel : ViewModel() {
 
 
     var quarterLimit = 4
+    var foulLimit = 6
 
     var _shotClockLimit = MutableLiveData<Long>(24L)
     val shotClockLimit: LiveData<Long>
@@ -381,7 +382,7 @@ class MatchViewModel : ViewModel() {
             it.playerNum == playerNum && it.matchId == HoopInfo.matchId
         }?.size?.plus(1)
         if (count != null) {
-            if(count >= 3) {
+            if(count >= foulLimit) {
                 getSubPlayer2Starting(0)
                 changeSubPlayer(onCourtPlayer, 0)
 //                player = subNum[0]
@@ -394,6 +395,7 @@ class MatchViewModel : ViewModel() {
         coroutineScope.launch {
             rule = HoopRemoteDataSource.getRule()
             quarterLimit = rule.quarter.toInt() // TODO
+            foulLimit = rule.foulOut.toInt()
             _shotClockLimit.value = rule.sClock.toLong()
             _gameClockLimit.value = rule.gClock.toLong()
             _shotClock.value = _shotClockLimit.value

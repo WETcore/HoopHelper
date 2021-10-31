@@ -126,4 +126,17 @@ object HoopRemoteDataSource: HoopRepository {
             }
     }
 
+    override fun getRoster(): MutableLiveData<List<Player>> {
+        val result = MutableLiveData<List<Player>>()
+        result.let {
+            FirebaseFirestore.getInstance()
+                .collection("Players")
+                .whereEqualTo("teamId", User.teamId)
+                .addSnapshotListener { value, error ->
+                    it.value = value?.toObjects(Player::class.java) ?: mutableListOf()
+                }
+        }
+        return result
+    }
+
 }

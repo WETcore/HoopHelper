@@ -44,7 +44,7 @@
             app:layout_constraintTop_toBottomOf="@+id/quarter_input" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/start_pg_input"
+            android:id="@+id/start5_pg_input"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -75,10 +75,10 @@
             android:layout_marginEnd="8dp"
             android:hint="SG"
             android:theme="@style/changeBackgroundColor"
-            app:layout_constraintBottom_toBottomOf="@+id/start_pg_input"
+            app:layout_constraintBottom_toBottomOf="@+id/start5_pg_input"
             app:layout_constraintEnd_toStartOf="@+id/start5_sf_input"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/start_pg_input">
+            app:layout_constraintStart_toEndOf="@+id/start5_pg_input">
 
             <com.google.android.material.textfield.MaterialAutoCompleteTextView
                 android:id="@+id/start5_sg_text"
@@ -123,7 +123,7 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/start_pg_input">
+            app:layout_constraintTop_toBottomOf="@+id/start5_pg_input">
 
             <com.google.android.material.textfield.MaterialAutoCompleteTextView
                 android:id="@+id/start5_pf_text"

@@ -1,11 +1,13 @@
 package com.aqua.hoophelper.database
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 
 interface HoopRepository {
 
     fun getEvents(): LiveData<List<Event>>
     fun getMatches(): LiveData<List<Match>>
+    fun getRoster(): MutableLiveData<List<Player>>
 
     suspend fun getTeams(): List<Team>
     suspend fun getUserInfo(): List<Player>
