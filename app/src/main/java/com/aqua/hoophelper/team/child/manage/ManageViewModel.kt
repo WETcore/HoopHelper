@@ -86,9 +86,9 @@ class ManageViewModel : ViewModel() {
         _substitutionPlayer.value = _substitutionPlayer.value
     }
 
-    fun switchLineUp(pos: Int) {
-        var buffer = substitutionPlayer.value!![pos]
-        val id = roster.value?.filter { it.starting5 }?.get(0)?.id
+    fun switchLineUp(spinnerPos: Int, pos: Int) {
+        var buffer = substitutionPlayer.value!![spinnerPos]
+        val id = roster.value?.filter { it.starting5 }?.get(pos)?.id
 
         db.collection("Players")
             .whereEqualTo("id", id)
@@ -116,5 +116,19 @@ class ManageViewModel : ViewModel() {
 //        _substitutionPlayer.value = subPlayerList
 //
 //        refresh()
+    }
+
+    var releasePos = 0
+    fun removePlayer(spinnerPos: Int) {
+
+        var buffer = roster.value!![spinnerPos]
+//        Log.d("testA","${buffer}")
+
+        db.collection("Players")
+            .whereEqualTo("id", buffer.id)
+            .get().addOnSuccessListener {
+                it.documents[0].reference.delete()
+            }
+        setRoster()
     }
 }

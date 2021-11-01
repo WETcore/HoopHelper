@@ -394,12 +394,12 @@ class MatchViewModel : ViewModel() {
     fun getMatchRule() {
         coroutineScope.launch {
             rule = HoopRemoteDataSource.getRule()
-            quarterLimit = rule.quarter.toInt() // TODO
+            quarterLimit = rule.quarter.toInt() // TODO TO
             foulLimit = rule.foulOut.toInt()
             _shotClockLimit.value = rule.sClock.toLong()
             _gameClockLimit.value = rule.gClock.toLong()
             _shotClock.value = _shotClockLimit.value
-            _gameClockMin.value = _gameClockLimit.value
+            _gameClockMin.value = _gameClockLimit.value!! - 1
             shotClockTimer.start()
             gameClockSecTimer.start()
         }

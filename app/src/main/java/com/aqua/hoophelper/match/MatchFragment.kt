@@ -165,7 +165,23 @@ class MatchFragment : Fragment() {
 
         // 改變launch顯示文字
         viewModel.zone.observe(viewLifecycleOwner) {
-            binding.launchChip.text = it.toString()
+            binding.launchChip.text = when(it) {
+                1 -> "Around Rim"
+                2 -> "L.Elbow"
+                3 -> "Mid Straight"
+                4 -> "R.Elbow"
+                5 -> "L.Baseline"
+                6 -> "L.Wing"
+                7 -> "Long Straight"
+                8 -> "R.Wing"
+                9 -> "R.Baseline"
+                10 -> "L.Corner"
+                11 -> "L.3Points"
+                12 -> "Arc"
+                13 -> "R.3Points"
+                14 -> "R.Corner"
+                else -> "Area"
+            }
         }
 
 

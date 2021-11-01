@@ -285,14 +285,11 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/release_button"
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginEnd="8dp"
-            app:icon="@drawable/caution_triangle_copy"
+            android:layout_height="60dp"
             android:text="Release Player"
-            app:layout_constraintBottom_toBottomOf="@+id/release_input"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/release_input"
+            app:icon="@drawable/caution_triangle_copy"
+            app:layout_constraintEnd_toEndOf="@+id/timeout_input_2"
+            app:layout_constraintStart_toStartOf="@+id/timeout_input_2"
             app:layout_constraintTop_toTopOf="@+id/release_input" />
 
         <com.google.android.material.button.MaterialButton
@@ -300,10 +297,10 @@
             style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
             android:text="Set Rule"
             app:layout_constraintBottom_toBottomOf="@+id/textView5"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/foul_input"
+            app:layout_constraintStart_toStartOf="@+id/foul_input"
             app:strokeColor="@color/hoop_red"
             app:strokeWidth="1dp" />
 
@@ -312,15 +309,11 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
             android:hint="release player"
             android:theme="@style/changeBackgroundColor"
-            app:layout_constraintEnd_toStartOf="@+id/release_button"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/timeout_input_1"
+            app:layout_constraintStart_toStartOf="@+id/timeout_input_1"
             app:layout_constraintTop_toBottomOf="@+id/timeout_input_1">
 
             <com.google.android.material.textfield.MaterialAutoCompleteTextView
