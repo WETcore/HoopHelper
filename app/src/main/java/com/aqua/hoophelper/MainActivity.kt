@@ -1,13 +1,17 @@
 package com.aqua.hoophelper
 
 import android.content.Intent
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
+import com.aqua.hoophelper.database.Match
+import com.aqua.hoophelper.database.Player
 import com.aqua.hoophelper.databinding.ActivityMainBinding
 import com.aqua.hoophelper.match.MatchViewModel
 import com.aqua.hoophelper.profile.RC_SIGN_IN
@@ -22,6 +26,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.firestore.Query
 
 
 class MainActivity : AppCompatActivity() {
@@ -35,6 +40,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         // binding
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -48,9 +54,23 @@ class MainActivity : AppCompatActivity() {
         binding.fab.setOnClickListener {
             binding.toolbar.visibility = View.GONE
             binding.appBar.behavior.slideDown(binding.appBar)
-            viewModel.getMatchInfo()
-            viewModel.db.collection("Matches").add(viewModel.match)
+            viewModel.setMatchInfo()
             navHostFragment.navigate(NavigationDirections.navToMatch(viewModel.match.matchId))
+        }
+
+        ///badge
+        binding.bottomBar.getOrCreateBadge(R.id.liveFragment).apply {
+            viewModel.db.collection("Matches") // TODO to model
+                .addSnapshotListener { value, error ->
+                    var mlist = value?.toObjects(Match::class.java)?.sortedBy {
+                        it.actualTime
+                    }
+                    isVisible = if (mlist.isNullOrEmpty()) {
+                        false
+                    } else {
+                        mlist.last()?.gaming == true
+                    }
+                }
         }
 
         navHostFragment.addOnDestinationChangedListener { _, destination, _ ->
@@ -59,7 +79,7 @@ class MainActivity : AppCompatActivity() {
                     binding.toolbar.visibility = View.VISIBLE
                     binding.appBar.behavior.slideUp(binding.appBar)
                 }
-                R.id.chartFragment -> {
+                R.id.teamFragment -> {
                     binding.toolbar.visibility = View.VISIBLE
                     binding.appBar.behavior.slideUp(binding.appBar)
                 }
@@ -73,16 +93,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-
-//        // Configure Google Sign In
-//        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-//            .requestIdToken(getString(R.string.default_web_client_id))
-//            .requestEmail()
-//            .build()
-//
-//        // getting the value of gso inside the GoogleSignInClient
-//        val googleSignInClient = GoogleSignIn.getClient(this, gso)
-
     }
 
     override fun onStart() {
@@ -91,6 +101,9 @@ class MainActivity : AppCompatActivity() {
         auth = Firebase.auth
         // Check if user is signed in (non-null) and update UI accordingly.
         val currentUser = auth.currentUser
+        User.account = currentUser
+        Log.d("currentUser","${currentUser?.email}")
+        viewModel.getUserInfo()
         updateUI(currentUser)
     }
 
@@ -131,4 +144,15 @@ class MainActivity : AppCompatActivity() {
     private fun updateUI(user: FirebaseUser?) {
 
     }
+}
+
+object User {
+    var account: FirebaseUser? = null
+    var teamId = ""
+    var teamMembers = MutableLiveData(listOf<Player>())
+}
+
+object HoopInfo {
+    var spinnerSelectedTeamId = ""
+    var matchId = ""
 }

@@ -1,32 +1,28 @@
 package com.aqua.hoophelper.match
 
-import android.app.Application
-import android.os.Build
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.os.CountDownTimer
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.*
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import android.widget.Toast
-import androidx.annotation.RequiresApi
-import androidx.core.view.get
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.aqua.hoophelper.HoopInfo
 import com.aqua.hoophelper.NavigationDirections
 import com.aqua.hoophelper.R
 import com.aqua.hoophelper.databinding.MatchFragmentBinding
-import com.google.android.material.chip.Chip
-import com.google.firebase.firestore.Query
-import com.yxf.clippathlayout.PathInfo
-import com.yxf.clippathlayout.pathgenerator.CirclePathGenerator
 
 enum class DataType {
-    REBOUND, ASSIST, STEAL, BLOCK, TURNOVER, FOUL
+    SCORE, REBOUND, ASSIST, STEAL, BLOCK, TURNOVER, FOUL
+}
+
+enum class DetailDataType {
+    PTS, FG, ThreeP, FT, TOV,
+    REB, AST, STL, BLK, PF
 }
 
 class MatchFragment : Fragment() {
@@ -45,6 +41,9 @@ class MatchFragment : Fragment() {
         val binding: MatchFragmentBinding =
             DataBindingUtil.inflate(inflater, R.layout.match_fragment, container,false)
 
+        // get roster from db
+        viewModel.setRoster()
+
         // safe arg
         val args: MatchFragmentArgs by navArgs()
 
@@ -52,16 +51,14 @@ class MatchFragment : Fragment() {
         Toast.makeText(requireContext(), "drag the red dot to the court.", Toast.LENGTH_SHORT).show()
 
         // set shot clock
-        viewModel.shotClockTimer.start()
         viewModel.shotClock.observe(viewLifecycleOwner) {
             binding.shotClock.text = it.toString()
             if (it == 0L) {
-                viewModel._shotClock.value = 24L
+                viewModel._shotClock.value = viewModel.shotClockLimit.value
             }
         }
 
         // set game clock
-        viewModel.gameClockSecTimer.start()
         viewModel.gameClockSec.observe(viewLifecycleOwner) {
             binding.gameClockSec.text = it.toString()
             viewModel.setGameClockMin(viewModel.gameClockSec.value!!)
@@ -72,12 +69,12 @@ class MatchFragment : Fragment() {
         viewModel.gameClockMin.observe(viewLifecycleOwner) {
             binding.gameClockMin.text = it.toString()
             if (it == 0L) {
+                viewModel._gameClockMin.value = viewModel.gameClockLimit.value!! - 1
                 viewModel._quarter.value = viewModel._quarter.value?.plus(1)
-                viewModel._gameClockMin.value = 12L
             }
         }
         viewModel.quarter.observe(viewLifecycleOwner) {
-            if (it == 5) {
+            if (it > viewModel.quarterLimit) {
                 findNavController().navigate(NavigationDirections.navToHome())
                 viewModel.shotClockTimer.cancel()
                 viewModel.gameClockSecTimer.cancel()
@@ -100,8 +97,17 @@ class MatchFragment : Fragment() {
 
         // set exit match
         binding.exitMatchButton.setOnClickListener {
-            viewModel.shotClockTimer.cancel()
-            viewModel.gameClockSecTimer.cancel()
+//            viewModel.shotClockTimer.cancel()
+//            viewModel.gameClockSecTimer.cancel()
+            viewModel.db // TODO move to model, auto close game need same fun
+                .collection("Matches")
+                .whereEqualTo("matchId", args.matchId)
+                .get()
+                .addOnSuccessListener {
+                    it.forEach {
+                        it.reference.update("gaming",false)
+                    }
+                }
             findNavController().navigate(NavigationDirections.navToHome())
         }
 
@@ -126,24 +132,34 @@ class MatchFragment : Fragment() {
             }
         }
         // select substitution player
-        var teamAdapter = ArrayAdapter(requireContext(), R.layout.team_item, viewModel.substitutionPlayer.value!!)
-        binding.subPlayerText.setAdapter(teamAdapter)
+        viewModel.substitutionPlayer.observe(viewLifecycleOwner) {
+            viewModel.subNum = mutableListOf<String>()
+            it.forEach { player ->
+                viewModel.subNum.add(player.number)
+            }
+            var teamAdapter = ArrayAdapter(requireContext(), R.layout.match_team_item, viewModel.subNum)
+            binding.subPlayerText.setAdapter(teamAdapter)
+        }
+
 
         binding.subPlayerText.setOnItemClickListener { parent, view, position, id ->
-            var buffer = viewModel.playerNum.value!![viewModel.selectPlayerPos]
-            viewModel.getSubPlayer(parent.getItemAtPosition(position).toString())
+            var buffer = viewModel.startPlayer.value!![viewModel.selectPlayerPos]
+            viewModel.getSubPlayer2Starting(position)
             viewModel.changeSubPlayer(buffer, position)
-            Log.d("poss","${viewModel.selectPlayerPos} ${parent.getItemAtPosition(position)}")
         }
 
-        viewModel.playerNum.observe(viewLifecycleOwner) {
-            Log.d("poss", "${viewModel.playerNum.value}")
-            binding.player1Chip.text = it[0]
-            binding.player2Chip.text = it[1]
-            binding.player3Chip.text = it[2]
-            binding.player4Chip.text = it[3]
-            binding.player5Chip.text = it[4]
+        viewModel.startPlayer.observe(viewLifecycleOwner) {
+            Log.d("tag","${it}")
+            if (!it.isNullOrEmpty()) {
+                binding.player1Chip.text = it[0].number
+                if (viewModel.player == "") viewModel.player = binding.player1Chip.text.toString()
+                binding.player2Chip.text = it[1].number
+                binding.player3Chip.text = it[2].number
+                binding.player4Chip.text = it[3].number
+                binding.player5Chip.text = it[4].number
+            }
         }
+
 
         /// record data
 
@@ -233,8 +249,10 @@ class MatchFragment : Fragment() {
                     viewModel.setStatData(DataType.TURNOVER, args.matchId)
                     group.clearCheck()
                 }
-                R.id.foul_chip -> {
+                R.id.foul_chip -> {//TODO ban player
                     viewModel.setStatData(DataType.FOUL, args.matchId)
+                    var buffer = viewModel.startPlayer.value!![viewModel.selectPlayerPos]
+                    viewModel.getFoulCount(viewModel.player, buffer)
                     group.clearCheck()
                 }
             }
@@ -262,18 +280,26 @@ class MatchFragment : Fragment() {
             Log.d("record","${viewModel.event}")
         }
 
-        // cancel event
-        binding.cancelChip.setOnClickListener {
-            viewModel.db.collection("Events")
-                .orderBy("actualTime", Query.Direction.DESCENDING)
-                .limit(1).get().addOnSuccessListener {
-                    it.forEach {
-                        it.reference.delete()
-                    }
-                }
+
+        // event history & cancel event
+        viewModel.lastEvent.observe(viewLifecycleOwner) {
+            if (!it.isNullOrEmpty()) {
+                binding.historyChip.text = viewModel.setHistoryText(it.filter { it.matchId ==HoopInfo.matchId })
+            }
+        }
+
+        binding.historyChip.setOnCloseIconClickListener {
+            viewModel.cancelEvent()
+            binding.historyChip.isCloseIconVisible = false
+            binding.historyChip.isChecked = false
+        }
+        binding.historyChip.setOnCheckedChangeListener { buttonView, isChecked ->
+            binding.historyChip.isCloseIconVisible = isChecked
         }
 
         return binding.root
     }
+
+
 
 }

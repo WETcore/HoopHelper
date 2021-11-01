@@ -1,5 +1,6 @@
 package com.aqua.hoophelper.live
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.aqua.hoophelper.database.Event
@@ -12,7 +13,8 @@ class LiveViewModel : ViewModel() {
     val events: LiveData<List<Event>>
         get() = _events
 
-    // TODO 區別動作
+
+    // 區別動作
     fun filterEventType(event: Event): String {
         return when {
             event.assist -> {
