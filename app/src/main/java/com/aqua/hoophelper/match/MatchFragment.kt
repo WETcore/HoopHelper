@@ -80,13 +80,23 @@ class MatchFragment : Fragment() {
                 viewModel.gameClockSecTimer.cancel()
                 Toast.makeText (requireContext(),"Game over.",Toast.LENGTH_SHORT).show()
             }
+            else if (it == viewModel.quarterLimit/2) {
+                viewModel.timeOut = 0
+                binding.pauseMatchChip.isCheckable = true
+            }
             binding.quarter.text = it.toString()
         }
         // set pause
         binding.pauseMatchChip.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
-                viewModel.shotClockTimer.cancel()
-                viewModel.gameClockSecTimer.cancel()
+                if(viewModel.setTimeOutCount()) {
+                    Toast.makeText(requireContext(), "limit",Toast.LENGTH_SHORT).show()
+                    binding.pauseMatchChip.isChecked = false
+                    binding.pauseMatchChip.isCheckable = false
+                } else {
+                    viewModel.shotClockTimer.cancel()
+                    viewModel.gameClockSecTimer.cancel()
+                }
             } else {
                 viewModel.shotClockTimer.start()
                 viewModel.gameClockSecTimer.start()
@@ -265,7 +275,7 @@ class MatchFragment : Fragment() {
                     viewModel.setStatData(DataType.TURNOVER, args.matchId)
                     group.clearCheck()
                 }
-                R.id.foul_chip -> {//TODO ban player
+                R.id.foul_chip -> {
                     viewModel.setStatData(DataType.FOUL, args.matchId)
                     var buffer = viewModel.startPlayer.value!![viewModel.selectPlayerPos]
                     viewModel.getFoulCount(viewModel.player, buffer)

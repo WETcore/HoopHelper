@@ -30,12 +30,6 @@ class ManageViewModel : ViewModel() {
         get() = _substitutionPlayer
     var subNum = mutableListOf<String>()
 
-//    var _lineup = MutableLiveData<MutableList<String>>(
-//        (_subLineup.value!! + _start5.value!!).sortedBy { it.toInt() }.toMutableList()
-//    )
-//    val lineup: LiveData<MutableList<String>>
-//        get() = _lineup
-
     // roster
     var _roster = MutableLiveData<List<Player>>()
     val roster: LiveData<List<Player>>
@@ -103,26 +97,12 @@ class ManageViewModel : ViewModel() {
             }
 
         setRoster()
-//        var starPlayerList = mutableListOf<Player>()
-//        var subPlayerList = mutableListOf<Player>()
-//        starPlayerList = startPlayer.value!!
-//        subPlayerList = substitutionPlayer.value!!
-//
-//        starPlayerList.filter { it.starting5 }?.get(0)?.starting5 = false
-//
-//        subPlayerList.filter { it == buffer }?.get(0)?.starting5 = true
-//
-//        _startPlayer.value = starPlayerList
-//        _substitutionPlayer.value = subPlayerList
-//
-//        refresh()
     }
 
     var releasePos = 0
     fun removePlayer(spinnerPos: Int) {
 
         var buffer = roster.value!![spinnerPos]
-//        Log.d("testA","${buffer}")
 
         db.collection("Players")
             .whereEqualTo("id", buffer.id)

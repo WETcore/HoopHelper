@@ -37,12 +37,16 @@ class MatchViewModel : ViewModel() {
 
     var quarterLimit = 4
     var foulLimit = 6
+    var timeOut1Limit = 2
+    var timeOut2Limit = 3
+
+    // time out
+    var timeOut = 0
 
     var _shotClockLimit = MutableLiveData<Long>(24L)
     val shotClockLimit: LiveData<Long>
-    get() = _shotClockLimit
+        get() = _shotClockLimit
 
-//    var gameClockLimit = 12L
     var _gameClockLimit = MutableLiveData<Long>(12L)
     val gameClockLimit: LiveData<Long>
         get() = _gameClockLimit
@@ -396,12 +400,23 @@ class MatchViewModel : ViewModel() {
             rule = HoopRemoteDataSource.getRule()
             quarterLimit = rule.quarter.toInt() // TODO TO
             foulLimit = rule.foulOut.toInt()
+            timeOut1Limit = rule.to1.toInt()
+            timeOut2Limit = rule.to2.toInt()
             _shotClockLimit.value = rule.sClock.toLong()
             _gameClockLimit.value = rule.gClock.toLong()
             _shotClock.value = _shotClockLimit.value
             _gameClockMin.value = _gameClockLimit.value!! - 1
             shotClockTimer.start()
             gameClockSecTimer.start()
+        }
+    }
+
+    fun setTimeOutCount(): Boolean {
+        timeOut += 1
+        return if (quarter.value!! <= quarterLimit/2) {
+            timeOut > timeOut1Limit
+        } else {
+            timeOut > timeOut2Limit
         }
     }
 
