@@ -98,12 +98,12 @@ class ManageFragment : Fragment() {
             )
         }
 
+        // release player
         binding.releaseText.setOnItemClickListener { parent, view, position, id ->
             viewModel.releasePos = position
         }
-
         binding.releaseButton.setOnClickListener {
-            viewModel.removePlayer(viewModel.releasePos)
+//            viewModel.removePlayer(viewModel.releasePos)
         }
 
         // set rule
