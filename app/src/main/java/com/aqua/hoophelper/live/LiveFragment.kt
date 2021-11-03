@@ -32,13 +32,17 @@ class LiveFragment : Fragment() {
         val adapter = LiveEventAdapter(viewModel)
         binding.liveRecycler.adapter = adapter
 
-        viewModel.events.observe(viewLifecycleOwner) {
+        viewModel.events.observe(viewLifecycleOwner) { its ->
+            its.sortedByDescending { it.actualTime }
             adapter.submitList(
-                it.filter { its ->
-                    its.matchId == it[0].matchId && its.teamId == HoopInfo.spinnerSelectedTeamId
+                its.filter {
+                    it.matchId == its[0].matchId
+                            && it.teamId == HoopInfo.spinnerSelectedTeamId
                 }
             )
         }
+        (binding.liveRecycler.adapter as LiveEventAdapter).notifyItemChanged(0)
+
 
         return binding.root
     }

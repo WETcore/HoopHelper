@@ -74,7 +74,8 @@ class MatchViewModel : ViewModel() {
 
     //////////////////
     // player num send to db
-    var player = ""
+    var playerNum = ""
+    var playerName = ""
 
     // selectPlayerPos 紀錄按那個 chip
     var selectPlayerPos = 0
@@ -153,7 +154,8 @@ class MatchViewModel : ViewModel() {
 
     fun selectPlayer(pos: Int): String {
         selectPlayerPos = pos
-        player = _startPlayer.value!![pos].number
+        playerNum = _startPlayer.value!![pos].number
+        playerName = _startPlayer.value!![pos].name
         return _startPlayer.value!![pos].number
     }
 
@@ -185,8 +187,10 @@ class MatchViewModel : ViewModel() {
         event.actualTime = Calendar.getInstance().timeInMillis
         event.matchTimeMin = gameClockMin.value.toString()
         event.matchTimeSec = gameClockSec.value.toString()
+        event.quarter = quarter.value.toString()
         _record.value = countIn
-        event.playerNum = player
+        event.playerNum = playerNum
+        event.playerName = playerName
         event.zone = zone.value!!
         if (zone.value!! in 1..9)  {
             event.score2 = _record.value!!
@@ -204,9 +208,12 @@ class MatchViewModel : ViewModel() {
         event.teamId = User.teamId
         event.playerId = startPlayer.value?.get(selectPlayerPos)?.id ?: ""
         event.actualTime = Calendar.getInstance().timeInMillis
-        event.playerNum = player
+        event.playerNum = playerNum
+        event.playerName = playerName
+        event.zone = -1
         event.matchTimeMin = gameClockMin.value.toString()
         event.matchTimeSec = gameClockSec.value.toString()
+        event.quarter = quarter.value.toString()
         event.freeThrow = bool
         db.collection("Events").add(event)
     }
@@ -218,9 +225,11 @@ class MatchViewModel : ViewModel() {
         event.teamId = User.teamId
         event.playerId = startPlayer.value?.get(selectPlayerPos)?.id ?: ""
         event.actualTime = Calendar.getInstance().timeInMillis
-        event.playerNum = player
+        event.playerNum = playerNum
+        event.playerName = playerName
         event.matchTimeMin = gameClockMin.value.toString()
         event.matchTimeSec = gameClockSec.value.toString()
+        event.quarter = quarter.value.toString()
         event.zone = zone.value!!
         _record.value = true
         when(type) {
@@ -310,7 +319,7 @@ class MatchViewModel : ViewModel() {
     fun getSubPlayer2Starting(position: Int) {
         _startPlayer.value!![selectPlayerPos] = substitutionPlayer.value!![position]
         _startPlayer.value = _startPlayer.value
-        player = _startPlayer.value!![selectPlayerPos].number
+        playerNum = _startPlayer.value!![selectPlayerPos].number
     }
 
     fun changeSubPlayer(onCourtPlayer: Player, spinnerPos: Int) {

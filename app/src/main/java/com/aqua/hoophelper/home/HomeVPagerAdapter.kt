@@ -79,7 +79,6 @@ class HomeVPagerAdapter(
         detailStl.text = viewModel.getLeaderDetailData(DetailDataType.STL, mainDataType)
         detailBlk.text = viewModel.getLeaderDetailData(DetailDataType.BLK, mainDataType)
 
-
         //handle card click
 
         // flip card
@@ -108,7 +107,6 @@ class HomeVPagerAdapter(
                 true
             }
         }
-
 
         //add view to container
         container.addView(view, position)

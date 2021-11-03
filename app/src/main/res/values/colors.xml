@@ -19,6 +19,10 @@
     <color name="clock_green">#C2E8CE</color>
     <color name="clock_background">#A35709</color>
 
+    <color name="basil_bg">#FFFBE6</color>
+    <color name="basil_green_dark">#356859</color>
+    <color name="basil_orange">#FD5523</color>
+
 
 
     <color name="transparent">#00000000</color>
