@@ -3,12 +3,18 @@ package com.aqua.hoophelper.home
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.transition.TransitionManager
+import android.util.Log
+import android.view.HapticFeedbackConstants
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.core.view.children
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
+import com.aqua.hoophelper.NavigationDirections
 import com.aqua.hoophelper.R
 import com.aqua.hoophelper.databinding.HomeFragmentBinding
 import com.aqua.hoophelper.match.DataType
@@ -45,19 +51,19 @@ class HomeFragment : Fragment() {
         }
 
         // VPager
-        val leaderList = listOf<String>("1","2","3","4","5")
+//        val leaderList = listOf<String>("Giannis Sina Ugo Antetokounmpo","2","3","4","5")
 
-        val adapter = HomeVPagerAdapter(leaderList, requireContext())
-        binding.homeViewpager.apply {
-            this.adapter = adapter
-            setPadding(190, 100, 100, 150)
-            pageMargin = 0
+        viewModel.teamStat.observe(viewLifecycleOwner) {
+            Log.d("redo2","Hi ${it}")
+
+            val adapter = HomeVPagerAdapter(viewModel.teamStat.value!!, requireContext())
+
+            binding.homeViewpager.apply {
+                this.adapter?.notifyDataSetChanged()
+                this.adapter = adapter
+                setPadding(190, 100, 100, 150)
+            }
         }
-
-
-
-
         return binding.root
     }
-
 }

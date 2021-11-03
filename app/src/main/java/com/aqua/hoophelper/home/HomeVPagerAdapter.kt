@@ -9,14 +9,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.cardview.widget.CardView
-import androidx.databinding.DataBindingUtil
 import androidx.viewpager.widget.PagerAdapter
 import com.aqua.hoophelper.R
-import com.aqua.hoophelper.databinding.HomeCardBinding
-import com.aqua.hoophelper.databinding.HomeFragmentBinding
+import com.aqua.hoophelper.database.PlayerStat
 
 class HomeVPagerAdapter(
-    private val list: List<String>,
+    private val list: List<PlayerStat>,
     private val context: Context): PagerAdapter() {
 
     override fun getCount(): Int {
@@ -28,13 +26,24 @@ class HomeVPagerAdapter(
     }
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
+
+        val leaderTypes = listOf<String>("Score", "Rebound", "Assist", "Steal", "Block")
         val view = LayoutInflater.from(context).inflate(R.layout.home_card, container, false)
+        Log.d("redo2","Hi ${list}")
 
         //get data
 
         //set data to UI
-        val stat = view.findViewById<TextView>(R.id.leader_stat)
-        stat.text = list[position]
+        val stat = view.findViewById<TextView>(R.id.leader_name)
+        val type = view.findViewById<TextView>(R.id.leader_stat_type)
+        val statMain = view.findViewById<TextView>(R.id.leader_stat_main)
+        val statb = view.findViewById<TextView>(R.id.leader_name_b)
+
+        stat.text = list[position].name
+        type.text = leaderTypes[position]
+
+        statb.text = stat.text
+
         //handle card click
         val card = view.findViewById<CardView>(R.id.leader_card)
         val cardB = view.findViewById<CardView>(R.id.leader_card_b)

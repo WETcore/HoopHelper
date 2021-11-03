@@ -14,6 +14,7 @@ data class Invitation(
 data class Player(
     var id: String = "",
     var number: String = "",
+    var name: String = "",
     var teamId: String = "",
     var email: String = "",
     var starting5: Boolean = false,
@@ -57,4 +58,14 @@ data class Rule(
     var foulOut: String = "6",
     var to1: String = "2",
     var to2: String = "3",
+)
+
+data class PlayerStat(
+    var name: String = "",
+    var number: String = "",
+    var pts: String = "",
+    var reb: String = "",
+    var ast: String = "",
+    var stl: String = "",
+    var blk: String = "",
 )
