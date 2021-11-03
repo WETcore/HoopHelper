@@ -96,7 +96,7 @@
                     app:layout_constraintVertical_bias="0.0" />
 
                 <TextView
-                    android:id="@+id/leader_stat_b2"
+                    android:id="@+id/leader_pts"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="32dp"
@@ -109,7 +109,7 @@
                     app:layout_constraintEnd_toEndOf="parent" />
 
                 <TextView
-                    android:id="@+id/leader_stat_b3"
+                    android:id="@+id/leader_reb"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/aldrich"
@@ -118,10 +118,10 @@
                     android:textSize="24sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@+id/leader_number2"
-                    app:layout_constraintStart_toStartOf="@+id/leader_stat_b2" />
+                    app:layout_constraintStart_toStartOf="@+id/leader_pts" />
 
                 <TextView
-                    android:id="@+id/leader_stat_b4"
+                    android:id="@+id/leader_ast"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/aldrich"
@@ -130,10 +130,10 @@
                     android:textSize="24sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@+id/leader_number3"
-                    app:layout_constraintStart_toStartOf="@+id/leader_stat_b3" />
+                    app:layout_constraintStart_toStartOf="@+id/leader_reb" />
 
                 <TextView
-                    android:id="@+id/leader_stat_b5"
+                    android:id="@+id/leader_stl"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/aldrich"
@@ -142,10 +142,10 @@
                     android:textSize="24sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@+id/leader_number4"
-                    app:layout_constraintStart_toStartOf="@+id/leader_stat_b4" />
+                    app:layout_constraintStart_toStartOf="@+id/leader_ast" />
 
                 <TextView
-                    android:id="@+id/leader_stat_b6"
+                    android:id="@+id/leader_blk"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/aldrich"
@@ -154,7 +154,7 @@
                     android:textSize="24sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@+id/leader_number5"
-                    app:layout_constraintStart_toStartOf="@+id/leader_stat_b5" />
+                    app:layout_constraintStart_toStartOf="@+id/leader_stl" />
 
                 <View
                     android:id="@+id/view_b"

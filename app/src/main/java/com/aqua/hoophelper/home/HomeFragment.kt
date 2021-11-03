@@ -56,9 +56,10 @@ class HomeFragment : Fragment() {
         viewModel.teamStat.observe(viewLifecycleOwner) {
             Log.d("redo2","Hi ${it}")
 
-            val adapter = HomeVPagerAdapter(viewModel.teamStat.value!!, requireContext())
+            val adapter = HomeVPagerAdapter(viewModel.teamStat.value!!, requireContext(), viewModel)
 
             binding.homeViewpager.apply {
+                this.offscreenPageLimit = 4
                 this.adapter?.notifyDataSetChanged()
                 this.adapter = adapter
                 setPadding(190, 100, 100, 150)

@@ -63,9 +63,9 @@ data class Rule(
 data class PlayerStat(
     var name: String = "",
     var number: String = "",
-    var pts: String = "",
-    var reb: String = "",
-    var ast: String = "",
-    var stl: String = "",
-    var blk: String = "",
+    var pts: Int = 0,
+    var reb: Int = 0,
+    var ast: Int = 0,
+    var stl: Int = 0,
+    var blk: Int = 0,
 )
