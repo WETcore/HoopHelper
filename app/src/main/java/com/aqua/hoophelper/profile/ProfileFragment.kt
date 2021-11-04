@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.Fragment
 import com.aqua.hoophelper.R
 import com.aqua.hoophelper.databinding.ProfileFragmentBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -15,17 +16,10 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.firebase.auth.FirebaseAuth
 
 
-class ProfileFragment : BottomSheetDialogFragment() {
-
-    private lateinit var auth: FirebaseAuth
+class ProfileFragment : Fragment() {
 
     private val viewModel: ProfileViewModel by lazy {
         ViewModelProvider(this).get(ProfileViewModel::class.java)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setStyle(DialogFragment.STYLE_NORMAL, R.style.MyBottomSheetDialogTheme)
     }
 
     @SuppressLint("ResourceAsColor")
@@ -40,27 +34,10 @@ class ProfileFragment : BottomSheetDialogFragment() {
 
         binding.mailLayout.suffixText = "example@gmail.com"
 
-//        // TODO login
-//        // Configure Google Sign In
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id))
-            .requestEmail()
-            .build()
-
-        // getting the value of gso inside the GoogleSignInClient
-        val googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
-
-        binding.googleSignIn.setOnClickListener {
-            viewModel.signIn(googleSignInClient,requireActivity())
-
-        }
-
         binding.createButton.setOnClickListener {
             viewModel.sendTeamInfo(binding.teamNameEdit.text.toString())
             viewModel.sendCaptainInfo(binding.playerNumEdit.text.toString())
         }
-
-
 
         return binding.root
     }

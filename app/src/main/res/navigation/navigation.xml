@@ -29,13 +29,20 @@
         android:name="com.aqua.hoophelper.live.LiveFragment"
         android:label="live_fragment"
         tools:layout="@layout/live_fragment" />
-    <dialog
+    <fragment
         android:id="@+id/profileFragment"
         android:name="com.aqua.hoophelper.profile.ProfileFragment"
         android:label="profile_fragment"
         tools:layout="@layout/profile_fragment" />
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.aqua.hoophelper.LoginFragment"
+        android:label="LoginFragment" />
 
 <!--  action  -->
+    <action android:id="@+id/nav_to_login" app:destination="@id/loginFragment"
+        app:popUpTo="@id/loginFragment"
+        app:popUpToInclusive="true" />
     <action android:id="@+id/nav_to_home" app:destination="@id/homeFragment"
         app:popUpTo="@id/homeFragment"
         app:popUpToInclusive="true" />

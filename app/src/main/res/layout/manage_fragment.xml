@@ -15,9 +15,13 @@
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/montserrat"
             android:text="Starting Lineup"
-            android:textSize="48sp"
+            android:textColor="@color/basil_green_dark"
+            android:textSize="40sp"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -25,22 +29,26 @@
             android:id="@+id/textView5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/montserrat"
             android:text="Game Rule"
-            android:textSize="48sp"
-            app:layout_constraintStart_toStartOf="parent"
+            android:textColor="@color/basil_green_dark"
+            android:textSize="40sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/start5_pf_input"
             app:layout_constraintTop_toBottomOf="@+id/start5_pf_input" />
 
         <TextView
             android:id="@+id/textView6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:fontFamily="@font/montserrat"
             android:text="Time Out"
+            android:textColor="@color/basil_green_dark"
             android:textSize="24sp"
-            app:layout_constraintStart_toStartOf="parent"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/quarter_input"
             app:layout_constraintTop_toBottomOf="@+id/quarter_input" />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -48,7 +56,6 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
             android:hint="PG"
@@ -56,7 +63,7 @@
             app:layout_constraintEnd_toStartOf="@+id/start5_sg_input"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/textView3"
             app:layout_constraintTop_toBottomOf="@+id/textView3">
 
             <com.google.android.material.textfield.MaterialAutoCompleteTextView
@@ -93,7 +100,7 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="16dp"
             android:hint="SF"
             android:theme="@style/changeBackgroundColor"
             app:layout_constraintBottom_toBottomOf="@+id/start5_sg_input"
@@ -114,7 +121,6 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:hint="PF"
@@ -122,7 +128,7 @@
             app:layout_constraintEnd_toStartOf="@+id/start5_c_input"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/start5_pg_input"
             app:layout_constraintTop_toBottomOf="@+id/start5_pg_input">
 
             <com.google.android.material.textfield.MaterialAutoCompleteTextView
@@ -138,11 +144,10 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
             android:hint="C"
             android:theme="@style/changeBackgroundColor"
             app:layout_constraintBottom_toBottomOf="@+id/start5_pf_input"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/start5_sf_input"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/start5_pf_input">
 
@@ -159,14 +164,13 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:hint="Quarter"
             app:layout_constraintEnd_toStartOf="@+id/game_clock_input"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/textView5"
             app:layout_constraintTop_toBottomOf="@+id/textView5">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -224,10 +228,9 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
             android:hint="Foul Out"
             app:layout_constraintBottom_toBottomOf="@+id/shot_clock_input"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/start5_c_input"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/shot_clock_input">
 
@@ -244,14 +247,13 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="32dp"
             android:hint="1st half time out"
             app:layout_constraintEnd_toStartOf="@+id/timeout_input_2"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/quarter_input"
             app:layout_constraintTop_toBottomOf="@+id/textView6">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -267,10 +269,9 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
             android:hint="2nd half time out"
             app:layout_constraintBottom_toBottomOf="@+id/timeout_input_1"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/foul_input"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/timeout_input_1">
 
@@ -287,6 +288,8 @@
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:text="Release Player"
+            android:textColor="@color/hoop_background"
+            android:fontFamily="@font/montserrat"
             app:icon="@drawable/caution_triangle_copy"
             app:layout_constraintEnd_toEndOf="@+id/timeout_input_2"
             app:layout_constraintStart_toStartOf="@+id/timeout_input_2"
@@ -298,6 +301,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Set Rule"
+            android:textStyle="bold"
+            android:fontFamily="@font/montserrat"
             app:layout_constraintBottom_toBottomOf="@+id/textView5"
             app:layout_constraintEnd_toEndOf="@+id/foul_input"
             app:layout_constraintStart_toStartOf="@+id/foul_input"

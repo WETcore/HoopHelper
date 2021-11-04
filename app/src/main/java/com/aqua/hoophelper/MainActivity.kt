@@ -5,6 +5,7 @@ import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.KeyEvent
 import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
@@ -14,7 +15,6 @@ import com.aqua.hoophelper.database.Match
 import com.aqua.hoophelper.database.Player
 import com.aqua.hoophelper.databinding.ActivityMainBinding
 import com.aqua.hoophelper.match.MatchViewModel
-import com.aqua.hoophelper.profile.RC_SIGN_IN
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
@@ -73,6 +73,25 @@ class MainActivity : AppCompatActivity() {
                 }
         }
 
+        // login or not
+        viewModel.loginState.observe(this){
+            if (it) {
+                Log.d("loginn","yes")
+                binding.toolbar.visibility = View.VISIBLE
+                binding.bottomBar.visibility = View.VISIBLE
+                binding.fab.visibility = View.VISIBLE
+                binding.appBar.visibility = View.VISIBLE
+                navHostFragment.navigate(NavigationDirections.navToHome())
+            } else {
+                Log.d("loginn","no")
+                binding.toolbar.visibility = View.GONE
+                binding.bottomBar.visibility = View.GONE
+                binding.fab.visibility = View.GONE
+                binding.appBar.visibility = View.GONE
+                navHostFragment.navigate(NavigationDirections.navToLogin())
+            }
+        }
+
         navHostFragment.addOnDestinationChangedListener { _, destination, _ ->
             when(destination.id) {
                 R.id.homeFragment -> {
@@ -95,6 +114,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
     override fun onStart() {
         super.onStart()
         // Initialize Firebase Auth
@@ -104,6 +124,7 @@ class MainActivity : AppCompatActivity() {
         User.account = currentUser
         Log.d("currentUser","${currentUser?.email}")
         viewModel.getUserInfo()
+        viewModel.checkLogin(User.account)
         updateUI(currentUser)
     }
 
@@ -114,8 +135,10 @@ class MainActivity : AppCompatActivity() {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
                 // Google Sign In was successful, authenticate with Firebase
-                val account = task.getResult(ApiException::class.java)!!
+                val account = task.getResult(ApiException::class.java)
                 Log.d("login", "firebaseAuthWithGoogle:" + account.email)
+                viewModel.checkLogin(account)
+//                Log.d("loginn","${viewModel.loginState.value}")
                 firebaseAuthWithGoogle(account.idToken!!)
             } catch (e: ApiException) {
                 // Google Sign In failed, update UI appropriately
