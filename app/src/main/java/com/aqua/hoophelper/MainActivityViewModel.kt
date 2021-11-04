@@ -27,9 +27,6 @@ class MainActivityViewModel: ViewModel() {
     var player = MutableLiveData<List<Player>>()
     var team = MutableLiveData<List<Team>>()
 
-    private var _loginState = MutableLiveData<Boolean>()
-    val loginState: LiveData<Boolean>
-    get() = _loginState
 
     // Create a Coroutine scope using a job to be able to cancel when needed
     private var viewModelJob = Job()
@@ -52,10 +49,6 @@ class MainActivityViewModel: ViewModel() {
         coroutineScope.launch {
             HoopRemoteDataSource.getUserInfo()
         }
-    }
-
-    fun checkLogin(state: Any?) {
-        _loginState.value = (state != null)
     }
 
     ////////////////
