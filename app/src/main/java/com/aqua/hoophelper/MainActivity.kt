@@ -76,19 +76,19 @@ class MainActivity : AppCompatActivity() {
         navHostFragment.addOnDestinationChangedListener { _, destination, _ ->
             when(destination.id) {
                 R.id.homeFragment -> {
-                    binding.toolbar.visibility = View.VISIBLE
+                    binding.toolbar.visibility = View.GONE
                     binding.appBar.behavior.slideUp(binding.appBar)
                 }
                 R.id.teamFragment -> {
-                    binding.toolbar.visibility = View.VISIBLE
+                    binding.toolbar.visibility = View.GONE
                     binding.appBar.behavior.slideUp(binding.appBar)
                 }
                 R.id.liveFragment -> {
-                    binding.toolbar.visibility = View.VISIBLE
+                    binding.toolbar.visibility = View.GONE
                     binding.appBar.behavior.slideUp(binding.appBar)
                 }
                 R.id.profileFragment -> {
-                    binding.toolbar.visibility = View.VISIBLE
+                    binding.toolbar.visibility = View.GONE
                     binding.appBar.behavior.slideUp(binding.appBar)
                 }
             }

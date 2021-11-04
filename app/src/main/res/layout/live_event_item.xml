@@ -12,7 +12,7 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/live_message_card"
+            android:id="@+id/live_message_card_b"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
@@ -20,7 +20,6 @@
             app:cardBackgroundColor="#FFFBE6"
             app:cardCornerRadius="20dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.473"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:strokeColor="#356859"
@@ -30,92 +29,38 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/live_time_chip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
-                    android:text="Time"
-                    android:textColor="@color/basil_green_dark"
-                    app:chipBackgroundColor="@color/basil_bg"
-                    app:chipStrokeColor="@color/basil_green_dark"
-                    app:chipStrokeWidth="1dp"
-                    app:layout_constraintStart_toEndOf="@+id/imageView"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/live_zone_chip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Zone"
-                    android:textColor="@color/basil_green_dark"
-                    app:chipBackgroundColor="@color/basil_bg"
-                    app:chipStrokeColor="@color/basil_green_dark"
-                    app:chipStrokeWidth="1dp"
-                    app:layout_constraintStart_toStartOf="@+id/live_time_chip"
-                    app:layout_constraintTop_toBottomOf="@+id/live_time_chip" />
-
                 <TextView
-                    android:id="@+id/live_event_type_text"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="16dp"
-                    android:fontFamily="@font/montserrat"
-                    android:text="Type"
-                    android:textColor="#356859"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/view2"
-                    app:layout_constraintTop_toBottomOf="@+id/view3" />
-
-                <TextView
-                    android:id="@+id/live_name"
+                    android:id="@+id/live_name_b"
                     android:layout_width="0dp"
                     android:layout_height="50dp"
                     android:layout_marginBottom="16dp"
                     android:autoSizeTextType="uniform"
                     android:fontFamily="@font/montserrat"
-                    android:text="name"
                     android:gravity=""
+                    android:text="name"
                     android:textColor="#356859"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/imageView"
-                    app:layout_constraintStart_toStartOf="@+id/imageView"
-                    app:layout_constraintTop_toBottomOf="@+id/imageView"
+                    app:layout_constraintEnd_toEndOf="@+id/imageView_b"
+                    app:layout_constraintStart_toStartOf="@+id/imageView_b"
+                    app:layout_constraintTop_toBottomOf="@+id/imageView_b"
                     app:layout_constraintVertical_bias="1.0" />
 
                 <View
-                    android:id="@+id/view2"
+                    android:id="@+id/view2_b"
                     android:layout_width="1dp"
                     android:layout_height="0dp"
+                    android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginBottom="16dp"
                     android:background="@color/basil_green_dark"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/imageView"
+                    app:layout_constraintStart_toEndOf="@+id/imageView_b"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <View
-                    android:id="@+id/view3"
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="16dp"
-                    android:background="@color/basil_green_dark"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/live_event_type_text"
-                    app:layout_constraintTop_toBottomOf="@+id/live_zone_chip" />
-
                 <ImageView
-                    android:id="@+id/imageView"
+                    android:id="@+id/imageView_b"
                     android:layout_width="101dp"
                     android:layout_height="98dp"
                     android:layout_marginStart="16dp"
@@ -124,9 +69,186 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/basketball" />
 
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/live_pts_chip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:textColor="@color/basil_green_dark"
+                    app:chipBackgroundColor="@color/basil_bg"
+                    app:chipStrokeColor="@color/basil_green_dark"
+                    app:chipStrokeWidth="1dp"
+                    android:text="PTS | 20"
+                    app:layout_constraintStart_toEndOf="@+id/view2_b"
+                    app:layout_constraintTop_toTopOf="@+id/imageView_b" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/live_reb_chip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/basil_green_dark"
+                    app:chipBackgroundColor="@color/basil_bg"
+                    app:chipStrokeColor="@color/basil_green_dark"
+                    app:chipStrokeWidth="1dp"
+                    android:text="REB | 20"
+                    app:layout_constraintStart_toStartOf="@+id/live_pts_chip"
+                    app:layout_constraintTop_toBottomOf="@+id/live_pts_chip" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/live_ast_chip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/basil_green_dark"
+                    app:chipBackgroundColor="@color/basil_bg"
+                    app:chipStrokeColor="@color/basil_green_dark"
+                    app:chipStrokeWidth="1dp"
+                    android:text="AST | 20"
+                    app:layout_constraintStart_toEndOf="@+id/view2_b"
+                    app:layout_constraintStart_toStartOf="@+id/live_reb_chip"
+                    app:layout_constraintTop_toBottomOf="@+id/live_reb_chip" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/live_stl_chip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="100dp"
+                    android:textColor="@color/basil_green_dark"
+                    app:chipBackgroundColor="@color/basil_bg"
+                    app:chipStrokeColor="@color/basil_green_dark"
+                    app:chipStrokeWidth="1dp"
+                    android:text="STL | 20"
+                    app:layout_constraintStart_toStartOf="@+id/live_pts_chip"
+                    app:layout_constraintTop_toTopOf="@+id/live_pts_chip" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/live_blk_chip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/basil_green_dark"
+                    app:chipBackgroundColor="@color/basil_bg"
+                    app:chipStrokeColor="@color/basil_green_dark"
+                    app:chipStrokeWidth="1dp"
+                    android:text="BLK | 20"
+                    app:layout_constraintStart_toStartOf="@+id/live_stl_chip"
+                    app:layout_constraintTop_toBottomOf="@+id/live_stl_chip" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
 
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/live_message_card"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="16dp"
+                    app:cardBackgroundColor="#FFFBE6"
+                    app:cardCornerRadius="20dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:strokeColor="#356859"
+                    app:strokeWidth="1dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/live_time_chip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="16dp"
+                            android:text="Time"
+                            android:textColor="@color/basil_green_dark"
+                            app:chipBackgroundColor="@color/basil_bg"
+                            app:chipStrokeColor="@color/basil_green_dark"
+                            app:chipStrokeWidth="1dp"
+                            app:layout_constraintStart_toEndOf="@+id/imageView"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/live_zone_chip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Zone"
+                            android:textColor="@color/basil_green_dark"
+                            app:chipBackgroundColor="@color/basil_bg"
+                            app:chipStrokeColor="@color/basil_green_dark"
+                            app:chipStrokeWidth="1dp"
+                            app:layout_constraintStart_toStartOf="@+id/live_time_chip"
+                            app:layout_constraintTop_toBottomOf="@+id/live_time_chip" />
+
+                        <TextView
+                            android:id="@+id/live_event_type_text"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginEnd="16dp"
+                            android:layout_marginBottom="16dp"
+                            android:fontFamily="@font/montserrat"
+                            android:text="Type"
+                            android:textColor="#356859"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/view2"
+                            app:layout_constraintTop_toBottomOf="@+id/view3" />
+
+                        <TextView
+                            android:id="@+id/live_name"
+                            android:layout_width="0dp"
+                            android:layout_height="50dp"
+                            android:layout_marginBottom="16dp"
+                            android:autoSizeTextType="uniform"
+                            android:fontFamily="@font/montserrat"
+                            android:text="name"
+                            android:gravity=""
+                            android:textColor="#356859"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="@+id/imageView"
+                            app:layout_constraintStart_toStartOf="@+id/imageView"
+                            app:layout_constraintTop_toBottomOf="@+id/imageView"
+                            app:layout_constraintVertical_bias="1.0" />
+
+                        <View
+                            android:id="@+id/view2"
+                            android:layout_width="1dp"
+                            android:layout_height="0dp"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginBottom="16dp"
+                            android:background="@color/basil_green_dark"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/imageView"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <View
+                            android:id="@+id/view3"
+                            android:layout_width="0dp"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginEnd="16dp"
+                            android:background="@color/basil_green_dark"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="@+id/live_event_type_text"
+                            app:layout_constraintTop_toBottomOf="@+id/live_zone_chip" />
+
+                        <ImageView
+                            android:id="@+id/imageView"
+                            android:layout_width="101dp"
+                            android:layout_height="98dp"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="16dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:srcCompat="@drawable/basketball" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </com.google.android.material.card.MaterialCardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

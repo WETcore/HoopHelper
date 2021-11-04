@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import com.aqua.hoophelper.HoopInfo
 import com.aqua.hoophelper.R
+import com.aqua.hoophelper.database.Event
 import com.aqua.hoophelper.database.remote.HoopRemoteDataSource
 import com.aqua.hoophelper.databinding.LiveFragmentBinding
 
@@ -29,10 +30,18 @@ class LiveFragment : Fragment() {
             DataBindingUtil.inflate(inflater, R.layout.live_fragment, container,false)
 
         // adapt recycler
-        val adapter = LiveEventAdapter(viewModel)
+        var adapter = LiveEventAdapter(viewModel, listOf(Event()))
         binding.liveRecycler.adapter = adapter
 
         viewModel.events.observe(viewLifecycleOwner) { its ->
+            adapter = LiveEventAdapter(
+                viewModel,
+                its.filter {
+                    it.matchId == its[0].matchId
+                            && it.teamId == HoopInfo.spinnerSelectedTeamId
+                }
+            )
+            binding.liveRecycler.adapter = adapter
             its.sortedByDescending { it.actualTime }
             adapter.submitList(
                 its.filter {
