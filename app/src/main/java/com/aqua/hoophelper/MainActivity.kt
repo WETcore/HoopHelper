@@ -1,5 +1,8 @@
 package com.aqua.hoophelper
 
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
@@ -92,6 +95,22 @@ class MainActivity : AppCompatActivity() {
                     binding.toolbar.visibility = View.GONE
                     binding.appBar.behavior.slideUp(binding.appBar)
                 }
+            }
+        }
+
+        viewModel.invites.observe(this) {
+            if (!it.isNullOrEmpty()) {
+                //TODO(notify)
+                val channel = NotificationChannel("1", "Hi", NotificationManager.IMPORTANCE_HIGH)
+                val notification = Notification.Builder(this, "1")
+                    .setSmallIcon(R.drawable.ball_icon)
+                    .setContentTitle("title")
+                    .setContentText("invites U")
+                    .build()
+                val manager =
+                    this.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+                manager.createNotificationChannel(channel)
+                manager.notify(1, notification)
             }
         }
     }

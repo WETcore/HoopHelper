@@ -8,7 +8,7 @@ data class Team(
 
 data class Invitation(
     var teamId: String = "",
-    var playerId: String = "",
+    var inviteeMail: String = "",
     )
 
 data class Player(

@@ -1,6 +1,5 @@
 package com.aqua.hoophelper.profile
 
-import android.content.Intent
 import android.util.Log
 import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.fragment.app.FragmentActivity
@@ -8,13 +7,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.aqua.hoophelper.User
-import com.aqua.hoophelper.database.Event
+import com.aqua.hoophelper.database.Invitation
 import com.aqua.hoophelper.database.Player
 import com.aqua.hoophelper.database.Team
 import com.aqua.hoophelper.database.remote.HoopRemoteDataSource
-import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.common.api.ApiException
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -30,6 +27,7 @@ class ProfileViewModel : ViewModel() {
 
     var player = Player()
     var team = Team()
+    var invitation =Invitation()
 
     val result = MutableLiveData<List<Player>>()
 
@@ -37,6 +35,10 @@ class ProfileViewModel : ViewModel() {
     var _roster = MutableLiveData<List<Player>>()
     val roster: LiveData<List<Player>>
         get() = _roster
+
+//    var _invites = HoopRemoteDataSource.getInvitations()
+//    val invites: LiveData<List<Invitation>>
+//        get() = _invites
 
     // Create a Coroutine scope using a job to be able to cancel when needed
     private var viewModelJob = Job()
@@ -82,6 +84,11 @@ class ProfileViewModel : ViewModel() {
                 it.documents[0].reference.delete()
             }
         setRoster()
+    }
+
+    fun sendInvitation() {
+        db.collection("Invitations")
+            .add(invitation)
     }
 
 }

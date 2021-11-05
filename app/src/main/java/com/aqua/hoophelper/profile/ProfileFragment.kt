@@ -1,26 +1,32 @@
 package com.aqua.hoophelper.profile
 
 import android.annotation.SuppressLint
-import android.content.Intent
-import androidx.lifecycle.ViewModelProvider
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context.NOTIFICATION_SERVICE
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import com.aqua.hoophelper.MainActivityViewModel
 import com.aqua.hoophelper.R
+import com.aqua.hoophelper.User
 import com.aqua.hoophelper.databinding.ProfileFragmentBinding
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.firebase.auth.FirebaseAuth
 
 
 class ProfileFragment : Fragment() {
 
     private val viewModel: ProfileViewModel by lazy {
         ViewModelProvider(this).get(ProfileViewModel::class.java)
+    }
+
+    private val mViewModel: MainActivityViewModel by lazy {
+        ViewModelProvider(this).get(MainActivityViewModel::class.java)
     }
 
     @SuppressLint("ResourceAsColor")
@@ -58,6 +64,15 @@ class ProfileFragment : Fragment() {
         }
         binding.releaseButton.setOnClickListener {
 //            viewModel.removePlayer(viewModel.releasePos)
+        }
+
+        // invite
+        binding.inviteButton.setOnClickListener {
+            viewModel.invitation.teamId = User.teamId
+            viewModel.invitation.inviteeMail = "huangaqua457@gmail.com"
+
+            viewModel.sendInvitation()
+
         }
 
         return binding.root

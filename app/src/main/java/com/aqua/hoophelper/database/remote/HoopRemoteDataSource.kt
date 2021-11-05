@@ -42,6 +42,32 @@ object HoopRemoteDataSource: HoopRepository {
         return result
     }
 
+    override fun getRoster(): MutableLiveData<List<Player>> {
+        val result = MutableLiveData<List<Player>>()
+        result.let {
+            FirebaseFirestore.getInstance()
+                .collection("Players")
+                .whereEqualTo("teamId", User.teamId)
+                .addSnapshotListener { value, error ->
+                    it.value = value?.toObjects(Player::class.java) ?: mutableListOf()
+                }
+        }
+        return result
+    }
+
+    override fun getInvitations(): MutableLiveData<List<Invitation>> {
+        val result = MutableLiveData<List<Invitation>>()
+        result.let {
+            FirebaseFirestore.getInstance()
+                .collection("Invitations")
+                .whereEqualTo("inviteeMail", User.account?.email)
+                .addSnapshotListener { value, error ->
+                    it.value = value?.toObjects(Invitation::class.java) ?: mutableListOf()
+                }
+        }
+        return result
+    }
+
     // captain participate the match. find captain's member
     override suspend fun getMatchMembers(): List<Player> = suspendCoroutine { conti ->
         val db = FirebaseFirestore.getInstance()
@@ -101,7 +127,9 @@ object HoopRemoteDataSource: HoopRepository {
                 .get()
                 .addOnCompleteListener {
                     val result = it.result?.toObjects(Player::class.java) ?: mutableListOf()
-                    User.teamId = result[0].teamId
+                    if (result.size != 0) {
+                        User.teamId = result[0].teamId
+                    }
 
                     Log.d("userInfo","${User.account?.email}")
 
@@ -125,18 +153,4 @@ object HoopRemoteDataSource: HoopRepository {
 
             }
     }
-
-    override fun getRoster(): MutableLiveData<List<Player>> {
-        val result = MutableLiveData<List<Player>>()
-        result.let {
-            FirebaseFirestore.getInstance()
-                .collection("Players")
-                .whereEqualTo("teamId", User.teamId)
-                .addSnapshotListener { value, error ->
-                    it.value = value?.toObjects(Player::class.java) ?: mutableListOf()
-                }
-        }
-        return result
-    }
-
 }

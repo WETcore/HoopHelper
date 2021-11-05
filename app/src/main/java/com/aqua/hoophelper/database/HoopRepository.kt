@@ -8,6 +8,7 @@ interface HoopRepository {
     fun getEvents(): LiveData<List<Event>>
     fun getMatches(): LiveData<List<Match>>
     fun getRoster(): MutableLiveData<List<Player>>
+    fun getInvitations(): MutableLiveData<List<Invitation>>
 
     suspend fun getTeams(): List<Team>
     suspend fun getUserInfo(): List<Player>
