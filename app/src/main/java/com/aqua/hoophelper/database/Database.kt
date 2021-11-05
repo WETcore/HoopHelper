@@ -18,6 +18,7 @@ data class Player(
     var teamId: String = "",
     var email: String = "",
     var starting5: Boolean = false,
+    var isCaptain: Boolean = false,
 )
 
 data class Match(

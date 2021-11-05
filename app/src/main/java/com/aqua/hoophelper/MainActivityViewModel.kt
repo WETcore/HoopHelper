@@ -45,12 +45,6 @@ class MainActivityViewModel: ViewModel() {
         db.collection("Matches").add(match)
     }
 
-    fun getUserInfo() {
-        coroutineScope.launch {
-            HoopRemoteDataSource.getUserInfo()
-        }
-    }
-
     ////////////////
     override fun onCleared() {
         super.onCleared()

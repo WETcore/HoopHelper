@@ -32,9 +32,9 @@ class TeamFragment : Fragment() {
         // set tab
         val tabLayout = binding.tabLayout
         val vPager = binding.teamViewpager
-        val title: List<String> = listOf( "Manage","Chart", "Tactic")
+        val title: List<String> = listOf("Manage", "Chart", "Tactic")
         val titleIcon: List<Drawable> = listOf(
-            resources.getDrawable(R.drawable.management),
+            resources.getDrawable(R.drawable.planning),
             resources.getDrawable(R.drawable.bar_chart),
             resources.getDrawable(R.drawable.tactic),
         )

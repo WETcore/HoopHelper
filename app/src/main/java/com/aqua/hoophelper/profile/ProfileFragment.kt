@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.view.*
+import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
@@ -28,6 +29,8 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
+        viewModel.setRoster()
+
         // binding
         val binding: ProfileFragmentBinding =
             DataBindingUtil.inflate(inflater, R.layout.profile_fragment, container,false)
@@ -37,6 +40,24 @@ class ProfileFragment : Fragment() {
         binding.createButton.setOnClickListener {
             viewModel.sendTeamInfo(binding.teamNameEdit.text.toString())
             viewModel.sendCaptainInfo(binding.playerNumEdit.text.toString())
+        }
+
+        viewModel.roster.observe(viewLifecycleOwner) {
+            var num = mutableListOf<String>()
+            it.forEach { player ->
+                num.add(player.number)
+            }
+            binding.releaseText.setAdapter(
+                ArrayAdapter(requireContext(), R.layout.team_start5_item, num)
+            )
+        }
+
+        // release player
+        binding.releaseText.setOnItemClickListener { parent, view, position, id ->
+            viewModel.releasePos = position
+        }
+        binding.releaseButton.setOnClickListener {
+//            viewModel.removePlayer(viewModel.releasePos)
         }
 
         return binding.root

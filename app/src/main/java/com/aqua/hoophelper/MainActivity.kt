@@ -96,13 +96,4 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        // Initialize Firebase Auth
-        auth = Firebase.auth
-        // Check if user is signed in (non-null) and update UI accordingly.
-        val currentUser = auth.currentUser
-        Log.d("currentUser","${currentUser?.email}")
-    }
-
 }
