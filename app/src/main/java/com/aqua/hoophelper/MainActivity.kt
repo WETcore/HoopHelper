@@ -32,6 +32,8 @@ import com.google.firebase.firestore.Query
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var auth: FirebaseAuth
+
     private val viewModel: MainActivityViewModel by lazy {
         ViewModelProvider(this).get(MainActivityViewModel::class.java)
     }
@@ -82,7 +84,7 @@ class MainActivity : AppCompatActivity() {
                     binding.toolbar.visibility = View.GONE
                     binding.appBar.behavior.slideUp(binding.appBar)
                 }
-                R.id.liveFragment -> {
+                R.id.liveFragment -> {//TODO ban fab
                     binding.toolbar.visibility = View.GONE
                     binding.appBar.behavior.slideUp(binding.appBar)
                 }
@@ -92,6 +94,15 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        // Initialize Firebase Auth
+        auth = Firebase.auth
+        // Check if user is signed in (non-null) and update UI accordingly.
+        val currentUser = auth.currentUser
+        Log.d("currentUser","${currentUser?.email}")
     }
 
 }

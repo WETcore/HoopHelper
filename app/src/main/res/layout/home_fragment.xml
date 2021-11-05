@@ -19,15 +19,11 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="32dp"
             android:layout_marginEnd="16dp"
-            android:fontFamily="@font/montserrat"
-            android:gravity="start"
             android:text="LEADERBOARD"
-            android:textColor="@color/basil_green_dark"
-            android:textSize="40sp"
-            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            style="@style/text_title" />
 
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/home_viewpager"

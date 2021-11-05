@@ -6,20 +6,29 @@ import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
+import com.aqua.hoophelper.database.remote.HoopRemoteDataSource
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 class LoginActivityViewModel: ViewModel() {
+
+    // Create a Coroutine scope using a job to be able to cancel when needed
+    private var viewModelJob = Job()
+
+    // the Coroutine runs using the Main (UI) dispatcher
+    private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     fun signIn(googleSignInClient: GoogleSignInClient, activity: FragmentActivity) {
         val signInIntent = googleSignInClient.signInIntent
         ActivityCompat.startActivityForResult(activity, signInIntent, RC_SIGN_IN, null)
     }
 
-    fun getStatus(context: Context, intent: Intent) {
-        Log.d("login","${User.account}")
-        if(User.account != null) {
-//            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-//            context.startActivity(intent)
+    fun getUserInfo() {
+        coroutineScope.launch {
+            HoopRemoteDataSource.getUserInfo()
         }
     }
 

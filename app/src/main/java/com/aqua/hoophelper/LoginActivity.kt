@@ -56,7 +56,9 @@ class LoginActivity : AppCompatActivity() {
         auth = Firebase.auth
         // Check if user is signed in (non-null) and update UI accordingly.
         val currentUser = auth.currentUser
+        User.account = currentUser
         Log.d("currentUser","${currentUser?.email}")
+        viewModel.getUserInfo()
         updateUI(currentUser)
     }
 
@@ -86,6 +88,7 @@ class LoginActivity : AppCompatActivity() {
                     Log.d("login", "signInWithCredential:success")
                     val user = auth.currentUser
                     User.account = user
+                    viewModel.getUserInfo()
                     updateUI(user)
                 } else {
                     // If sign in fails, display a message to the user.
