@@ -68,6 +68,7 @@ class ProfileFragment : Fragment() {
 
         // invite
         binding.inviteButton.setOnClickListener {
+            viewModel.invitation.id = viewModel.db.collection("Invitations").document().id
             viewModel.invitation.teamId = User.teamId
             viewModel.invitation.inviteeMail = "huangaqua457@gmail.com"
 

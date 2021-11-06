@@ -1,5 +1,6 @@
 package com.aqua.hoophelper.component
 
+import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -13,32 +14,35 @@ import androidx.lifecycle.LifecycleService
 import com.aqua.hoophelper.MainActivity
 import com.aqua.hoophelper.R
 import com.aqua.hoophelper.database.remote.HoopRemoteDataSource
+import kotlinx.coroutines.coroutineScope
 
 class HoopService: LifecycleService() {
 
     override fun onCreate() {
         super.onCreate()
+        Log.d("service", "OnCreate1")
     }
 
-    override fun onStart(intent: Intent?, startId: Int) {
-        super.onStart(intent, startId)
-        Log.d("service","Hi")
-    }
-
+    @SuppressLint("UnspecifiedImmutableFlag")
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
-        Log.d("service","Hi2")
+        super.onStartCommand(intent, flags, startId)
+
         HoopRemoteDataSource.getInvitations().observe(this) {
             if (!it.isNullOrEmpty()) {
-//                Toast.makeText(this, "Hi", Toast.LENGTH_SHORT).show()
+//                Log.d("service","${it[0].id}")
                 val intent1 = Intent(this, CheckService::class.java)
                 intent1.putExtra("teamId",it[0].teamId)
+                intent1.putExtra("inviteId",it[0].id)
+                intent1.putExtra("mail",it[0].inviteeMail)
                 val serviceActionPendingIntent1 =
                     PendingIntent
                         .getService(this,
                             0,
                             intent1,
-                            PendingIntent.FLAG_UPDATE_CURRENT)
+                            PendingIntent.FLAG_CANCEL_CURRENT)
+
+                Log.d("service1","Hi1 ${intent1.getStringExtra("inviteId")}")
 
                 val action1 = Notification.Action.Builder(R.drawable.ball_icon, "ACCEPT", serviceActionPendingIntent1).build()
 
@@ -48,18 +52,24 @@ class HoopService: LifecycleService() {
                     .setContentTitle("Title")
                     .setContentText("invitation")
                     .setSmallIcon(R.drawable.ball_icon)
-                    .setStyle(Notification.DecoratedCustomViewStyle())
                     .addAction(action1)
 //                    .setCustomContentView(RemoteViews(this.packageName, R.layout.notify_layout))
+                    .setAutoCancel(true)
                     .build()
 
                 val manager = this.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
                 manager.createNotificationChannel(channel)
                 manager.notify(1, notification)
+//                Log.d("service1","Hi3 ${intent1.getStringExtra("inviteId")}")
             }
         }
 
 
-        return super.onStartCommand(intent, flags, startId)
+        return START_NOT_STICKY
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("service", "OnDestroy1")
     }
 }

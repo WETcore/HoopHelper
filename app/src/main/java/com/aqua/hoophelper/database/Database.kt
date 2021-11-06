@@ -7,6 +7,7 @@ data class Team(
 )
 
 data class Invitation(
+    var id: String = "",
     var teamId: String = "",
     var inviteeMail: String = "",
     )

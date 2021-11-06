@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        stopService(Intent(applicationContext, HoopService::class.java))
         startService(Intent(applicationContext, HoopService::class.java))
 
         // binding
@@ -106,6 +107,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
+        stopService(Intent(applicationContext, HoopService::class.java))
         val brIntent = Intent()
         brIntent.action = "reStartService"
         brIntent.setClass(this, RestartBroadcastReceiver::class.java)
