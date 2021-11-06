@@ -1,36 +1,18 @@
 package com.aqua.hoophelper
 
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
+import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.KeyEvent
 import android.view.View
-import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.aqua.hoophelper.database.Match
-import com.aqua.hoophelper.database.Player
 import com.aqua.hoophelper.databinding.ActivityMainBinding
-import com.aqua.hoophelper.match.MatchViewModel
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.aqua.hoophelper.component.HoopService
+import com.aqua.hoophelper.component.RestartBroadcastReceiver
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-
-import com.google.android.gms.auth.api.signin.GoogleSignInResult
-import com.google.android.gms.common.api.ApiException
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.firestore.Query
 
 
 class MainActivity : AppCompatActivity() {
@@ -41,8 +23,11 @@ class MainActivity : AppCompatActivity() {
         ViewModelProvider(this).get(MainActivityViewModel::class.java)
     }
 
+    @SuppressLint("RemoteViewLayout")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        startService(Intent(applicationContext, HoopService::class.java))
 
         // binding
         val binding = ActivityMainBinding.inflate(layoutInflater)
@@ -61,7 +46,7 @@ class MainActivity : AppCompatActivity() {
             navHostFragment.navigate(NavigationDirections.navToMatch(viewModel.match.matchId))
         }
 
-        ///badge
+        // badge
         binding.bottomBar.getOrCreateBadge(R.id.liveFragment).apply {
             viewModel.db.collection("Matches") // TODO to model
                 .addSnapshotListener { value, error ->
@@ -98,21 +83,34 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        viewModel.invites.observe(this) {
-            if (!it.isNullOrEmpty()) {
-                //TODO(notify)
-                val channel = NotificationChannel("1", "Hi", NotificationManager.IMPORTANCE_HIGH)
-                val notification = Notification.Builder(this, "1")
-                    .setSmallIcon(R.drawable.ball_icon)
-                    .setContentTitle("title")
-                    .setContentText("invites U")
-                    .build()
-                val manager =
-                    this.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-                manager.createNotificationChannel(channel)
-                manager.notify(1, notification)
-            }
-        }
+//        viewModel.invites.observe(this) {
+//            if (!it.isNullOrEmpty()) {
+//                //TODO(notify)
+//                val activityActionIntent = Intent(this, MainActivity::class.java)
+//                val activityActionPendingIntent: PendingIntent =
+//                    PendingIntent.getActivity(this, 0, activityActionIntent, 0)
+//
+//                val channel = NotificationChannel("1", "Invite", NotificationManager.IMPORTANCE_HIGH)
+//                val notification = Notification.Builder(this, "1")
+//                    .setContentTitle("Title")
+//                    .setContentText("invitation")
+//                    .setSmallIcon(R.drawable.ball_icon)
+//                    .addAction(R.drawable.ball_icon, "TEST", activityActionPendingIntent)
+//                    .build()
+//
+//                val manager = this.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+//                manager.createNotificationChannel(channel)
+//                manager.notify(1, notification)
+//            }
+//        }
+    }
+
+    override fun onDestroy() {
+        val brIntent = Intent()
+        brIntent.action = "reStartService"
+        brIntent.setClass(this, RestartBroadcastReceiver::class.java)
+        this.sendBroadcast(brIntent)
+        super.onDestroy()
     }
 
 }
