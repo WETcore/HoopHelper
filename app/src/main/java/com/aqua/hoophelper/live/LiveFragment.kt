@@ -37,7 +37,7 @@ class LiveFragment : Fragment() {
             adapter = LiveEventAdapter(
                 viewModel,
                 its.filter {
-                    it.matchId == its[0].matchId
+                    it.matchId == its.first().matchId
                             && it.teamId == HoopInfo.spinnerSelectedTeamId
                 }
             )
@@ -45,7 +45,7 @@ class LiveFragment : Fragment() {
             its.sortedByDescending { it.actualTime }
             adapter.submitList(
                 its.filter {
-                    it.matchId == its[0].matchId
+                    it.matchId == its.first().matchId
                             && it.teamId == HoopInfo.spinnerSelectedTeamId
                 }
             )

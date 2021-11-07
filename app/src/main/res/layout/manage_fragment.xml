@@ -13,24 +13,24 @@
 
         <TextView
             android:id="@+id/textView3"
+            style="@style/text_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:text="Starting Lineup"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            style="@style/text_title"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/textView5"
+            style="@style/text_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="Game Rule"
             app:layout_constraintStart_toStartOf="@+id/start5_pf_input"
-            app:layout_constraintTop_toBottomOf="@+id/start5_pf_input"
-            style="@style/text_title"/>
+            app:layout_constraintTop_toBottomOf="@+id/start5_pf_input" />
 
         <TextView
             android:id="@+id/textView6"
@@ -242,12 +242,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="32dp"
             android:hint="1st half time out"
             app:layout_constraintEnd_toStartOf="@+id/timeout_input_2"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toStartOf="@+id/quarter_input"
+            app:layout_constraintStart_toStartOf="@+id/textView6"
             app:layout_constraintTop_toBottomOf="@+id/textView6">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -263,9 +262,11 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp"
             android:hint="2nd half time out"
             app:layout_constraintBottom_toBottomOf="@+id/timeout_input_1"
-            app:layout_constraintEnd_toEndOf="@+id/foul_input"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/timeout_input_1">
 
@@ -281,9 +282,9 @@
             android:id="@+id/release_button"
             android:layout_width="0dp"
             android:layout_height="60dp"
+            android:fontFamily="@font/montserrat"
             android:text="Release Player"
             android:textColor="@color/hoop_background"
-            android:fontFamily="@font/montserrat"
             app:icon="@drawable/caution_triangle_copy"
             app:layout_constraintEnd_toEndOf="@+id/timeout_input_2"
             app:layout_constraintStart_toStartOf="@+id/timeout_input_2"
@@ -294,9 +295,9 @@
             style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat"
             android:text="Set Rule"
             android:textStyle="bold"
-            android:fontFamily="@font/montserrat"
             app:layout_constraintBottom_toBottomOf="@+id/textView5"
             app:layout_constraintEnd_toEndOf="@+id/foul_input"
             app:layout_constraintStart_toStartOf="@+id/foul_input"

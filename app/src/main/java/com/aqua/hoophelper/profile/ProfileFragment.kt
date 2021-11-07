@@ -1,11 +1,8 @@
 package com.aqua.hoophelper.profile
 
 import android.annotation.SuppressLint
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.content.Context.NOTIFICATION_SERVICE
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,7 +26,7 @@ class ProfileFragment : Fragment() {
         ViewModelProvider(this).get(MainActivityViewModel::class.java)
     }
 
-    @SuppressLint("ResourceAsColor")
+    @SuppressLint("ResourceAsColor", "SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -40,6 +37,44 @@ class ProfileFragment : Fragment() {
         // binding
         val binding: ProfileFragmentBinding =
             DataBindingUtil.inflate(inflater, R.layout.profile_fragment, container,false)
+
+        when {
+            User.isCaptain -> {
+                Log.d("vivi","Hi1")
+                binding.apply {
+                    createTeamLayout.visibility = View.GONE
+                    fanText.visibility = View.GONE
+                    viewModel.getUserInfo()
+                }
+            }
+            User.teamId.length > 5 -> {
+                Log.d("vivi","Hi2")
+                binding.apply {
+                    createTeamLayout.visibility = View.GONE
+                    manageRosterLayout.visibility = View.GONE
+                    fanText.visibility = View.GONE
+                    viewModel.getUserInfo()
+                }
+            }
+            else -> {
+                Log.d("vivi","Hi3")
+                binding.apply {
+                    manageRosterLayout.visibility = View.GONE
+                    teamNameText.visibility = View.GONE
+                    nicknameText.visibility = View.GONE
+                    numberText.visibility = View.GONE
+                }
+            }
+        }
+
+        viewModel.teamInfo.observe(viewLifecycleOwner) {
+            binding.teamNameText.text = "Team: " + it.name
+        }
+
+        viewModel.userInfo.observe(viewLifecycleOwner) {
+            binding.nicknameText.text = "Name: " + it.name
+            binding.numberText.text = "Number: " + it.number
+        }
 
         binding.mailLayout.suffixText = "example@gmail.com"
 

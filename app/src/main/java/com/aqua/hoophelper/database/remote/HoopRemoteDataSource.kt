@@ -128,7 +128,9 @@ object HoopRemoteDataSource: HoopRepository {
                 .addOnCompleteListener {
                     val result = it.result?.toObjects(Player::class.java) ?: mutableListOf()
                     if (result.size != 0) {
-                        User.teamId = result[0].teamId
+                        User.teamId = result.first().teamId
+                        User.isCaptain = result.first().captain
+                        User.id = result.first().id
                     }
 
                     Log.d("userInfo","${User.account?.email}")
@@ -150,7 +152,18 @@ object HoopRemoteDataSource: HoopRepository {
 //                Log.d("gameRule","Hi")
 
                 conti.resume(result)
+            }
+    }
 
+    override suspend fun getPlayer(): Player = suspendCoroutine { conti ->
+        FirebaseFirestore.getInstance()
+            .collection("Players")
+            .whereEqualTo("id", User.id)
+            .get()
+            .addOnCompleteListener {
+                val result = it.result.first().toObject(Player::class.java)
+
+                conti.resume(result)
             }
     }
 }

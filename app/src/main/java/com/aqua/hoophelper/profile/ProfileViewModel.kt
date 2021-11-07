@@ -36,9 +36,15 @@ class ProfileViewModel : ViewModel() {
     val roster: LiveData<List<Player>>
         get() = _roster
 
-//    var _invites = HoopRemoteDataSource.getInvitations()
-//    val invites: LiveData<List<Invitation>>
-//        get() = _invites
+    // userInfo
+    var _userInfo = MutableLiveData<Player>()
+    val userInfo: LiveData<Player>
+        get() = _userInfo
+
+    // teamInfo
+    var _teamInfo = MutableLiveData<Team>()
+    val teamInfo: LiveData<Team>
+        get() = _teamInfo
 
     // Create a Coroutine scope using a job to be able to cancel when needed
     private var viewModelJob = Job()
@@ -81,7 +87,7 @@ class ProfileViewModel : ViewModel() {
         db.collection("Players")
             .whereEqualTo("id", buffer.id)
             .get().addOnSuccessListener {
-                it.documents[0].reference.delete()
+                it.documents.first().reference.delete()
             }
         setRoster()
     }
@@ -89,6 +95,13 @@ class ProfileViewModel : ViewModel() {
     fun sendInvitation() {
         db.collection("Invitations")
             .add(invitation)
+    }
+
+    fun getUserInfo() {
+        coroutineScope.launch {
+            _teamInfo.value = HoopRemoteDataSource.getTeams().first { it.id == User.teamId }
+            _userInfo.value = HoopRemoteDataSource.getPlayer()
+        }
     }
 
 }

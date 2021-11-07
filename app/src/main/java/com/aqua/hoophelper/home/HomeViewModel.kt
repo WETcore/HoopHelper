@@ -49,7 +49,7 @@ class HomeViewModel : ViewModel() {
             for (i in teams.value!!.indices) {
                 teamNameList.add(teams.value!![i].name)
             }
-            HoopInfo.spinnerSelectedTeamId = _teams.value!![0].id
+            HoopInfo.spinnerSelectedTeamId = _teams.value!!.first().id
         }
         return teamNameList
     }

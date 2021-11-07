@@ -162,8 +162,8 @@ class MatchFragment : Fragment() {
             Log.d("tag","${it}")
             if (!it.isNullOrEmpty()) {
                 binding.player1Chip.text = it[0].number
-                if (viewModel.playerNum == "") viewModel.playerNum = it[0].number
-                if (viewModel.playerName == "") viewModel.playerName = it[0].name
+                if (viewModel.playerNum == "") viewModel.playerNum = it.first().number
+                if (viewModel.playerName == "") viewModel.playerName = it.first().name
                 binding.player2Chip.text = it[1].number
                 binding.player3Chip.text = it[2].number
                 binding.player4Chip.text = it[3].number

@@ -29,9 +29,9 @@ class HoopService: LifecycleService() {
             if (!it.isNullOrEmpty()) {
 //                Log.d("service","${it[0].id}")
                 val intent1 = Intent(this, CheckService::class.java)
-                intent1.putExtra("teamId",it[0].teamId)
-                intent1.putExtra("inviteId",it[0].id)
-                intent1.putExtra("mail",it[0].inviteeMail)
+                intent1.putExtra("teamId",it.first().teamId)
+                intent1.putExtra("inviteId",it.first().id)
+                intent1.putExtra("mail",it.first().inviteeMail)
                 val serviceActionPendingIntent1 =
                     PendingIntent
                         .getService(this,

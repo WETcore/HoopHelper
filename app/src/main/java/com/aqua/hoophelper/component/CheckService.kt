@@ -47,7 +47,7 @@ class CheckService: LifecycleService() {
                     FirebaseFirestore.getInstance()
                         .collection("Players")
                         .add(player)
-                    it.result.documents[0].reference.delete()
+                    it.result.documents.first().reference.delete()
                     Log.d("service1","Hi2----")
                     stopSelf()
                 }

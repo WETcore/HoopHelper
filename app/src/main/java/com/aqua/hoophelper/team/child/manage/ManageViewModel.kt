@@ -87,13 +87,13 @@ class ManageViewModel : ViewModel() {
         db.collection("Players")
             .whereEqualTo("id", id)
             .get().addOnSuccessListener {
-                it.documents[0].reference.update("starting5", false)
+                it.documents.first().reference.update("starting5", false)
             }
 
         db.collection("Players")
             .whereEqualTo("id", buffer.id)
             .get().addOnSuccessListener {
-                it.documents[0].reference.update("starting5", true)
+                it.documents.first().reference.update("starting5", true)
             }
 
         setRoster()

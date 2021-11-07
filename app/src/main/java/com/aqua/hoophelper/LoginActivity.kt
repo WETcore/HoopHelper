@@ -8,7 +8,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import com.aqua.hoophelper.database.Player
 import com.aqua.hoophelper.databinding.ActivityLoginBinding
-import com.aqua.hoophelper.databinding.ActivityMainBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
@@ -110,6 +109,8 @@ object User {
     var account: FirebaseUser? = null
     var teamId = ""
     var teamMembers = MutableLiveData(listOf<Player>())
+    var isCaptain = false
+    var id = ""
 }
 
 object HoopInfo {
