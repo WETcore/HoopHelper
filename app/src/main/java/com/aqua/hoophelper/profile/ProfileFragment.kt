@@ -88,8 +88,28 @@ class ProfileFragment : Fragment() {
 
         // create team
         binding.createButton.setOnClickListener {
-            viewModel.sendTeamInfo(binding.teamNameEdit.text.toString())
-            viewModel.sendCaptainInfo(binding.playerNumEdit.text.toString())
+            if (binding.teamNameEdit.text?.length == 0) {
+                binding.teamNameLayout.error = "This is required"
+            } else {
+                binding.teamNameLayout.error = null
+            }
+            if (binding.nicknameEdit.text?.length == 0) {
+                binding.nicknameLayout.error = "This is required"
+            } else {
+                binding.nicknameLayout.error = null
+            }
+            if (binding.playerNumEdit.text?.length == 0) {
+                binding.playerNumLayout.error = "This is required"
+            } else {
+                binding.playerNumLayout.error = null
+            }
+            if (binding.teamNameEdit.text?.length != 0 &&
+                binding.nicknameEdit.text?.length != 0 &&
+                binding.playerNumEdit.text?.length != 0
+            ) {
+                viewModel.sendTeamInfo(binding.teamNameEdit.text.toString())
+                viewModel.sendCaptainInfo(binding.playerNumEdit.text.toString())
+            }
         }
 
         // release player
@@ -97,19 +117,40 @@ class ProfileFragment : Fragment() {
             viewModel.releasePos = position
         }
         binding.releaseButton.setOnClickListener {
-            viewModel.removePlayer(viewModel.releasePos)
+            if (binding.releaseText.text?.length == 0) {
+                binding.releaseInput.error = "This is required"
+            } else {
+                binding.releaseInput.error = null
+            }
+            if (binding.releaseText.text?.length != 0) {
+//            viewModel.removePlayer(viewModel.releasePos)
+            }
         }
 
         // invite
         binding.mailLayout.suffixText = "@gmail.com"
         binding.inviteButton.setOnClickListener {
-            viewModel.invitation.id = viewModel.db.collection("Invitations").document().id
-            viewModel.invitation.teamId = User.teamId
-            viewModel.invitation.inviteeMail = binding.mailEdit.text.toString() + binding.mailLayout.suffixText//"huangaqua457@gmail.com"
-            viewModel.invitation.playerName = binding.inviteNameEdit.text.toString()//"Andrew"
+            if (binding.mailEdit.text?.length == 0) {
+                binding.mailLayout.error = "This is required"
+            } else {
+                binding.mailLayout.error = null
+            }
+            if (binding.inviteNameEdit.text?.length == 0) {
+                binding.inviteNameLayout.error = "This is required"
+            } else {
+                binding.inviteNameLayout.error = null
+            }
+            if (binding.mailEdit.text?.length != 0 &&
+                binding.inviteNameEdit.text?.length != 0
+            ) {
+                viewModel.invitation.id = viewModel.db.collection("Invitations").document().id
+                viewModel.invitation.teamId = User.teamId
+                viewModel.invitation.inviteeMail =
+                    binding.mailEdit.text.toString() + binding.mailLayout.suffixText
+                viewModel.invitation.playerName = binding.inviteNameEdit.text.toString()
 
-            viewModel.sendInvitation()
-
+                viewModel.sendInvitation()
+            }
         }
 
         return binding.root

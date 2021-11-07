@@ -33,6 +33,7 @@
                 app:boxStrokeColor="@color/spinner"
                 android:textColorHint="@color/spinner"
                 app:hintEnabled="true"
+                app:errorEnabled="true"
                 app:layout_constraintEnd_toStartOf="@+id/nickname_layout"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_chainStyle="packed"
@@ -58,22 +59,22 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:hint="Nickname"
-                app:boxStrokeColor="@color/spinner"
                 android:textColorHint="@color/spinner"
+                app:boxStrokeColor="@color/spinner"
                 app:hintEnabled="true"
-                app:layout_constraintBottom_toBottomOf="@+id/team_name_layout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/team_name_layout"
+                app:layout_constraintTop_toTopOf="@+id/team_name_layout"
                 app:suffixTextColor="@color/hoop_red">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/nickname_edit"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:fontFamily="@font/montserrat"
                     android:inputType="textPersonName"
                     android:textColor="@color/basil_green_dark"
-                    android:fontFamily="@font/montserrat"
                     android:textCursorDrawable="@color/hoop_red" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -88,6 +89,7 @@
                 app:boxStrokeColor="@color/spinner"
                 android:textColorHint="@color/spinner"
                 app:hintEnabled="true"
+                app:errorEnabled="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/create_button"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -118,7 +120,6 @@
                 android:text="Create"
                 android:textColor="@color/basil_orange"
                 android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="@+id/player_num_layout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/player_num_layout"
@@ -233,23 +234,24 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:hint="Email"
-                app:hintEnabled="true"
-                app:boxStrokeColor="@color/spinner"
                 android:textColorHint="@color/spinner"
-                app:suffixTextColor="@color/basil_green_dark"
+                app:boxStrokeColor="@color/spinner"
+                app:errorEnabled="true"
+                app:hintEnabled="true"
                 app:layout_constraintEnd_toStartOf="@+id/invite_name_layout"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintHorizontal_weight="2"
                 app:layout_constraintStart_toStartOf="@+id/textView10"
-                app:layout_constraintTop_toBottomOf="@+id/textView10">
+                app:layout_constraintTop_toBottomOf="@+id/textView10"
+                app:suffixTextColor="@color/basil_green_dark">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/mail_edit"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:inputType="textEmailAddress"
                     android:fontFamily="@font/montserrat"
+                    android:inputType="textEmailAddress"
                     android:textColor="@color/basil_green_dark"
                     android:textCursorDrawable="@color/hoop_red" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -262,22 +264,23 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:hint="Nickname"
-                app:boxStrokeColor="@color/spinner"
                 android:textColorHint="@color/spinner"
+                app:boxStrokeColor="@color/spinner"
                 app:hintEnabled="true"
-                app:layout_constraintBottom_toBottomOf="@+id/mail_layout"
+                app:errorEnabled="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_weight="1"
-                app:layout_constraintStart_toEndOf="@+id/mail_layout">
+                app:layout_constraintStart_toEndOf="@+id/mail_layout"
+                app:layout_constraintTop_toTopOf="@+id/mail_layout">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/invite_name_edit"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:fontFamily="@font/montserrat"
                     android:inputType="textPersonName"
                     android:textColor="@color/basil_green_dark"
-                    android:fontFamily="@font/montserrat"
                     android:textCursorDrawable="@color/hoop_red" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -290,6 +293,8 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:hint="Release Player"
+                app:hintEnabled="true"
+                app:errorEnabled="true"
                 android:theme="@style/changeBackgroundColor"
                 app:boxStrokeColor="@color/spinner"
                 android:textColorHint="@color/spinner"
