@@ -1,9 +1,10 @@
-<layout xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-<data>
 
-</data>
+    <data>
+
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -29,9 +30,9 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:hint="Team Name"
-                app:boxStrokeColor="@color/hoop_red"
+                app:boxStrokeColor="@color/spinner"
+                android:textColorHint="@color/spinner"
                 app:hintEnabled="true"
-                app:hintTextColor="@color/hoop_red"
                 app:layout_constraintEnd_toStartOf="@+id/nickname_layout"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_chainStyle="packed"
@@ -44,6 +45,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:inputType="textPersonName"
+                    android:fontFamily="@font/montserrat"
                     android:textCursorDrawable="@color/hoop_red" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -55,9 +57,9 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:hint="Nickname"
-                app:boxStrokeColor="@color/hoop_red"
+                app:boxStrokeColor="@color/spinner"
+                android:textColorHint="@color/spinner"
                 app:hintEnabled="true"
-                app:hintTextColor="@color/hoop_red"
                 app:layout_constraintBottom_toBottomOf="@+id/team_name_layout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -69,6 +71,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:inputType="textPersonName"
+                    android:fontFamily="@font/montserrat"
                     android:textCursorDrawable="@color/hoop_red" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -80,9 +83,9 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:hint="Jersey Number"
-                app:boxStrokeColor="@color/hoop_red"
+                app:boxStrokeColor="@color/spinner"
+                android:textColorHint="@color/spinner"
                 app:hintEnabled="true"
-                app:hintTextColor="@color/hoop_red"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/create_button"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -96,6 +99,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:inputType="number"
+                    android:fontFamily="@font/montserrat"
                     android:textCursorDrawable="@color/hoop_red" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -111,13 +115,13 @@
                 android:text="Create"
                 android:textColor="@color/basil_orange"
                 android:textSize="20sp"
-                app:strokeColor="@color/basil_orange"
-                app:strokeWidth="1dp"
                 app:layout_constraintBottom_toBottomOf="@+id/player_num_layout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/player_num_layout"
-                app:layout_constraintTop_toTopOf="@+id/player_num_layout" />
+                app:layout_constraintTop_toTopOf="@+id/player_num_layout"
+                app:strokeColor="@color/basil_orange"
+                app:strokeWidth="1dp" />
 
             <TextView
                 android:id="@+id/textView2"
@@ -226,22 +230,23 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:hint="Email"
-                app:boxStrokeColor="@color/hoop_red"
                 app:hintEnabled="true"
-                app:hintTextColor="@color/hoop_red"
+                app:boxStrokeColor="@color/spinner"
+                android:textColorHint="@color/spinner"
+                app:suffixTextColor="@color/spinner"
                 app:layout_constraintEnd_toStartOf="@+id/invite_name_layout"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintHorizontal_weight="2"
                 app:layout_constraintStart_toStartOf="@+id/textView10"
-                app:layout_constraintTop_toBottomOf="@+id/textView10"
-                app:suffixTextColor="@color/hoop_red">
+                app:layout_constraintTop_toBottomOf="@+id/textView10">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/email_edit"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:inputType="textEmailAddress"
+                    android:fontFamily="@font/montserrat"
                     android:textCursorDrawable="@color/hoop_red" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -253,21 +258,22 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:hint="Nickname"
-                app:boxStrokeColor="@color/hoop_red"
+                app:boxStrokeColor="@color/spinner"
+                android:textColorHint="@color/spinner"
                 app:hintEnabled="true"
-                app:hintTextColor="@color/hoop_red"
                 app:layout_constraintBottom_toBottomOf="@+id/mail_layout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_weight="1"
-                app:layout_constraintStart_toEndOf="@+id/mail_layout"
-                app:suffixTextColor="@color/hoop_red">
+                app:layout_constraintStart_toEndOf="@+id/mail_layout">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/invite_name_edit"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:inputType="textPersonName"
+                    android:textColor="@color/basil_green_dark"
+                    android:fontFamily="@font/montserrat"
                     android:textCursorDrawable="@color/hoop_red" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -281,6 +287,8 @@
                 android:layout_marginEnd="16dp"
                 android:hint="Release Player"
                 android:theme="@style/changeBackgroundColor"
+                app:boxStrokeColor="@color/spinner"
+                android:textColorHint="@color/spinner"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_chainStyle="packed"
@@ -292,6 +300,7 @@
                     android:id="@+id/release_text"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:fontFamily="@font/montserrat"
                     android:inputType="none" />
             </com.google.android.material.textfield.TextInputLayout>
 

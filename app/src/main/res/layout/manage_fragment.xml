@@ -54,6 +54,8 @@
             android:layout_marginEnd="8dp"
             android:hint="PG"
             android:theme="@style/changeBackgroundColor"
+            app:boxStrokeColor="@color/spinner"
+            android:textColorHint="@color/spinner"
             app:layout_constraintEnd_toStartOf="@+id/start5_sg_input"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="packed"
@@ -65,6 +67,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:inputType="none"
+                android:textColor="@color/basil_green_dark"
+                android:fontFamily="@font/montserrat"
                 android:text="PG" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -75,6 +79,8 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:hint="SG"
+            app:boxStrokeColor="@color/spinner"
+            android:textColorHint="@color/spinner"
             android:theme="@style/changeBackgroundColor"
             app:layout_constraintBottom_toBottomOf="@+id/start5_pg_input"
             app:layout_constraintEnd_toStartOf="@+id/start5_sf_input"
@@ -86,6 +92,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:inputType="none"
+                android:textColor="@color/basil_green_dark"
+                android:fontFamily="@font/montserrat"
                 android:text="SG" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -96,6 +104,8 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:hint="SF"
+            app:boxStrokeColor="@color/spinner"
+            android:textColorHint="@color/spinner"
             android:theme="@style/changeBackgroundColor"
             app:layout_constraintBottom_toBottomOf="@+id/start5_sg_input"
             app:layout_constraintEnd_toEndOf="parent"
@@ -107,6 +117,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:inputType="none"
+                android:textColor="@color/basil_green_dark"
+                android:fontFamily="@font/montserrat"
                 android:text="SF" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -118,6 +130,8 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:hint="PF"
+            app:boxStrokeColor="@color/spinner"
+            android:textColorHint="@color/spinner"
             android:theme="@style/changeBackgroundColor"
             app:layout_constraintEnd_toStartOf="@+id/start5_c_input"
             app:layout_constraintHorizontal_bias="0.5"
@@ -130,6 +144,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:inputType="none"
+                android:textColor="@color/basil_green_dark"
+                android:fontFamily="@font/montserrat"
                 android:text="PF" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -139,6 +155,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="C"
+            app:boxStrokeColor="@color/spinner"
+            android:textColorHint="@color/spinner"
             android:theme="@style/changeBackgroundColor"
             app:layout_constraintBottom_toBottomOf="@+id/start5_pf_input"
             app:layout_constraintEnd_toEndOf="@+id/start5_sf_input"
@@ -150,6 +168,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:inputType="none"
+                android:textColor="@color/basil_green_dark"
+                android:fontFamily="@font/montserrat"
                 android:text="C" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -161,6 +181,8 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:hint="Quarter"
+            app:boxStrokeColor="@color/spinner"
+            android:textColorHint="@color/spinner"
             app:layout_constraintEnd_toStartOf="@+id/game_clock_input"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="packed"
@@ -172,6 +194,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:inputType="number"
+                android:textColor="@color/basil_green_dark"
+                android:fontFamily="@font/montserrat"
                 android:text="4" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -182,6 +206,9 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:hint="G.Clock"
+            app:boxStrokeColor="@color/spinner"
+            android:textColorHint="@color/spinner"
+            app:suffixTextColor="@color/spinner"
             app:layout_constraintBottom_toBottomOf="@+id/quarter_input"
             app:layout_constraintEnd_toStartOf="@+id/shot_clock_input"
             app:layout_constraintHorizontal_bias="0.5"
@@ -193,6 +220,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:inputType="number"
+                android:textColor="@color/basil_green_dark"
+                android:fontFamily="@font/montserrat"
                 android:text="12" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -203,6 +232,9 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:hint="S.Clock"
+            app:boxStrokeColor="@color/spinner"
+            android:textColorHint="@color/spinner"
+            app:suffixTextColor="@color/spinner"
             app:layout_constraintBottom_toBottomOf="@+id/game_clock_input"
             app:layout_constraintEnd_toStartOf="@+id/foul_input"
             app:layout_constraintHorizontal_bias="0.5"
@@ -214,6 +246,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:inputType="number"
+                android:textColor="@color/basil_green_dark"
+                android:fontFamily="@font/montserrat"
                 android:text="24" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -222,7 +256,9 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="Foul Out"
+            android:hint="Foul"
+            app:boxStrokeColor="@color/spinner"
+            android:textColorHint="@color/spinner"
             app:layout_constraintBottom_toBottomOf="@+id/shot_clock_input"
             app:layout_constraintEnd_toEndOf="@+id/start5_c_input"
             app:layout_constraintHorizontal_bias="0.5"
@@ -233,6 +269,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:inputType="number"
+                android:textColor="@color/basil_green_dark"
+                android:fontFamily="@font/montserrat"
                 android:text="6" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -243,6 +281,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:hint="1st half time out"
+            app:boxStrokeColor="@color/spinner"
+            android:textColorHint="@color/spinner"
             app:layout_constraintEnd_toStartOf="@+id/timeout_input_2"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="packed"
@@ -254,6 +294,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:inputType="number"
+                android:textColor="@color/basil_green_dark"
+                android:fontFamily="@font/montserrat"
                 android:text="2" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -265,6 +307,8 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="16dp"
             android:hint="2nd half time out"
+            app:boxStrokeColor="@color/spinner"
+            android:textColorHint="@color/spinner"
             app:layout_constraintBottom_toBottomOf="@+id/timeout_input_1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -275,6 +319,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:inputType="number"
+                android:textColor="@color/basil_green_dark"
+                android:fontFamily="@font/montserrat"
                 android:text="3" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -310,7 +356,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:hint="release player"
+            android:hint="release"
+            app:boxStrokeColor="@color/spinner"
+            android:textColorHint="@color/spinner"
             android:theme="@style/changeBackgroundColor"
             app:layout_constraintEnd_toEndOf="@+id/timeout_input_1"
             app:layout_constraintStart_toStartOf="@+id/timeout_input_1"
@@ -320,6 +368,7 @@
                 android:id="@+id/release_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:fontFamily="@font/montserrat"
                 android:inputType="none" />
         </com.google.android.material.textfield.TextInputLayout>
 

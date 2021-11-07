@@ -76,8 +76,6 @@ class ProfileFragment : Fragment() {
             binding.numberText.text = "Number: " + it.number
         }
 
-        binding.mailLayout.suffixText = "example@gmail.com"
-
         binding.createButton.setOnClickListener {
             viewModel.sendTeamInfo(binding.teamNameEdit.text.toString())
             viewModel.sendCaptainInfo(binding.playerNumEdit.text.toString())
