@@ -1,5 +1,6 @@
 package com.aqua.hoophelper.component
 
+import android.app.RemoteInput
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
@@ -27,7 +28,13 @@ class CheckService: LifecycleService() {
         player.id = intent?.getStringExtra("inviteId") ?: "No"
         player.teamId = intent?.getStringExtra("teamId") ?: "No"
 
-        player.number = 11.toString()
+        val remoteInput = RemoteInput.getResultsFromIntent(intent)
+
+        if (remoteInput != null) {
+            player.number = remoteInput.getCharSequence("numKey").toString()
+        }
+
+//        player.number = 11.toString()
 
 
         if (player.id.length > 5) {

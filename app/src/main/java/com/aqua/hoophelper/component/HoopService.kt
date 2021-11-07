@@ -1,10 +1,7 @@
 package com.aqua.hoophelper.component
 
 import android.annotation.SuppressLint
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
+import android.app.*
 import android.content.Intent
 import android.util.Log
 import android.widget.RemoteViews
@@ -44,13 +41,19 @@ class HoopService: LifecycleService() {
 
                 Log.d("service1","Hi1 ${intent1.getStringExtra("inviteId")}")
 
-                val action1 = Notification.Action.Builder(R.drawable.ball_icon, "ACCEPT", serviceActionPendingIntent1).build()
+                val action1 = Notification.Action.Builder(R.drawable.ball_icon, "ACCEPT",serviceActionPendingIntent1)
+                    .addRemoteInput(
+                        RemoteInput.Builder("numKey")
+                        .setLabel("Jersey Number")
+                        .build()
+                    )
+                    .build()
 
                 val channel =
                     NotificationChannel("1", "Invite", NotificationManager.IMPORTANCE_HIGH)
                 val notification = Notification.Builder(this, "1")
-                    .setContentTitle("Title")
-                    .setContentText("invitation")
+                    .setContentTitle("Hoooooop~")
+                    .setContentText("Invitation")
                     .setSmallIcon(R.drawable.ball_icon)
                     .addAction(action1)
 //                    .setCustomContentView(RemoteViews(this.packageName, R.layout.notify_layout))
