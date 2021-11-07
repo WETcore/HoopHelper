@@ -45,6 +45,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:inputType="textPersonName"
+                    android:textColor="@color/basil_green_dark"
                     android:fontFamily="@font/montserrat"
                     android:textCursorDrawable="@color/hoop_red" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -71,6 +72,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:inputType="textPersonName"
+                    android:textColor="@color/basil_green_dark"
                     android:fontFamily="@font/montserrat"
                     android:textCursorDrawable="@color/hoop_red" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -99,6 +101,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:inputType="number"
+                    android:textColor="@color/basil_green_dark"
                     android:fontFamily="@font/montserrat"
                     android:textCursorDrawable="@color/hoop_red" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -233,7 +236,7 @@
                 app:hintEnabled="true"
                 app:boxStrokeColor="@color/spinner"
                 android:textColorHint="@color/spinner"
-                app:suffixTextColor="@color/spinner"
+                app:suffixTextColor="@color/basil_green_dark"
                 app:layout_constraintEnd_toStartOf="@+id/invite_name_layout"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_chainStyle="packed"
@@ -242,11 +245,12 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView10">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/email_edit"
+                    android:id="@+id/mail_edit"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:inputType="textEmailAddress"
                     android:fontFamily="@font/montserrat"
+                    android:textColor="@color/basil_green_dark"
                     android:textCursorDrawable="@color/hoop_red" />
             </com.google.android.material.textfield.TextInputLayout>
 

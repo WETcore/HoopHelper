@@ -27,15 +27,13 @@ class CheckService: LifecycleService() {
         player.email = intent?.getStringExtra("mail") ?: "No"
         player.id = intent?.getStringExtra("inviteId") ?: "No"
         player.teamId = intent?.getStringExtra("teamId") ?: "No"
+        player.name = intent?.getStringExtra("name") ?: "No"
 
         val remoteInput = RemoteInput.getResultsFromIntent(intent)
 
         if (remoteInput != null) {
             player.number = remoteInput.getCharSequence("numKey").toString()
         }
-
-//        player.number = 11.toString()
-
 
         if (player.id.length > 5) {
             Log.d("service1","Hi2 ${player.id}")

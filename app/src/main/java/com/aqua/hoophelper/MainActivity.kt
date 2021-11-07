@@ -83,27 +83,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-
-//        viewModel.invites.observe(this) {
-//            if (!it.isNullOrEmpty()) {
-//                //TODO(notify)
-//                val activityActionIntent = Intent(this, MainActivity::class.java)
-//                val activityActionPendingIntent: PendingIntent =
-//                    PendingIntent.getActivity(this, 0, activityActionIntent, 0)
-//
-//                val channel = NotificationChannel("1", "Invite", NotificationManager.IMPORTANCE_HIGH)
-//                val notification = Notification.Builder(this, "1")
-//                    .setContentTitle("Title")
-//                    .setContentText("invitation")
-//                    .setSmallIcon(R.drawable.ball_icon)
-//                    .addAction(R.drawable.ball_icon, "TEST", activityActionPendingIntent)
-//                    .build()
-//
-//                val manager = this.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-//                manager.createNotificationChannel(channel)
-//                manager.notify(1, notification)
-//            }
-//        }
     }
 
     override fun onDestroy() {

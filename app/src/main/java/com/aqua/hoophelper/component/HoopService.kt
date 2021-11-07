@@ -27,11 +27,12 @@ class HoopService: LifecycleService() {
 
         HoopRemoteDataSource.getInvitations().observe(this) {
             if (!it.isNullOrEmpty()) {
-//                Log.d("service","${it[0].id}")
+                Log.d("service","${it[0].id}")
                 val intent1 = Intent(this, CheckService::class.java)
                 intent1.putExtra("teamId",it.first().teamId)
                 intent1.putExtra("inviteId",it.first().id)
                 intent1.putExtra("mail",it.first().inviteeMail)
+                intent1.putExtra("name",it.first().playerName)
                 val serviceActionPendingIntent1 =
                     PendingIntent
                         .getService(this,

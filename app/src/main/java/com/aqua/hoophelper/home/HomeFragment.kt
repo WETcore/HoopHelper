@@ -38,11 +38,12 @@ class HomeFragment : Fragment() {
 
         // spinner
         viewModel.getTeamList()
+
         viewModel.teams.observe(viewLifecycleOwner) {
-            // TODO 設定預設球隊
             val teamAdapter =
                 ArrayAdapter(requireContext(), R.layout.home_team_item, viewModel.teamNameList)
             binding.teamText.setAdapter(teamAdapter)
+            binding.teamText.setText(viewModel.teams.value?.first()?.name, false)
         }
 
         // set selected Team
@@ -51,8 +52,6 @@ class HomeFragment : Fragment() {
         }
 
         // VPager
-//        val leaderList = listOf<String>("Giannis Sina Ugo Antetokounmpo","2","3","4","5")
-
         viewModel.teamStat.observe(viewLifecycleOwner) {
             Log.d("redo2","Hi ${it}")
 

@@ -48,6 +48,8 @@
             android:layout_marginEnd="16dp"
             android:hint="Selected Team"
             android:theme="@style/changeBackgroundColor"
+            app:boxStrokeColor="@color/spinner"
+            android:textColorHint="@color/spinner"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/textView"
             app:layout_constraintTop_toBottomOf="@+id/textView">
@@ -57,6 +59,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="none"
+                android:textColor="@color/basil_green_dark"
+                android:fontFamily="@font/montserrat"
                 android:text="Team" />
         </com.google.android.material.textfield.TextInputLayout>
 

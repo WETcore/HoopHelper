@@ -50,6 +50,7 @@ class HomeViewModel : ViewModel() {
                 teamNameList.add(teams.value!![i].name)
             }
             HoopInfo.spinnerSelectedTeamId = _teams.value!!.first().id
+            selectedTeam(0)
         }
         return teamNameList
     }

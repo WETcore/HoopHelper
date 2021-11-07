@@ -10,6 +10,7 @@ data class Invitation(
     var id: String = "",
     var teamId: String = "",
     var inviteeMail: String = "",
+    var playerName: String = "",
     )
 
 data class Player(

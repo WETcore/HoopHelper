@@ -1,6 +1,8 @@
 package com.aqua.hoophelper.team
 
 import android.annotation.SuppressLint
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.graphics.drawable.Drawable
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -39,6 +41,9 @@ class TeamFragment : Fragment() {
             resources.getDrawable(R.drawable.tactic),
         )
         vPager.adapter = TeamVPagerAdapter(requireActivity())
+
+        tabLayout.tabTextColors = ColorStateList.valueOf(Color.parseColor("#C60000"))
+        tabLayout.tabIconTint = ColorStateList.valueOf(Color.parseColor("#C60000"))
 
         TabLayoutMediator(tabLayout, vPager) { tab, position ->
             tab.text = title[position]

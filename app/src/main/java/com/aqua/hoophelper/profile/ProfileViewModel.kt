@@ -29,8 +29,6 @@ class ProfileViewModel : ViewModel() {
     var team = Team()
     var invitation =Invitation()
 
-    val result = MutableLiveData<List<Player>>()
-
     // roster
     var _roster = MutableLiveData<List<Player>>()
     val roster: LiveData<List<Player>>
@@ -52,12 +50,6 @@ class ProfileViewModel : ViewModel() {
     // the Coroutine runs using the Main (UI) dispatcher
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-
-    fun signIn(googleSignInClient: GoogleSignInClient, activity: FragmentActivity) {
-        val signInIntent = googleSignInClient.signInIntent
-        startActivityForResult(activity, signInIntent, RC_SIGN_IN, null)
-    }
-
     fun sendTeamInfo(teamName: String) {
         team.name = teamName
         team.id = db.collection("Teams").document().id
@@ -69,6 +61,7 @@ class ProfileViewModel : ViewModel() {
         player.id = db.collection("Players").document().id
         player.teamId = team.id
         player.number = number
+        player.captain = true
         db.collection("Players").add(player)
     }
 

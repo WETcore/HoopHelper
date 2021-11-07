@@ -76,11 +76,6 @@ class ProfileFragment : Fragment() {
             binding.numberText.text = "Number: " + it.number
         }
 
-        binding.createButton.setOnClickListener {
-            viewModel.sendTeamInfo(binding.teamNameEdit.text.toString())
-            viewModel.sendCaptainInfo(binding.playerNumEdit.text.toString())
-        }
-
         viewModel.roster.observe(viewLifecycleOwner) {
             var num = mutableListOf<String>()
             it.forEach { player ->
@@ -91,19 +86,27 @@ class ProfileFragment : Fragment() {
             )
         }
 
+        // create team
+        binding.createButton.setOnClickListener {
+            viewModel.sendTeamInfo(binding.teamNameEdit.text.toString())
+            viewModel.sendCaptainInfo(binding.playerNumEdit.text.toString())
+        }
+
         // release player
         binding.releaseText.setOnItemClickListener { parent, view, position, id ->
             viewModel.releasePos = position
         }
         binding.releaseButton.setOnClickListener {
-//            viewModel.removePlayer(viewModel.releasePos)
+            viewModel.removePlayer(viewModel.releasePos)
         }
 
         // invite
+        binding.mailLayout.suffixText = "@gmail.com"
         binding.inviteButton.setOnClickListener {
             viewModel.invitation.id = viewModel.db.collection("Invitations").document().id
             viewModel.invitation.teamId = User.teamId
-            viewModel.invitation.inviteeMail = "huangaqua457@gmail.com"
+            viewModel.invitation.inviteeMail = binding.mailEdit.text.toString() + binding.mailLayout.suffixText//"huangaqua457@gmail.com"
+            viewModel.invitation.playerName = binding.inviteNameEdit.text.toString()//"Andrew"
 
             viewModel.sendInvitation()
 
