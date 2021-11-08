@@ -108,7 +108,10 @@ class ProfileFragment : Fragment() {
                 binding.playerNumEdit.text?.length != 0
             ) {
                 viewModel.sendTeamInfo(binding.teamNameEdit.text.toString())
-                viewModel.sendCaptainInfo(binding.playerNumEdit.text.toString())
+                viewModel.sendCaptainInfo(
+                    binding.playerNumEdit.text.toString(),
+                    binding.nicknameEdit.text.toString()
+                )
             }
         }
 
@@ -123,12 +126,12 @@ class ProfileFragment : Fragment() {
                 binding.releaseInput.error = null
             }
             if (binding.releaseText.text?.length != 0) {
-//            viewModel.removePlayer(viewModel.releasePos)
+            viewModel.removePlayer(viewModel.releasePos)
             }
         }
 
         // invite
-        binding.mailLayout.suffixText = "@gmail.com"
+//        binding.mailLayout.suffixText = "@gmail.com"
         binding.inviteButton.setOnClickListener {
             if (binding.mailEdit.text?.length == 0) {
                 binding.mailLayout.error = "This is required"
@@ -146,7 +149,7 @@ class ProfileFragment : Fragment() {
                 viewModel.invitation.id = viewModel.db.collection("Invitations").document().id
                 viewModel.invitation.teamId = User.teamId
                 viewModel.invitation.inviteeMail =
-                    binding.mailEdit.text.toString() + binding.mailLayout.suffixText
+                    binding.mailEdit.text.toString()// + binding.mailLayout.suffixText
                 viewModel.invitation.playerName = binding.inviteNameEdit.text.toString()
 
                 viewModel.sendInvitation()

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
@@ -57,7 +58,7 @@ class MainActivity : AppCompatActivity() {
                     isVisible = if (mlist.isNullOrEmpty()) {
                         false
                     } else {
-                        mlist.last()?.gaming == true
+                        mlist.lastOrNull()?.gaming == true // TODO filter spinner teamId
                     }
                 }
         }

@@ -4,7 +4,7 @@
     android:padding="16dp"
     android:text="Text"
     android:fontFamily="@font/montserrat"
-    android:textColor="@color/basil_green_dark"
+    android:textColor="@color/hoop_red"
     android:background="@color/hoop_yellow">
 
 

@@ -21,6 +21,8 @@
 
     <color name="basil_bg">#FFFBE6</color>
     <color name="basil_green_dark">#356859</color>
+    <color name="basil_green">#37966F</color>
+    <color name="basil_green_light">#B9E4C9</color>
     <color name="basil_orange">#FD5523</color>
 
 

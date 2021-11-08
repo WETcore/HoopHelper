@@ -16,7 +16,7 @@ import com.aqua.hoophelper.match.DataType
 import com.aqua.hoophelper.match.DetailDataType
 
 class HomeVPagerAdapter(
-    private val list: List<PlayerStat>,
+    private val list: List<String>,
     private val context: Context,
     private val viewModel: HomeViewModel): PagerAdapter() {
 
@@ -30,9 +30,7 @@ class HomeVPagerAdapter(
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
 
-        val leaderTypes = listOf<String>("Score", "Rebound", "Assist", "Steal", "Block")
         val view = LayoutInflater.from(context).inflate(R.layout.home_card, container, false)
-        Log.d("redo2","Hi ${list}")
 
         Log.d("redo3","Hi ${position}")
 
@@ -49,7 +47,7 @@ class HomeVPagerAdapter(
         val detailStl = view.findViewById<TextView>(R.id.leader_stl)
         val detailBlk = view.findViewById<TextView>(R.id.leader_blk)
 
-        type.text = leaderTypes[position]
+        type.text = list[position]
 
         val mainDataType = when(position) {
             0 -> {

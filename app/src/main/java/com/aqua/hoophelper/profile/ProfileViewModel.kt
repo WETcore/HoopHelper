@@ -56,11 +56,12 @@ class ProfileViewModel : ViewModel() {
         db.collection("Teams").add(team)
     }
 
-    fun sendCaptainInfo(number: String) {
+    fun sendCaptainInfo(number: String, name: String) {
         player.email = User.account?.email ?: "error"
         player.id = db.collection("Players").document().id
         player.teamId = team.id
         player.number = number
+        player.name = name
         player.captain = true
         db.collection("Players").add(player)
     }
@@ -92,7 +93,7 @@ class ProfileViewModel : ViewModel() {
 
     fun getUserInfo() {
         coroutineScope.launch {
-            _teamInfo.value = HoopRemoteDataSource.getTeams().first { it.id == User.teamId }
+            _teamInfo.value = HoopRemoteDataSource.getTeams().firstOrNull { it.id == User.teamId }
             _userInfo.value = HoopRemoteDataSource.getPlayer()
         }
     }

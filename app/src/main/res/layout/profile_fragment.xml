@@ -28,15 +28,13 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
                 android:hint="Team Name"
+                android:textColorHint="@color/spinner_text"
                 app:boxStrokeColor="@color/spinner"
-                android:textColorHint="@color/spinner"
-                app:hintEnabled="true"
                 app:errorEnabled="true"
-                app:layout_constraintEnd_toStartOf="@+id/nickname_layout"
+                app:hintEnabled="true"
+                app:layout_constraintEnd_toStartOf="@+id/player_num_layout"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView2"
                 app:suffixTextColor="@color/hoop_red">
@@ -46,8 +44,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:inputType="textPersonName"
-                    android:textColor="@color/basil_green_dark"
-                    android:fontFamily="@font/montserrat"
+                    style="@style/editText"
                     android:textCursorDrawable="@color/hoop_red" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -58,23 +55,21 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                android:hint="Nickname"
-                android:textColorHint="@color/spinner"
+                android:hint="Name"
+                android:textColorHint="@color/spinner_text"
                 app:boxStrokeColor="@color/spinner"
                 app:hintEnabled="true"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/team_name_layout"
-                app:layout_constraintTop_toTopOf="@+id/team_name_layout"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/team_name_layout"
                 app:suffixTextColor="@color/hoop_red">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/nickname_edit"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:fontFamily="@font/montserrat"
                     android:inputType="textPersonName"
-                    android:textColor="@color/basil_green_dark"
+                    style="@style/editText"
                     android:textCursorDrawable="@color/hoop_red" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -84,18 +79,16 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
                 android:hint="Jersey Number"
+                android:textColorHint="@color/spinner_text"
                 app:boxStrokeColor="@color/spinner"
-                android:textColorHint="@color/spinner"
-                app:hintEnabled="true"
                 app:errorEnabled="true"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/create_button"
+                app:hintEnabled="true"
+                app:layout_constraintBottom_toBottomOf="@+id/team_name_layout"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintHorizontal_chainStyle="packed"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/team_name_layout"
+                app:layout_constraintStart_toEndOf="@+id/team_name_layout"
                 app:suffixTextColor="@color/hoop_red">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -103,27 +96,24 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:inputType="number"
-                    android:textColor="@color/basil_green_dark"
-                    android:fontFamily="@font/montserrat"
+                    style="@style/editText"
                     android:textCursorDrawable="@color/hoop_red" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
                 android:id="@+id/create_button"
                 style="@style/Widget.MaterialComponents.Button"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="65dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginTop="16dp"
                 android:backgroundTint="@color/hoop_background"
                 android:fontFamily="@font/montserrat"
                 android:text="Create"
                 android:textColor="@color/basil_orange"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/player_num_layout"
-                app:layout_constraintTop_toTopOf="@+id/player_num_layout"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/nickname_layout"
                 app:strokeColor="@color/basil_orange"
                 app:strokeWidth="1dp" />
 
@@ -232,9 +222,9 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:hint="Email"
-                android:textColorHint="@color/spinner"
+                android:textAlignment="viewEnd"
+                android:textColorHint="@color/spinner_text"
                 app:boxStrokeColor="@color/spinner"
                 app:errorEnabled="true"
                 app:hintEnabled="true"
@@ -248,11 +238,11 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/mail_edit"
+                    style="@style/editText"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:fontFamily="@font/montserrat"
                     android:inputType="textEmailAddress"
-                    android:textColor="@color/basil_green_dark"
+                    android:textColor="@color/basil_green"
                     android:textCursorDrawable="@color/hoop_red" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -263,11 +253,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                android:hint="Nickname"
-                android:textColorHint="@color/spinner"
+                android:hint="Name"
+                android:textColorHint="@color/spinner_text"
                 app:boxStrokeColor="@color/spinner"
-                app:hintEnabled="true"
                 app:errorEnabled="true"
+                app:hintEnabled="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_weight="1"
@@ -276,11 +266,10 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/invite_name_edit"
+                    style="@style/editText"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:fontFamily="@font/montserrat"
                     android:inputType="textPersonName"
-                    android:textColor="@color/basil_green_dark"
                     android:textCursorDrawable="@color/hoop_red" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -290,20 +279,20 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="24dp"
                 android:layout_marginEnd="16dp"
                 android:hint="Release Player"
-                app:hintEnabled="true"
-                app:errorEnabled="true"
+                android:textColorHint="@color/spinner_text"
                 android:theme="@style/changeBackgroundColor"
                 app:boxStrokeColor="@color/spinner"
-                android:textColorHint="@color/spinner"
+                app:errorEnabled="true"
+                app:hintEnabled="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintHorizontal_weight="2"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/mail_layout">
+                app:layout_constraintTop_toBottomOf="@+id/view4">
 
                 <com.google.android.material.textfield.MaterialAutoCompleteTextView
                     android:id="@+id/release_text"
@@ -316,10 +305,8 @@
             <Button
                 android:id="@+id/invite_button"
                 style="@style/Widget.MaterialComponents.Button"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
                 android:backgroundTint="@color/hoop_background"
                 android:fontFamily="@font/montserrat"
                 android:paddingHorizontal="20dp"
@@ -327,21 +314,31 @@
                 android:text="Invite"
                 android:textColor="@color/basil_orange"
                 android:textSize="20sp"
-                app:layout_constraintEnd_toStartOf="@+id/release_button"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintHorizontal_weight="2"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/release_input"
+                app:layout_constraintTop_toBottomOf="@+id/mail_layout"
                 app:strokeColor="@color/basil_orange"
                 app:strokeWidth="1dp" />
 
+            <View
+                android:id="@+id/view4"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="16dp"
+                android:background="@color/basil_green_dark"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/invite_button" />
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/release_button"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
+                android:layout_width="121dp"
+                android:layout_height="62dp"
                 android:autoSizeTextType="uniform"
                 android:fontFamily="@font/montserrat"
                 android:paddingHorizontal="20dp"
@@ -349,12 +346,9 @@
                 android:text="Release"
                 android:textColor="@color/hoop_background"
                 app:backgroundTint="@color/basil_orange"
-                app:layout_constraintBottom_toBottomOf="@+id/invite_button"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintHorizontal_weight="1"
-                app:layout_constraintStart_toEndOf="@+id/invite_button"
-                app:layout_constraintTop_toTopOf="@+id/invite_button" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/release_input" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

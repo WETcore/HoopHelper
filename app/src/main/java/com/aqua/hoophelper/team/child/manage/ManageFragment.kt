@@ -88,24 +88,6 @@ class ManageFragment : Fragment() {
             }
         }
 
-        viewModel.roster.observe(viewLifecycleOwner) {
-            var num = mutableListOf<String>()
-            it.forEach { player ->
-                num.add(player.number)
-            }
-            binding.releaseText.setAdapter(
-                ArrayAdapter(requireContext(), R.layout.team_start5_item, num)
-            )
-        }
-
-        // release player
-        binding.releaseText.setOnItemClickListener { parent, view, position, id ->
-            viewModel.releasePos = position
-        }
-        binding.releaseButton.setOnClickListener {
-//            viewModel.removePlayer(viewModel.releasePos)
-        }
-
         // set rule
         binding.apply {
             setRuleButton.setOnClickListener { //TODO 初始值從db拿，以下放回VM
