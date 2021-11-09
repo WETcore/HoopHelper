@@ -9,7 +9,9 @@ import android.widget.Toast
 import androidx.lifecycle.LifecycleService
 import com.aqua.hoophelper.User
 import com.aqua.hoophelper.database.Player
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 
 class CheckService: LifecycleService() {
 
@@ -28,6 +30,7 @@ class CheckService: LifecycleService() {
         player.id = intent?.getStringExtra("inviteId") ?: "No"
         player.teamId = intent?.getStringExtra("teamId") ?: "No"
         player.name = intent?.getStringExtra("name") ?: "No"
+        player.avatar = Firebase.auth.currentUser?.photoUrl.toString()
 
         val remoteInput = RemoteInput.getResultsFromIntent(intent)
 

@@ -76,6 +76,7 @@ class MatchViewModel : ViewModel() {
     // player num send to db
     var playerNum = ""
     var playerName = ""
+    var playerImage = ""
 
     // selectPlayerPos 紀錄按那個 chip
     var selectPlayerPos = 0
@@ -154,9 +155,10 @@ class MatchViewModel : ViewModel() {
 
     fun selectPlayer(pos: Int): String {
         selectPlayerPos = pos
-        playerNum = _startPlayer.value!![pos].number
-        playerName = _startPlayer.value!![pos].name
-        return _startPlayer.value!![pos].number
+        playerNum = startPlayer.value!![pos].number
+        playerName = startPlayer.value!![pos].name
+        playerImage = startPlayer.value!![pos].avatar
+        return startPlayer.value!![pos].number
     }
 
     fun selectZone(selectedZone: Int) {
@@ -191,6 +193,7 @@ class MatchViewModel : ViewModel() {
         _record.value = countIn
         event.playerNum = playerNum
         event.playerName = playerName
+        event.playerImage = playerImage
         event.zone = zone.value!!
         if (zone.value!! in 1..9)  {
             event.score2 = _record.value!!
@@ -210,6 +213,7 @@ class MatchViewModel : ViewModel() {
         event.actualTime = Calendar.getInstance().timeInMillis
         event.playerNum = playerNum
         event.playerName = playerName
+        event.playerImage = playerImage
         event.zone = -1
         event.matchTimeMin = gameClockMin.value.toString()
         event.matchTimeSec = gameClockSec.value.toString()
@@ -227,6 +231,7 @@ class MatchViewModel : ViewModel() {
         event.actualTime = Calendar.getInstance().timeInMillis
         event.playerNum = playerNum
         event.playerName = playerName
+        event.playerImage = playerImage
         event.matchTimeMin = gameClockMin.value.toString()
         event.matchTimeSec = gameClockSec.value.toString()
         event.quarter = quarter.value.toString()
@@ -320,6 +325,8 @@ class MatchViewModel : ViewModel() {
         _startPlayer.value!![selectPlayerPos] = substitutionPlayer.value!![position]
         _startPlayer.value = _startPlayer.value
         playerNum = _startPlayer.value!![selectPlayerPos].number
+        playerName = _startPlayer.value!![selectPlayerPos].name
+        playerImage = _startPlayer.value!![selectPlayerPos].avatar
     }
 
     fun changeSubPlayer(onCourtPlayer: Player, spinnerPos: Int) {

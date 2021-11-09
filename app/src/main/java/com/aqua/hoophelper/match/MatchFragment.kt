@@ -164,6 +164,7 @@ class MatchFragment : Fragment() {
                 binding.player1Chip.text = it[0].number
                 if (viewModel.playerNum == "") viewModel.playerNum = it.first().number
                 if (viewModel.playerName == "") viewModel.playerName = it.first().name
+                if (viewModel.playerImage == "") viewModel.playerImage = it.first().avatar
                 binding.player2Chip.text = it[1].number
                 binding.player3Chip.text = it[2].number
                 binding.player4Chip.text = it[3].number

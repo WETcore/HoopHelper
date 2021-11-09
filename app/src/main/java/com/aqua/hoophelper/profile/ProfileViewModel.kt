@@ -1,5 +1,8 @@
 package com.aqua.hoophelper.profile
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.util.Log
 import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.fragment.app.FragmentActivity
@@ -17,6 +20,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import java.lang.Exception
+import java.net.URI
+import java.net.URL
 
 const val RC_SIGN_IN = 0
 

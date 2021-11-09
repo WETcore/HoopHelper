@@ -71,4 +71,9 @@
         <item name="android:textColor">@color/basil_green_dark</item>
         <item name="android:fontFamily">@font/montserrat</item>
     </style>
+
+    <style name="circleImage" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
 </resources>

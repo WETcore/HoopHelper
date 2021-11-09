@@ -8,12 +8,17 @@ import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.aqua.hoophelper.R
+import com.aqua.hoophelper.User
 import com.aqua.hoophelper.database.Event
 import com.aqua.hoophelper.databinding.LiveEventItemBinding
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import okhttp3.HttpUrl.Companion.toHttpUrl
 
 
 class LiveEventAdapter(val viewModel: LiveViewModel, val events: List<Event>): ListAdapter<Event, LiveEventAdapter.EventViewHolder>(DiffCallback) {
@@ -179,6 +184,16 @@ class LiveEventAdapter(val viewModel: LiveViewModel, val events: List<Event>): L
                 true
             }
         }
+
+        // image
+        Glide
+            .with(holder.binding.root)
+            .load(event.playerImage.toUri())
+            .into(holder.binding.imageView)
+        Glide
+            .with(holder.binding.root)
+            .load(event.playerImage.toUri())
+            .into(holder.binding.imageViewB)
 
         holder.bind(event)
     }

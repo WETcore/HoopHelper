@@ -1,8 +1,5 @@
 package com.aqua.hoophelper
 
-import android.content.Context
-import android.content.Intent
-import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel

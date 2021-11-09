@@ -14,6 +14,8 @@ import com.aqua.hoophelper.MainActivityViewModel
 import com.aqua.hoophelper.R
 import com.aqua.hoophelper.User
 import com.aqua.hoophelper.databinding.ProfileFragmentBinding
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 
 
 class ProfileFragment : Fragment() {

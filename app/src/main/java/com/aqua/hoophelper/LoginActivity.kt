@@ -54,11 +54,11 @@ class LoginActivity : AppCompatActivity() {
         // Initialize Firebase Auth
         auth = Firebase.auth
         // Check if user is signed in (non-null) and update UI accordingly.
-        val currentUser = auth.currentUser
-        User.account = currentUser
-        Log.d("currentUser","${currentUser?.email}")
+        val user = auth.currentUser
+        User.account = user
+        Log.d("currentUser","${user?.email}")
         viewModel.getUserInfo()
-        updateUI(currentUser)
+        updateUI(user)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
