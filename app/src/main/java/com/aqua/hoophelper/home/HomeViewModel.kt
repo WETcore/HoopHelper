@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.aqua.hoophelper.HoopInfo
 import com.aqua.hoophelper.database.Event
 import com.aqua.hoophelper.database.Player
+import com.aqua.hoophelper.database.PlayerStat
 import com.aqua.hoophelper.database.Team
 import com.aqua.hoophelper.database.remote.HoopRemoteDataSource
 import com.aqua.hoophelper.match.DataType
@@ -19,9 +20,8 @@ class HomeViewModel : ViewModel() {
     var teamNameList = mutableListOf<String>()
 
     // 球隊中球員數據
-//    var teamStat = mutableListOf<MutableMap<String, String>>()
-    private var _teamStat = MutableLiveData<MutableList<MutableMap<String, String>>>()
-    val teamStat: LiveData<MutableList<MutableMap<String, String>>>
+    private var _teamStat = MutableLiveData<MutableList<PlayerStat>>(mutableListOf())
+    val teamStat: LiveData<MutableList<PlayerStat>>
         get() = _teamStat
 
 
@@ -30,11 +30,18 @@ class HomeViewModel : ViewModel() {
     val teams: LiveData<List<Team>>
         get() = _teams
 
+    // 球員列表
+    private var _teamPlayers = MutableLiveData<List<Player>>(listOf(Player()))
+    val teamPlayers: LiveData<List<Player>>
+        get() = _teamPlayers
+
     // Create a Coroutine scope using a job to be able to cancel when needed
     private var viewModelJob = Job()
 
     // the Coroutine runs using the Main (UI) dispatcher
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
+
+
 
     fun getTeamList(): List<String> {
         coroutineScope.launch {
@@ -42,7 +49,8 @@ class HomeViewModel : ViewModel() {
             for (i in teams.value!!.indices) {
                 teamNameList.add(teams.value!![i].name)
             }
-            HoopInfo.spinnerSelectedTeamId = _teams.value!![0].id
+            HoopInfo.spinnerSelectedTeamId = _teams.value!!.first().id
+            selectedTeam(0)
         }
         return teamNameList
     }
@@ -51,181 +59,129 @@ class HomeViewModel : ViewModel() {
     fun selectedTeam(pos: Int) {
         HoopInfo.spinnerSelectedTeamId = _teams.value!![pos].id
         coroutineScope.launch {
-            val players = HoopRemoteDataSource.getTeamMembers()
-            getTeamPlayersData(players, players.size)
+            _teamPlayers.value = HoopRemoteDataSource.getTeamMembers()
+            getTeamPlayersData(_teamPlayers.value!!, _teamPlayers.value!!.size)
+
         }
     }
 
     private fun getTeamPlayersData(players: List<Player>, listSize: Int) {
         coroutineScope.launch {
             var data: List<Event>
-            val bufferlist = mutableListOf<MutableMap<String, String>>()
+            var playerStat = PlayerStat()
+            val playerStats = mutableListOf<PlayerStat>()
             for (i in 0 until listSize) {
                 data = HoopRemoteDataSource.getPlayerData(players[i].id)
-                var playerStat = mutableMapOf(
-                    "id" to "",
-                    "num" to "00",
-                    "assist" to "0",
-                    "score2I" to "0",
-                    "score2O" to "0",
-                    "score3I" to "0",
-                    "score3O" to "0",
-                    "rebound" to "0",
-                    "steal" to "0",
-                    "block" to "0",
-                    "ftI" to "0",
-                    "ftO" to "0",
-                    "tov" to "0",
-                    "foul" to "0",
 
-                    )
-                playerStat["id"] = players[i].id
-                playerStat["num"] = players[i].number
-                playerStat["assist"] = data.filter { it.assist }.size.toString()
-                playerStat["score2I"] = (data.filter { it.score2 == true }.size).toString()
-                playerStat["score2O"] = (data.filter { it.score2 == false }.size).toString()
-                playerStat["score3I"] = (data.filter { it.score3 == true }.size).toString()
-                playerStat["score3O"] = (data.filter { it.score3 == false }.size).toString()
-                playerStat["rebound"] = data.filter { it.rebound }.size.toString()
-                playerStat["steal"] = data.filter { it.steal }.size.toString()
-                playerStat["block"] = data.filter { it.block }.size.toString()
-                playerStat["ftI"] = data.filter { it.freeThrow == true }.size.toString()
-                playerStat["ftO"] = data.filter { it.freeThrow == false }.size.toString()
-                playerStat["tov"] = data.filter { it.turnover }.size.toString()
-                playerStat["foul"] = data.filter { it.foul }.size.toString()
+                val id = players[i].id
+                val num = players[i].number
+                val name = players[i].name
+                val ast = data.filter { it.assist }.size
+                val ptI = data.filter { it.score2 == true }.size
+                val ptO = data.filter { it.score2 == false }.size
+                val pt3I = data.filter { it.score3 == true }.size
+                val pt3O = data.filter { it.score3 == false }.size
+                val reb = data.filter { it.rebound }.size
+                val stl = data.filter { it.steal }.size
+                val blk = data.filter { it.block }.size
+                val ftI = data.filter { it.freeThrow == true }.size
+                val ftO = data.filter { it.freeThrow == false }.size
+                val tov = data.filter { it.turnover }.size
+                val foul = data.filter { it.foul }.size
 
-//                Log.d("playerStat","${playerStat}")
-                bufferlist.add(i, playerStat)
+                playerStat = PlayerStat(
+                    name,
+                    num,
+                    pts = (ptI*2 + pt3I*3 + ftI),
+                    reb,
+                    ast,
+                    stl,
+                    blk,
+                )
+
+                playerStats.add(playerStat)
+
             }
-            _teamStat.value = bufferlist
-            Log.d("playerStat2","${_teamStat.value}")
-//            var buffer = teamStat
-//            buffer.sortByDescending { it["score"]?.toInt() }
-//            Log.d("playerStat","${buffer}")
+            _teamStat.value = playerStats
+            Log.d("redo","${teamStat.value}")
         }
     }
 
-    fun getLeaderboardData(type: DataType): String {
-        when(type) {
+    fun getLeaderMainData(type: DataType): Pair<String, String> {
+        return when(type) {
             DataType.SCORE -> {
                 teamStat.value?.sortByDescending {
-                    ((it["score2I"]?.toInt()?.times(2))
-                        ?.plus(it["score3I"]?.toInt()?.times(3) ?: 0)) }
-
-//                Log.d("playerStat","${teamStat.value?.get(0)?.get("score2I")}")
-                val pts = ((teamStat.value?.get(0)?.get("score2I")?.toInt()?.times(2))
-                    ?.plus(teamStat.value?.get(0)?.get("score3I")?.toInt()?.times(3) ?: 0))
-
-                return "Number" + teamStat.value?.get(0)?.get("num") + " gets " + pts
+                    it.pts
+                }
+                Log.d("stat", "${teamStat.value?.get(0)}")
+                val leaderMainData = teamStat.value?.get(0)
+                Pair(leaderMainData?.name ?: "MJ", (leaderMainData?.pts ?: 0).toString())
             }
             DataType.ASSIST -> {
-                teamStat.value?.sortByDescending { it["assist"]?.toInt() }
-                return "Number" + teamStat.value?.get(0)?.get("num") + " gets " + teamStat.value?.get(0)?.get("assist")
+                teamStat.value?.sortByDescending { it.ast }
+                val leaderMainData = teamStat.value?.get(0)
+                Pair(leaderMainData?.name ?: "MJ", (leaderMainData?.ast ?: 0).toString())
             }
             DataType.REBOUND -> {
-                teamStat.value?.sortByDescending { it["rebound"]?.toInt() }
-                return "Number" + teamStat.value?.get(0)?.get("num") + " gets " + teamStat.value?.get(0)?.get("rebound")
+                teamStat.value?.sortByDescending { it.reb }
+                val leaderMainData = teamStat.value?.get(0)
+                Pair(leaderMainData?.name ?: "MJ", (leaderMainData?.reb ?: 0).toString())
             }
             DataType.STEAL -> {
-                teamStat.value?.sortByDescending { it["steal"]?.toInt() }
-                return "Number" + teamStat.value?.get(0)?.get("num") + " gets " + teamStat.value?.get(0)?.get("steal")
+                teamStat.value?.sortByDescending { it.stl }
+                val leaderMainData = teamStat.value?.get(0)
+                Pair(leaderMainData?.name ?: "MJ", (leaderMainData?.stl ?: 0).toString())
             }
             DataType.BLOCK -> {
-                teamStat.value?.sortByDescending { it["block"]?.toInt() }
-                return "Number" + teamStat.value?.get(0)?.get("num") + " gets " + teamStat.value?.get(0)?.get("block")
+                teamStat.value?.sortByDescending { it.blk }
+                val leaderMainData = teamStat.value?.get(0)
+                Pair(leaderMainData?.name ?: "MJ", (leaderMainData?.blk ?: 0).toString())
             }
-            else -> return "else"
+            else -> Pair("MJ","else")
         }
     }
 
-
-    var leaderData = mutableListOf<String>()
-    fun getLeaderDetailData(leaderType: DataType, type: DetailDataType): String {
-        var leader = mutableMapOf<String, String>()
-        leader = when(leaderType) {
+    fun getLeaderDetailData(detailDataType: DetailDataType, dataType: DataType): String {
+        when(dataType) {
             DataType.SCORE -> {
-                teamStat.value?.sortByDescending { ((it["score2I"]?.toInt()?.times(2))
-                    ?.plus(it["score3I"]?.toInt()?.times(3) ?: 0)) }
-                teamStat.value?.get(0)!!
+                teamStat.value?.sortByDescending {
+                    it.pts
+                }
             }
             DataType.ASSIST -> {
-                teamStat.value?.sortByDescending { it["assist"]?.toInt() }
-                teamStat.value?.get(0)!!
+                teamStat.value?.sortByDescending { it.ast }
             }
             DataType.REBOUND -> {
-                teamStat.value?.sortByDescending { it["rebound"]?.toInt() }
-                teamStat.value?.get(0)!!
+                teamStat.value?.sortByDescending { it.reb }
             }
             DataType.STEAL -> {
-                teamStat.value?.sortByDescending { it["steal"]?.toInt() }
-                teamStat.value?.get(0)!!
+                teamStat.value?.sortByDescending { it.stl }
             }
             DataType.BLOCK -> {
-                teamStat.value?.sortByDescending { it["block"]?.toInt() }
-                teamStat.value?.get(0)!!
+                teamStat.value?.sortByDescending { it.blk }
             }
-            else ->  mutableMapOf<String, String>()
+            else -> teamStat.value
         }
 
-        return when(type) {
+        return when(detailDataType) {
             DetailDataType.PTS -> {
-                ((leader["score2I"]?.toInt()?.times(2))
-                    ?.plus(leader["score3I"]?.toInt()?.times(3) ?: 0)).toString()
-            }
-            DetailDataType.FG -> {
-                try {
-                    val buffer = (((leader["score2I"]?.toDouble() ?: 0.0) + (leader["score3I"]?.toDouble() ?: 0.0)) /
-                            ((leader["score2I"]?.toDouble() ?: 0.0) + (leader["score3I"]?.toDouble() ?: 0.0) +
-                                    (leader["score2O"]?.toDouble() ?: 0.0) + (leader["score3O"]?.toDouble() ?: 1.0)))
-                        String.format("%.2f", buffer)
-                } catch (e: ArithmeticException) {
-                    "0"
-                }
-            }
-            DetailDataType.ThreeP -> {
-                try {
-                    val buffer = ((leader["score3I"]?.toDouble() ?: 0.0) /
-                            ((leader["score3I"]?.toDouble() ?: 0.0) +
-                                    (leader["score3O"]?.toDouble() ?: 1.0)))
-                    String.format("%.2f", buffer)
-                } catch (e: ArithmeticException) {
-                    "0"
-                }
-            }
-            DetailDataType.FT -> {
-                try {
-                    val buffer = ((leader["ftI"]?.toDouble() ?: 0.0) /
-                            ((leader["ftI"]?.toDouble() ?: 0.0) +
-                                    (leader["ftO"]?.toDouble() ?: 1.0)))
-                    String.format("%.2f", buffer)
-                } catch (e: ArithmeticException) {
-                    "0"
-                }
-
-            }
-            DetailDataType.TOV -> {
-                leader["TOV"] ?: "0"
-            }
-            DetailDataType.REB -> {
-                leader["rebound"] ?: "0"
+                (teamStat.value?.get(0)?.pts ?: 0).toString()
             }
             DetailDataType.AST -> {
-                leader["assist"] ?: "0"
+                (teamStat.value?.get(0)?.ast ?: 0).toString()
+            }
+            DetailDataType.REB -> {
+                (teamStat.value?.get(0)?.reb ?: 0).toString()
             }
             DetailDataType.STL -> {
-                leader["steal"] ?: "0"
+                (teamStat.value?.get(0)?.stl ?: 0).toString()
             }
             DetailDataType.BLK -> {
-                leader["block"] ?: "0"
+                (teamStat.value?.get(0)?.blk ?: 0).toString()
             }
-            DetailDataType.PF -> {
-                leader["foul"] ?: "0"
-            }
+            else -> ""
         }
     }
-
-
-
 
     ////////////////
     override fun onCleared() {

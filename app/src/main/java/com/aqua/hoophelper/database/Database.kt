@@ -1,5 +1,7 @@
 package com.aqua.hoophelper.database
 
+import android.net.Uri
+
 data class Team(
     var id: String = "",
     var name: String = "",
@@ -7,16 +9,21 @@ data class Team(
 )
 
 data class Invitation(
+    var id: String = "",
     var teamId: String = "",
-    var playerId: String = "",
+    var inviteeMail: String = "",
+    var playerName: String = "",
     )
 
 data class Player(
     var id: String = "",
     var number: String = "",
+    var name: String = "",
     var teamId: String = "",
     var email: String = "",
     var starting5: Boolean = false,
+    var captain: Boolean = false,
+    var avatar: String = "",
 )
 
 data class Match(
@@ -36,8 +43,11 @@ data class Event(
     var eventId: String = "",
     var actualTime: Long = 0L,
     var playerNum: String = "0",
+    var playerName: String = "MJ",
+    var playerImage: String = "",
     var matchTimeMin: String = "",
     var matchTimeSec: String = "",
+    var quarter: String = "",
     var zone: Int = 0,
     var score2: Boolean? = null,
     var score3: Boolean? = null,
@@ -57,4 +67,14 @@ data class Rule(
     var foulOut: String = "6",
     var to1: String = "2",
     var to2: String = "3",
+)
+
+data class PlayerStat(
+    var name: String = "",
+    var number: String = "",
+    var pts: Int = 0,
+    var reb: Int = 0,
+    var ast: Int = 0,
+    var stl: Int = 0,
+    var blk: Int = 0,
 )

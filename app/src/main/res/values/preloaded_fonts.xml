@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="preloaded_fonts" translatable="false">
+        <item>@font/</item>
+        <item>@font/aldrich</item>
+        <item>@font/eczar</item>
+        <item>@font/lekton</item>
+        <item>@font/montserrat</item>
+        <item>@font/work_sans</item>
+    </array>
+</resources>

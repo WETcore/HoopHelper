@@ -13,58 +13,48 @@
 
         <TextView
             android:id="@+id/textView3"
+            style="@style/text_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
             android:text="Starting Lineup"
-            android:textSize="48sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/textView5"
+            style="@style/text_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="32dp"
             android:text="Game Rule"
-            android:textSize="48sp"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/start5_pf_input"
             app:layout_constraintTop_toBottomOf="@+id/start5_pf_input" />
-
-        <TextView
-            android:id="@+id/textView6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="Time Out"
-            android:textSize="24sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/quarter_input" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/start5_pg_input"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
             android:hint="PG"
+            android:textColorHint="@color/spinner"
             android:theme="@style/changeBackgroundColor"
+            app:boxStrokeColor="@color/spinner"
             app:layout_constraintEnd_toStartOf="@+id/start5_sg_input"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/textView3"
             app:layout_constraintTop_toBottomOf="@+id/textView3">
 
             <com.google.android.material.textfield.MaterialAutoCompleteTextView
                 android:id="@+id/start5_pg_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:fontFamily="@font/montserrat"
                 android:inputType="none"
-                android:text="PG" />
+                android:text="PG"
+                android:textColor="@color/basil_green_dark" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -72,9 +62,11 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
+            android:layout_marginStart="16dp"
             android:hint="SG"
+            android:textColorHint="@color/spinner"
             android:theme="@style/changeBackgroundColor"
+            app:boxStrokeColor="@color/spinner"
             app:layout_constraintBottom_toBottomOf="@+id/start5_pg_input"
             app:layout_constraintEnd_toStartOf="@+id/start5_sf_input"
             app:layout_constraintHorizontal_bias="0.5"
@@ -84,8 +76,10 @@
                 android:id="@+id/start5_sg_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:fontFamily="@font/montserrat"
                 android:inputType="none"
-                android:text="SG" />
+                android:text="SG"
+                android:textColor="@color/basil_green_dark" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -93,9 +87,12 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:hint="SF"
+            android:textColorHint="@color/spinner"
             android:theme="@style/changeBackgroundColor"
+            app:boxStrokeColor="@color/spinner"
             app:layout_constraintBottom_toBottomOf="@+id/start5_sg_input"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -105,8 +102,10 @@
                 android:id="@+id/start5_sf_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:fontFamily="@font/montserrat"
                 android:inputType="none"
-                android:text="SF" />
+                android:text="SF"
+                android:textColor="@color/basil_green_dark" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -114,23 +113,25 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginTop="16dp"
             android:hint="PF"
+            android:textColorHint="@color/spinner"
             android:theme="@style/changeBackgroundColor"
+            app:boxStrokeColor="@color/spinner"
             app:layout_constraintEnd_toStartOf="@+id/start5_c_input"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/start5_pg_input"
             app:layout_constraintTop_toBottomOf="@+id/start5_pg_input">
 
             <com.google.android.material.textfield.MaterialAutoCompleteTextView
                 android:id="@+id/start5_pf_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:fontFamily="@font/montserrat"
                 android:inputType="none"
-                android:text="PF" />
+                android:text="PF"
+                android:textColor="@color/basil_green_dark" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -138,11 +139,13 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
+            android:layout_marginStart="16dp"
             android:hint="C"
+            android:textColorHint="@color/spinner"
             android:theme="@style/changeBackgroundColor"
+            app:boxStrokeColor="@color/spinner"
             app:layout_constraintBottom_toBottomOf="@+id/start5_pf_input"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/start5_sf_input"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/start5_pf_input">
 
@@ -150,8 +153,10 @@
                 android:id="@+id/start5_c_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:fontFamily="@font/montserrat"
                 android:inputType="none"
-                android:text="C" />
+                android:text="C"
+                android:textColor="@color/basil_green_dark" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -159,18 +164,18 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
             android:hint="Quarter"
+            android:textColorHint="@color/spinner"
+            app:boxStrokeColor="@color/spinner"
             app:layout_constraintEnd_toStartOf="@+id/game_clock_input"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/textView5"
             app:layout_constraintTop_toBottomOf="@+id/textView5">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/quarter_edit"
+                style="@style/editText"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:inputType="number"
@@ -182,16 +187,20 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
+            android:layout_marginStart="16dp"
             android:hint="G.Clock"
+            android:textColorHint="@color/spinner"
+            app:boxStrokeColor="@color/spinner"
             app:layout_constraintBottom_toBottomOf="@+id/quarter_input"
             app:layout_constraintEnd_toStartOf="@+id/shot_clock_input"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/quarter_input"
-            app:suffixText="min">
+            app:suffixText="min"
+            app:suffixTextColor="@color/spinner">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/game_clock_edit"
+                style="@style/editText"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:inputType="number"
@@ -203,16 +212,20 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
+            android:layout_marginStart="16dp"
             android:hint="S.Clock"
+            android:textColorHint="@color/spinner"
+            app:boxStrokeColor="@color/spinner"
             app:layout_constraintBottom_toBottomOf="@+id/game_clock_input"
             app:layout_constraintEnd_toStartOf="@+id/foul_input"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/game_clock_input"
-            app:suffixText="sec">
+            app:suffixText="sec"
+            app:suffixTextColor="@color/spinner">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/shot_clock_edit"
+                style="@style/editText"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:inputType="number"
@@ -224,15 +237,18 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:hint="Foul Out"
+            android:layout_marginStart="16dp"
+            android:hint="Foul"
+            android:textColorHint="@color/spinner"
+            app:boxStrokeColor="@color/spinner"
             app:layout_constraintBottom_toBottomOf="@+id/shot_clock_input"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/start5_c_input"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/shot_clock_input">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/foul_edit"
+                style="@style/editText"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:inputType="number"
@@ -244,20 +260,22 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="32dp"
+            android:layout_marginTop="16dp"
             android:hint="1st half time out"
+            android:textColorHint="@color/spinner"
+            app:boxStrokeColor="@color/spinner"
             app:layout_constraintEnd_toStartOf="@+id/timeout_input_2"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView6">
+            app:layout_constraintStart_toStartOf="@+id/quarter_input"
+            app:layout_constraintTop_toBottomOf="@+id/quarter_input">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/timeout_edit_1"
+                style="@style/editText"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:fontFamily="@font/montserrat"
                 android:inputType="number"
                 android:text="2" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -267,8 +285,11 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:hint="2nd half time out"
+            android:textColorHint="@color/spinner"
+            app:boxStrokeColor="@color/spinner"
             app:layout_constraintBottom_toBottomOf="@+id/timeout_input_1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -276,59 +297,31 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/timeout_edit_2"
+                style="@style/editText"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:fontFamily="@font/montserrat"
                 android:inputType="number"
                 android:text="3" />
         </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/release_button"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginEnd="8dp"
-            app:icon="@drawable/caution_triangle_copy"
-            android:text="Release Player"
-            app:layout_constraintBottom_toBottomOf="@+id/release_input"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/release_input"
-            app:layout_constraintTop_toTopOf="@+id/release_input" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/set_rule_button"
             style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:text="Set Rule"
-            app:layout_constraintBottom_toBottomOf="@+id/textView5"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:strokeColor="@color/hoop_red"
-            app:strokeWidth="1dp" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/release_input"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:hint="release player"
-            android:theme="@style/changeBackgroundColor"
-            app:layout_constraintEnd_toStartOf="@+id/release_button"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintHorizontal_chainStyle="packed"
+            android:fontFamily="@font/montserrat"
+            android:paddingVertical="16dp"
+            android:paddingHorizontal="16dp"
+            android:text="Set Rule"
+            android:textColor="@color/basil_orange"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/timeout_input_1">
-
-            <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                android:id="@+id/release_text"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:inputType="none" />
-        </com.google.android.material.textfield.TextInputLayout>
+            app:layout_constraintTop_toBottomOf="@+id/timeout_input_1"
+            app:strokeColor="@color/basil_orange"
+            app:strokeWidth="1dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -80,13 +80,23 @@ class MatchFragment : Fragment() {
                 viewModel.gameClockSecTimer.cancel()
                 Toast.makeText (requireContext(),"Game over.",Toast.LENGTH_SHORT).show()
             }
+            else if (it == viewModel.quarterLimit/2) {
+                viewModel.timeOut = 0
+                binding.pauseMatchChip.isCheckable = true
+            }
             binding.quarter.text = it.toString()
         }
         // set pause
         binding.pauseMatchChip.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
-                viewModel.shotClockTimer.cancel()
-                viewModel.gameClockSecTimer.cancel()
+                if(viewModel.setTimeOutCount()) {
+                    Toast.makeText(requireContext(), "limit",Toast.LENGTH_SHORT).show()
+                    binding.pauseMatchChip.isChecked = false
+                    binding.pauseMatchChip.isCheckable = false
+                } else {
+                    viewModel.shotClockTimer.cancel()
+                    viewModel.gameClockSecTimer.cancel()
+                }
             } else {
                 viewModel.shotClockTimer.start()
                 viewModel.gameClockSecTimer.start()
@@ -152,7 +162,9 @@ class MatchFragment : Fragment() {
             Log.d("tag","${it}")
             if (!it.isNullOrEmpty()) {
                 binding.player1Chip.text = it[0].number
-                if (viewModel.player == "") viewModel.player = binding.player1Chip.text.toString()
+                if (viewModel.playerNum == "") viewModel.playerNum = it.first().number
+                if (viewModel.playerName == "") viewModel.playerName = it.first().name
+                if (viewModel.playerImage == "") viewModel.playerImage = it.first().avatar
                 binding.player2Chip.text = it[1].number
                 binding.player3Chip.text = it[2].number
                 binding.player4Chip.text = it[3].number
@@ -165,7 +177,23 @@ class MatchFragment : Fragment() {
 
         // 改變launch顯示文字
         viewModel.zone.observe(viewLifecycleOwner) {
-            binding.launchChip.text = it.toString()
+            binding.launchChip.text = when(it) {
+                1 -> "A"//"Around Rim"
+                2 -> "B"//"L.Elbow"
+                3 -> "C"//"Mid Straight"
+                4 -> "D"//"R.Elbow"
+                5 -> "E"//"L.Baseline"
+                6 -> "F"//"L.Wing"
+                7 -> "G"//"Long Straight"
+                8 -> "H"//"R.Wing"
+                9 -> "I"//"R.Baseline"
+                10 -> "J"//"L.Corner"
+                11 -> "K"//"L.3Points"
+                12 -> "L"//"Arc"
+                13 -> "M"//"R.3Points"
+                14 -> "N"//"R.Corner"
+                else -> "O"//"Area"
+            }
         }
 
 
@@ -249,10 +277,10 @@ class MatchFragment : Fragment() {
                     viewModel.setStatData(DataType.TURNOVER, args.matchId)
                     group.clearCheck()
                 }
-                R.id.foul_chip -> {//TODO ban player
+                R.id.foul_chip -> {
                     viewModel.setStatData(DataType.FOUL, args.matchId)
                     var buffer = viewModel.startPlayer.value!![viewModel.selectPlayerPos]
-                    viewModel.getFoulCount(viewModel.player, buffer)
+                    viewModel.getFoulCount(viewModel.playerNum, buffer)
                     group.clearCheck()
                 }
             }

@@ -2,9 +2,16 @@ package com.aqua.hoophelper.live
 
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.aqua.hoophelper.database.Event
+import com.aqua.hoophelper.database.Player
+import com.aqua.hoophelper.database.PlayerStat
 import com.aqua.hoophelper.database.remote.HoopRemoteDataSource
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 class LiveViewModel : ViewModel() {
 
@@ -13,53 +20,86 @@ class LiveViewModel : ViewModel() {
     val events: LiveData<List<Event>>
         get() = _events
 
+    // 球員數據
+    private var _playerStat = MutableLiveData<PlayerStat>(PlayerStat())
+    val playerStat: LiveData<PlayerStat>
+        get() = _playerStat
+
+    // Create a Coroutine scope using a job to be able to cancel when needed
+    private var viewModelJob = Job()
+
+    // the Coroutine runs using the Main (UI) dispatcher
+    private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     // 區別動作
     fun filterEventType(event: Event): String {
         return when {
             event.assist -> {
-                "Number" + event.playerNum + " sent " + "assist" + " in zone" + event.zone
+                "sent " + "assist"
             }
             event.block -> {
-                "Number" + event.playerNum + " sent " + "block" + " in zone" + event.zone
+                "sent " + "block"
             }
             event.foul -> {
-                "Number" + event.playerNum + " got " + "foul" + " in zone" + event.zone
+                "got " + "foul"
             }
             event.rebound -> {
-                "Number" + event.playerNum + " got " + "rebound" + " in zone" + event.zone
+                "got " + "rebound"
             }
             event.steal -> {
-                "Number" + event.playerNum + " got " + "steal" + " in zone" + event.zone
+                "got " + "steal"
             }
             event.turnover -> {
-                "Number" + event.playerNum + " got " + "turnover" + " in zone" + event.zone
+                "got " + "turnover"
             }
             event.score2 == true -> {
-                "Number" + event.playerNum + " got " + "2 points" + " in zone" + event.zone
+                "made " + "2 points"
             }
             event.score2 == false -> {
-                "Number" + event.playerNum + " miss " + "2 points" + " in zone" + event.zone
+                "miss " + "2 points"
             }
             event.score3 == true -> {
-                "Number" + event.playerNum + " got " + "3 points" + " in zone" + event.zone
+                "made " + "3 points"
             }
             event.score3 == false -> {
-                "Number" + event.playerNum + " miss " + "3 points" + " in zone" + event.zone
+                "miss " + "3 points"
             }
             event.freeThrow == true -> {
-                "Number" + event.playerNum + " made a free throw"
+                "made a free throw"
             }
             event.freeThrow == false -> {
-                "Number" + event.playerNum + " miss a free throw"
+                "miss a free throw"
             }
             else -> "else"
         }
     }
 
-    fun countFreeThrows(): String {
-        return events.value?.filter {
-            it.freeThrow == true
-        }?.size.toString()
+    fun getTeamPlayerData(id: String, events: List<Event>): PlayerStat {
+
+        val buffer = events.filter { it.playerId == id }
+
+        val ast = buffer.filter { it.assist }.size
+        val ptI = buffer.filter { it.score2 == true }.size
+        val ptO = buffer.filter { it.score2 == false }.size
+        val pt3I = buffer.filter { it.score3 == true }.size
+        val pt3O = buffer.filter { it.score3 == false }.size
+        val reb = buffer.filter { it.rebound }.size
+        val stl = buffer.filter { it.steal }.size
+        val blk = buffer.filter { it.block }.size
+        val ftI = buffer.filter { it.freeThrow == true }.size
+        val ftO = buffer.filter { it.freeThrow == false }.size
+        val tov = buffer.filter { it.turnover }.size
+        val foul = buffer.filter { it.foul }.size
+
+        return PlayerStat(
+            "name",
+            "num",
+            pts = (ptI*2 + pt3I*3 + ftI),
+            reb,
+            ast,
+            stl,
+            blk,
+        )
     }
+
 }

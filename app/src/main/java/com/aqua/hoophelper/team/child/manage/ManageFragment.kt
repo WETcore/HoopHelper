@@ -69,46 +69,23 @@ class ManageFragment : Fragment() {
 
             start5PgText.setOnItemClickListener { parent, view, position, id ->
 
-                viewModel.switchLineUp(position)
+                viewModel.switchLineUp(position, 0)
 
                 Log.d("lineup","${viewModel.startPlayer.value}")
 
             }
-//            start5SgText.setOnItemClickListener { parent, view, position, id ->
-//                buffer = viewModel._start5.value!![1]
-//                viewModel._start5.value!![1] = parent.getItemAtPosition(position).toString()
-//                viewModel._subLineup.value!![position] = buffer
-//            }
-//            start5SfText.setOnItemClickListener { parent, view, position, id ->
-//                buffer = viewModel._start5.value!![2]
-//                viewModel._start5.value!![2] = parent.getItemAtPosition(position).toString()
-//                viewModel._subLineup.value!![position] = buffer
-//            }
-//            start5PfText.setOnItemClickListener { parent, view, position, id ->
-//                buffer = viewModel._start5.value!![3]
-//                viewModel._start5.value!![3] = parent.getItemAtPosition(position).toString()
-//                viewModel._subLineup.value!![position] = buffer
-//            }
-//            start5CText.setOnItemClickListener { parent, view, position, id ->
-//                buffer = viewModel._start5.value!![4]
-//                viewModel._start5.value!![4] = parent.getItemAtPosition(position).toString()
-//                viewModel._subLineup.value!![position] = buffer
-//            }
-        }
-
-        viewModel.roster.observe(viewLifecycleOwner) {
-            var num = mutableListOf<String>()
-            it.forEach { player ->
-                num.add(player.number)
+            start5SgText.setOnItemClickListener { parent, view, position, id ->
+                viewModel.switchLineUp(position, 1)
             }
-            binding.releaseText.setAdapter(
-                ArrayAdapter(requireContext(), R.layout.team_start5_item, num)
-            )
-        }
-
-        binding.releaseButton.setOnClickListener {
-//            viewModel.roster.value?.remove(binding.releaseText.text.toString()) TODO
-//            binding.releaseInput.editText?.setText("")
+            start5SfText.setOnItemClickListener { parent, view, position, id ->
+                viewModel.switchLineUp(position, 2)
+            }
+            start5PfText.setOnItemClickListener { parent, view, position, id ->
+                viewModel.switchLineUp(position, 3)
+            }
+            start5CText.setOnItemClickListener { parent, view, position, id ->
+                viewModel.switchLineUp(position, 4)
+            }
         }
 
         // set rule

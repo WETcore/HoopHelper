@@ -1,6 +1,8 @@
 package com.aqua.hoophelper.team
 
 import android.annotation.SuppressLint
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.graphics.drawable.Drawable
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -32,13 +34,16 @@ class TeamFragment : Fragment() {
         // set tab
         val tabLayout = binding.tabLayout
         val vPager = binding.teamViewpager
-        val title: List<String> = listOf( "Manage","Chart", "Tactic")
+        val title: List<String> = listOf("Manage", "Chart", "Tactic")
         val titleIcon: List<Drawable> = listOf(
-            resources.getDrawable(R.drawable.management),
+            resources.getDrawable(R.drawable.planning),
             resources.getDrawable(R.drawable.bar_chart),
             resources.getDrawable(R.drawable.tactic),
         )
         vPager.adapter = TeamVPagerAdapter(requireActivity())
+
+        tabLayout.tabTextColors = ColorStateList.valueOf(Color.parseColor("#C60000"))
+        tabLayout.tabIconTint = ColorStateList.valueOf(Color.parseColor("#C60000"))
 
         TabLayoutMediator(tabLayout, vPager) { tab, position ->
             tab.text = title[position]

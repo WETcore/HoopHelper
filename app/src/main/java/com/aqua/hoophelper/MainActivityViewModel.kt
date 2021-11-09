@@ -1,12 +1,10 @@
 package com.aqua.hoophelper
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.aqua.hoophelper.database.Event
-import com.aqua.hoophelper.database.Match
-import com.aqua.hoophelper.database.Player
-import com.aqua.hoophelper.database.Team
+import com.aqua.hoophelper.database.*
 import com.aqua.hoophelper.database.remote.HoopRemoteDataSource
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
@@ -26,6 +24,10 @@ class MainActivityViewModel: ViewModel() {
     var player = MutableLiveData<List<Player>>()
     var team = MutableLiveData<List<Team>>()
 
+    var _invites = HoopRemoteDataSource.getInvitations()
+    val invites: LiveData<List<Invitation>>
+        get() = _invites
+
     // Create a Coroutine scope using a job to be able to cancel when needed
     private var viewModelJob = Job()
 
@@ -41,12 +43,6 @@ class MainActivityViewModel: ViewModel() {
         match.time = cal.get(Calendar.HOUR_OF_DAY).toString()
         match.actualTime = Calendar.getInstance().timeInMillis
         db.collection("Matches").add(match)
-    }
-
-    fun getUserInfo() {
-        coroutineScope.launch {
-            HoopRemoteDataSource.getUserInfo()
-        }
     }
 
     ////////////////

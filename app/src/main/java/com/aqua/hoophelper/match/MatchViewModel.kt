@@ -37,12 +37,16 @@ class MatchViewModel : ViewModel() {
 
     var quarterLimit = 4
     var foulLimit = 6
+    var timeOut1Limit = 2
+    var timeOut2Limit = 3
+
+    // time out
+    var timeOut = 0
 
     var _shotClockLimit = MutableLiveData<Long>(24L)
     val shotClockLimit: LiveData<Long>
-    get() = _shotClockLimit
+        get() = _shotClockLimit
 
-//    var gameClockLimit = 12L
     var _gameClockLimit = MutableLiveData<Long>(12L)
     val gameClockLimit: LiveData<Long>
         get() = _gameClockLimit
@@ -70,7 +74,9 @@ class MatchViewModel : ViewModel() {
 
     //////////////////
     // player num send to db
-    var player = ""
+    var playerNum = ""
+    var playerName = ""
+    var playerImage = ""
 
     // selectPlayerPos 紀錄按那個 chip
     var selectPlayerPos = 0
@@ -149,8 +155,10 @@ class MatchViewModel : ViewModel() {
 
     fun selectPlayer(pos: Int): String {
         selectPlayerPos = pos
-        player = _startPlayer.value!![pos].number
-        return _startPlayer.value!![pos].number
+        playerNum = startPlayer.value!![pos].number
+        playerName = startPlayer.value!![pos].name
+        playerImage = startPlayer.value!![pos].avatar
+        return startPlayer.value!![pos].number
     }
 
     fun selectZone(selectedZone: Int) {
@@ -181,8 +189,11 @@ class MatchViewModel : ViewModel() {
         event.actualTime = Calendar.getInstance().timeInMillis
         event.matchTimeMin = gameClockMin.value.toString()
         event.matchTimeSec = gameClockSec.value.toString()
+        event.quarter = quarter.value.toString()
         _record.value = countIn
-        event.playerNum = player
+        event.playerNum = playerNum
+        event.playerName = playerName
+        event.playerImage = playerImage
         event.zone = zone.value!!
         if (zone.value!! in 1..9)  {
             event.score2 = _record.value!!
@@ -200,9 +211,13 @@ class MatchViewModel : ViewModel() {
         event.teamId = User.teamId
         event.playerId = startPlayer.value?.get(selectPlayerPos)?.id ?: ""
         event.actualTime = Calendar.getInstance().timeInMillis
-        event.playerNum = player
+        event.playerNum = playerNum
+        event.playerName = playerName
+        event.playerImage = playerImage
+        event.zone = -1
         event.matchTimeMin = gameClockMin.value.toString()
         event.matchTimeSec = gameClockSec.value.toString()
+        event.quarter = quarter.value.toString()
         event.freeThrow = bool
         db.collection("Events").add(event)
     }
@@ -214,9 +229,12 @@ class MatchViewModel : ViewModel() {
         event.teamId = User.teamId
         event.playerId = startPlayer.value?.get(selectPlayerPos)?.id ?: ""
         event.actualTime = Calendar.getInstance().timeInMillis
-        event.playerNum = player
+        event.playerNum = playerNum
+        event.playerName = playerName
+        event.playerImage = playerImage
         event.matchTimeMin = gameClockMin.value.toString()
         event.matchTimeSec = gameClockSec.value.toString()
+        event.quarter = quarter.value.toString()
         event.zone = zone.value!!
         _record.value = true
         when(type) {
@@ -306,7 +324,9 @@ class MatchViewModel : ViewModel() {
     fun getSubPlayer2Starting(position: Int) {
         _startPlayer.value!![selectPlayerPos] = substitutionPlayer.value!![position]
         _startPlayer.value = _startPlayer.value
-        player = _startPlayer.value!![selectPlayerPos].number
+        playerNum = _startPlayer.value!![selectPlayerPos].number
+        playerName = _startPlayer.value!![selectPlayerPos].name
+        playerImage = _startPlayer.value!![selectPlayerPos].avatar
     }
 
     fun changeSubPlayer(onCourtPlayer: Player, spinnerPos: Int) {
@@ -394,14 +414,25 @@ class MatchViewModel : ViewModel() {
     fun getMatchRule() {
         coroutineScope.launch {
             rule = HoopRemoteDataSource.getRule()
-            quarterLimit = rule.quarter.toInt() // TODO
+            quarterLimit = rule.quarter.toInt() // TODO TO
             foulLimit = rule.foulOut.toInt()
+            timeOut1Limit = rule.to1.toInt()
+            timeOut2Limit = rule.to2.toInt()
             _shotClockLimit.value = rule.sClock.toLong()
             _gameClockLimit.value = rule.gClock.toLong()
             _shotClock.value = _shotClockLimit.value
-            _gameClockMin.value = _gameClockLimit.value
+            _gameClockMin.value = _gameClockLimit.value!! - 1
             shotClockTimer.start()
             gameClockSecTimer.start()
+        }
+    }
+
+    fun setTimeOutCount(): Boolean {
+        timeOut += 1
+        return if (quarter.value!! <= quarterLimit/2) {
+            timeOut > timeOut1Limit
+        } else {
+            timeOut > timeOut2Limit
         }
     }
 

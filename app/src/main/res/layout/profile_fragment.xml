@@ -1,120 +1,355 @@
-<layout xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:background="@drawable/bottom_sheet_dialog">
-<data>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-</data>
+    <data>
+
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:background="@color/hoop_background">
 
-        <com.google.android.gms.common.SignInButton
-            android:id="@+id/google_sign_in"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="32dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/mail_layout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/create_team_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
-            android:hint="email"
-            app:boxStrokeColor="@color/hoop_red"
-            app:hintEnabled="true"
-            app:hintTextColor="@color/hoop_red"
+            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/google_sign_in"
-            app:suffixTextColor="@color/hoop_red">
+            app:layout_constraintTop_toBottomOf="@+id/user_info_layout"
+            tools:visibility="visible">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/email_edit"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textCursorDrawable="@color/hoop_red"
-                android:inputType="textEmailAddress" />
-        </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/team_name_layout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:hint="Team Name"
+                android:textColorHint="@color/spinner_text"
+                app:boxStrokeColor="@color/spinner"
+                app:errorEnabled="true"
+                app:hintEnabled="true"
+                app:layout_constraintEnd_toStartOf="@+id/player_num_layout"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView2"
+                app:suffixTextColor="@color/hoop_red">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/team_name_layout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/team_name_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="textPersonName"
+                    style="@style/editText"
+                    android:textCursorDrawable="@color/hoop_red" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/nickname_layout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:hint="Name"
+                android:textColorHint="@color/spinner_text"
+                app:boxStrokeColor="@color/spinner"
+                app:hintEnabled="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/team_name_layout"
+                app:suffixTextColor="@color/hoop_red">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/nickname_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="textPersonName"
+                    style="@style/editText"
+                    android:textCursorDrawable="@color/hoop_red" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/player_num_layout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:hint="Jersey Number"
+                android:textColorHint="@color/spinner_text"
+                app:boxStrokeColor="@color/spinner"
+                app:errorEnabled="true"
+                app:hintEnabled="true"
+                app:layout_constraintBottom_toBottomOf="@+id/team_name_layout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/team_name_layout"
+                app:suffixTextColor="@color/hoop_red">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/player_num_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="number"
+                    style="@style/editText"
+                    android:textCursorDrawable="@color/hoop_red" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/create_button"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="wrap_content"
+                android:layout_height="65dp"
+                android:layout_marginTop="16dp"
+                android:backgroundTint="@color/hoop_background"
+                android:fontFamily="@font/montserrat"
+                android:text="Create"
+                android:textColor="@color/basil_orange"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/nickname_layout"
+                app:strokeColor="@color/basil_orange"
+                app:strokeWidth="1dp" />
+
+            <TextView
+                android:id="@+id/textView2"
+                style="@style/text_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
+                android:text="Create Team"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/user_info_layout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:hint="Team Name"
-            app:boxStrokeColor="@color/hoop_red"
-            app:hintEnabled="true"
-            app:hintTextColor="@color/hoop_red"
-            app:layout_constraintEnd_toEndOf="@+id/mail_layout"
-            app:layout_constraintStart_toStartOf="@+id/mail_layout"
-            app:layout_constraintTop_toBottomOf="@+id/mail_layout"
-            app:suffixTextColor="@color/hoop_red">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="gone">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/team_name_edit"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textCursorDrawable="@color/hoop_red"
-                android:inputType="textPersonName" />
-        </com.google.android.material.textfield.TextInputLayout>
+            <TextView
+                android:id="@+id/textView4"
+                style="@style/text_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
+                android:text="User Information"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/player_num_layout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            <TextView
+                android:id="@+id/team_name_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Team:"
+                android:textColor="@color/basil_green_dark"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="@+id/textView4"
+                app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+            <TextView
+                android:id="@+id/fan_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="No Team Joined"
+                android:textColor="@color/basil_orange"
+                android:textSize="20sp"
+                app:layout_constraintStart_toEndOf="@+id/team_name_text"
+                app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+            <TextView
+                android:id="@+id/nickname_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Name:"
+                android:textColor="@color/basil_green_dark"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="@+id/team_name_text"
+                app:layout_constraintTop_toBottomOf="@+id/team_name_text" />
+
+            <TextView
+                android:id="@+id/number_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Number:"
+                android:textColor="@color/basil_green_dark"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="@+id/nickname_text"
+                app:layout_constraintTop_toBottomOf="@+id/nickname_text" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/manage_roster_layout"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:hint="Player Number"
-            app:boxStrokeColor="@color/hoop_red"
-            app:hintEnabled="true"
-            app:hintTextColor="@color/hoop_red"
-            app:layout_constraintEnd_toEndOf="@+id/team_name_layout"
-            app:layout_constraintStart_toStartOf="@+id/team_name_layout"
-            app:layout_constraintTop_toBottomOf="@+id/team_name_layout"
-            app:suffixTextColor="@color/hoop_red">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/player_num_edit"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textCursorDrawable="@color/hoop_red"
-                android:inputType="number" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <Button
-            android:id="@+id/create_button"
-            style="@style/Widget.MaterialComponents.Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:backgroundTint="@color/hoop_orange"
-            android:text="Create"
-            android:textColor="@color/hoop_background"
+            android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/player_num_layout"
-            app:layout_constraintTop_toBottomOf="@+id/player_num_layout" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/create_team_layout"
+            app:layout_editor_absoluteY="500dp">
 
-        <Button
-            android:id="@+id/invite_button"
-            style="@style/Widget.MaterialComponents.Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/hoop_orange"
-            android:text="Invite"
-            android:textColor="@color/hoop_background"
-            app:layout_constraintEnd_toEndOf="@+id/player_num_layout"
-            app:layout_constraintTop_toTopOf="@+id/create_button" />
+            <TextView
+                android:id="@+id/textView10"
+                style="@style/text_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
+                android:text="Manage Roster"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/mail_layout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Email"
+                android:textAlignment="viewEnd"
+                android:textColorHint="@color/spinner_text"
+                app:boxStrokeColor="@color/spinner"
+                app:errorEnabled="true"
+                app:hintEnabled="true"
+                app:layout_constraintEnd_toStartOf="@+id/invite_name_layout"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintHorizontal_weight="2"
+                app:layout_constraintStart_toStartOf="@+id/textView10"
+                app:layout_constraintTop_toBottomOf="@+id/textView10"
+                app:suffixTextColor="@color/basil_green_dark">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/mail_edit"
+                    style="@style/editText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="textEmailAddress"
+                    android:textColor="@color/basil_green"
+                    android:textCursorDrawable="@color/hoop_red" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/invite_name_layout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:hint="Name"
+                android:textColorHint="@color/spinner_text"
+                app:boxStrokeColor="@color/spinner"
+                app:errorEnabled="true"
+                app:hintEnabled="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@+id/mail_layout"
+                app:layout_constraintTop_toTopOf="@+id/mail_layout">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/invite_name_edit"
+                    style="@style/editText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="textPersonName"
+                    android:textCursorDrawable="@color/hoop_red" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/release_input"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="16dp"
+                android:hint="Release Player"
+                android:textColorHint="@color/spinner_text"
+                android:theme="@style/changeBackgroundColor"
+                app:boxStrokeColor="@color/spinner"
+                app:errorEnabled="true"
+                app:hintEnabled="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintHorizontal_weight="2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view4">
+
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/release_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/montserrat"
+                    android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/invite_button"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/hoop_background"
+                android:fontFamily="@font/montserrat"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="10dp"
+                android:text="Invite"
+                android:textColor="@color/basil_orange"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintHorizontal_weight="2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/mail_layout"
+                app:strokeColor="@color/basil_orange"
+                app:strokeWidth="1dp" />
+
+            <View
+                android:id="@+id/view4"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="16dp"
+                android:background="@color/basil_green_dark"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/invite_button" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/release_button"
+                android:layout_width="121dp"
+                android:layout_height="62dp"
+                android:autoSizeTextType="uniform"
+                android:fontFamily="@font/montserrat"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="10dp"
+                android:text="Release"
+                android:textColor="@color/hoop_background"
+                app:backgroundTint="@color/basil_orange"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/release_input" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

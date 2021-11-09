@@ -61,7 +61,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     app:elevation="0dp"
-                    app:labelVisibilityMode="selected"
+                    app:itemIconTint="@color/icon"
+                    app:itemTextColor="@color/icon"
+                    app:labelVisibilityMode="labeled"
                     android:background="@color/transparent"
                     app:menu="@menu/menu" />
             </com.google.android.material.bottomappbar.BottomAppBar>
@@ -70,8 +72,8 @@
                 android:id="@+id/fab"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/hoop_red"
-                android:foreground="@drawable/ball_icon"
+                android:background="@color/hoop_background"
+                android:foreground="@drawable/basketball_ball_copy"
                 app:layout_anchor="@id/app_bar" />
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>

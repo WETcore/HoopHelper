@@ -12,12 +12,18 @@
     <color name="hoop_yellow">#FF9800</color>
     <color name="hoop_red">#C60000</color>
     <color name="hoop_orange_light">#FF6600</color>
-    <color name="hoop_background">#FFE9A3</color>
+    <color name="hoop_background">#FFE9C2</color>FFF3B6
 
     <color name="clock_yellow">#FFF87D</color>
     <color name="clock_red">#FF6D24</color>
     <color name="clock_green">#C2E8CE</color>
     <color name="clock_background">#A35709</color>
+
+    <color name="basil_bg">#FFFBE6</color>
+    <color name="basil_green_dark">#356859</color>
+    <color name="basil_green">#37966F</color>
+    <color name="basil_green_light">#B9E4C9</color>
+    <color name="basil_orange">#FD5523</color>
 
 
 

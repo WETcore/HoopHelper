@@ -12,15 +12,42 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HoopHelper">
         <activity
-            android:name=".MainActivity"
-            android:windowSoftInputMode="adjustPan"
+            android:name=".LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan">
+
+        </activity>
+
+        <service
+            android:name=".component.HoopService"
+            android:enabled="true"
+            android:exported="true"/>
+
+        <service
+            android:name=".component.CheckService"
+            android:enabled="true"
+            android:exported="true"/>
+
+        <receiver
+            android:name=".component.RestartBroadcastReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="reStartService"/>
+            </intent-filter>
+        </receiver>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

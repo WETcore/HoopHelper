@@ -55,4 +55,25 @@
         <item name="android:background">@color/transparent</item>
     </style>
 
+    <style name="text_title">
+        <item name="android:fontFamily">@font/montserrat</item>
+        <item name="android:gravity">start</item>
+        <item name="android:textColor">@color/basil_green_dark</item>
+        <item name="android:textSize">36sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="spinner">
+        <item name="android:textColorHint">@color/spinner</item>
+        <item name="boxStrokeColor">@color/spinner</item>
+    </style>
+    <style name="editText">
+        <item name="android:textColor">@color/basil_green_dark</item>
+        <item name="android:fontFamily">@font/montserrat</item>
+    </style>
+
+    <style name="circleImage" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
 </resources>
