@@ -114,6 +114,6 @@ object User {
 }
 
 object HoopInfo {
-    var spinnerSelectedTeamId = ""
+    var spinnerSelectedTeamId = MutableLiveData("")
     var matchId = ""
 }

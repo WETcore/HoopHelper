@@ -49,7 +49,7 @@ class HomeViewModel : ViewModel() {
             for (i in teams.value!!.indices) {
                 teamNameList.add(teams.value!![i].name)
             }
-            HoopInfo.spinnerSelectedTeamId = _teams.value!!.first().id
+            HoopInfo.spinnerSelectedTeamId.value = teams.value!!.first().id
             selectedTeam(0)
         }
         return teamNameList
@@ -57,11 +57,10 @@ class HomeViewModel : ViewModel() {
 
     // 取得球員名單與數據
     fun selectedTeam(pos: Int) {
-        HoopInfo.spinnerSelectedTeamId = _teams.value!![pos].id
+        HoopInfo.spinnerSelectedTeamId.value = teams.value!![pos].id
         coroutineScope.launch {
             _teamPlayers.value = HoopRemoteDataSource.getTeamMembers()
-            getTeamPlayersData(_teamPlayers.value!!, _teamPlayers.value!!.size)
-
+            getTeamPlayersData(teamPlayers.value!!, teamPlayers.value!!.size)
         }
     }
 

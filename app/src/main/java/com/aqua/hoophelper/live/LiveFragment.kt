@@ -38,7 +38,7 @@ class LiveFragment : Fragment() {
                 viewModel,
                 its.filter {
                     it.matchId == its.first().matchId
-                            && it.teamId == HoopInfo.spinnerSelectedTeamId
+                            && it.teamId == HoopInfo.spinnerSelectedTeamId.value
                 }
             )
             binding.liveRecycler.adapter = adapter
@@ -46,7 +46,7 @@ class LiveFragment : Fragment() {
             adapter.submitList(
                 its.filter {
                     it.matchId == its.first().matchId
-                            && it.teamId == HoopInfo.spinnerSelectedTeamId
+                            && it.teamId == HoopInfo.spinnerSelectedTeamId.value
                 }
             )
         }

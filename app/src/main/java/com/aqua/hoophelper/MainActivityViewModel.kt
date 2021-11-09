@@ -45,6 +45,23 @@ class MainActivityViewModel: ViewModel() {
         db.collection("Matches").add(match)
     }
 
+    val badgeSwitch = MutableLiveData<Boolean>(false)
+
+    fun showBadge(teamId: String) {
+        badgeSwitch.let {
+            db.collection("Matches") // TODO to model
+                .addSnapshotListener { value, error ->
+                    val matches = value?.toObjects(Match::class.java)?.sortedBy { it.actualTime }
+                    it.value = if (matches.isNullOrEmpty()) {
+                        false
+                    } else {
+                        matches.lastOrNull{ it.teamId == teamId }?.gaming == true // TODO filter spinner teamId
+                    }
+                    Log.d("badge2","${it.value} $teamId")
+                }
+        }
+    }
+
     ////////////////
     override fun onCleared() {
         super.onCleared()

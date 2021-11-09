@@ -49,20 +49,12 @@ class MainActivity : AppCompatActivity() {
         }
 
         // badge
-        binding.bottomBar.getOrCreateBadge(R.id.liveFragment).apply {
-            viewModel.db.collection("Matches") // TODO to model
-                .addSnapshotListener { value, error ->
-                    var mlist = value?.toObjects(Match::class.java)?.sortedBy {
-                        it.actualTime
-                    }
-                    isVisible = if (mlist.isNullOrEmpty()) {
-                        false
-                    } else {
-                        mlist.lastOrNull()?.gaming == true // TODO filter spinner teamId
-                    }
-                }
+        HoopInfo.spinnerSelectedTeamId.observe(this) {
+            viewModel.showBadge(it)
         }
-
+        viewModel.badgeSwitch.observe(this) {
+            binding.bottomBar.getOrCreateBadge(R.id.liveFragment).isVisible = it
+        }
 
         navHostFragment.addOnDestinationChangedListener { _, destination, _ ->
             when(destination.id) {

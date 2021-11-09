@@ -14,6 +14,7 @@ import androidx.core.view.children
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
+import com.aqua.hoophelper.MainActivityViewModel
 import com.aqua.hoophelper.NavigationDirections
 import com.aqua.hoophelper.R
 import com.aqua.hoophelper.databinding.HomeFragmentBinding
@@ -25,6 +26,10 @@ class HomeFragment : Fragment() {
 
     private val viewModel: HomeViewModel by lazy {
         ViewModelProvider(this).get(HomeViewModel::class.java)
+    }
+
+    private val mainViewModel: MainActivityViewModel by lazy {
+        ViewModelProvider(this).get(MainActivityViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -49,6 +54,7 @@ class HomeFragment : Fragment() {
         // set selected Team
         binding.teamText.setOnItemClickListener { parent, view, position, id ->
             viewModel.selectedTeam(position)
+//            mainViewModel.showBadge() // TODO
         }
 
         // VPager
