@@ -1,13 +1,469 @@
-<?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".match.MatchFragment">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Hello" />
+        android:background="@color/hoop_background"
+        tools:context=".match.MatchFragment">
 
-</FrameLayout>
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/materialCardView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:backgroundTint="@color/clock_background"
+            android:elevation="10dp"
+            app:cardCornerRadius="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/basketball_court"
+            app:layout_constraintDimensionRatio="w,1:1"
+            app:layout_constraintStart_toEndOf="@+id/materialCardView2"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+            app:strokeColor="@color/hoop_yellow"
+            app:strokeWidth="1dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/game_clock_sec"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="2dp"
+                    android:text="00"
+                    android:textAlignment="viewEnd"
+                    android:textColor="@color/clock_yellow"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/game_clock_min"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/textview4" />
+
+                <TextView
+                    android:id="@+id/textview4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=":"
+                    android:textColor="@color/clock_yellow"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/game_clock_min"
+                    app:layout_constraintEnd_toStartOf="@+id/game_clock_sec"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/game_clock_min" />
+
+                <TextView
+                    android:id="@+id/game_clock_min"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="12"
+                    android:textAlignment="viewEnd"
+                    android:textColor="@color/clock_yellow"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toTopOf="@+id/shot_clock"
+                    app:layout_constraintEnd_toStartOf="@+id/textview4"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_chainStyle="packed" />
+
+                <TextView
+                    android:id="@+id/shot_clock"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="24"
+                    android:textAlignment="center"
+                    android:textColor="@color/clock_red"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/game_clock_min" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/materialCardView2"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:backgroundTint="@color/clock_background"
+            app:cardCornerRadius="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/basketball_court"
+            app:layout_constraintDimensionRatio="h,1:1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+            app:strokeColor="@color/hoop_yellow"
+            app:strokeWidth="1dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/quarter_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="5dp"
+                    android:text="PERIOD"
+                    android:textAlignment="center"
+                    android:textColor="@color/clock_green"
+                    android:textSize="10sp"
+                    app:layout_constraintBottom_toTopOf="@+id/quarter"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_chainStyle="packed" />
+
+                <TextView
+                    android:id="@+id/quarter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1"
+                    android:textAlignment="center"
+                    android:textColor="@color/clock_green"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/quarter_label" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/hoop_yellow"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/player_chip_group"
+                style="@style/Widget.MaterialComponents.ChipGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                app:checkedChip="@+id/player1_chip"
+                app:chipSpacingHorizontal="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:selectionRequired="true"
+                app:singleLine="false"
+                app:singleSelection="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/player1_chip"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/button_text"
+                    app:chipBackgroundColor="@color/button"
+                    app:chipStrokeColor="@color/button_text"
+                    app:chipStrokeWidth="1dp" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/player2_chip"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/button_text"
+                    app:chipBackgroundColor="@color/button"
+                    app:chipStrokeColor="@color/button_text"
+                    app:chipStrokeWidth="1dp" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/player3_chip"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/button_text"
+                    app:chipBackgroundColor="@color/button"
+                    app:chipStrokeColor="@color/button_text"
+                    app:chipStrokeWidth="1dp" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/player4_chip"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/button_text"
+                    app:chipBackgroundColor="@color/button"
+                    app:chipStrokeColor="@color/button_text"
+                    app:chipStrokeWidth="1dp" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/player5_chip"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/button_text"
+                    app:chipBackgroundColor="@color/button"
+                    app:chipStrokeColor="@color/button_text"
+                    app:chipStrokeWidth="1dp" />
+
+            </com.google.android.material.chip.ChipGroup>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="2dp"
+                android:hint="latest sub"
+                android:textColorHint="@color/match_spinner"
+                android:theme="@style/changeBackgroundColorForMatch"
+                app:boxStrokeColor="@color/match_spinner"
+                app:hintEnabled="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/player_chip_group"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <AutoCompleteTextView
+                    android:id="@+id/sub_player_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat"
+                    android:inputType="none"
+                    android:singleLine="true"
+                    android:text="Bench"
+                    android:textColor="@color/hoop_red"
+                    android:textSize="14sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ImageView
+            android:id="@+id/exit_match_button"
+            android:layout_width="34dp"
+            android:layout_height="27dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/logout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/pause_match_chip"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="Timeout"
+            android:textColor="@color/button_text"
+            android:textSize="14sp"
+            app:chipBackgroundColor="@color/button"
+            app:chipStrokeColor="@color/button_text"
+            app:chipStrokeWidth="1dp"
+            app:layout_constraintBottom_toBottomOf="@+id/free_throw_switch"
+            app:layout_constraintStart_toEndOf="@+id/free_throw_switch" />
+
+        <ImageView
+            android:id="@+id/basketball_court"
+            android:layout_width="411dp"
+            android:layout_height="381dp"
+            android:layout_marginTop="60dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+            app:srcCompat="@drawable/boeder_130913_blankchart" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chip_group"
+            style="@style/Widget.MaterialComponents.ChipGroup"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/free_throw_switch"
+            app:selectionRequired="true"
+            app:singleSelection="true"
+            tools:visibility="visible">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/score_chip"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Score"
+                android:textColor="@color/hoop_orange"
+                app:chipBackgroundColor="@color/hoop_yellow"
+                app:chipStrokeColor="@color/hoop_orange"
+                app:chipStrokeWidth="1dp" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/miss_chip"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Miss"
+                android:textColor="@color/hoop_orange"
+                app:chipBackgroundColor="@color/hoop_yellow"
+                app:chipStrokeColor="@color/hoop_orange"
+                app:chipStrokeWidth="1dp" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/rebound_chip"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Reb"
+                android:textColor="@color/hoop_orange"
+                app:chipBackgroundColor="@color/hoop_yellow"
+                app:chipStrokeColor="@color/hoop_orange"
+                app:chipStrokeWidth="1dp" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/assist_chip"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ast"
+                android:textColor="@color/hoop_orange"
+                app:chipBackgroundColor="@color/hoop_yellow"
+                app:chipStrokeColor="@color/hoop_orange"
+                app:chipStrokeWidth="1dp" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/steal_chip"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Stl"
+                android:textColor="@color/hoop_orange"
+                app:chipBackgroundColor="@color/hoop_yellow"
+                app:chipStrokeColor="@color/hoop_orange"
+                app:chipStrokeWidth="1dp" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/block_chip"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Blk"
+                android:textColor="@color/hoop_orange"
+                app:chipBackgroundColor="@color/hoop_yellow"
+                app:chipStrokeColor="@color/hoop_orange"
+                app:chipStrokeWidth="1dp" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/turnover_chip"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TO"
+                android:textColor="@color/hoop_orange"
+                app:chipBackgroundColor="@color/hoop_yellow"
+                app:chipStrokeColor="@color/hoop_orange"
+                app:chipStrokeWidth="1dp" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/foul_chip"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:text="Foul"
+                android:textColor="@color/hoop_orange"
+                app:chipBackgroundColor="@color/hoop_yellow"
+                app:chipStrokeColor="@color/hoop_orange"
+                app:chipStrokeWidth="1dp" />
+
+        </com.google.android.material.chip.ChipGroup>
+        <com.google.android.material.chip.Chip
+            android:id="@+id/launch_chip"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="@color/red_dot"
+            android:checkable="false"
+            android:text="Drag"
+            android:textColor="@color/red_dot_text"
+            app:chipEndPadding="5dp"
+            app:chipStartPadding="5dp"
+            app:chipStrokeColor="@color/red_dot_text"
+            app:chipStrokeWidth="3dp"
+            app:layout_constraintBottom_toBottomOf="@+id/free_throw_switch"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/free_throw_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="FreeThrow"
+            android:textColor="@color/button"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/basketball_court"
+            app:thumbTint="@color/button"
+            app:trackTint="@color/button_text" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/ft_chip_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/free_throw_switch"
+            app:layout_constraintStart_toStartOf="@+id/free_throw_switch"
+            tools:visibility="visible">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/ft_in_chip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="In"
+                android:textColor="@color/hoop_orange"
+                app:chipBackgroundColor="@color/hoop_yellow"
+                app:chipStrokeColor="@color/hoop_orange"
+                app:chipStrokeWidth="1dp" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/ft_out_chip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="miss"
+                android:textColor="@color/hoop_orange"
+                app:chipBackgroundColor="@color/hoop_yellow"
+                app:chipStrokeColor="@color/hoop_orange"
+                app:chipStrokeWidth="1dp" />
+        </com.google.android.material.chip.ChipGroup>
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/history_chip"
+            style="@style/Widget.MaterialComponents.Chip.Entry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="latest event"
+            android:textColor="@color/hoop_orange"
+            app:chipBackgroundColor="@color/hoop_yellow"
+            app:chipStrokeColor="@color/hoop_orange"
+            app:chipStrokeWidth="1dp"
+            app:closeIconVisible="false"
+            app:layout_constraintBottom_toBottomOf="@+id/pause_match_chip"
+            app:layout_constraintStart_toEndOf="@+id/pause_match_chip" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -3,9 +3,42 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable-v24/zone_elbow.xml" value="0.2791666666666667" />
+        <entry key="app/src/main/res/drawable/ball_icon.xml" value="0.27037037037037037" />
+        <entry key="app/src/main/res/drawable/bottom_sheet_dialog.xml" value="0.275" />
+        <entry key="app/src/main/res/drawable/button_selector.xml" value="0.4212962962962963" />
+        <entry key="app/src/main/res/drawable/test.xml" value="0.2635416666666667" />
+        <entry key="app/src/main/res/drawable/text_selector.xml" value="0.4212962962962963" />
+        <entry key="app/src/main/res/drawable/zone_baseline.xml" value="0.2791666666666667" />
+        <entry key="app/src/main/res/drawable/zone_corner.xml" value="0.2791666666666667" />
+        <entry key="app/src/main/res/drawable/zone_elbow.xml" value="0.2791666666666667" />
+        <entry key="app/src/main/res/drawable/zone_rim.xml" value="0.2791666666666667" />
+        <entry key="app/src/main/res/font/eczar.xml" value="0.3067708333333333" />
+        <entry key="app/src/main/res/font/montserrat.xml" value="0.3067708333333333" />
+        <entry key="app/src/main/res/layout/activity_login.xml" value="0.2984375" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.24114583333333334" />
-        <entry key="app/src/main/res/layout/home_fragment.xml" value="0.4375" />
-        <entry key="app/src/main/res/layout/match_fragment.xml" value="0.2484375" />
+        <entry key="app/src/main/res/layout/chart_fragment.xml" value="0.2484375" />
+        <entry key="app/src/main/res/layout/fragment_login.xml" value="0.2890625" />
+        <entry key="app/src/main/res/layout/home_card.xml" value="0.34739583333333335" />
+        <entry key="app/src/main/res/layout/home_card_detail.xml" value="0.3416666666666667" />
+        <entry key="app/src/main/res/layout/home_fragment.xml" value="0.3416666666666667" />
+        <entry key="app/src/main/res/layout/home_team_item.xml" value="0.3411458333333333" />
+        <entry key="app/src/main/res/layout/live_event_item.xml" value="0.2953125" />
+        <entry key="app/src/main/res/layout/live_fragment.xml" value="0.2625" />
+        <entry key="app/src/main/res/layout/live_message_item.xml" value="0.32864583333333336" />
+        <entry key="app/src/main/res/layout/login_fragment.xml" value="0.27760416666666665" />
+        <entry key="app/src/main/res/layout/manage_fragment.xml" value="0.33693693693693694" />
+        <entry key="app/src/main/res/layout/match_fragment.xml" value="0.3508771929824561" />
+        <entry key="app/src/main/res/layout/match_team_item.xml" value="0.3416666666666667" />
+        <entry key="app/src/main/res/layout/notify_layout.xml" value="0.36614583333333334" />
+        <entry key="app/src/main/res/layout/player_chip.xml" value="0.2734375" />
+        <entry key="app/src/main/res/layout/profile_fragment.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/tactic_fragment.xml" value="0.2635416666666667" />
+        <entry key="app/src/main/res/layout/team_fragment.xml" value="0.2635416666666667" />
+        <entry key="app/src/main/res/layout/team_item.xml" value="0.2625" />
+        <entry key="app/src/main/res/layout/team_start5_item.xml" value="0.3411458333333333" />
+        <entry key="app/src/main/res/menu/menu.xml" value="0.2625" />
+        <entry key="app/src/main/res/xml/player_chip.xml" value="0.2734375" />
       </map>
     </option>
   </component>

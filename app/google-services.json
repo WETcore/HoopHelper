@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "493047794948",
+    "project_id": "hoop-helper",
+    "storage_bucket": "hoop-helper.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:493047794948:android:be1fb66174ba8042291451",
+        "android_client_info": {
+          "package_name": "com.aqua.hoophelper"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "493047794948-6jiqr50gnq2l2rcnt8mei9jqrci7qaid.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCbTHyf1jFZVsmpX0u8raDYSb5bdNb0QJg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "493047794948-6jiqr50gnq2l2rcnt8mei9jqrci7qaid.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

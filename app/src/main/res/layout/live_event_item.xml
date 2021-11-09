@@ -1,0 +1,260 @@
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="event"
+            type="com.aqua.hoophelper.database.Event" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/live_message_card_b"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="16dp"
+            app:cardBackgroundColor="#FFFBE6"
+            app:cardCornerRadius="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:strokeColor="#356859"
+            app:strokeWidth="1dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/live_name_b"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_marginBottom="16dp"
+                    android:autoSizeTextType="uniform"
+                    android:fontFamily="@font/montserrat"
+                    android:gravity="center"
+                    android:text="name"
+                    android:textColor="#356859"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/imageView_b"
+                    app:layout_constraintStart_toStartOf="@+id/imageView_b"
+                    app:layout_constraintTop_toBottomOf="@+id/imageView_b"
+                    app:layout_constraintVertical_bias="1.0" />
+
+                <View
+                    android:id="@+id/view2_b"
+                    android:layout_width="1dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="@color/basil_green_dark"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/imageView_b"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/imageView_b"
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/live_reb_chip"
+                    app:layout_constraintDimensionRatio="w,1:1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:shapeAppearanceOverlay="@style/circleImage"
+                    app:srcCompat="@drawable/basketball" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/live_pts_chip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="PTS | 20"
+                    android:textColor="@color/basil_green_dark"
+                    app:chipBackgroundColor="@color/basil_bg"
+                    app:chipStrokeColor="@color/basil_green_dark"
+                    app:chipStrokeWidth="1dp"
+                    app:layout_constraintStart_toEndOf="@+id/view2_b"
+                    app:layout_constraintTop_toTopOf="@+id/view2_b" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/live_reb_chip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="REB | 20"
+                    android:textColor="@color/basil_green_dark"
+                    app:chipBackgroundColor="@color/basil_bg"
+                    app:chipStrokeColor="@color/basil_green_dark"
+                    app:chipStrokeWidth="1dp"
+                    app:layout_constraintStart_toStartOf="@+id/live_pts_chip"
+                    app:layout_constraintTop_toBottomOf="@+id/live_pts_chip" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/live_ast_chip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="AST | 20"
+                    android:textColor="@color/basil_green_dark"
+                    app:chipBackgroundColor="@color/basil_bg"
+                    app:chipStrokeColor="@color/basil_green_dark"
+                    app:chipStrokeWidth="1dp"
+                    app:layout_constraintStart_toStartOf="@+id/live_reb_chip"
+                    app:layout_constraintTop_toBottomOf="@+id/live_reb_chip" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/live_stl_chip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="32dp"
+                    android:text="STL | 20"
+                    android:textColor="@color/basil_green_dark"
+                    app:chipBackgroundColor="@color/basil_bg"
+                    app:chipStrokeColor="@color/basil_green_dark"
+                    app:chipStrokeWidth="1dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/live_blk_chip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="BLK | 20"
+                    android:textColor="@color/basil_green_dark"
+                    app:chipBackgroundColor="@color/basil_bg"
+                    app:chipStrokeColor="@color/basil_green_dark"
+                    app:chipStrokeWidth="1dp"
+                    app:layout_constraintStart_toStartOf="@+id/live_stl_chip"
+                    app:layout_constraintTop_toBottomOf="@+id/live_stl_chip" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/live_message_card"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="16dp"
+            app:cardBackgroundColor="#FFFBE6"
+            app:cardCornerRadius="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:strokeColor="#356859"
+            app:strokeWidth="1dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/live_time_chip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text="Time"
+                    android:textColor="@color/basil_green_dark"
+                    app:chipBackgroundColor="@color/basil_bg"
+                    app:chipStrokeColor="@color/basil_green_dark"
+                    app:chipStrokeWidth="1dp"
+                    app:layout_constraintStart_toEndOf="@+id/view2"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/live_zone_chip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Zone"
+                    android:textColor="@color/basil_green_dark"
+                    app:chipBackgroundColor="@color/basil_bg"
+                    app:chipStrokeColor="@color/basil_green_dark"
+                    app:chipStrokeWidth="1dp"
+                    app:layout_constraintStart_toStartOf="@+id/live_time_chip"
+                    app:layout_constraintTop_toBottomOf="@+id/live_time_chip" />
+
+                <TextView
+                    android:id="@+id/live_event_type_text"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:fontFamily="@font/montserrat"
+                    android:text="Type"
+                    android:textColor="#356859"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/view2"
+                    app:layout_constraintTop_toBottomOf="@+id/view3" />
+
+                <TextView
+                    android:id="@+id/live_name"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_marginBottom="16dp"
+                    android:autoSizeTextType="uniform"
+                    android:fontFamily="@font/montserrat"
+                    android:gravity="center"
+                    android:text="name"
+                    android:textColor="#356859"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/imageView"
+                    app:layout_constraintStart_toStartOf="@+id/imageView"
+                    app:layout_constraintTop_toBottomOf="@+id/imageView"
+                    app:layout_constraintVertical_bias="1.0" />
+
+                <View
+                    android:id="@+id/view2"
+                    android:layout_width="1dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="@color/basil_green_dark"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/imageView"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:id="@+id/view3"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@color/basil_green_dark"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/live_event_type_text"
+                    app:layout_constraintTop_toBottomOf="@+id/live_zone_chip" />
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/live_zone_chip"
+                    app:layout_constraintDimensionRatio="h,1:1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:shapeAppearanceOverlay="@style/circleImage"
+                    app:srcCompat="@drawable/basketball" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

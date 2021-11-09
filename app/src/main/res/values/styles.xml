@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="fab_style1" parent="">
+        <item name="cornerFamilyBottomRight">rounded</item>
+        <item name="cornerSizeBottomRight">50dp</item>
+        <item name="cornerFamilyBottomLeft">rounded</item>
+        <item name="cornerSizeBottomLeft">50dp</item>
+    </style>
+
+    <style name="fab_style2" parent="">
+        <item name="cornerFamilyBottomRight">cut</item>
+        <item name="cornerSizeBottomRight">50dp</item>
+    </style>
+
+    <style name="fab_style3" parent="">
+        <item name="cornerFamilyBottomLeft">cut</item>
+        <item name="cornerSizeBottomLeft">50dp</item>
+    </style>
+
+    <style name="fab_style4" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="fab_style5" parent="">
+        <item name="cornerFamilyTopLeft">rounded</item>
+        <item name="cornerSizeTopLeft">50dp</item>
+        <item name="cornerFamilyBottomLeft">rounded</item>
+        <item name="cornerSizeBottomLeft">50dp</item>
+    </style>
+
+    <style name="fab_style6" parent="">
+        <item name="cornerFamilyTopRight">rounded</item>
+        <item name="cornerSizeTopRight">50dp</item>
+        <item name="cornerFamilyBottomRight">rounded</item>
+        <item name="cornerSizeBottomRight">50dp</item>
+    </style>
+
+<!--  for textInputLayout  -->
+    <style name="changeBackgroundColor"  parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu">
+        <item name="colorSurface">@color/hoop_background</item>
+    </style>
+
+    <style name="changeBackgroundColorForMatch"  parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu">
+        <item name="colorSurface">@color/hoop_yellow</item>
+    </style>
+
+<!--  for bottomSheetDialog  -->
+    <style name="MyBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/MYBottomSheetStyle</item>
+    </style>
+
+    <style name="MYBottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@color/transparent</item>
+    </style>
+
+    <style name="text_title">
+        <item name="android:fontFamily">@font/montserrat</item>
+        <item name="android:gravity">start</item>
+        <item name="android:textColor">@color/basil_green_dark</item>
+        <item name="android:textSize">36sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="spinner">
+        <item name="android:textColorHint">@color/spinner</item>
+        <item name="boxStrokeColor">@color/spinner</item>
+    </style>
+    <style name="editText">
+        <item name="android:textColor">@color/basil_green_dark</item>
+        <item name="android:fontFamily">@font/montserrat</item>
+    </style>
+
+    <style name="circleImage" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+</resources>
