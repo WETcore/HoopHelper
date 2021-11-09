@@ -21,7 +21,7 @@ data class Player(
     var name: String = "",
     var teamId: String = "",
     var email: String = "",
-    var starting5: Boolean = false,
+    var starting5: MutableList<Boolean> = mutableListOf(false, true, false, false, false),
     var captain: Boolean = false,
     var avatar: String = "",
 )

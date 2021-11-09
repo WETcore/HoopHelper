@@ -30,13 +30,7 @@ class ManageFragment : Fragment() {
         val binding: ManageFragmentBinding =
             DataBindingUtil.inflate(inflater, R.layout.manage_fragment, container,false)
 
-
-
-
-
-
         binding.apply {
-
             // lineUp
             viewModel.startPlayer.observe(viewLifecycleOwner) {
                 if (!it.isNullOrEmpty()) {
@@ -51,7 +45,6 @@ class ManageFragment : Fragment() {
 
             // sub
             viewModel.substitutionPlayer.observe(viewLifecycleOwner) {
-
                 viewModel.subNum = mutableListOf<String>()
                 it.forEach { player ->
                     viewModel.subNum.add(player.number)
@@ -68,11 +61,8 @@ class ManageFragment : Fragment() {
             }
 
             start5PgText.setOnItemClickListener { parent, view, position, id ->
-
                 viewModel.switchLineUp(position, 0)
-
                 Log.d("lineup","${viewModel.startPlayer.value}")
-
             }
             start5SgText.setOnItemClickListener { parent, view, position, id ->
                 viewModel.switchLineUp(position, 1)
@@ -100,10 +90,6 @@ class ManageFragment : Fragment() {
                 viewModel.setRule()
             }
         }
-
-
-
-
 
         return binding.root
     }

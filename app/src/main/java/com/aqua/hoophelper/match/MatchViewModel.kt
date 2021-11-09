@@ -372,28 +372,29 @@ class MatchViewModel : ViewModel() {
 
     fun setRoster() {
         coroutineScope.launch {
-            val starPlayerList = mutableListOf<Player>()
+            val startPlayerList = mutableListOf<Player>()
             val subPlayerList = mutableListOf<Player>()
             _roster.value = HoopRemoteDataSource.getMatchMembers()
             Log.d("roster", "${_roster.value}")
             val lineUp = _roster.value!!
 
             lineUp.filter {
-                !it.starting5
+                !it.starting5.contains(true)
             }.forEachIndexed { index, player ->
                 _substitutionPlayer.value!!.add(player)
                 subPlayerList.add(player)
             }
 
             lineUp.filter {
-                it.starting5
+                it.starting5.contains(true)
             }.forEachIndexed { index, player ->
-                starPlayerList.add(player)
+                startPlayerList.add(player)
             }
-            _startPlayer.value = starPlayerList
+            startPlayerList.sortBy { it.starting5.indexOf(true) }
+            _startPlayer.value = startPlayerList
             _substitutionPlayer.value = subPlayerList
-            Log.d("subPlayer2", "${_startPlayer.value}")
-            Log.d("subPlayer3", "${_substitutionPlayer.value}")
+            Log.d("subPlayer2", "${startPlayerList}")
+            Log.d("subPlayer3", "${subPlayerList}")
         }
     }
 
