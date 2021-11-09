@@ -18,7 +18,7 @@ import com.aqua.hoophelper.match.DetailDataType
 class HomeVPagerAdapter(
     private val list: List<String>,
     private val context: Context,
-    private val viewModel: HomeViewModel): PagerAdapter() {
+    private val viewModel: HomeViewModel?): PagerAdapter() {
 
     override fun getCount(): Int {
         return list.size
@@ -67,15 +67,17 @@ class HomeVPagerAdapter(
             }
             else -> DataType.TURNOVER
         }
-        leaderName.text = viewModel.getLeaderMainData(mainDataType).first // TODO
-        leaderNameB.text = viewModel.getLeaderMainData(mainDataType).first
-        statMain.text = viewModel.getLeaderMainData(mainDataType).second
+        if (viewModel != null) {
+            leaderName.text = viewModel.getLeaderMainData(mainDataType).first // TODO
+            leaderNameB.text = viewModel.getLeaderMainData(mainDataType).first
+            statMain.text = viewModel.getLeaderMainData(mainDataType).second
 
-        detailPts.text = viewModel.getLeaderDetailData(DetailDataType.PTS, mainDataType)
-        detailReb.text = viewModel.getLeaderDetailData(DetailDataType.REB, mainDataType)
-        detailAst.text = viewModel.getLeaderDetailData(DetailDataType.AST, mainDataType)
-        detailStl.text = viewModel.getLeaderDetailData(DetailDataType.STL, mainDataType)
-        detailBlk.text = viewModel.getLeaderDetailData(DetailDataType.BLK, mainDataType)
+            detailPts.text = viewModel.getLeaderDetailData(DetailDataType.PTS, mainDataType)
+            detailReb.text = viewModel.getLeaderDetailData(DetailDataType.REB, mainDataType)
+            detailAst.text = viewModel.getLeaderDetailData(DetailDataType.AST, mainDataType)
+            detailStl.text = viewModel.getLeaderDetailData(DetailDataType.STL, mainDataType)
+            detailBlk.text = viewModel.getLeaderDetailData(DetailDataType.BLK, mainDataType)
+        }
 
         //handle card click
 

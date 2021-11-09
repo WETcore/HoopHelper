@@ -82,7 +82,6 @@ class ManageViewModel : ViewModel() {
 
         val bufferLineupList = mutableListOf(false, false, false, false, false)
 
-
         db.collection("Players")
             .get().addOnCompleteListener {
                 it.result.documents.apply {
@@ -91,7 +90,7 @@ class ManageViewModel : ViewModel() {
                     bufferLineupList[pos] = false
                     first { it["id"] == startPlayer.id }.reference.update("starting5", bufferLineupList)
 
-//                    setRoster()
+                    setRoster()
                 }
             }
     }

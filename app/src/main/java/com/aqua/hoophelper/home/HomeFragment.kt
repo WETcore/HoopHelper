@@ -55,13 +55,20 @@ class HomeFragment : Fragment() {
         viewModel.teamStat.observe(viewLifecycleOwner) {
             Log.d("redo2","Hi ${it}")
 
-            val leaderTypes = listOf<String>("Score", "Rebound", "Assist", "Steal", "Block")
+            val leaderTypes = listOf("Score", "Rebound", "Assist", "Steal", "Block")
             if (it.size >= 5) {
                 val adapter = HomeVPagerAdapter(leaderTypes, requireContext(), viewModel)
-
                 binding.homeViewpager.apply {
                     this.offscreenPageLimit = 4
-                    this.adapter?.notifyDataSetChanged()
+//                    this.adapter?.notifyDataSetChanged()
+                    this.adapter = adapter
+                    setPadding(190, 100, 100, 150)
+                }
+            } else {
+                val adapter = HomeVPagerAdapter(leaderTypes, requireContext(), null)
+                binding.homeViewpager.apply {
+                    this.offscreenPageLimit = 4
+//                    this.adapter?.notifyDataSetChanged()
                     this.adapter = adapter
                     setPadding(190, 100, 100, 150)
                 }
