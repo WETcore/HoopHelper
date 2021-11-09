@@ -38,7 +38,7 @@ class CheckService: LifecycleService() {
             player.number = remoteInput.getCharSequence("numKey").toString()
         }
 
-        if (player.id.length > 5) {
+        if (player.teamId.length > 5) {
             Log.d("service1","Hi2 ${player.id}")
             FirebaseFirestore.getInstance()
                 .collection("Invitations")
@@ -50,6 +50,15 @@ class CheckService: LifecycleService() {
                         .add(player)
                     it.result.documents.first().reference.delete()
                     Log.d("service1","Hi2----")
+                    stopSelf()
+                }
+        } else if (player.id.length > 5) {
+            Log.d("service1","Hi3----")
+            FirebaseFirestore.getInstance()
+                .collection("Invitations")
+                .whereEqualTo("id", player.id)
+                .get().addOnCompleteListener {
+                    it.result.documents.first().reference.delete()
                     stopSelf()
                 }
         }

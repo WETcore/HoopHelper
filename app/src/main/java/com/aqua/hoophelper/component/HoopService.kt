@@ -39,9 +39,7 @@ class HoopService: LifecycleService() {
                             0,
                             intent1,
                             PendingIntent.FLAG_CANCEL_CURRENT)
-
                 Log.d("service1","Hi1 ${intent1.getStringExtra("inviteId")}")
-
                 val action1 = Notification.Action.Builder(R.drawable.ball_icon, "ACCEPT",serviceActionPendingIntent1)
                     .addRemoteInput(
                         RemoteInput.Builder("numKey")
@@ -50,6 +48,16 @@ class HoopService: LifecycleService() {
                     )
                     .build()
 
+                val intent2 = Intent(this, CheckService::class.java)
+                intent2.putExtra("inviteId",it.first().id)
+                val serviceActionPendingIntent2 =
+                    PendingIntent
+                        .getService(this,
+                            0,
+                            intent2,
+                            PendingIntent.FLAG_CANCEL_CURRENT)
+                val action2 = Notification.Action.Builder(R.drawable.ball_icon, "CANCEL",serviceActionPendingIntent2).build()
+
                 val channel =
                     NotificationChannel("1", "Invite", NotificationManager.IMPORTANCE_HIGH)
                 val notification = Notification.Builder(this, "1")
@@ -57,6 +65,7 @@ class HoopService: LifecycleService() {
                     .setContentText("Invitation")
                     .setSmallIcon(R.drawable.ball_icon)
                     .addAction(action1)
+                    .addAction(action2)
 //                    .setCustomContentView(RemoteViews(this.packageName, R.layout.notify_layout))
                     .setAutoCancel(true)
                     .build()
