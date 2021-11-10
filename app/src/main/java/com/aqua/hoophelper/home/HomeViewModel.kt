@@ -41,7 +41,9 @@ class HomeViewModel : ViewModel() {
     // the Coroutine runs using the Main (UI) dispatcher
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-
+    init {
+        getTeamList()
+    }
 
     fun getTeamList(): List<String> {
         coroutineScope.launch {

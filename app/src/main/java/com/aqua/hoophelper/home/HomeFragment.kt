@@ -41,9 +41,6 @@ class HomeFragment : Fragment() {
         val binding: HomeFragmentBinding =
             DataBindingUtil.inflate(inflater, R.layout.home_fragment, container,false)
 
-        // spinner
-        viewModel.getTeamList()
-
         viewModel.teams.observe(viewLifecycleOwner) {
             val teamAdapter =
                 ArrayAdapter(requireContext(), R.layout.home_team_item, viewModel.teamNameList)

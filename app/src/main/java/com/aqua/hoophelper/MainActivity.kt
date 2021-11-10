@@ -2,23 +2,31 @@ package com.aqua.hoophelper
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.KeyEvent
 import android.view.View
+import android.widget.Toast
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
+import androidx.navigation.ui.onNavDestinationSelected
 import com.aqua.hoophelper.database.Match
 import com.aqua.hoophelper.databinding.ActivityMainBinding
 import com.aqua.hoophelper.component.HoopService
 import com.aqua.hoophelper.component.RestartBroadcastReceiver
+import com.github.clans.fab.FloatingActionButton
+import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.bottomappbar.BottomAppBar
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 
 
 class MainActivity : AppCompatActivity() {
-
-    private lateinit var auth: FirebaseAuth
 
     private val viewModel: MainActivityViewModel by lazy {
         ViewModelProvider(this).get(MainActivityViewModel::class.java)
@@ -35,19 +43,6 @@ class MainActivity : AppCompatActivity() {
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // nav host
-        val navHostFragment = findNavController(R.id.nav_host)
-        NavigationUI.setupWithNavController(binding.bottomBar,navHostFragment)
-        binding.bottomBar.menu.getItem(2).isCheckable = false
-
-        // FAB nav to match
-        binding.fab.setOnClickListener {
-            binding.toolbar.visibility = View.GONE
-            binding.appBar.behavior.slideDown(binding.appBar)
-            viewModel.setMatchInfo()
-            navHostFragment.navigate(NavigationDirections.navToMatch(viewModel.match.matchId))
-        }
-
         // badge
         HoopInfo.spinnerSelectedTeamId.observe(this) {
             viewModel.showBadge(it)
@@ -56,24 +51,85 @@ class MainActivity : AppCompatActivity() {
             binding.bottomBar.getOrCreateBadge(R.id.liveFragment).isVisible = it
         }
 
-        navHostFragment.addOnDestinationChangedListener { _, destination, _ ->
-            when(destination.id) {
+        // nav host
+        val navHostFragment = findNavController(R.id.nav_host)
+
+        // FAB nav to match
+        binding.fab.setOnClickListener {
+            when {
+                User.teamId.length <= 5 -> {
+                    Snackbar.make(binding.root, "No team no game~", Snackbar.LENGTH_SHORT)
+                        .setAction("create team") {
+                            binding.bottomBar.menu.getItem(4).isChecked = true
+                            navHostFragment.navigate(NavigationDirections.navToProfile())
+                        }.apply {
+                            setTextColor(Color.parseColor("#FD5523"))
+                            setActionTextColor(Color.parseColor("#356859"))
+                            setBackgroundTint(Color.parseColor("#FFFBE6"))
+                        }.show()
+                }
+                User.teamMembers.size <= 5 -> {
+                    Snackbar.make(binding.root, "At least 5 players", Snackbar.LENGTH_SHORT)
+                        .setAction("assemble") {
+                            binding.bottomBar.menu.getItem(4).isChecked = true
+                            navHostFragment.navigate(NavigationDirections.navToProfile())
+                        }.apply {
+                            setTextColor(Color.parseColor("#FD5523"))
+                            setActionTextColor(Color.parseColor("#356859"))
+                            setBackgroundTint(Color.parseColor("#FFFBE6"))
+                        }.show()
+                }
+                else -> {
+                    binding.appBar.behavior.slideDown(binding.appBar)
+                    viewModel.setMatchInfo()
+                    binding.bottomBar.menu.getItem(2).isChecked = true
+                    navHostFragment.navigate(NavigationDirections.navToMatch(viewModel.match.matchId))
+                }
+            }
+        }
+
+        binding.bottomBar.setOnItemSelectedListener {
+            when(it.itemId) {
                 R.id.homeFragment -> {
-                    binding.toolbar.visibility = View.GONE
+                    binding.fab.isClickable = true
                     binding.appBar.behavior.slideUp(binding.appBar)
+                    navHostFragment.navigate(NavigationDirections.navToHome())
+                    true
                 }
                 R.id.teamFragment -> {
-                    binding.toolbar.visibility = View.GONE
-                    binding.appBar.behavior.slideUp(binding.appBar)
+                    if (User.teamId.length <= 5) {
+                        binding.fab.isClickable = true
+                        Snackbar.make(binding.root, "No team no game~", Snackbar.LENGTH_SHORT)
+                            .setAction("create team") {
+                                binding.bottomBar.menu.getItem(4).isChecked = true
+                                navHostFragment.navigate(NavigationDirections.navToProfile())
+                            }.apply {
+                                setTextColor(Color.parseColor("#FD5523"))
+                                setActionTextColor(Color.parseColor("#356859"))
+                                setBackgroundTint(Color.parseColor("#FFFBE6"))
+                            }.show()
+                        false
+                    }
+                    else {
+                        binding.fab.isClickable = true
+                        binding.appBar.behavior.slideUp(binding.appBar)
+                        navHostFragment.navigate(NavigationDirections.navToTeam())
+                        true
+                    }
                 }
-                R.id.liveFragment -> {//TODO ban fab
-                    binding.toolbar.visibility = View.GONE
+                R.id.liveFragment -> {
+                    binding.fab.isClickable = false
                     binding.appBar.behavior.slideUp(binding.appBar)
+                    navHostFragment.navigate(NavigationDirections.navToLive())
+                    true
                 }
                 R.id.profileFragment -> {
-                    binding.toolbar.visibility = View.GONE
+                    binding.fab.isClickable = true
                     binding.appBar.behavior.slideUp(binding.appBar)
+                    navHostFragment.navigate(NavigationDirections.navToProfile())
+                    true
                 }
+                else -> false
             }
         }
     }
@@ -87,4 +143,13 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        findViewById<View>(R.id.fab).isClickable = true
+        findViewById<BottomAppBar>(R.id.app_bar).let {
+            it.behavior.slideUp(it)
+        }
+        findViewById<BottomNavigationView>(R.id.bottom_bar).menu.getItem(0).isChecked = true
+        return super.onKeyDown(keyCode, event)
+    }
 }

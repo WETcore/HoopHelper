@@ -108,7 +108,7 @@ class LoginActivity : AppCompatActivity() {
 object User {
     var account: FirebaseUser? = null
     var teamId = ""
-    var teamMembers = MutableLiveData(listOf<Player>())
+    var teamMembers = listOf<Player>()
     var isCaptain = false
     var id = ""
 }

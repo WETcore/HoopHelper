@@ -78,7 +78,7 @@ object HoopRemoteDataSource: HoopRepository {
             .get()
             .addOnCompleteListener { value ->
                 val result = value.result?.toObjects(Player::class.java) ?: mutableListOf()
-                User.teamMembers.value = result
+                User.teamMembers = result
 //                Log.d("roster","${User.teamMembers.value}")
                 conti.resume(result)
             }
