@@ -105,22 +105,6 @@ class MatchFragment : Fragment() {
             binding.gameClockSec.text = viewModel.gameClockSec.value.toString()
         }
 
-        // set exit match
-        binding.exitMatchButton.setOnClickListener {
-//            viewModel.shotClockTimer.cancel()
-//            viewModel.gameClockSecTimer.cancel()
-            viewModel.db // TODO move to model, auto close game need same fun
-                .collection("Matches")
-                .whereEqualTo("matchId", args.matchId)
-                .get()
-                .addOnSuccessListener {
-                    it.forEach {
-                        it.reference.update("gaming",false)
-                    }
-                }
-            findNavController().navigate(NavigationDirections.navToHome())
-        }
-
         // select player
         binding.playerChipGroup.setOnCheckedChangeListener { group, checkedId ->
             when(checkedId) {
@@ -327,7 +311,5 @@ class MatchFragment : Fragment() {
 
         return binding.root
     }
-
-
 
 }

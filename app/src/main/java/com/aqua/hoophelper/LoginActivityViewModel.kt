@@ -26,6 +26,7 @@ class LoginActivityViewModel: ViewModel() {
     fun getUserInfo() {
         coroutineScope.launch {
             HoopRemoteDataSource.getUserInfo()
+            HoopRemoteDataSource.getMatchMembers()
         }
     }
 

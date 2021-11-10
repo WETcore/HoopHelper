@@ -84,14 +84,19 @@ class ProfileViewModel : ViewModel() {
     }
 
     var releasePos = 0
-    fun removePlayer(spinnerPos: Int) {
+    fun removePlayer(spinnerPos: Int): Boolean {
         val buffer = roster.value!![spinnerPos]
-        db.collection("Players")
-            .whereEqualTo("id", buffer.id)
-            .get().addOnSuccessListener {
-                it.documents.first().reference.delete()
-            }
-        setRoster()
+        return if (buffer.number != userInfo.value?.number) {
+            db.collection("Players")
+                .whereEqualTo("id", buffer.id)
+                .get().addOnSuccessListener {
+                    it.documents.first().reference.delete()
+                }
+            setRoster()
+            false
+        } else {
+          true
+        }
     }
 
     fun sendInvitation(mail: String, name: String) {

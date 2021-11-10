@@ -3,27 +3,18 @@ package com.aqua.hoophelper
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.KeyEvent
 import android.view.View
-import android.widget.Toast
-import androidx.fragment.app.FragmentManager
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
-import androidx.navigation.ui.NavigationUI
-import androidx.navigation.ui.onNavDestinationSelected
-import com.aqua.hoophelper.database.Match
-import com.aqua.hoophelper.databinding.ActivityMainBinding
 import com.aqua.hoophelper.component.HoopService
 import com.aqua.hoophelper.component.RestartBroadcastReceiver
-import com.github.clans.fab.FloatingActionButton
-import com.google.android.material.appbar.AppBarLayout
+import com.aqua.hoophelper.databinding.ActivityMainBinding
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.FirebaseAuth
 
 
 class MainActivity : AppCompatActivity() {
@@ -82,6 +73,7 @@ class MainActivity : AppCompatActivity() {
                 else -> {
                     binding.appBar.behavior.slideDown(binding.appBar)
                     viewModel.setMatchInfo()
+                    binding.fab.isClickable = false
                     binding.bottomBar.menu.getItem(2).isChecked = true
                     navHostFragment.navigate(NavigationDirections.navToMatch(viewModel.match.matchId))
                 }
@@ -148,6 +140,17 @@ class MainActivity : AppCompatActivity() {
         findViewById<View>(R.id.fab).isClickable = true
         findViewById<BottomAppBar>(R.id.app_bar).let {
             it.behavior.slideUp(it)
+        }
+        if (findViewById<BottomNavigationView>(R.id.bottom_bar).menu.getItem(2).isChecked) {
+            viewModel.db // TODO move to model, auto close game need same fun
+                .collection("Matches")
+                .whereEqualTo("matchId", viewModel.match.matchId)
+                .get()
+                .addOnSuccessListener {
+                    it.forEach {
+                        it.reference.update("gaming",false)
+                    }
+                }
         }
         findViewById<BottomNavigationView>(R.id.bottom_bar).menu.getItem(0).isChecked = true
         return super.onKeyDown(keyCode, event)

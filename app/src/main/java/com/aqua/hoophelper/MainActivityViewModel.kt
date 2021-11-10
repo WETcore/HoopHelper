@@ -55,7 +55,7 @@ class MainActivityViewModel: ViewModel() {
                     it.value = if (matches.isNullOrEmpty()) {
                         false
                     } else {
-                        matches.lastOrNull{ it.teamId == teamId }?.gaming == true // TODO filter spinner teamId
+                        matches.lastOrNull{ it.teamId == teamId }?.gaming == true
                     }
                     Log.d("badge2","${it.value} $teamId")
                 }
