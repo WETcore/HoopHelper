@@ -5,7 +5,7 @@ import android.net.Uri
 data class Team(
     var id: String = "",
     var name: String = "",
-    var jerseyNumber: String = "",
+    var jerseyNumbers: MutableList<String> = mutableListOf(),
 )
 
 data class Invitation(
@@ -13,6 +13,7 @@ data class Invitation(
     var teamId: String = "",
     var inviteeMail: String = "",
     var playerName: String = "",
+    var existingNumbers: List<String> = listOf(),
     )
 
 data class Player(
@@ -21,7 +22,7 @@ data class Player(
     var name: String = "",
     var teamId: String = "",
     var email: String = "",
-    var starting5: MutableList<Boolean> = mutableListOf(false, true, false, false, false),
+    var starting5: MutableList<Boolean> = mutableListOf(false, false, false, false, false),
     var captain: Boolean = false,
     var avatar: String = "",
 )

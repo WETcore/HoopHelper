@@ -15,7 +15,9 @@ import com.aqua.hoophelper.database.Player
 import com.aqua.hoophelper.database.Team
 import com.aqua.hoophelper.database.remote.HoopRemoteDataSource
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -56,8 +58,9 @@ class ProfileViewModel : ViewModel() {
     // the Coroutine runs using the Main (UI) dispatcher
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-    fun sendTeamInfo(teamName: String) {
+    fun sendTeamInfo(teamName: String, playerNum: String) {
         team.name = teamName
+        team.jerseyNumbers = mutableListOf(playerNum)
         team.id = db.collection("Teams").document().id
         db.collection("Teams").add(team)
     }
@@ -69,6 +72,7 @@ class ProfileViewModel : ViewModel() {
         player.number = number
         player.name = name
         player.captain = true
+        player.avatar = Firebase.auth.currentUser?.photoUrl.toString()
         db.collection("Players").add(player)
     }
 
@@ -81,9 +85,7 @@ class ProfileViewModel : ViewModel() {
 
     var releasePos = 0
     fun removePlayer(spinnerPos: Int) {
-
-        var buffer = roster.value!![spinnerPos]
-
+        val buffer = roster.value!![spinnerPos]
         db.collection("Players")
             .whereEqualTo("id", buffer.id)
             .get().addOnSuccessListener {
@@ -92,9 +94,17 @@ class ProfileViewModel : ViewModel() {
         setRoster()
     }
 
-    fun sendInvitation() {
-        db.collection("Invitations")
-            .add(invitation)
+    fun sendInvitation(mail: String, name: String) {
+
+        coroutineScope.launch {
+            invitation.id = db.collection("Invitations").document().id
+            invitation.teamId = User.teamId
+            invitation.inviteeMail = mail// + binding.mailLayout.suffixText
+            invitation.playerName = name
+            invitation.existingNumbers = HoopRemoteDataSource.getTeamInfo().jerseyNumbers
+
+            db.collection("Invitations").add(invitation)
+        }
     }
 
     fun getUserInfo() {

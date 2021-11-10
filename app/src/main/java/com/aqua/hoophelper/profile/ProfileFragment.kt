@@ -109,7 +109,10 @@ class ProfileFragment : Fragment() {
                 binding.nicknameEdit.text?.length != 0 &&
                 binding.playerNumEdit.text?.length != 0
             ) {
-                viewModel.sendTeamInfo(binding.teamNameEdit.text.toString())
+                viewModel.sendTeamInfo(
+                    binding.teamNameEdit.text.toString(),
+                    binding.playerNumEdit.text.toString()
+                )
                 viewModel.sendCaptainInfo(
                     binding.playerNumEdit.text.toString(),
                     binding.nicknameEdit.text.toString()
@@ -148,13 +151,7 @@ class ProfileFragment : Fragment() {
             if (binding.mailEdit.text?.length != 0 &&
                 binding.inviteNameEdit.text?.length != 0
             ) {
-                viewModel.invitation.id = viewModel.db.collection("Invitations").document().id
-                viewModel.invitation.teamId = User.teamId
-                viewModel.invitation.inviteeMail =
-                    binding.mailEdit.text.toString()// + binding.mailLayout.suffixText
-                viewModel.invitation.playerName = binding.inviteNameEdit.text.toString()
-
-                viewModel.sendInvitation()
+                viewModel.sendInvitation(binding.mailEdit.text.toString(), binding.inviteNameEdit.text.toString())
             }
         }
 
