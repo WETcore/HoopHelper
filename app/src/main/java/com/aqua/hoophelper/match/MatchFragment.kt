@@ -135,7 +135,6 @@ class MatchFragment : Fragment() {
             binding.subPlayerText.setAdapter(teamAdapter)
         }
 
-
         binding.subPlayerText.setOnItemClickListener { parent, view, position, id ->
             var buffer = viewModel.startPlayer.value!![viewModel.selectPlayerPos]
             viewModel.getSubPlayer2Starting(position)
@@ -156,9 +155,7 @@ class MatchFragment : Fragment() {
             }
         }
 
-
         /// record data
-
         // 改變launch顯示文字
         viewModel.zone.observe(viewLifecycleOwner) {
             binding.launchChip.text = when(it) {
@@ -179,7 +176,6 @@ class MatchFragment : Fragment() {
                 else -> "O"//"Area"
             }
         }
-
 
         //開啟子選單
         binding.launchChip.setOnCheckedChangeListener { buttonView, isChecked ->
@@ -291,7 +287,6 @@ class MatchFragment : Fragment() {
             viewModel.setFreeThrowData(false, args.matchId)
             Log.d("record","${viewModel.event}")
         }
-
 
         // event history & cancel event
         viewModel.lastEvent.observe(viewLifecycleOwner) {
