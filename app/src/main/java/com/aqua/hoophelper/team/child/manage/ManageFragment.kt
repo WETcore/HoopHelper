@@ -13,6 +13,7 @@ import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import com.aqua.hoophelper.R
 import com.aqua.hoophelper.databinding.ManageFragmentBinding
+import com.aqua.hoophelper.team.child.tactic.Tactic
 
 class ManageFragment : Fragment() {
 

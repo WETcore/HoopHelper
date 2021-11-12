@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.aqua.hoophelper.R
+import com.aqua.hoophelper.team.child.tactic.Tactic
 
 class ChartFragment : Fragment() {
 

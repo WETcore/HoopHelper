@@ -40,8 +40,9 @@ class TacticFragment : Fragment() {
         }
 
         binding.switch1.setOnCheckedChangeListener { buttonView, isChecked ->
-            Tactic.vPagerSwipe.value = !isChecked
-            binding.switch1.text = Tactic.vPagerSwipe.value.toString()
+            Line.isCurl = isChecked
+//            Tactic.vPagerSwipe.value = !isChecked
+//            binding.switch1.text = Tactic.vPagerSwipe.value.toString()
         }
 
         return binding.root
