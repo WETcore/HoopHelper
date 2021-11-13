@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +13,7 @@ import androidx.navigation.findNavController
 import com.aqua.hoophelper.component.HoopService
 import com.aqua.hoophelper.component.RestartBroadcastReceiver
 import com.aqua.hoophelper.databinding.ActivityMainBinding
+import com.aqua.hoophelper.team.child.tactic.Tactic
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar

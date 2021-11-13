@@ -9,11 +9,10 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import com.aqua.hoophelper.R
-import java.util.logging.Handler
 import kotlin.math.PI
+import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.sin
-import kotlin.random.Random
 
 class TacticCanvas(context: Context, attrs: AttributeSet): View(context, attrs) {
 
@@ -23,6 +22,9 @@ class TacticCanvas(context: Context, attrs: AttributeSet): View(context, attrs) 
     private var paintEnd: Paint = Paint()
     private var bitmap: Bitmap
     private var mCanvas: Canvas
+
+    private var originX:Float = 0f
+    private var originY:Float = 0f
 
     private var startX:Float = 0f
     private var startY:Float = 0f
@@ -77,9 +79,11 @@ class TacticCanvas(context: Context, attrs: AttributeSet): View(context, attrs) 
                 mCanvas.drawCircle(event.x, event.y, 10f, paintStart)
                 path.reset()
                 path.moveTo(event.x, event.y)
+                originX = event.x
+                originY = event.y
                 startX = event.x
                 startY = event.y
-                Line.wave = 1f
+                Arrow.wave = 1f
             }
             MotionEvent.ACTION_MOVE -> {
                 getDashedLine()
@@ -88,8 +92,12 @@ class TacticCanvas(context: Context, attrs: AttributeSet): View(context, attrs) 
             }
             MotionEvent.ACTION_UP -> {
                 Tactic.vPagerSwipe.value = true
-                Log.d("dash","${Line.isDash}")
-                mCanvas.drawCircle(event.x, event.y, 10f, paintEnd)
+                if (Arrow.isScreen) {
+                    getScreenLine(event.x, event.y, Arrow.isScreen)
+                } else {
+//                    mCanvas.drawCircle(startX, startY, 10f, paintEnd)
+                    getScreenLine(event.x, event.y, Arrow.isScreen)
+                }
             }
         }
         invalidate()
@@ -98,12 +106,12 @@ class TacticCanvas(context: Context, attrs: AttributeSet): View(context, attrs) 
 
     private fun getSpline(stopX: Float, stopY: Float) {
 
-        if (Line.isCurl) {
+        if (Arrow.isCurl) {
             // wave freq.
-            Line.wave += 6f
+            Arrow.wave += 3f
             // add curl and set amplitude
-            val curlX = stopX + sin(Line.wave * PI / 18).toFloat() * 20f
-            val curlY = stopY + cos(Line.wave * PI / 18).toFloat() * 20f
+            val curlX = stopX + sin(Arrow.wave * PI / 18).toFloat() * 40f
+            val curlY = stopY + cos(Arrow.wave * PI / 18).toFloat() * 40f
             path.quadTo(startX, startY, curlX, curlY)
             mCanvas.drawPath(path, paint)
             startX = curlX
@@ -117,15 +125,63 @@ class TacticCanvas(context: Context, attrs: AttributeSet): View(context, attrs) 
     }
 
     private fun getDashedLine() {
-        if (Line.isDash) {
-            paint.pathEffect = DashPathEffect(floatArrayOf(10f, 10f), 0f)
+        if (Arrow.isDash) {
+            paint.pathEffect = DashPathEffect(floatArrayOf(40f, 20f), 0f)
         } else {
             paint.pathEffect = DashPathEffect(floatArrayOf(0f, 0f), 0f)
         }
     }
+
+    private fun getScreenLine(stopX: Float, stopY: Float, screen: Boolean) {
+        val dx = stopX - originX
+        val dy = -(stopY - originY)
+
+        if (screen) {
+            var crossX = 10f
+            var crossY = 10f
+            Log.d("cross", "${dy} ${dx}")
+
+            // quadrant
+            when {
+                (dx < 0f && abs(dy) <= 10f) || (dx > 0f && abs(dy) <= 10f) -> {
+                    Log.d("cross", "x")
+                    crossX = 0f
+                    crossY = 10f
+                }
+                (abs(dx) <= 10f && dy > 0f) || (abs(dx) <= 10f && dy < 0f) -> {
+                    Log.d("cross", "y")
+                    crossX = 10f
+                    crossY = 0f
+                }
+                (dx > 0f && dy > 0f) || (dx < 0f && dy < 0f) -> {
+                    Log.d("cross", "1 3")
+                    crossX = 10f
+                    crossY = 10f
+                }
+
+                (dx < 0f && dy > 0f) || (dx > 0f && dy < 0f) -> {
+                    Log.d("cross", "2 4")
+                    crossX = -10f
+                    crossY = 10f
+                }
+            }
+            mCanvas.drawLine(startX - crossX, startY - crossY, startX + crossX,startY + crossY, paintEnd)
+        } else {
+            var arrowX = 10f
+            var arrowY = 10f
+            Log.d("cross", "${dy} ${dx}")
+            mCanvas.drawLine(startX - arrowX, startY - arrowY, startX + arrowX,startY + arrowY, paintEnd)
+            mCanvas.drawLine(startX - arrowX, startY + arrowY, startX + arrowX,startY - arrowY, paintEnd)
+        }
+    }
+
+    fun clear() {
+        mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR)
+        mCanvas.drawColor(resources.getColor(R.color.basil_green_light))
+    }
 }
 
-object Line {
+object Arrow {
     var wave = 1f
     var isDash = false
     var isCurl = false
