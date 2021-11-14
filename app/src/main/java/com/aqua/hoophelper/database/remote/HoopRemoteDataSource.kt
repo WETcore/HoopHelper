@@ -95,7 +95,7 @@ object HoopRemoteDataSource: HoopRepository {
             }
     }
 
-    override suspend fun getTeamMembers(): List<Player> = suspendCoroutine { conti ->
+    override suspend fun getSelectedTeamMembers(): List<Player> = suspendCoroutine { conti ->
         FirebaseFirestore.getInstance()
             .collection("Players")
             .whereEqualTo("teamId", HoopInfo.spinnerSelectedTeamId.value!!)

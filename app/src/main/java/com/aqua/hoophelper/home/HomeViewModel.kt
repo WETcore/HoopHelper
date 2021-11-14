@@ -61,7 +61,7 @@ class HomeViewModel : ViewModel() {
     fun selectedTeam(pos: Int) {
         HoopInfo.spinnerSelectedTeamId.value = teams.value!![pos].id
         coroutineScope.launch {
-            _teamPlayers.value = HoopRemoteDataSource.getTeamMembers()
+            _teamPlayers.value = HoopRemoteDataSource.getSelectedTeamMembers()
             getTeamPlayersData(teamPlayers.value!!, teamPlayers.value!!.size)
         }
     }

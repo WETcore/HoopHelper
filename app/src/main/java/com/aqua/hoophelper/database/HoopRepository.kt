@@ -12,7 +12,7 @@ interface HoopRepository {
 
     suspend fun getTeams(): List<Team>
     suspend fun getUserInfo(): List<Player>
-    suspend fun getTeamMembers(): List<Player>
+    suspend fun getSelectedTeamMembers(): List<Player>
     suspend fun getMatchMembers(): List<Player>
     suspend fun getPlayerData(playerId: String): List<Event>
     suspend fun getRule(): Rule
