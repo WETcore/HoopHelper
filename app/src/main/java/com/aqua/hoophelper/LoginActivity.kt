@@ -1,9 +1,17 @@
 package com.aqua.hoophelper
 
+import android.animation.ObjectAnimator
 import android.content.Intent
+import android.graphics.Path
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.util.Log
+import android.view.View
+import android.view.animation.PathInterpolator
+import androidx.annotation.RequiresApi
+import androidx.core.animation.doOnEnd
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import com.aqua.hoophelper.database.Player
@@ -27,6 +35,7 @@ class LoginActivity : AppCompatActivity() {
         ViewModelProvider(this).get(LoginActivityViewModel::class.java)
     }
 
+    @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -43,10 +52,25 @@ class LoginActivity : AppCompatActivity() {
         // getting the value of gso inside the GoogleSignInClient
         val googleSignInClient = GoogleSignIn.getClient(this, gso)
 
-        binding.googleSignIn.setOnClickListener {
-            viewModel.signIn(googleSignInClient,this)
+        // animation & login
+        val displayMetrics = DisplayMetrics()
+        this@LoginActivity.display?.getRealMetrics(displayMetrics)
+        val width = displayMetrics.widthPixels.toFloat()
+        val height = displayMetrics.heightPixels.toFloat()
+        val path = Path()
+        path.moveTo(32f, height-32f)
+        binding.loginFab.setOnClickListener {
+            path.apply {
+                quadTo(width*0.25f, -1000f,width*0.5f - 120f,height* 0.5f - 60f)
+            }
+            val animator = ObjectAnimator.ofFloat(binding.loginFab, View.X, View.Y, path).apply {
+                duration = 1500
+                start()
+            }
+            animator.doOnEnd {
+                viewModel.signIn(googleSignInClient,this)
+            }
         }
-
     }
 
     override fun onStart() {

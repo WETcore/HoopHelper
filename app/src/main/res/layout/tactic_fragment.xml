@@ -83,54 +83,50 @@
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginBottom="120dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="w,1:1"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tactic"
             app:shapeAppearanceOverlay="@style/circleImage" />
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/player2_avatar"
             android:layout_width="0dp"
             android:layout_height="50dp"
-            android:layout_marginStart="76dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginStart="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/player1_avatar"
             app:layout_constraintDimensionRatio="w,1:1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tactic"
+            app:layout_constraintStart_toEndOf="@+id/player1_avatar"
             app:shapeAppearanceOverlay="@style/circleImage" />
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/player3_avatar"
             android:layout_width="0dp"
             android:layout_height="50dp"
-            android:layout_marginStart="148dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginStart="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/player2_avatar"
             app:layout_constraintDimensionRatio="w,1:1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tactic"
+            app:layout_constraintStart_toEndOf="@+id/player2_avatar"
             app:shapeAppearanceOverlay="@style/circleImage" />
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/player4_avatar"
             android:layout_width="0dp"
             android:layout_height="50dp"
-            android:layout_marginStart="212dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginStart="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/player3_avatar"
             app:layout_constraintDimensionRatio="w,1:1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tactic"
+            app:layout_constraintStart_toEndOf="@+id/player3_avatar"
             app:shapeAppearanceOverlay="@style/circleImage" />
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/player5_avatar"
             android:layout_width="0dp"
             android:layout_height="50dp"
-            android:layout_marginStart="276dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginStart="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/player4_avatar"
             app:layout_constraintDimensionRatio="w,1:1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tactic"
+            app:layout_constraintStart_toEndOf="@+id/player4_avatar"
             app:shapeAppearanceOverlay="@style/circleImage" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -139,11 +135,11 @@
             android:layout_height="30dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            app:fab_size="mini"
             android:background="@color/hoop_background"
             android:foreground="@drawable/ball_of_basketball"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tactic" />
+            app:fab_size="mini"
+            app:layout_constraintBottom_toBottomOf="@+id/player5_avatar"
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
