@@ -59,6 +59,11 @@ class LoginActivity : AppCompatActivity() {
         val height = displayMetrics.heightPixels.toFloat()
         val path = Path()
         path.moveTo(32f, height-32f)
+
+        binding.googleSignIn.setOnClickListener {
+//            viewModel.signIn(googleSignInClient,this)
+        }
+
         binding.loginFab.setOnClickListener {
             path.apply {
                 quadTo(width*0.25f, -1000f,width*0.5f - 120f,height* 0.5f - 60f)

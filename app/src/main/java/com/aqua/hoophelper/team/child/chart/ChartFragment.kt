@@ -1,7 +1,6 @@
 package com.aqua.hoophelper.team.child.chart
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,13 +10,13 @@ import androidx.lifecycle.ViewModelProvider
 import com.anychart.AnyChart
 import com.anychart.chart.common.dataentry.DataEntry
 import com.anychart.chart.common.dataentry.ValueDataEntry
-import com.anychart.data.Set
-import com.anychart.core.radar.series.Line
-import com.anychart.data.Mapping
 import com.anychart.enums.Align
-import com.anychart.enums.MarkerType
 import com.aqua.hoophelper.R
 import com.aqua.hoophelper.databinding.ChartFragmentBinding
+import com.anychart.enums.LegendLayout
+
+import android.annotation.SuppressLint
+import android.widget.ArrayAdapter
 
 
 class ChartFragment : Fragment() {
@@ -26,6 +25,7 @@ class ChartFragment : Fragment() {
         ViewModelProvider(this).get(ChartViewModel::class.java)
     }
 
+    @SuppressLint("ResourceType")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -34,61 +34,51 @@ class ChartFragment : Fragment() {
         val binding: ChartFragmentBinding =
             DataBindingUtil.inflate(inflater, R.layout.chart_fragment, container,false)
 
-        val radar = AnyChart.radar()
+        val pie = AnyChart.pie()
 
-        radar.yScale().minimum(0.0)
-        radar.yScale().minimumGap(0.0)
-        radar.yScale().ticks().interval(10.0)
-        radar.xAxis().labels().padding(1.0, 1.0, 1.0, 1.0)
+        /**
+         * pie
+         */
+        val dataP = mutableListOf<DataEntry>()
+        dataP.add(ValueDataEntry("Around Rim", 63))
+        dataP.add(ValueDataEntry("Left Elbow", 78))
+        dataP.add(ValueDataEntry("Mid Straight", 72))
+        dataP.add(ValueDataEntry("Right Elbow", 14))
+        dataP.add(ValueDataEntry("Left Baseline", 12))
+        dataP.add(ValueDataEntry("Left Wing", 63))
+        dataP.add(ValueDataEntry("Long Straight", 78))
+        dataP.add(ValueDataEntry("Right Wing", 72))
+        dataP.add(ValueDataEntry("Right Baseline", 14))
+        dataP.add(ValueDataEntry("Left Corner", 12))
+        dataP.add(ValueDataEntry("Left 3Points", 63))
+        dataP.add(ValueDataEntry("Top of Arc", 78))
+        dataP.add(ValueDataEntry("Right 3Points", 72))
+        dataP.add(ValueDataEntry("Right Corner", 14))
+        dataP.add(ValueDataEntry("FreeThrow Line", 200))
+        pie.data(dataP)
 
-        radar.legend()
+        pie.title("Hot Spot")
+
+        pie.labels().position("outside")
+
+        pie.legend()
+            .position("center-bottom")
+            .itemsLayout(LegendLayout.HORIZONTAL)
             .align(Align.CENTER)
-            .enabled(true)
 
-        val data: MutableList<DataEntry> = mutableListOf()
+        /////////////////////
 
-        val set = Set.instantiate()
+        pie.background().enabled(true)
+        pie.background().fill("#FFE9C2")
 
-        viewModel.events.observe(viewLifecycleOwner) {
-            Log.d("chart","1 ${it}")
-            data.add(CustomDataEntry("Score", viewModel.transData()?.filter { it.freeThrow == true }?.size, 19))
-            data.add(CustomDataEntry("Rebound", 7, 12))
-            data.add(CustomDataEntry("Assist", 14, 17))
-            data.add(CustomDataEntry("Steal", 13, 3))
-            data.add(CustomDataEntry("Block", 15, 6))
+        binding.chartPie.setChart(pie)
 
-            set.data(data)
-            val data1 = set.mapAs("{ x: 'x', value: 'value' }")
-            val data2 = set.mapAs("{ x: 'x', value: 'value2' }")
-
-            viewModel.roster.observe(viewLifecycleOwner) {
-                Log.d("chart","2 ${it}")
-                val shamanLine: Line = radar.line(data1)
-                shamanLine.name(it.first().name)
-                shamanLine.markers()
-                    .enabled(true)
-                    .type(MarkerType.SQUARE)
-                    .size(3.0)
-
-                val warriorLine: Line = radar.line(data2)
-                warriorLine.name(it[1].name)
-                warriorLine.markers()
-                    .enabled(true)
-                    .type(MarkerType.CIRCLE)
-                    .size(3.0)
-            }
+        val playerAdapter = ArrayAdapter(requireContext(), R.layout.home_team_item, viewModel.playerList)
+        binding.chartEdit.setAdapter(playerAdapter)
+        binding.chartEdit.setText(viewModel.playerList.first(), false)
+        binding.chartEdit.setOnItemClickListener { parent, view, position, id ->
         }
 
-        binding.chartRadar.setChart(radar)
-
         return binding.root
-    }
-
-}
-
-private class CustomDataEntry(x: String?, value: Number?, value2: Number?) :
-    ValueDataEntry(x, value) {
-    init {
-        setValue("value2", value2)
     }
 }

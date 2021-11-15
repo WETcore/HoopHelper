@@ -131,12 +131,12 @@ class MatchFragment : Fragment() {
             it.forEach { player ->
                 viewModel.subNum.add(player.number)
             }
-            var teamAdapter = ArrayAdapter(requireContext(), R.layout.match_team_item, viewModel.subNum)
+            val teamAdapter = ArrayAdapter(requireContext(), R.layout.match_team_item, viewModel.subNum)
             binding.subPlayerText.setAdapter(teamAdapter)
         }
 
         binding.subPlayerText.setOnItemClickListener { parent, view, position, id ->
-            var buffer = viewModel.startPlayer.value!![viewModel.selectPlayerPos]
+            val buffer = viewModel.startPlayer.value!![viewModel.selectPlayerPos]
             viewModel.getSubPlayer2Starting(position)
             viewModel.changeSubPlayer(buffer, position)
         }
