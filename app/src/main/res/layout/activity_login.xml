@@ -50,14 +50,5 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="UI 施工中"
-            app:layout_constraintEnd_toEndOf="@+id/textView7"
-            app:layout_constraintStart_toStartOf="@+id/textView7"
-            app:layout_constraintTop_toBottomOf="@+id/textView7" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
