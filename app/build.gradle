@@ -5,6 +5,7 @@ plugins {
     id 'kotlin-kapt'
     id 'androidx.navigation.safeargs.kotlin'
     id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
 }
 
 android {
@@ -138,7 +139,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging-directboot:22.0.0'
     implementation 'com.google.firebase:firebase-auth-ktx:21.0.1'
     implementation 'com.firebaseui:firebase-ui-auth:4.2.1'
-//    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.2.4'
+    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.2.4'
 
     //custom shape view
     implementation 'com.yxf:clippathlayout:1.0.4'

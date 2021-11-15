@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Button
 import androidx.core.view.children
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.Navigation
@@ -77,6 +78,12 @@ class HomeFragment : Fragment() {
                 }
             }
         }
+
+        // crashlitics
+        binding.crash.setOnClickListener {
+            throw RuntimeException("Test Crash") // Force a crash
+        }
+
         return binding.root
     }
 }
