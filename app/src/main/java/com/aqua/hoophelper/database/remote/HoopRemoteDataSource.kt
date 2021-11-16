@@ -172,4 +172,14 @@ object HoopRemoteDataSource: HoopRepository {
             }
     }
 
+    override suspend fun getTeamEvents(): List<Event> = suspendCoroutine { conti ->
+        FirebaseFirestore.getInstance()
+            .collection("Events")
+            .get()
+            .addOnCompleteListener {
+                val result = it.result.toObjects(Event::class.java)
+                conti.resume(result)
+            }
+    }
+
 }
