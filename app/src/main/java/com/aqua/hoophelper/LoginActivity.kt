@@ -61,7 +61,7 @@ class LoginActivity : AppCompatActivity() {
         path.moveTo(32f, height-32f)
 
         binding.googleSignIn.setOnClickListener {
-//            viewModel.signIn(googleSignInClient,this)
+            viewModel.signIn(googleSignInClient,this)
         }
 
         binding.loginFab.setOnClickListener {

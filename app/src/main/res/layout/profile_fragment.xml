@@ -11,6 +11,17 @@
         android:layout_height="match_parent"
         android:background="@color/hoop_background">
 
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottie_profile"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:lottie_loop="true"
+            app:lottie_autoPlay="true"
+            app:lottie_rawRes="@raw/loader_basketball"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/create_team_layout"
@@ -41,10 +52,10 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/team_name_edit"
+                    style="@style/editText"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:inputType="textPersonName"
-                    style="@style/editText"
                     android:textCursorDrawable="@color/hoop_red" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -66,10 +77,10 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/nickname_edit"
+                    style="@style/editText"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:inputType="textPersonName"
-                    style="@style/editText"
                     android:textCursorDrawable="@color/hoop_red" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -93,10 +104,10 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/player_num_edit"
+                    style="@style/editText"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:inputType="number"
-                    style="@style/editText"
                     android:textCursorDrawable="@color/hoop_red" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -136,8 +147,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="gone">
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 android:id="@+id/textView4"

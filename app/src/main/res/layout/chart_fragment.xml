@@ -11,6 +11,28 @@
     android:background="@color/hoop_background"
     tools:context=".team.child.chart.ChartFragment">
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottie_chart"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:lottie_loop="true"
+        app:lottie_autoPlay="true"
+        app:lottie_rawRes="@raw/loader_basketball"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/chart_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
     <com.github.mikephil.charting.charts.PieChart
         android:id="@+id/chart_pie"
         android:layout_width="0dp"
@@ -48,6 +70,6 @@
             android:inputType="none"
             android:textColor="@color/basil_green_dark" />
     </com.google.android.material.textfield.TextInputLayout>
-
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

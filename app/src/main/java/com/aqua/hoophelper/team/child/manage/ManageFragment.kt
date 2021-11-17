@@ -14,6 +14,7 @@ import androidx.databinding.DataBindingUtil
 import com.aqua.hoophelper.R
 import com.aqua.hoophelper.databinding.ManageFragmentBinding
 import com.aqua.hoophelper.team.child.tactic.Tactic
+import com.aqua.hoophelper.util.LoadApiStatus
 
 class ManageFragment : Fragment() {
 
@@ -30,6 +31,22 @@ class ManageFragment : Fragment() {
         // binding
         val binding: ManageFragmentBinding =
             DataBindingUtil.inflate(inflater, R.layout.manage_fragment, container,false)
+
+        viewModel.status.observe(viewLifecycleOwner) {
+            when(it) {
+                LoadApiStatus.LOADING -> {
+                    binding.lottieManage.visibility = View.VISIBLE
+                    binding.manageLayout.visibility = View.GONE
+                }
+                LoadApiStatus.DONE -> {
+                    binding.lottieManage.visibility = View.GONE
+                    binding.manageLayout.visibility = View.VISIBLE
+                }
+                LoadApiStatus.ERROR -> {
+
+                }
+            }
+        }
 
         binding.apply {
             // lineUp

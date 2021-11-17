@@ -1,8 +1,6 @@
 package com.aqua.hoophelper.profile
 
 import android.annotation.SuppressLint
-import android.app.AlertDialog
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,8 +14,7 @@ import com.aqua.hoophelper.MainActivityViewModel
 import com.aqua.hoophelper.R
 import com.aqua.hoophelper.User
 import com.aqua.hoophelper.databinding.ProfileFragmentBinding
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
+import com.aqua.hoophelper.util.LoadApiStatus
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 
@@ -43,27 +40,55 @@ class ProfileFragment : Fragment() {
         val binding: ProfileFragmentBinding =
             DataBindingUtil.inflate(inflater, R.layout.profile_fragment, container,false)
 
+
+
         when {
             User.isCaptain -> {
-                Log.d("vivi","Hi1")
-                binding.apply {
-                    createTeamLayout.visibility = View.GONE
-                    fanText.visibility = View.GONE
-                    viewModel.getUserInfo()
+                viewModel.getPlayerUserInfo()
+                binding.createTeamLayout.visibility = View.GONE
+                binding.fanText.visibility = View.GONE
+                viewModel.status.observe(viewLifecycleOwner) {
+                    when(it) {
+                        LoadApiStatus.LOADING -> {
+                            binding.lottieProfile.visibility = View.VISIBLE
+                            binding.manageRosterLayout.visibility = View.INVISIBLE
+                            binding.userInfoLayout.visibility = View.INVISIBLE
+                        }
+                        LoadApiStatus.DONE -> {
+                            binding.lottieProfile.visibility = View.INVISIBLE
+                            binding.manageRosterLayout.visibility = View.VISIBLE
+                            binding.userInfoLayout.visibility = View.VISIBLE
+                        }
+                        LoadApiStatus.ERROR -> {
+
+                        }
+                    }
                 }
             }
             User.teamId.length > 5 -> {
-                Log.d("vivi","Hi2")
-                binding.apply {
-                    createTeamLayout.visibility = View.GONE
-                    manageRosterLayout.visibility = View.GONE
-                    fanText.visibility = View.GONE
-                    viewModel.getUserInfo()
+                viewModel.getPlayerUserInfo()
+                binding.manageRosterLayout.visibility = View.GONE
+                binding.createTeamLayout.visibility = View.GONE
+                binding.fanText.visibility = View.GONE
+                viewModel.status.observe(viewLifecycleOwner) {
+                    when(it) {
+                        LoadApiStatus.LOADING -> {
+                            binding.lottieProfile.visibility = View.VISIBLE
+                            binding.userInfoLayout.visibility = View.INVISIBLE
+                        }
+                        LoadApiStatus.DONE -> {
+                            binding.lottieProfile.visibility = View.INVISIBLE
+                            binding.userInfoLayout.visibility = View.VISIBLE
+                        }
+                        LoadApiStatus.ERROR -> {
+
+                        }
+                    }
                 }
             }
             else -> {
-                Log.d("vivi","Hi3")
                 binding.apply {
+                    binding.lottieProfile.visibility = View.GONE
                     manageRosterLayout.visibility = View.GONE
                     teamNameText.visibility = View.GONE
                     nicknameText.visibility = View.GONE
@@ -82,7 +107,7 @@ class ProfileFragment : Fragment() {
         }
 
         viewModel.roster.observe(viewLifecycleOwner) {
-            var nums = mutableListOf<String>()
+            val nums = mutableListOf<String>()
             it.forEach { player ->
                 nums.add(player.number)
             }
@@ -182,7 +207,6 @@ class ProfileFragment : Fragment() {
                 viewModel.sendInvitation(binding.mailEdit.text.toString(), binding.inviteNameEdit.text.toString())
             }
         }
-
         return binding.root
     }
 }

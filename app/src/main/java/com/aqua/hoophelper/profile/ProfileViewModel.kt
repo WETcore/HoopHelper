@@ -12,8 +12,10 @@ import androidx.lifecycle.ViewModel
 import com.aqua.hoophelper.User
 import com.aqua.hoophelper.database.Invitation
 import com.aqua.hoophelper.database.Player
+import com.aqua.hoophelper.database.Result
 import com.aqua.hoophelper.database.Team
 import com.aqua.hoophelper.database.remote.HoopRemoteDataSource
+import com.aqua.hoophelper.util.LoadApiStatus
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -29,6 +31,10 @@ import java.net.URL
 const val RC_SIGN_IN = 0
 
 class ProfileViewModel : ViewModel() {
+
+    val _status = MutableLiveData<LoadApiStatus?>()
+    val status: LiveData<LoadApiStatus?>
+        get() = _status
 
     // Firebase
     val db = FirebaseFirestore.getInstance()
@@ -77,9 +83,18 @@ class ProfileViewModel : ViewModel() {
     }
 
     fun setRoster() {
+        _status.value = LoadApiStatus.LOADING
         coroutineScope.launch {
-            _roster.value = HoopRemoteDataSource.getMatchMembers()
-            Log.d("roster", "Hi ${roster.value}")
+            when(val result = HoopRemoteDataSource.getMatchMembers()) { //TODO
+                is Result.Success -> {
+                    _roster.value = result.data!!
+                    _status.value = LoadApiStatus.DONE
+                }
+                is Result.Error -> {
+                    Log.d("status", "error")
+                    _status.value = LoadApiStatus.ERROR
+                }
+            }
         }
     }
 
@@ -112,10 +127,29 @@ class ProfileViewModel : ViewModel() {
         }
     }
 
-    fun getUserInfo() {
+    fun getPlayerUserInfo() {
+        _status.value = LoadApiStatus.LOADING
         coroutineScope.launch {
-            _teamInfo.value = HoopRemoteDataSource.getTeams().firstOrNull { it.id == User.teamId }
-            _userInfo.value = HoopRemoteDataSource.getPlayer()
+            when(val result = HoopRemoteDataSource.getTeams()) {
+                is Result.Success -> {
+                    _teamInfo.value = result.data.firstOrNull { it.id == User.teamId }
+                }
+                is Result.Error -> {
+                    Log.d("status", "error")
+                    _status.value = LoadApiStatus.ERROR
+                }
+            }
+            when(val result = HoopRemoteDataSource.getPlayer()) {
+                is Result.Success -> {
+                    _userInfo.value = result.data!!
+                    _status.value = LoadApiStatus.DONE
+                }
+                is Result.Error -> {
+                    Log.d("status", "error")
+                    _status.value = LoadApiStatus.ERROR
+                }
+            }
+
         }
     }
 

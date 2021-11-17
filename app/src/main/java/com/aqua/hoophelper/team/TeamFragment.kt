@@ -4,15 +4,15 @@ import android.annotation.SuppressLint
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.Drawable
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.get
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.viewpager2.widget.ViewPager2
 import com.aqua.hoophelper.MainActivityViewModel
 import com.aqua.hoophelper.R
 import com.aqua.hoophelper.databinding.TeamFragmentBinding
@@ -56,7 +56,7 @@ class TeamFragment : Fragment() {
         TabLayoutMediator(tabLayout, vPager) { tab, position ->
             tab.text = title[position]
             tab.icon = titleIcon[position]
-            vPager.offscreenPageLimit = 2
+            vPager.offscreenPageLimit = 2 //ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT
             vPager.setCurrentItem(tab.position, true)
         }.attach()
 

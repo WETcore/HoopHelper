@@ -1,4 +1,4 @@
-package com.aqua.hoophelper.component
+package com.aqua.hoophelper.util
 
 import android.content.BroadcastReceiver
 import android.content.Context

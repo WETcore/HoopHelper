@@ -14,6 +14,7 @@ import com.aqua.hoophelper.R
 import com.aqua.hoophelper.database.PlayerStat
 import com.aqua.hoophelper.match.DataType
 import com.aqua.hoophelper.match.DetailDataType
+import com.aqua.hoophelper.util.LoadApiStatus
 
 class HomeVPagerAdapter(
     private val list: List<String>,
@@ -110,7 +111,7 @@ class HomeVPagerAdapter(
 
         //add view to container
         container.addView(view, position)
-
+        viewModel?._status?.value = LoadApiStatus.DONE
         return view
     }
 

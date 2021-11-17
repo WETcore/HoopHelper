@@ -1,4 +1,4 @@
-package com.aqua.hoophelper.component
+package com.aqua.hoophelper.util
 
 import android.app.RemoteInput
 import android.content.Intent
@@ -8,7 +8,6 @@ import com.aqua.hoophelper.database.Player
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
-import kotlin.random.Random
 
 class CheckService: LifecycleService() {
 

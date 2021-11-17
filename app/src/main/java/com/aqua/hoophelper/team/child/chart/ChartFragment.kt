@@ -22,6 +22,7 @@ import android.util.Log
 import android.widget.ArrayAdapter
 import com.anychart.APIlib
 import com.anychart.AnyChartView
+import com.aqua.hoophelper.util.LoadApiStatus
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
@@ -41,6 +42,22 @@ class ChartFragment : Fragment() {
         // binding
         val binding: ChartFragmentBinding =
             DataBindingUtil.inflate(inflater, R.layout.chart_fragment, container,false)
+
+        viewModel.status.observe(viewLifecycleOwner) {
+            when(it) {
+                LoadApiStatus.LOADING -> {
+                    binding.lottieChart.visibility = View.VISIBLE
+                    binding.chartLayout.visibility = View.GONE
+                }
+                LoadApiStatus.DONE -> {
+                    binding.lottieChart.visibility = View.GONE
+                    binding.chartLayout.visibility = View.VISIBLE
+                }
+                LoadApiStatus.ERROR -> {
+
+                }
+            }
+        }
 
         // spinner
         val playerAdapter = ArrayAdapter(requireContext(), R.layout.home_team_item, viewModel.playerList)
@@ -119,6 +136,7 @@ class ChartFragment : Fragment() {
                     setDrawEntryLabels(false)
                     data = pieData
                     invalidate()
+                    viewModel._status.value = LoadApiStatus.DONE
                 }
             }
         }

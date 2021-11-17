@@ -8,13 +8,19 @@ import com.aqua.hoophelper.database.Event
 import com.aqua.hoophelper.database.Match
 import com.aqua.hoophelper.database.Player
 import com.aqua.hoophelper.database.PlayerStat
+import com.aqua.hoophelper.database.Result
 import com.aqua.hoophelper.database.remote.HoopRemoteDataSource
+import com.aqua.hoophelper.util.LoadApiStatus
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class ChartViewModel : ViewModel() {
+
+    val _status = MutableLiveData<LoadApiStatus?>()
+    val status: LiveData<LoadApiStatus?>
+        get() = _status
 
     private val _roster = MutableLiveData<List<Player>>()
     val roster: LiveData<List<Player>>
@@ -46,9 +52,18 @@ class ChartViewModel : ViewModel() {
     }
 
     private fun getChartData() {
+        _status.value = LoadApiStatus.LOADING
         coroutineScope.launch {
-            _roster.value = HoopRemoteDataSource.getMatchMembers()
-            getPlayerStats(roster.value?.first()?.id ?: "")
+            when(val result = HoopRemoteDataSource.getMatchMembers()) {
+                is Result.Success -> {
+                    _roster.value = result.data!!
+                    getPlayerStats(roster.value?.first()?.id ?: "")
+                }
+                is Result.Error -> {
+                    Log.d("status", "error")
+                    _status.value = LoadApiStatus.ERROR
+                }
+            }
         }
     }
 

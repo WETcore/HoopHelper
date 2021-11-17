@@ -6,8 +6,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.aqua.hoophelper.database.Event
 import com.aqua.hoophelper.database.Player
+import com.aqua.hoophelper.database.Result
 import com.aqua.hoophelper.database.Rule
 import com.aqua.hoophelper.database.remote.HoopRemoteDataSource
+import com.aqua.hoophelper.util.LoadApiStatus
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -15,6 +17,10 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class ManageViewModel : ViewModel() {
+
+    val _status = MutableLiveData<LoadApiStatus?>()
+    val status: LiveData<LoadApiStatus?>
+        get() = _status
 
     val db = FirebaseFirestore.getInstance()
 
@@ -50,23 +56,32 @@ class ManageViewModel : ViewModel() {
         db.collection("Rule").document("rule").set(rule)
     }
     fun setRoster() {
+        _status.value = LoadApiStatus.LOADING
         coroutineScope.launch {
             val starPlayerList = mutableListOf<Player>()
             val subPlayerList = mutableListOf<Player>()
-            _roster.value = HoopRemoteDataSource.getMatchMembers()
-            val lineUp = _roster.value!!
-            lineUp.filter { !it.starting5.contains(true) }.forEachIndexed { index, player ->
-                _substitutionPlayer.value!!.add(player)
-                subPlayerList.add(player)
+            when(val result = HoopRemoteDataSource.getMatchMembers()) {
+                is Result.Success -> {
+                    _roster.value = result.data!!
+                    val lineUp = _roster.value!!
+                    lineUp.filter { !it.starting5.contains(true) }.forEachIndexed { index, player ->
+                        _substitutionPlayer.value!!.add(player)
+                        subPlayerList.add(player)
+                    }
+                    lineUp.filter { it.starting5.contains(true) }.forEachIndexed { index, player ->
+                        starPlayerList.add(player)
+                    }
+                    starPlayerList.sortBy { it.starting5.indexOf(true) }
+                    _startPlayer.value = starPlayerList
+                    _substitutionPlayer.value = subPlayerList
+
+                    _status.value = LoadApiStatus.DONE
+                }
+                is Result.Error -> {
+                    Log.d("status", "error")
+                    _status.value = LoadApiStatus.ERROR
+                }
             }
-            lineUp.filter { it.starting5.contains(true) }.forEachIndexed { index, player ->
-                starPlayerList.add(player)
-            }
-            starPlayerList.sortBy { it.starting5.indexOf(true) }
-            _startPlayer.value = starPlayerList
-            _substitutionPlayer.value = subPlayerList
-//            Log.d("subPlayer4", "${_startPlayer.value}")
-            Log.d("subPlayer5", "${_substitutionPlayer.value}")
         }
     }
 

@@ -1,18 +1,12 @@
-package com.aqua.hoophelper.component
+package com.aqua.hoophelper.util
 
 import android.annotation.SuppressLint
 import android.app.*
 import android.content.Intent
-import android.os.Bundle
 import android.util.Log
-import android.widget.RemoteViews
-import android.widget.Toast
-import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
-import com.aqua.hoophelper.MainActivity
 import com.aqua.hoophelper.R
 import com.aqua.hoophelper.database.remote.HoopRemoteDataSource
-import kotlinx.coroutines.coroutineScope
 import java.io.Serializable
 
 class HoopService: LifecycleService() {

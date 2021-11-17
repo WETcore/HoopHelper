@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.aqua.hoophelper.MainActivityViewModel
 import com.aqua.hoophelper.R
 import com.aqua.hoophelper.databinding.TacticFragmentBinding
+import com.aqua.hoophelper.util.LoadApiStatus
 import com.bumptech.glide.Glide
 
 class TacticFragment : Fragment() {
@@ -37,6 +38,22 @@ class TacticFragment : Fragment() {
         // binding
         val binding: TacticFragmentBinding =
             DataBindingUtil.inflate(inflater, R.layout.tactic_fragment, container,false)
+
+        viewModel.status.observe(viewLifecycleOwner) {
+            when(it) {
+                LoadApiStatus.LOADING -> {
+                    binding.lottieTactic.visibility = View.VISIBLE
+                    binding.tacticLayout.visibility = View.GONE
+                }
+                LoadApiStatus.DONE -> {
+                    binding.lottieTactic.visibility = View.GONE
+                    binding.tacticLayout.visibility = View.VISIBLE
+                }
+                LoadApiStatus.ERROR -> {
+
+                }
+            }
+        }
 
         // arrow style
         binding.arrowGroup.check(R.id.arrow_normal)
