@@ -15,17 +15,14 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/materialCardView"
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_height="44dp"
+            android:layout_marginEnd="16dp"
             android:backgroundTint="@color/clock_background"
             android:elevation="10dp"
             app:cardCornerRadius="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/basketball_court"
+            app:layout_constraintBottom_toBottomOf="@+id/materialCardView2"
             app:layout_constraintDimensionRatio="w,1:1"
-            app:layout_constraintStart_toEndOf="@+id/materialCardView2"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+            app:layout_constraintEnd_toEndOf="parent"
             app:strokeColor="@color/hoop_yellow"
             app:strokeWidth="1dp">
 
@@ -95,9 +92,9 @@
             android:id="@+id/materialCardView2"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginBottom="2dp"
             android:backgroundTint="@color/clock_background"
             app:cardCornerRadius="8dp"
             app:layout_constraintBottom_toTopOf="@+id/basketball_court"
@@ -155,7 +152,7 @@
                 style="@style/Widget.MaterialComponents.ChipGroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
+                android:layout_marginStart="12dp"
                 app:checkedChip="@+id/player1_chip"
                 app:chipSpacingHorizontal="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -224,7 +221,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="2dp"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="16dp"
                 android:layout_marginBottom="2dp"
                 android:hint="latest sub"
                 android:textColorHint="@color/match_spinner"
@@ -249,16 +246,6 @@
             </com.google.android.material.textfield.TextInputLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <ImageView
-            android:id="@+id/exit_match_button"
-            android:layout_width="34dp"
-            android:layout_height="27dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:src="@drawable/logout"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
-
         <com.google.android.material.chip.Chip
             android:id="@+id/pause_match_chip"
             style="@style/Widget.MaterialComponents.Chip.Choice"
@@ -276,7 +263,7 @@
 
         <ImageView
             android:id="@+id/basketball_court"
-            android:layout_width="411dp"
+            android:layout_width="0dp"
             android:layout_height="381dp"
             android:layout_marginTop="60dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -289,8 +276,8 @@
             style="@style/Widget.MaterialComponents.ChipGroup"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -389,12 +376,13 @@
                 app:chipStrokeWidth="1dp" />
 
         </com.google.android.material.chip.ChipGroup>
+
         <com.google.android.material.chip.Chip
             android:id="@+id/launch_chip"
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="16dp"
             android:backgroundTint="@color/red_dot"
             android:checkable="false"
             android:text="Drag"
@@ -410,7 +398,7 @@
             android:id="@+id/free_throw_switch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="16dp"
             android:text="FreeThrow"
             android:textColor="@color/button"
             android:textStyle="bold"

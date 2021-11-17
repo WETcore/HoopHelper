@@ -1,23 +1,20 @@
 package com.aqua.hoophelper.component
 
 import android.app.RemoteInput
-import android.app.Service
 import android.content.Intent
-import android.os.IBinder
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.LifecycleService
-import com.aqua.hoophelper.User
 import com.aqua.hoophelper.database.Player
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
+import kotlin.random.Random
 
 class CheckService: LifecycleService() {
 
     override fun onCreate() {
         super.onCreate()
-        Log.d("service", "OnCreate2")
+        Log.d("service2", "OnCreate2")
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -34,30 +31,59 @@ class CheckService: LifecycleService() {
 
         val remoteInput = RemoteInput.getResultsFromIntent(intent)
 
-        if (remoteInput != null) {
-            player.number = remoteInput.getCharSequence("numKey").toString()
-        }
 
-        if (player.id.length > 5) {
-            Log.d("service1","Hi2 ${player.id}")
-            FirebaseFirestore.getInstance()
-                .collection("Invitations")
+
+        // check accept or cancel
+        val db = FirebaseFirestore.getInstance()
+        if (intent?.getBooleanExtra("toggle", false) == true) {
+            if (remoteInput != null) {
+                player.number = remoteInput.getCharSequence("numKey").toString()
+                val numbers = intent.getSerializableExtra("numbers") as MutableSet<String>
+                val bufferSize = numbers.size
+                numbers.add(player.number)
+                // check dual number
+                if (numbers.size == bufferSize) {
+//                    Log.d("service2", "Hi")
+                    val reIntent = Intent(applicationContext, HoopService::class.java)
+                    reIntent.putExtra("dualNumber", true)
+                    stopService(Intent(applicationContext, HoopService::class.java))
+                    startService(reIntent)
+                    stopSelf()
+                } else {
+                    if (player.id.length > 5) {
+                        Log.d("service2", "Hi2 ${player.id}")
+                        db.collection("Invitations")
+                            .whereEqualTo("id", player.id)
+                            .get().addOnCompleteListener {
+                                Log.d("service2", "Hi2---")
+                                db.collection("Players").add(player)
+                                it.result.documents.first().reference.delete()
+                                Log.d("service2", "Hi2----")
+                                stopService(Intent(applicationContext, HoopService::class.java))
+                                stopSelf()
+                            }
+                    }
+                }
+            }
+        } else {
+            db.collection("Invitations")
                 .whereEqualTo("id", player.id)
                 .get().addOnCompleteListener {
-                    Log.d("service1","Hi2---")
-                    FirebaseFirestore.getInstance()
-                        .collection("Players")
-                        .add(player)
+                    Log.d("service2","Hi3---")
                     it.result.documents.first().reference.delete()
-                    Log.d("service1","Hi2----")
+                    Log.d("service2","Hi3----")
+                    stopService(Intent(applicationContext, HoopService::class.java))
                     stopSelf()
                 }
         }
+
+
+
         return START_REDELIVER_INTENT
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.d("service", "OnDestroy2")
+        Log.d("service2", "OnDestroy2")
     }
 }

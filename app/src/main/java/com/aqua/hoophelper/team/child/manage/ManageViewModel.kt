@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.aqua.hoophelper.database.Event
 import com.aqua.hoophelper.database.Player
 import com.aqua.hoophelper.database.Rule
 import com.aqua.hoophelper.database.remote.HoopRemoteDataSource
@@ -20,18 +21,18 @@ class ManageViewModel : ViewModel() {
     var rule = Rule()
 
     // startingPlayer
-    var _startPlayer = MutableLiveData<MutableList<Player>>(mutableListOf())
+    private var _startPlayer = MutableLiveData<MutableList<Player>>(mutableListOf())
     val startPlayer: LiveData<MutableList<Player>>
         get() = _startPlayer
 
     // substitutionPlayer 替補
-    var _substitutionPlayer = MutableLiveData<MutableList<Player>>(mutableListOf())
+    private var _substitutionPlayer = MutableLiveData<MutableList<Player>>(mutableListOf())
     val substitutionPlayer: LiveData<MutableList<Player>>
         get() = _substitutionPlayer
     var subNum = mutableListOf<String>()
 
     // roster
-    var _roster = MutableLiveData<List<Player>>()
+    private var _roster = MutableLiveData<List<Player>>()
     val roster: LiveData<List<Player>>
         get() = _roster
 
@@ -41,32 +42,27 @@ class ManageViewModel : ViewModel() {
     // the Coroutine runs using the Main (UI) dispatcher
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-    fun setRule() {
-        db.collection("Rule").document("rule").set(rule)
-    }
     init {
         setRoster()
+    }
+
+    fun setRule() {
+        db.collection("Rule").document("rule").set(rule)
     }
     fun setRoster() {
         coroutineScope.launch {
             val starPlayerList = mutableListOf<Player>()
             val subPlayerList = mutableListOf<Player>()
             _roster.value = HoopRemoteDataSource.getMatchMembers()
-            Log.d("roster", "${_roster.value}")
             val lineUp = _roster.value!!
-
-            lineUp.filter {
-                !it.starting5
-            }.forEachIndexed { index, player ->
+            lineUp.filter { !it.starting5.contains(true) }.forEachIndexed { index, player ->
                 _substitutionPlayer.value!!.add(player)
                 subPlayerList.add(player)
             }
-
-            lineUp.filter {
-                it.starting5
-            }.forEachIndexed { index, player ->
+            lineUp.filter { it.starting5.contains(true) }.forEachIndexed { index, player ->
                 starPlayerList.add(player)
             }
+            starPlayerList.sortBy { it.starting5.indexOf(true) }
             _startPlayer.value = starPlayerList
             _substitutionPlayer.value = subPlayerList
 //            Log.d("subPlayer4", "${_startPlayer.value}")
@@ -81,34 +77,22 @@ class ManageViewModel : ViewModel() {
     }
 
     fun switchLineUp(spinnerPos: Int, pos: Int) {
-        var buffer = substitutionPlayer.value!![spinnerPos]
-        val id = roster.value?.filter { it.starting5 }?.get(pos)?.id
+        val bufferPlayer = substitutionPlayer.value!![spinnerPos]
+        val startPlayer = startPlayer.value!![pos]
+
+        val bufferLineupList = mutableListOf(false, false, false, false, false)
 
         db.collection("Players")
-            .whereEqualTo("id", id)
-            .get().addOnSuccessListener {
-                it.documents.first().reference.update("starting5", false)
-            }
+            .get().addOnCompleteListener {
+                it.result.documents.apply {
+                    bufferLineupList[pos] = true
+                    first { it["id"] == bufferPlayer.id }.reference.update("starting5", bufferLineupList)
+                    bufferLineupList[pos] = false
+                    first { it["id"] == startPlayer.id }.reference.update("starting5", bufferLineupList)
 
-        db.collection("Players")
-            .whereEqualTo("id", buffer.id)
-            .get().addOnSuccessListener {
-                it.documents.first().reference.update("starting5", true)
+                    setRoster()
+                }
             }
-
-        setRoster()
     }
 
-    var releasePos = 0
-    fun removePlayer(spinnerPos: Int) {
-
-        var buffer = roster.value!![spinnerPos]
-
-        db.collection("Players")
-            .whereEqualTo("id", buffer.id)
-            .get().addOnSuccessListener {
-                it.documents[0].reference.delete()
-            }
-        setRoster()
-    }
 }

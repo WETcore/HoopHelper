@@ -6,19 +6,27 @@ import android.graphics.Color
 import android.graphics.drawable.Drawable
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.get
 import androidx.databinding.DataBindingUtil
+import com.aqua.hoophelper.MainActivityViewModel
 import com.aqua.hoophelper.R
 import com.aqua.hoophelper.databinding.TeamFragmentBinding
+import com.aqua.hoophelper.team.child.tactic.Tactic
 import com.google.android.material.tabs.TabLayoutMediator
 
 class TeamFragment : Fragment() {
 
     private val viewModel: TeamViewModel by lazy {
         ViewModelProvider(this).get(TeamViewModel::class.java)
+    }
+
+    private val mainViewModel: MainActivityViewModel by lazy {
+        ViewModelProvider(this).get(MainActivityViewModel::class.java)
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -48,9 +56,16 @@ class TeamFragment : Fragment() {
         TabLayoutMediator(tabLayout, vPager) { tab, position ->
             tab.text = title[position]
             tab.icon = titleIcon[position]
+            vPager.offscreenPageLimit = 2
             vPager.setCurrentItem(tab.position, true)
         }.attach()
 
+        Tactic.vPagerSwipe.observe(viewLifecycleOwner) {
+            Log.d("canvas","Hi ${it}")
+            vPager.isUserInputEnabled = it
+        }
+
         return binding.root
     }
+
 }

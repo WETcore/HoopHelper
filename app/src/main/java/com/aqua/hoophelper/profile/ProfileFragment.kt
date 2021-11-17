@@ -1,6 +1,8 @@
 package com.aqua.hoophelper.profile
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,6 +18,7 @@ import com.aqua.hoophelper.User
 import com.aqua.hoophelper.databinding.ProfileFragmentBinding
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 
 class ProfileFragment : Fragment() {
@@ -79,12 +82,12 @@ class ProfileFragment : Fragment() {
         }
 
         viewModel.roster.observe(viewLifecycleOwner) {
-            var num = mutableListOf<String>()
+            var nums = mutableListOf<String>()
             it.forEach { player ->
-                num.add(player.number)
+                nums.add(player.number)
             }
             binding.releaseText.setAdapter(
-                ArrayAdapter(requireContext(), R.layout.team_start5_item, num)
+                ArrayAdapter(requireContext(), R.layout.team_start5_item, nums)
             )
         }
 
@@ -109,7 +112,10 @@ class ProfileFragment : Fragment() {
                 binding.nicknameEdit.text?.length != 0 &&
                 binding.playerNumEdit.text?.length != 0
             ) {
-                viewModel.sendTeamInfo(binding.teamNameEdit.text.toString())
+                viewModel.sendTeamInfo(
+                    binding.teamNameEdit.text.toString(),
+                    binding.playerNumEdit.text.toString()
+                )
                 viewModel.sendCaptainInfo(
                     binding.playerNumEdit.text.toString(),
                     binding.nicknameEdit.text.toString()
@@ -124,16 +130,41 @@ class ProfileFragment : Fragment() {
         binding.releaseButton.setOnClickListener {
             if (binding.releaseText.text?.length == 0) {
                 binding.releaseInput.error = "This is required"
-            } else {
+            } else if (binding.releaseText.text?.length != 0) {
                 binding.releaseInput.error = null
-            }
-            if (binding.releaseText.text?.length != 0) {
-            viewModel.removePlayer(viewModel.releasePos)
+
+                // change captain
+                if (viewModel.removePlayer(viewModel.releasePos)) {
+                    val numbers = mutableListOf<String>()
+                    viewModel.roster.value?.forEach { player ->
+                        if (player.number != viewModel.userInfo.value?.number) {
+                            numbers.add(player.number)
+                        }
+                    }
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle("Choose New Captain")
+                        .setSingleChoiceItems(numbers.toTypedArray(), 0) { dialog, which ->
+                        }
+                        .setNeutralButton("Cancel") { dialog, which ->
+                            dialog.cancel()
+                        }
+                        .setPositiveButton("Confirm") { dialog, which ->
+                            val position = (dialog as androidx.appcompat.app.AlertDialog)
+                                .listView.checkedItemPosition
+                            viewModel.db
+                                .collection("Players")
+                                .whereEqualTo("number",numbers[position])
+                                .get().addOnCompleteListener {
+                                    it.result.documents.first().reference.update("captain", true)
+                                }
+                            dialog.dismiss()
+                        }
+                        .show()
+                }
             }
         }
 
         // invite
-//        binding.mailLayout.suffixText = "@gmail.com"
         binding.inviteButton.setOnClickListener {
             if (binding.mailEdit.text?.length == 0) {
                 binding.mailLayout.error = "This is required"
@@ -148,13 +179,7 @@ class ProfileFragment : Fragment() {
             if (binding.mailEdit.text?.length != 0 &&
                 binding.inviteNameEdit.text?.length != 0
             ) {
-                viewModel.invitation.id = viewModel.db.collection("Invitations").document().id
-                viewModel.invitation.teamId = User.teamId
-                viewModel.invitation.inviteeMail =
-                    binding.mailEdit.text.toString()// + binding.mailLayout.suffixText
-                viewModel.invitation.playerName = binding.inviteNameEdit.text.toString()
-
-                viewModel.sendInvitation()
+                viewModel.sendInvitation(binding.mailEdit.text.toString(), binding.inviteNameEdit.text.toString())
             }
         }
 
