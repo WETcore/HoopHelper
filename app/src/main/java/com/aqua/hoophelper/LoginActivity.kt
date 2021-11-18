@@ -1,5 +1,6 @@
 package com.aqua.hoophelper
 
+import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.content.Intent
 import android.graphics.Path
@@ -9,11 +10,16 @@ import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
+import android.view.animation.Animation
 import android.view.animation.PathInterpolator
 import androidx.annotation.RequiresApi
 import androidx.core.animation.doOnEnd
+import androidx.dynamicanimation.animation.DynamicAnimation
+import androidx.dynamicanimation.animation.SpringAnimation
+import androidx.dynamicanimation.animation.SpringForce
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
+import com.airbnb.lottie.LottieAnimationView
 import com.aqua.hoophelper.database.Player
 import com.aqua.hoophelper.databinding.ActivityLoginBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -52,13 +58,39 @@ class LoginActivity : AppCompatActivity() {
         // getting the value of gso inside the GoogleSignInClient
         val googleSignInClient = GoogleSignIn.getClient(this, gso)
 
+        binding.lottiePlay.addAnimatorListener(object : Animator.AnimatorListener{
+            var animateSwitch = false
+            override fun onAnimationStart(animation: Animator?) {
+                // TODO("Not yet implemented")
+            }
+
+            override fun onAnimationEnd(animation: Animator?) {
+                animateSwitch = !animateSwitch
+                if (animateSwitch) {
+                    binding.lottiePlay.setAnimation(R.raw.post_up)
+                } else {
+                    binding.lottiePlay.setAnimation(R.raw.isolation)
+                }
+                binding.lottiePlay.playAnimation()
+                // TODO("Not yet implemented")
+            }
+
+            override fun onAnimationCancel(animation: Animator?) {
+                // TODO("Not yet implemented")
+            }
+
+            override fun onAnimationRepeat(animation: Animator?) {
+                // TODO("Not yet implemented")
+            }
+        })
+
         // animation & login
         val displayMetrics = DisplayMetrics()
         this@LoginActivity.display?.getRealMetrics(displayMetrics)
         val width = displayMetrics.widthPixels.toFloat()
         val height = displayMetrics.heightPixels.toFloat()
         val path = Path()
-        path.moveTo(32f, height-32f)
+        path.moveTo(32f, height-104f)
 
         binding.googleSignIn.setOnClickListener {
             viewModel.signIn(googleSignInClient,this)
@@ -66,13 +98,19 @@ class LoginActivity : AppCompatActivity() {
 
         binding.loginFab.setOnClickListener {
             path.apply {
-                quadTo(width*0.25f, -1000f,width*0.5f - 120f,height* 0.5f - 60f)
+                quadTo(width*0.25f, 0f,width*0.5f,height* 0.145f)
             }
             val animator = ObjectAnimator.ofFloat(binding.loginFab, View.X, View.Y, path).apply {
-                duration = 1500
+                duration = 500
                 start()
             }
             animator.doOnEnd {
+//                SpringAnimation(binding.loginFab, DynamicAnimation.TRANSLATION_Y).apply {
+//                    this.animateToFinalPosition(0f)
+//                    this.setStartVelocity(SpringForce.DAMPING_RATIO_HIGH_BOUNCY)
+//                }.start()
+
+                binding.loginFab.isClickable = false
                 viewModel.signIn(googleSignInClient,this)
             }
         }
@@ -128,8 +166,30 @@ class LoginActivity : AppCompatActivity() {
 
     private fun updateUI(user: FirebaseUser?) {
         if (user != null) {
+            findViewById<View>(R.id.login_layout).visibility = View.GONE
+            val lottie = findViewById<LottieAnimationView>(R.id.login_lottie)
+            lottie.speed = 1.5f
+            lottie.playAnimation()
             val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+
+            lottie.addAnimatorListener(object : Animator.AnimatorListener{
+                override fun onAnimationStart(animation: Animator?) {
+                   // TODO("Not yet implemented")
+                }
+
+                override fun onAnimationEnd(animation: Animator?) {
+                    startActivity(intent)
+                   // TODO("Not yet implemented")
+                }
+
+                override fun onAnimationCancel(animation: Animator?) {
+                   // TODO("Not yet implemented")
+                }
+
+                override fun onAnimationRepeat(animation: Animator?) {
+                   // TODO("Not yet implemented")
+                }
+            })
         }
     }
 }

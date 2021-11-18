@@ -37,7 +37,7 @@ class TacticCanvas(context: Context, attrs: AttributeSet): View(context, attrs) 
 
         // Canvas
         mCanvas = Canvas(bitmap)
-        mCanvas.drawColor(resources.getColor(R.color.basil_green_light))
+        mCanvas.drawColor(resources.getColor(R.color.basil_background))
 
         // Paint
         paint.apply {
@@ -177,7 +177,7 @@ class TacticCanvas(context: Context, attrs: AttributeSet): View(context, attrs) 
 
     fun clear() {
         mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR)
-        mCanvas.drawColor(resources.getColor(R.color.basil_green_light))
+        mCanvas.drawColor(resources.getColor(R.color.basil_background))
     }
 }
 

@@ -9,7 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/hoop_background"
+        android:background="@color/basil_background"
         tools:context=".match.MatchFragment">
 
         <com.airbnb.lottie.LottieAnimationView
@@ -45,7 +45,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/materialCardView2"
                 app:layout_constraintDimensionRatio="w,1:1"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:strokeColor="@color/hoop_yellow"
+                app:strokeColor="@color/basil_yellow"
                 app:strokeWidth="1dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -123,7 +123,7 @@
                 app:layout_constraintDimensionRatio="h,1:1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
-                app:strokeColor="@color/hoop_yellow"
+                app:strokeColor="@color/basil_yellow"
                 app:strokeWidth="1dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -164,7 +164,7 @@
                 android:id="@+id/constraintLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/hoop_yellow"
+                android:background="@color/basil_yellow"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -250,6 +250,7 @@
                     android:theme="@style/changeBackgroundColorForMatch"
                     app:boxStrokeColor="@color/match_spinner"
                     app:hintEnabled="true"
+                    app:endIconTint="@color/match_spinner"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/player_chip_group"
@@ -263,7 +264,7 @@
                         android:inputType="none"
                         android:singleLine="true"
                         android:text="Bench"
-                        android:textColor="@color/hoop_red"
+                        android:textColor="@color/basil_red"
                         android:textSize="14sp" />
                 </com.google.android.material.textfield.TextInputLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -314,9 +315,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Score"
-                    android:textColor="@color/hoop_orange"
-                    app:chipBackgroundColor="@color/hoop_yellow"
-                    app:chipStrokeColor="@color/hoop_orange"
+                    android:textColor="@color/basil_orange"
+                    app:chipBackgroundColor="@color/basil_yellow"
+                    app:chipStrokeColor="@color/basil_orange"
                     app:chipStrokeWidth="1dp" />
 
                 <com.google.android.material.chip.Chip
@@ -325,9 +326,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Miss"
-                    android:textColor="@color/hoop_orange"
-                    app:chipBackgroundColor="@color/hoop_yellow"
-                    app:chipStrokeColor="@color/hoop_orange"
+                    android:textColor="@color/basil_orange"
+                    app:chipBackgroundColor="@color/basil_yellow"
+                    app:chipStrokeColor="@color/basil_orange"
                     app:chipStrokeWidth="1dp" />
 
                 <com.google.android.material.chip.Chip
@@ -336,9 +337,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Reb"
-                    android:textColor="@color/hoop_orange"
-                    app:chipBackgroundColor="@color/hoop_yellow"
-                    app:chipStrokeColor="@color/hoop_orange"
+                    android:textColor="@color/basil_orange"
+                    app:chipBackgroundColor="@color/basil_yellow"
+                    app:chipStrokeColor="@color/basil_orange"
                     app:chipStrokeWidth="1dp" />
 
                 <com.google.android.material.chip.Chip
@@ -347,9 +348,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Ast"
-                    android:textColor="@color/hoop_orange"
-                    app:chipBackgroundColor="@color/hoop_yellow"
-                    app:chipStrokeColor="@color/hoop_orange"
+                    android:textColor="@color/basil_orange"
+                    app:chipBackgroundColor="@color/basil_yellow"
+                    app:chipStrokeColor="@color/basil_orange"
                     app:chipStrokeWidth="1dp" />
 
                 <com.google.android.material.chip.Chip
@@ -358,9 +359,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Stl"
-                    android:textColor="@color/hoop_orange"
-                    app:chipBackgroundColor="@color/hoop_yellow"
-                    app:chipStrokeColor="@color/hoop_orange"
+                    android:textColor="@color/basil_orange"
+                    app:chipBackgroundColor="@color/basil_yellow"
+                    app:chipStrokeColor="@color/basil_orange"
                     app:chipStrokeWidth="1dp" />
 
                 <com.google.android.material.chip.Chip
@@ -369,9 +370,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Blk"
-                    android:textColor="@color/hoop_orange"
-                    app:chipBackgroundColor="@color/hoop_yellow"
-                    app:chipStrokeColor="@color/hoop_orange"
+                    android:textColor="@color/basil_orange"
+                    app:chipBackgroundColor="@color/basil_yellow"
+                    app:chipStrokeColor="@color/basil_orange"
                     app:chipStrokeWidth="1dp" />
 
                 <com.google.android.material.chip.Chip
@@ -380,9 +381,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="TO"
-                    android:textColor="@color/hoop_orange"
-                    app:chipBackgroundColor="@color/hoop_yellow"
-                    app:chipStrokeColor="@color/hoop_orange"
+                    android:textColor="@color/basil_orange"
+                    app:chipBackgroundColor="@color/basil_yellow"
+                    app:chipStrokeColor="@color/basil_orange"
                     app:chipStrokeWidth="1dp" />
 
                 <com.google.android.material.chip.Chip
@@ -392,9 +393,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="20dp"
                     android:text="Foul"
-                    android:textColor="@color/hoop_orange"
-                    app:chipBackgroundColor="@color/hoop_yellow"
-                    app:chipStrokeColor="@color/hoop_orange"
+                    android:textColor="@color/basil_orange"
+                    app:chipBackgroundColor="@color/basil_yellow"
+                    app:chipStrokeColor="@color/basil_orange"
                     app:chipStrokeWidth="1dp" />
 
             </com.google.android.material.chip.ChipGroup>
@@ -443,9 +444,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="In"
-                    android:textColor="@color/hoop_orange"
-                    app:chipBackgroundColor="@color/hoop_yellow"
-                    app:chipStrokeColor="@color/hoop_orange"
+                    android:textColor="@color/basil_orange"
+                    app:chipBackgroundColor="@color/basil_yellow"
+                    app:chipStrokeColor="@color/basil_orange"
                     app:chipStrokeWidth="1dp" />
 
                 <com.google.android.material.chip.Chip
@@ -453,9 +454,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="miss"
-                    android:textColor="@color/hoop_orange"
-                    app:chipBackgroundColor="@color/hoop_yellow"
-                    app:chipStrokeColor="@color/hoop_orange"
+                    android:textColor="@color/basil_orange"
+                    app:chipBackgroundColor="@color/basil_yellow"
+                    app:chipStrokeColor="@color/basil_orange"
                     app:chipStrokeWidth="1dp" />
             </com.google.android.material.chip.ChipGroup>
 
@@ -466,9 +467,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:text="latest event"
-                android:textColor="@color/hoop_orange"
-                app:chipBackgroundColor="@color/hoop_yellow"
-                app:chipStrokeColor="@color/hoop_orange"
+                android:textColor="@color/basil_orange"
+                app:chipBackgroundColor="@color/basil_yellow"
+                app:chipStrokeColor="@color/basil_orange"
                 app:chipStrokeWidth="1dp"
                 app:closeIconVisible="false"
                 app:layout_constraintBottom_toBottomOf="@+id/pause_match_chip"

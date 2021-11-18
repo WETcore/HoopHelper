@@ -50,8 +50,8 @@ class TeamFragment : Fragment() {
         )
         vPager.adapter = TeamVPagerAdapter(requireActivity())
 
-        tabLayout.tabTextColors = ColorStateList.valueOf(Color.parseColor("#C60000"))
-        tabLayout.tabIconTint = ColorStateList.valueOf(Color.parseColor("#C60000"))
+        tabLayout.tabTextColors = ColorStateList.valueOf(Color.parseColor("#FF1B1B"))
+        tabLayout.tabIconTint = ColorStateList.valueOf(Color.parseColor("#FF1B1B"))
 
         TabLayoutMediator(tabLayout, vPager) { tab, position ->
             tab.text = title[position]

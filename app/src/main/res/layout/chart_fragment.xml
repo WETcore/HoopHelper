@@ -8,7 +8,7 @@
     android:id="@+id/chart_constraint"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/hoop_background"
+    android:background="@color/basil_background"
     tools:context=".team.child.chart.ChartFragment">
 
     <com.airbnb.lottie.LottieAnimationView
@@ -58,6 +58,7 @@
         android:textColorHint="@color/spinner"
         android:theme="@style/changeBackgroundColor"
         app:boxStrokeColor="@color/spinner"
+        app:endIconTint="@color/spinner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">

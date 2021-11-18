@@ -9,20 +9,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".team.TeamFragment"
-    android:background="@color/hoop_background">
+    android:background="@color/basil_background">
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/hoop_yellow"
+        android:background="@color/basil_yellow"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:tabIndicatorAnimationMode="elastic"
-        app:tabIndicatorColor="@color/hoop_red"
+        app:tabIndicatorColor="@color/basil_red"
         app:tabIndicatorHeight="3dp"
-        app:tabSelectedTextColor="@color/hoop_red">
+        app:tabSelectedTextColor="@color/basil_red">
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"

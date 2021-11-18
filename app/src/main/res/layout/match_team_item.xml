@@ -4,8 +4,8 @@
     android:padding="16dp"
     android:text="Text"
     android:fontFamily="@font/montserrat"
-    android:textColor="@color/hoop_red"
-    android:background="@color/hoop_yellow">
+    android:textColor="@color/basil_red"
+    android:background="@color/basil_yellow">
 
 
 </TextView>

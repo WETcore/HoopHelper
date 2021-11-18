@@ -56,6 +56,14 @@ class CheckService: LifecycleService() {
                             .get().addOnCompleteListener {
                                 Log.d("service2", "Hi2---")
                                 db.collection("Players").add(player)
+
+                                db.collection("Teams")
+                                    .whereEqualTo("id", player.teamId)
+                                    .get().addOnCompleteListener {
+                                        it.result.documents.first().reference
+                                        .update("jerseyNumbers",numbers.toList())
+                                    }
+
                                 it.result.documents.first().reference.delete()
                                 Log.d("service2", "Hi2----")
                                 stopService(Intent(applicationContext, HoopService::class.java))
