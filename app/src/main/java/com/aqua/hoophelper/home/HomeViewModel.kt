@@ -53,7 +53,7 @@ class HomeViewModel : ViewModel() {
         coroutineScope.launch {
             when(val result = HoopRemoteDataSource.getTeams()) {
                 is Result.Success -> {
-                    _teams.value = result.data!!
+                    _teams.value = result.data!!.filter { it.jerseyNumbers.size >= 5 }
                     for (i in teams.value!!.indices) {
                         teamNameList.add(teams.value!![i].name)
                     }

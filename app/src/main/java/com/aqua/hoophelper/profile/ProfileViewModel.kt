@@ -18,6 +18,7 @@ import com.aqua.hoophelper.database.remote.HoopRemoteDataSource
 import com.aqua.hoophelper.util.LoadApiStatus
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
@@ -58,11 +59,21 @@ class ProfileViewModel : ViewModel() {
     val teamInfo: LiveData<Team>
         get() = _teamInfo
 
+    // authToggle
+    var _authToggle = MutableLiveData<Boolean>(false)
+    val authToggle: LiveData<Boolean>
+        get() = _authToggle
+
     // Create a Coroutine scope using a job to be able to cancel when needed
     private var viewModelJob = Job()
 
     // the Coroutine runs using the Main (UI) dispatcher
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
+
+    init {
+        getUserInfo()
+        setRoster()
+    }
 
     fun sendTeamInfo(teamName: String, playerNum: String) {
         team.name = teamName
@@ -82,13 +93,18 @@ class ProfileViewModel : ViewModel() {
         db.collection("Players").add(player)
     }
 
+
+    var initState = true
     fun setRoster() {
         _status.value = LoadApiStatus.LOADING
         coroutineScope.launch {
             when(val result = HoopRemoteDataSource.getMatchMembers()) { //TODO
                 is Result.Success -> {
                     _roster.value = result.data!!
-                    _status.value = LoadApiStatus.DONE
+                    if (!initState) {
+                        _status.value = LoadApiStatus.DONE
+                    }
+                    else initState = !initState
                 }
                 is Result.Error -> {
                     Log.d("status", "error")
@@ -99,9 +115,9 @@ class ProfileViewModel : ViewModel() {
     }
 
     var releasePos = 0
-    fun removePlayer(spinnerPos: Int): Boolean {
-        val buffer = roster.value!![spinnerPos]
-        return if (buffer.number != userInfo.value?.number) {
+    fun removePlayer(): Boolean {
+        val buffer = roster.value!![releasePos]
+        return if (buffer.id != userInfo.value?.id) { // remove normal player
             db.collection("Players")
                 .whereEqualTo("id", buffer.id)
                 .get().addOnSuccessListener {
@@ -151,6 +167,33 @@ class ProfileViewModel : ViewModel() {
             }
 
         }
+    }
+
+    fun getUserInfo() {
+        coroutineScope.launch {
+            HoopRemoteDataSource.getUserInfo()
+            HoopRemoteDataSource.getMatchMembers()
+            _authToggle.value = !_authToggle.value!!
+        }
+    }
+
+    fun setNewCaptain(id:  MutableList<String>, position: Int) {
+        db.collection("Players")
+            .whereEqualTo("id", roster.value!![releasePos].id)
+            .get().addOnSuccessListener {
+                Log.d("auth","HiH ${roster.value!![releasePos]}")
+                it.documents.first().reference.delete()
+            }
+        db.collection("Players")
+            .whereEqualTo("id", id[position])
+            .get().addOnSuccessListener {
+                it.documents.first().reference.update("captain", true)
+            }
+        db.collection("Teams")
+            .whereEqualTo("id", User.teamId) //TODO
+            .get().addOnSuccessListener {
+                it.documents.first().reference.update("jerseyNumbers", FieldValue.arrayRemove(roster.value!![releasePos].number))
+            }
     }
 
 }

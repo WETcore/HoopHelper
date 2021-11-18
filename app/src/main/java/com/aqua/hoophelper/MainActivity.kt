@@ -89,24 +89,39 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.teamFragment -> {
-                    if (User.teamId.length <= 5) {
-                        binding.fab.isClickable = true
-                        Snackbar.make(binding.root, "No team no game~", Snackbar.LENGTH_SHORT)
-                            .setAction("create team") {
-                                binding.bottomBar.menu.getItem(4).isChecked = true
-                                navHostFragment.navigate(NavigationDirections.navToProfile())
-                            }.apply {
-                                setTextColor(Color.parseColor("#FD5523"))
-                                setActionTextColor(Color.parseColor("#356859"))
-                                setBackgroundTint(Color.parseColor("#FFFBE6"))
-                            }.show()
-                        false
-                    }
-                    else {
-                        binding.fab.isClickable = true
-                        binding.appBar.behavior.slideUp(binding.appBar)
-                        navHostFragment.navigate(NavigationDirections.navToTeam())
-                        true
+                    when {
+                        User.teamId.length <= 5 -> {
+                            binding.fab.isClickable = true
+                            Snackbar.make(binding.root, "No team no game~", Snackbar.LENGTH_SHORT)
+                                .setAction("create team") {
+                                    binding.bottomBar.menu.getItem(4).isChecked = true
+                                    navHostFragment.navigate(NavigationDirections.navToProfile())
+                                }.apply {
+                                    setTextColor(Color.parseColor("#FD5523"))
+                                    setActionTextColor(Color.parseColor("#356859"))
+                                    setBackgroundTint(Color.parseColor("#FFFBE6"))
+                                }.show()
+                            false
+                        }
+                        User.teamMembers.size <= 5 -> {
+                            binding.fab.isClickable = true
+                            Snackbar.make(binding.root, "At least 5 players", Snackbar.LENGTH_SHORT)
+                                .setAction("assemble") {
+                                    binding.bottomBar.menu.getItem(4).isChecked = true
+                                    navHostFragment.navigate(NavigationDirections.navToProfile())
+                                }.apply {
+                                    setTextColor(Color.parseColor("#FD5523"))
+                                    setActionTextColor(Color.parseColor("#356859"))
+                                    setBackgroundTint(Color.parseColor("#FFFBE6"))
+                                }.show()
+                            false
+                        }
+                        else -> {
+                            binding.fab.isClickable = true
+                            binding.appBar.behavior.slideUp(binding.appBar)
+                            navHostFragment.navigate(NavigationDirections.navToTeam())
+                            true
+                        }
                     }
                 }
                 R.id.liveFragment -> {
