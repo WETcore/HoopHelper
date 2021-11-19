@@ -74,6 +74,18 @@
                 android:text="Team" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <TextView
+            android:id="@+id/process_text"
+            style="@style/text_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/caesar_dressing"
+            android:text="TRUST THE PROCESS"
+            android:textSize="34sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/lottie_viewpager" />
+
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/lottie_viewpager"
             android:layout_width="0dp"

@@ -153,7 +153,7 @@ class ProfileFragment : Fragment() {
                     binding.playerNumEdit.text.toString(),
                     binding.nicknameEdit.text.toString()
                 )
-                viewModel.getUserInfo()//TODO
+                viewModel.getUserInfo()
             }
         }
 

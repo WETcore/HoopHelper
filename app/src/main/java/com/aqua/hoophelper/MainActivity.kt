@@ -127,7 +127,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.liveFragment -> {
                     binding.fab.isClickable = false
                     binding.appBar.behavior.slideUp(binding.appBar)
-                    navHostFragment.navigate(NavigationDirections.navToLive())
+                    navHostFragment.navigate(NavigationDirections.navToLive(viewModel.badgeSwitch.value!!))
                     true
                 }
                 R.id.profileFragment -> {

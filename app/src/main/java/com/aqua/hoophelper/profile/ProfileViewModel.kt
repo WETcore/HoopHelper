@@ -77,7 +77,7 @@ class ProfileViewModel : ViewModel() {
 
     fun sendTeamInfo(teamName: String, playerNum: String) {
         team.name = teamName
-        team.jerseyNumbers = mutableListOf(playerNum)
+        team.jerseyNumbers = mutableListOf(playerNum, "T1", "T2", "T3", "T4", "T5")
         team.id = db.collection("Teams").document().id
         db.collection("Teams").add(team)
     }
@@ -91,6 +91,19 @@ class ProfileViewModel : ViewModel() {
         player.captain = true
         player.avatar = Firebase.auth.currentUser?.photoUrl.toString()
         db.collection("Players").add(player)
+        val botPlayer = Player()
+        botPlayer.apply {
+            avatar =
+                "https://images.unsplash.com/photo-1546776310-eef45dd6d63c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1410&q=80"
+            teamId= team.id
+            listOf("T1", "T2", "T3", "T4", "T5").forEachIndexed { index, s ->
+                starting5[index] = true
+                id = s
+                botPlayer.name = s
+                botPlayer.number = s
+                db.collection("Players").add(botPlayer)
+            }
+        }
     }
 
 
@@ -190,7 +203,7 @@ class ProfileViewModel : ViewModel() {
                 it.documents.first().reference.update("captain", true)
             }
         db.collection("Teams")
-            .whereEqualTo("id", User.teamId) //TODO
+            .whereEqualTo("id", User.teamId)
             .get().addOnSuccessListener {
                 it.documents.first().reference.update("jerseyNumbers", FieldValue.arrayRemove(roster.value!![releasePos].number))
             }

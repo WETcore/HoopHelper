@@ -28,7 +28,12 @@
         android:id="@+id/liveFragment"
         android:name="com.aqua.hoophelper.live.LiveFragment"
         android:label="live_fragment"
-        tools:layout="@layout/live_fragment" />
+        tools:layout="@layout/live_fragment" >
+        <argument
+            android:name="isGaming"
+            app:argType="boolean"
+            android:defaultValue="false" />
+    </fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.aqua.hoophelper.profile.ProfileFragment"

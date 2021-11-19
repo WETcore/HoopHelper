@@ -57,6 +57,7 @@ class ChartViewModel : ViewModel() {
             when(val result = HoopRemoteDataSource.getMatchMembers()) {
                 is Result.Success -> {
                     _roster.value = result.data!!
+                    Log.d("chartt","${roster.value}")
                     getPlayerStats(roster.value?.first()?.id ?: "")
                 }
                 is Result.Error -> {

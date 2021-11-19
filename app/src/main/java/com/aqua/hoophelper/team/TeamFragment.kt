@@ -61,7 +61,6 @@ class TeamFragment : Fragment() {
         }.attach()
 
         Tactic.vPagerSwipe.observe(viewLifecycleOwner) {
-            Log.d("canvas","Hi ${it}")
             vPager.isUserInputEnabled = it
         }
 

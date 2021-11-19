@@ -36,14 +36,18 @@ class HomeFragment : Fragment() {
         viewModel.status.observe(viewLifecycleOwner) {
             when(it) {
                 LoadApiStatus.LOADING -> {
+                    binding.processText.visibility = View.VISIBLE
                     binding.lottieViewpager.visibility = View.VISIBLE
                     binding.textInputLayout.visibility = View.GONE
                     binding.homeViewpager.visibility = View.INVISIBLE
+                    binding.textView.visibility = View.INVISIBLE
                 }
                 LoadApiStatus.DONE -> {
+                    binding.processText.visibility = View.GONE
                     binding.lottieViewpager.visibility = View.GONE
                     binding.textInputLayout.visibility = View.VISIBLE
                     binding.homeViewpager.visibility = View.VISIBLE
+                    binding.textView.visibility = View.VISIBLE
                 }
                 LoadApiStatus.ERROR -> {
 

@@ -65,7 +65,7 @@ class MatchFragment : Fragment() {
         val args: MatchFragmentArgs by navArgs()
 
         // Hint for user
-        Toast.makeText(requireContext(), "drag the red dot to the court.", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), "Long press & drag the red dot to the court.", Toast.LENGTH_LONG).show()
 
         // set shot clock
         viewModel.shotClock.observe(viewLifecycleOwner) {
