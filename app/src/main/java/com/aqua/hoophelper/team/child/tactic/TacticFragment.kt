@@ -26,10 +26,6 @@ class TacticFragment : Fragment() {
         ViewModelProvider(this).get(TacticViewModel::class.java)
     }
 
-    private val mainViewModel: MainActivityViewModel by lazy {
-        ViewModelProvider(this).get(MainActivityViewModel::class.java)
-    }
-
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

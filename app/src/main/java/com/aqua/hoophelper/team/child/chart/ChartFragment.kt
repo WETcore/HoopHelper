@@ -136,7 +136,6 @@ class ChartFragment : Fragment() {
                     setDrawEntryLabels(false)
                     data = pieData
                     invalidate()
-                    Log.d("chartt","Hi")
                     viewModel._status.value = LoadApiStatus.DONE
                 }
             }

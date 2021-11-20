@@ -16,8 +16,10 @@ import androidx.core.animation.doOnEnd
 import androidx.databinding.DataBindingUtil
 import com.aqua.hoophelper.LoginActivityViewModel
 import com.aqua.hoophelper.R
+import com.aqua.hoophelper.User
 import com.aqua.hoophelper.databinding.LoginFragmentBinding
 import com.aqua.hoophelper.databinding.TutorFragmentBinding
+import com.aqua.hoophelper.tutor.Tutor
 import com.aqua.hoophelper.tutor.TutorViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -85,10 +87,12 @@ class LoginFragment : Fragment() {
         path.moveTo(32f, height-104f)
 
         binding.googleSignIn.setOnClickListener {
+            Tutor.finished.value = false
             loginViewModel.signIn(googleSignInClient,requireActivity())
         }
 
         binding.loginFab.setOnClickListener {
+            Tutor.finished.value = false
             path.apply {
                 quadTo(width*0.25f, 0f,width*0.5f,height* 0.145f)
             }

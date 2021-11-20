@@ -8,5 +8,5 @@ class TutorViewModel : ViewModel() {
 }
 
 object Tutor {
-    val finished = MutableLiveData(false)
+    val finished = MutableLiveData(true)
 }

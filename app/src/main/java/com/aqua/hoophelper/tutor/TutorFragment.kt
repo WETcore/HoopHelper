@@ -51,6 +51,7 @@ class TutorFragment : Fragment() {
 
                     override fun onAnimationEnd(animation: Animator?) {
                         startActivity(intent)
+                        requireActivity().finish()
                         // TODO("Not yet implemented")
                     }
 

@@ -4,11 +4,13 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
+import androidx.navigation.ui.setupWithNavController
 import com.aqua.hoophelper.util.HoopService
 import com.aqua.hoophelper.util.RestartBroadcastReceiver
 import com.aqua.hoophelper.databinding.ActivityMainBinding
@@ -44,6 +46,7 @@ class MainActivity : AppCompatActivity() {
 
         // nav host
         val navHostFragment = findNavController(R.id.nav_host)
+        binding.bottomBar.setupWithNavController(navHostFragment)
 
         // FAB nav to match
         binding.fab.setOnClickListener {
@@ -136,6 +139,10 @@ class MainActivity : AppCompatActivity() {
                     navHostFragment.navigate(NavigationDirections.navToProfile())
                     true
                 }
+                R.id.matchFragment -> {
+                    Log.d("nav","Hi")
+                    true
+                }
                 else -> false
             }
         }
@@ -152,6 +159,8 @@ class MainActivity : AppCompatActivity() {
 
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if (findViewById<BottomNavigationView>(R.id.bottom_bar).menu.getItem(0).isChecked) {
+        }
         findViewById<View>(R.id.fab).isClickable = true
         findViewById<BottomAppBar>(R.id.app_bar).let {
             it.behavior.slideUp(it)
@@ -167,7 +176,6 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
         }
-        findViewById<BottomNavigationView>(R.id.bottom_bar).menu.getItem(0).isChecked = true
         return super.onKeyDown(keyCode, event)
     }
 }
