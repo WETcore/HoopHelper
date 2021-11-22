@@ -9,18 +9,27 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/hoop_background">
+        android:background="@color/basil_background">
 
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottie_profile"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:lottie_loop="true"
+            app:lottie_autoPlay="true"
+            app:lottie_rawRes="@raw/loader_basketball"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/create_team_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/user_info_layout"
-            tools:visibility="visible">
+            app:layout_constraintTop_toBottomOf="@+id/user_info_layout">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/team_name_layout"
@@ -37,15 +46,15 @@
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView2"
-                app:suffixTextColor="@color/hoop_red">
+                app:suffixTextColor="@color/basil_red">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/team_name_edit"
+                    style="@style/editText"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:inputType="textPersonName"
-                    style="@style/editText"
-                    android:textCursorDrawable="@color/hoop_red" />
+                    android:textCursorDrawable="@color/basil_red" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -62,15 +71,15 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/team_name_layout"
-                app:suffixTextColor="@color/hoop_red">
+                app:suffixTextColor="@color/basil_red">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/nickname_edit"
+                    style="@style/editText"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:inputType="textPersonName"
-                    style="@style/editText"
-                    android:textCursorDrawable="@color/hoop_red" />
+                    android:textCursorDrawable="@color/basil_red" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -89,15 +98,15 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/team_name_layout"
-                app:suffixTextColor="@color/hoop_red">
+                app:suffixTextColor="@color/basil_red">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/player_num_edit"
+                    style="@style/editText"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:inputType="number"
-                    style="@style/editText"
-                    android:textCursorDrawable="@color/hoop_red" />
+                    android:textCursorDrawable="@color/basil_red" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
@@ -106,7 +115,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="65dp"
                 android:layout_marginTop="16dp"
-                android:backgroundTint="@color/hoop_background"
+                android:backgroundTint="@color/basil_background"
                 android:fontFamily="@font/montserrat"
                 android:text="Create"
                 android:textColor="@color/basil_orange"
@@ -137,7 +146,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="gone">
+            tools:visibility="visible">
 
             <TextView
                 android:id="@+id/textView4"
@@ -242,8 +251,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:inputType="textEmailAddress"
-                    android:textColor="@color/basil_green"
-                    android:textCursorDrawable="@color/hoop_red" />
+                    android:textCursorDrawable="@color/basil_red" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -270,7 +278,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:inputType="textPersonName"
-                    android:textCursorDrawable="@color/hoop_red" />
+                    android:textCursorDrawable="@color/basil_red" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -282,11 +290,12 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="16dp"
                 android:hint="Release Player"
-                android:textColorHint="@color/spinner_text"
+                android:textColorHint="@color/spinner"
                 android:theme="@style/changeBackgroundColor"
                 app:boxStrokeColor="@color/spinner"
                 app:errorEnabled="true"
                 app:hintEnabled="true"
+                app:endIconTint="@color/spinner"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_chainStyle="packed"
@@ -299,6 +308,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:fontFamily="@font/montserrat"
+                    android:textColor="@color/basil_green_dark"
                     android:inputType="none" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -307,7 +317,7 @@
                 style="@style/Widget.MaterialComponents.Button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/hoop_background"
+                android:backgroundTint="@color/basil_background"
                 android:fontFamily="@font/montserrat"
                 android:paddingHorizontal="20dp"
                 android:paddingVertical="10dp"
@@ -344,7 +354,7 @@
                 android:paddingHorizontal="20dp"
                 android:paddingVertical="10dp"
                 android:text="Release"
-                android:textColor="@color/hoop_background"
+                android:textColor="@color/basil_background"
                 app:backgroundTint="@color/basil_orange"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

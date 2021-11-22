@@ -6,8 +6,10 @@ import androidx.lifecycle.MutableLiveData
 import com.aqua.hoophelper.HoopInfo
 import com.aqua.hoophelper.User
 import com.aqua.hoophelper.database.*
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.google.firebase.ktx.Firebase
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -60,7 +62,7 @@ object HoopRemoteDataSource: HoopRepository {
         result.let {
             FirebaseFirestore.getInstance()
                 .collection("Invitations")
-                .whereEqualTo("inviteeMail", User.account?.email)
+                .whereEqualTo("inviteeMail", Firebase.auth.currentUser?.email)
                 .addSnapshotListener { value, error ->
                     it.value = value?.toObjects(Invitation::class.java) ?: mutableListOf()
                 }
@@ -69,53 +71,88 @@ object HoopRemoteDataSource: HoopRepository {
     }
 
     // captain participate the match. find captain's member
-    override suspend fun getMatchMembers(): List<Player> = suspendCoroutine { conti ->
+    override suspend fun getMatchMembers(): Result<List<Player>> = suspendCoroutine { conti ->
         val db = FirebaseFirestore.getInstance()
         db.collection("Players")
             .whereEqualTo("teamId", User.teamId)
             .get()
-            .addOnCompleteListener { value ->
-                val result = value.result?.toObjects(Player::class.java) ?: mutableListOf()
-                User.teamMembers.value = result
-//                Log.d("roster","${User.teamMembers.value}")
-                conti.resume(result)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val result = task.result?.toObjects(Player::class.java) ?: mutableListOf()
+                    User.teamMembers = result
+                    conti.resume(Result.Success(result))
+                } else {
+                    task.exception?.let {
+                        Log.d("error",
+                            "[${this::class.simpleName}] Error getting documents. ${it.message}"
+                        )
+                        conti.resume(Result.Error(it))
+                        return@addOnCompleteListener
+                    }
+                }
             }
     }
 
-
-    override suspend fun getTeams(): List<Team> = suspendCoroutine { conti ->
+    override suspend fun getTeams(): Result<List<Team>> = suspendCoroutine { conti ->
         FirebaseFirestore.getInstance()
             .collection("Teams")
             .get()
-            .addOnCompleteListener { value ->
-                val result = value.result?.toObjects(Team::class.java) ?: mutableListOf()
-
-                conti.resume(result)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val result = task.result?.toObjects(Team::class.java) ?: mutableListOf()
+                    conti.resume(Result.Success(result))
+                } else {
+                    task.exception?.let {
+                        Log.d("error",
+                            "[${this::class.simpleName}] Error getting documents. ${it.message}"
+                        )
+                        conti.resume(Result.Error(it))
+                        return@addOnCompleteListener
+                    }
+                }
             }
     }
 
-    override suspend fun getTeamMembers(): List<Player> = suspendCoroutine { conti ->
+    override suspend fun getSelectedTeamMembers(): Result<List<Player>> = suspendCoroutine { conti ->
         FirebaseFirestore.getInstance()
             .collection("Players")
-            .whereEqualTo("teamId", HoopInfo.spinnerSelectedTeamId)
+            .whereEqualTo("teamId", HoopInfo.spinnerSelectedTeamId.value!!)
             .get()
-            .addOnCompleteListener { value ->
-                var result = value.result?.toObjects(Player::class.java) ?: mutableListOf()
-
-                conti.resume(result)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val result = task.result?.toObjects(Player::class.java) ?: mutableListOf()
+                    conti.resume(Result.Success(result))
+                } else {
+                    task.exception?.let {
+                        Log.d("error",
+                            "[${this::class.simpleName}] Error getting documents. ${it.message}"
+                        )
+                        conti.resume(Result.Error(it))
+                        return@addOnCompleteListener
+                    }
+                }
             }
     }
 
     // TODO get playerId to get event
-    override suspend fun getPlayerData(playerId: String): List<Event> = suspendCoroutine { conti ->
+    override suspend fun getPlayerData(playerId: String): Result<List<Event>> = suspendCoroutine { conti ->
         FirebaseFirestore.getInstance()
             .collection("Events")
             .whereEqualTo("playerId", playerId)
             .get()
-            .addOnCompleteListener { value ->
-                var result = value.result?.toObjects(Event::class.java) ?: mutableListOf()
-
-                conti.resume(result)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val result = task.result?.toObjects(Event::class.java) ?: mutableListOf()
+                    conti.resume(Result.Success(result))
+                } else {
+                    task.exception?.let {
+                        Log.d("error",
+                            "[${this::class.simpleName}] Error getting documents. ${it.message}"
+                        )
+                        conti.resume(Result.Error(it))
+                        return@addOnCompleteListener
+                    }
+                }
             }
     }
 
@@ -132,38 +169,76 @@ object HoopRemoteDataSource: HoopRepository {
                         User.isCaptain = result.first().captain
                         User.id = result.first().id
                     }
-
                     Log.d("userInfo","${User.account?.email}")
-
                     conti.resume(result)
-
                 }
         }
     }
 
-    override suspend fun getRule(): Rule = suspendCoroutine { conti ->
+    override suspend fun getTeamInfo(): Team = suspendCoroutine { conti ->
+        if (User.account != null) {
+            FirebaseFirestore.getInstance()
+                .collection("Teams")
+                .whereEqualTo("id", User.teamId)
+                .get()
+                .addOnCompleteListener {
+                    val result = it.result?.toObjects(Team::class.java)?.first() ?: Team()
+                    conti.resume(result)
+                }
+        }
+    }
+
+    override suspend fun getRule(): Result<Rule> = suspendCoroutine { conti ->
         FirebaseFirestore.getInstance()
             .collection("Rule")
             .document("rule")
             .get()
-            .addOnCompleteListener {
-                val result = it.result?.toObject(Rule::class.java) ?: Rule()
-
-//                Log.d("gameRule","Hi")
-
-                conti.resume(result)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val result = task.result?.toObject(Rule::class.java) ?: Rule()
+                    conti.resume(Result.Success(result))
+                } else {
+                    task.exception?.let {
+                        Log.d("error",
+                            "[${this::class.simpleName}] Error getting documents. ${it.message}"
+                        )
+                        conti.resume(Result.Error(it))
+                        return@addOnCompleteListener
+                    }
+                }
             }
     }
 
-    override suspend fun getPlayer(): Player = suspendCoroutine { conti ->
+    override suspend fun getPlayer(): Result<Player> = suspendCoroutine { conti ->
         FirebaseFirestore.getInstance()
             .collection("Players")
             .whereEqualTo("id", User.id)
             .get()
-            .addOnCompleteListener {
-                val result = it.result.first().toObject(Player::class.java)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val result = task.result.first().toObject(Player::class.java)
+                    conti.resume(Result.Success(result))
+                } else {
+                    task.exception?.let {
+                        Log.d("error",
+                            "[${this::class.simpleName}] Error getting documents. ${it.message}"
+                        )
+                        conti.resume(Result.Error(it))
+                        return@addOnCompleteListener
+                    }
+                }
+            }
+    }
 
+    override suspend fun getTeamEvents(): List<Event> = suspendCoroutine { conti ->
+        FirebaseFirestore.getInstance()
+            .collection("Events")
+            .whereEqualTo("teamId", User.teamId)
+            .get()
+            .addOnCompleteListener {
+                val result = it.result.toObjects(Event::class.java)
                 conti.resume(result)
             }
     }
+
 }

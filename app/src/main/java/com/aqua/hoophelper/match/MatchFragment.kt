@@ -15,6 +15,7 @@ import com.aqua.hoophelper.HoopInfo
 import com.aqua.hoophelper.NavigationDirections
 import com.aqua.hoophelper.R
 import com.aqua.hoophelper.databinding.MatchFragmentBinding
+import com.aqua.hoophelper.util.LoadApiStatus
 
 enum class DataType {
     SCORE, REBOUND, ASSIST, STEAL, BLOCK, TURNOVER, FOUL
@@ -41,14 +42,30 @@ class MatchFragment : Fragment() {
         val binding: MatchFragmentBinding =
             DataBindingUtil.inflate(inflater, R.layout.match_fragment, container,false)
 
-        // get roster from db
+        viewModel.status.observe(viewLifecycleOwner) {
+            when(it) {
+                LoadApiStatus.LOADING -> {
+                    binding.lottieMatch.visibility = View.VISIBLE
+                    binding.matchLayout.visibility = View.GONE
+                }
+                LoadApiStatus.DONE -> {
+                    binding.lottieMatch.visibility = View.GONE
+                    binding.matchLayout.visibility = View.VISIBLE
+                }
+                LoadApiStatus.ERROR -> {
+
+                }
+            }
+        }
+
+        // get roster from db TODO
         viewModel.setRoster()
 
         // safe arg
         val args: MatchFragmentArgs by navArgs()
 
         // Hint for user
-        Toast.makeText(requireContext(), "drag the red dot to the court.", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), "Long press & drag the red dot to the court.", Toast.LENGTH_LONG).show()
 
         // set shot clock
         viewModel.shotClock.observe(viewLifecycleOwner) {
@@ -105,22 +122,6 @@ class MatchFragment : Fragment() {
             binding.gameClockSec.text = viewModel.gameClockSec.value.toString()
         }
 
-        // set exit match
-        binding.exitMatchButton.setOnClickListener {
-//            viewModel.shotClockTimer.cancel()
-//            viewModel.gameClockSecTimer.cancel()
-            viewModel.db // TODO move to model, auto close game need same fun
-                .collection("Matches")
-                .whereEqualTo("matchId", args.matchId)
-                .get()
-                .addOnSuccessListener {
-                    it.forEach {
-                        it.reference.update("gaming",false)
-                    }
-                }
-            findNavController().navigate(NavigationDirections.navToHome())
-        }
-
         // select player
         binding.playerChipGroup.setOnCheckedChangeListener { group, checkedId ->
             when(checkedId) {
@@ -147,13 +148,12 @@ class MatchFragment : Fragment() {
             it.forEach { player ->
                 viewModel.subNum.add(player.number)
             }
-            var teamAdapter = ArrayAdapter(requireContext(), R.layout.match_team_item, viewModel.subNum)
+            val teamAdapter = ArrayAdapter(requireContext(), R.layout.match_team_item, viewModel.subNum)
             binding.subPlayerText.setAdapter(teamAdapter)
         }
 
-
         binding.subPlayerText.setOnItemClickListener { parent, view, position, id ->
-            var buffer = viewModel.startPlayer.value!![viewModel.selectPlayerPos]
+            val buffer = viewModel.startPlayer.value!![viewModel.selectPlayerPos]
             viewModel.getSubPlayer2Starting(position)
             viewModel.changeSubPlayer(buffer, position)
         }
@@ -172,9 +172,7 @@ class MatchFragment : Fragment() {
             }
         }
 
-
         /// record data
-
         // 改變launch顯示文字
         viewModel.zone.observe(viewLifecycleOwner) {
             binding.launchChip.text = when(it) {
@@ -195,7 +193,6 @@ class MatchFragment : Fragment() {
                 else -> "O"//"Area"
             }
         }
-
 
         //開啟子選單
         binding.launchChip.setOnCheckedChangeListener { buttonView, isChecked ->
@@ -308,7 +305,6 @@ class MatchFragment : Fragment() {
             Log.d("record","${viewModel.event}")
         }
 
-
         // event history & cancel event
         viewModel.lastEvent.observe(viewLifecycleOwner) {
             if (!it.isNullOrEmpty()) {
@@ -327,7 +323,5 @@ class MatchFragment : Fragment() {
 
         return binding.root
     }
-
-
 
 }

@@ -2,11 +2,11 @@ package com.aqua.hoophelper.profile
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -14,8 +14,8 @@ import com.aqua.hoophelper.MainActivityViewModel
 import com.aqua.hoophelper.R
 import com.aqua.hoophelper.User
 import com.aqua.hoophelper.databinding.ProfileFragmentBinding
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
+import com.aqua.hoophelper.util.LoadApiStatus
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 
 class ProfileFragment : Fragment() {
@@ -34,37 +34,69 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        viewModel.setRoster()
-
         // binding
         val binding: ProfileFragmentBinding =
             DataBindingUtil.inflate(inflater, R.layout.profile_fragment, container,false)
 
-        when {
-            User.isCaptain -> {
-                Log.d("vivi","Hi1")
-                binding.apply {
-                    createTeamLayout.visibility = View.GONE
-                    fanText.visibility = View.GONE
-                    viewModel.getUserInfo()
+        fun setAuth() {
+            when {
+                User.isCaptain -> {
+                    viewModel.getPlayerUserInfo()
+                    binding.createTeamLayout.visibility = View.GONE
+                    binding.fanText.visibility = View.GONE
+                    binding.teamNameText.visibility = View.VISIBLE
+                    binding.nicknameText.visibility = View.VISIBLE
+                    binding.numberText.visibility = View.VISIBLE
+                    viewModel.status.observe(viewLifecycleOwner) {
+                        when (it) {
+                            LoadApiStatus.LOADING -> {
+                                binding.lottieProfile.visibility = View.VISIBLE
+                                binding.manageRosterLayout.visibility = View.INVISIBLE
+                                binding.userInfoLayout.visibility = View.INVISIBLE
+                            }
+                            LoadApiStatus.DONE -> {
+                                binding.lottieProfile.visibility = View.INVISIBLE
+                                binding.manageRosterLayout.visibility = View.VISIBLE
+                                binding.userInfoLayout.visibility = View.VISIBLE
+                            }
+                            LoadApiStatus.ERROR -> {
+
+                            }
+                        }
+                    }
                 }
-            }
-            User.teamId.length > 5 -> {
-                Log.d("vivi","Hi2")
-                binding.apply {
-                    createTeamLayout.visibility = View.GONE
-                    manageRosterLayout.visibility = View.GONE
-                    fanText.visibility = View.GONE
-                    viewModel.getUserInfo()
+                User.teamId.length > 5 -> {
+                    viewModel.getPlayerUserInfo()
+                    binding.manageRosterLayout.visibility = View.GONE
+                    binding.createTeamLayout.visibility = View.GONE
+                    binding.fanText.visibility = View.GONE
+                    binding.teamNameText.visibility = View.VISIBLE
+                    binding.nicknameText.visibility = View.VISIBLE
+                    binding.numberText.visibility = View.VISIBLE
+                    viewModel.status.observe(viewLifecycleOwner) {
+                        when (it) {
+                            LoadApiStatus.LOADING -> {
+                                binding.lottieProfile.visibility = View.VISIBLE
+                                binding.userInfoLayout.visibility = View.INVISIBLE
+                            }
+                            LoadApiStatus.DONE -> {
+                                binding.lottieProfile.visibility = View.INVISIBLE
+                                binding.userInfoLayout.visibility = View.VISIBLE
+                            }
+                            LoadApiStatus.ERROR -> {
+
+                            }
+                        }
+                    }
                 }
-            }
-            else -> {
-                Log.d("vivi","Hi3")
-                binding.apply {
-                    manageRosterLayout.visibility = View.GONE
-                    teamNameText.visibility = View.GONE
-                    nicknameText.visibility = View.GONE
-                    numberText.visibility = View.GONE
+                else -> {
+                    binding.apply {
+                        binding.lottieProfile.visibility = View.GONE
+                        manageRosterLayout.visibility = View.GONE
+                        teamNameText.visibility = View.GONE
+                        nicknameText.visibility = View.GONE
+                        numberText.visibility = View.GONE
+                    }
                 }
             }
         }
@@ -79,13 +111,17 @@ class ProfileFragment : Fragment() {
         }
 
         viewModel.roster.observe(viewLifecycleOwner) {
-            var num = mutableListOf<String>()
+            val nums = mutableListOf<String>()
             it.forEach { player ->
-                num.add(player.number)
+                nums.add(player.number)
             }
             binding.releaseText.setAdapter(
-                ArrayAdapter(requireContext(), R.layout.team_start5_item, num)
+                ArrayAdapter(requireContext(), R.layout.team_start5_item, nums)
             )
+        }
+
+        viewModel.authToggle.observe(viewLifecycleOwner) {
+            setAuth()
         }
 
         // create team
@@ -109,11 +145,15 @@ class ProfileFragment : Fragment() {
                 binding.nicknameEdit.text?.length != 0 &&
                 binding.playerNumEdit.text?.length != 0
             ) {
-                viewModel.sendTeamInfo(binding.teamNameEdit.text.toString())
+                viewModel.sendTeamInfo(
+                    binding.teamNameEdit.text.toString(),
+                    binding.playerNumEdit.text.toString()
+                )
                 viewModel.sendCaptainInfo(
                     binding.playerNumEdit.text.toString(),
                     binding.nicknameEdit.text.toString()
                 )
+                viewModel.getUserInfo()
             }
         }
 
@@ -124,16 +164,42 @@ class ProfileFragment : Fragment() {
         binding.releaseButton.setOnClickListener {
             if (binding.releaseText.text?.length == 0) {
                 binding.releaseInput.error = "This is required"
-            } else {
+            } else if (binding.releaseText.text?.length != 0) {
                 binding.releaseInput.error = null
-            }
-            if (binding.releaseText.text?.length != 0) {
-            viewModel.removePlayer(viewModel.releasePos)
+                // change captain
+                if (viewModel.removePlayer()) {
+                    val playerId = mutableListOf<String>()
+                    val playerNum = mutableListOf<String>()
+                    viewModel.roster.value?.forEach { player ->
+                        if (player.id != viewModel.userInfo.value?.id) {
+                            playerId.add(player.id)
+                            playerNum.add(player.number)
+                        }
+                    }
+                    if (playerId.isNotEmpty()) {
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle("Choose New Captain")
+                            .setSingleChoiceItems(playerNum.toTypedArray(), 0) { dialog, which ->
+                            }
+                            .setNeutralButton("Cancel") { dialog, which ->
+                                dialog.cancel()
+                            }
+                            .setPositiveButton("Confirm") { dialog, which ->
+                                val position = (dialog as androidx.appcompat.app.AlertDialog)
+                                    .listView.checkedItemPosition
+                                viewModel.setNewCaptain(playerId, position)
+                                viewModel.getPlayerUserInfo()
+                                dialog.dismiss()
+                            }
+                            .show()
+                    } else {
+                        Toast.makeText(requireContext(), "Need at least one player", Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
         }
 
         // invite
-//        binding.mailLayout.suffixText = "@gmail.com"
         binding.inviteButton.setOnClickListener {
             if (binding.mailEdit.text?.length == 0) {
                 binding.mailLayout.error = "This is required"
@@ -148,13 +214,7 @@ class ProfileFragment : Fragment() {
             if (binding.mailEdit.text?.length != 0 &&
                 binding.inviteNameEdit.text?.length != 0
             ) {
-                viewModel.invitation.id = viewModel.db.collection("Invitations").document().id
-                viewModel.invitation.teamId = User.teamId
-                viewModel.invitation.inviteeMail =
-                    binding.mailEdit.text.toString()// + binding.mailLayout.suffixText
-                viewModel.invitation.playerName = binding.inviteNameEdit.text.toString()
-
-                viewModel.sendInvitation()
+                viewModel.sendInvitation(binding.mailEdit.text.toString(), binding.inviteNameEdit.text.toString())
             }
         }
 

@@ -10,12 +10,14 @@ interface HoopRepository {
     fun getRoster(): MutableLiveData<List<Player>>
     fun getInvitations(): MutableLiveData<List<Invitation>>
 
-    suspend fun getTeams(): List<Team>
+    suspend fun getTeams(): Result<List<Team>>
     suspend fun getUserInfo(): List<Player>
-    suspend fun getTeamMembers(): List<Player>
-    suspend fun getMatchMembers(): List<Player>
-    suspend fun getPlayerData(playerId: String): List<Event>
-    suspend fun getRule(): Rule
-    suspend fun getPlayer(): Player
+    suspend fun getSelectedTeamMembers(): Result<List<Player>>
+    suspend fun getMatchMembers(): Result<List<Player>>
+    suspend fun getPlayerData(playerId: String): Result<List<Event>>
+    suspend fun getRule(): Result<Rule>
+    suspend fun getPlayer(): Result<Player>
+    suspend fun getTeamInfo(): Team
+    suspend fun getTeamEvents(): List<Event>
 
 }

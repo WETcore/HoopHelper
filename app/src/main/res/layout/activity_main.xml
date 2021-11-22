@@ -15,16 +15,18 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:background="@color/hoop_yellow"
+            android:background="@color/basil_yellow"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Hoop Helper"
+                android:layout_gravity="center"
                 android:padding="16dp"
-                android:layout_gravity="center"/>
+                android:text="Hoop Helper" />
 
         </androidx.appcompat.widget.Toolbar>
 
@@ -49,7 +51,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:backgroundTint="@color/hoop_yellow"
+                android:backgroundTint="@color/basil_yellow"
                 app:contentInsetLeft="0dp"
                 app:contentInsetStart="0dp"
                 app:fabAlignmentMode="center"
@@ -72,7 +74,7 @@
                 android:id="@+id/fab"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/hoop_background"
+                android:backgroundTint="@color/basil_yellow"
                 android:foreground="@drawable/basketball_ball_copy"
                 app:layout_anchor="@id/app_bar" />
 

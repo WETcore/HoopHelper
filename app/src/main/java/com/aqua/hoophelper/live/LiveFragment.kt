@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.fragment.navArgs
 import com.aqua.hoophelper.HoopInfo
 import com.aqua.hoophelper.R
 import com.aqua.hoophelper.database.Event
@@ -29,28 +30,42 @@ class LiveFragment : Fragment() {
         val binding: LiveFragmentBinding =
             DataBindingUtil.inflate(inflater, R.layout.live_fragment, container,false)
 
-        // adapt recycler
-        var adapter = LiveEventAdapter(viewModel, listOf(Event()))
-        binding.liveRecycler.adapter = adapter
+        // safe args
+        val args: LiveFragmentArgs by navArgs()
 
-        viewModel.events.observe(viewLifecycleOwner) { its ->
-            adapter = LiveEventAdapter(
-                viewModel,
-                its.filter {
-                    it.matchId == its.first().matchId
-                            && it.teamId == HoopInfo.spinnerSelectedTeamId
-                }
-            )
+        if (args.isGaming) {
+            binding.lottieNothing.visibility = View.GONE
+            binding.nothingText.visibility = View.GONE
+            binding.liveRecycler.visibility = View.VISIBLE
+
+            // adapt recycler
+            var adapter = LiveEventAdapter(viewModel, listOf(Event()))
             binding.liveRecycler.adapter = adapter
-            its.sortedByDescending { it.actualTime }
-            adapter.submitList(
-                its.filter {
-                    it.matchId == its.first().matchId
-                            && it.teamId == HoopInfo.spinnerSelectedTeamId
-                }
-            )
+
+            viewModel.events.observe(viewLifecycleOwner) { its ->
+                adapter = LiveEventAdapter(
+                    viewModel,
+                    its.filter {
+                        it.matchId == its.first().matchId
+                                && it.teamId == HoopInfo.spinnerSelectedTeamId.value
+                    }
+                )
+                binding.liveRecycler.adapter = adapter
+                its.sortedByDescending { it.actualTime }
+                adapter.submitList(
+                    its.filter {
+                        it.matchId == its.first().matchId
+                                && it.teamId == HoopInfo.spinnerSelectedTeamId.value
+                    }
+                )
+            }
+            (binding.liveRecycler.adapter as LiveEventAdapter).notifyItemChanged(0)
+        } else {
+            binding.lottieNothing.visibility = View.VISIBLE
+            binding.nothingText.visibility = View.VISIBLE
+            binding.liveRecycler.visibility = View.GONE
         }
-        (binding.liveRecycler.adapter as LiveEventAdapter).notifyItemChanged(0)
+
 
 
         return binding.root

@@ -16,6 +16,7 @@ buildscript {
         version_retrofit_coroutines_adapter = "0.9.2"
         version_recyclerview = "1.2.0-alpha05"
         room_version = "2.4.0-alpha04"
+        lottieVersion = "3.4.0"
     }
 
     repositories {
@@ -31,6 +32,8 @@ buildscript {
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$version_navigation"
         // firebase
         classpath 'com.google.gms:google-services:4.3.10'
+        // Add the Crashlytics Gradle plugin
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.8.0'
     }
 }
 

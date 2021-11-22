@@ -10,8 +10,10 @@ import com.aqua.hoophelper.User
 import com.aqua.hoophelper.database.Event
 import com.aqua.hoophelper.database.Match
 import com.aqua.hoophelper.database.Player
+import com.aqua.hoophelper.database.Result
 import com.aqua.hoophelper.database.Rule
 import com.aqua.hoophelper.database.remote.HoopRemoteDataSource
+import com.aqua.hoophelper.util.LoadApiStatus
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import kotlinx.coroutines.CoroutineScope
@@ -25,6 +27,10 @@ const val COURT_TOP = 0.15
 const val COURT_BOTTOM = 0.57
 
 class MatchViewModel : ViewModel() {
+
+    val _status = MutableLiveData<LoadApiStatus?>()
+    val status: LiveData<LoadApiStatus?>
+        get() = _status
 
     // Firebase
     val db = FirebaseFirestore.getInstance()
@@ -371,29 +377,36 @@ class MatchViewModel : ViewModel() {
     }
 
     fun setRoster() {
+        _status.value = LoadApiStatus.LOADING
         coroutineScope.launch {
-            val starPlayerList = mutableListOf<Player>()
+            val startPlayerList = mutableListOf<Player>()
             val subPlayerList = mutableListOf<Player>()
-            _roster.value = HoopRemoteDataSource.getMatchMembers()
-            Log.d("roster", "${_roster.value}")
-            val lineUp = _roster.value!!
+            when(val result = HoopRemoteDataSource.getMatchMembers()) {
+                is Result.Success -> {
+                    _roster.value = result.data!!
+                    val lineUp = _roster.value!!
+                    lineUp.filter {
+                        !it.starting5.contains(true)
+                    }.forEachIndexed { index, player ->
+                        _substitutionPlayer.value!!.add(player)
+                        subPlayerList.add(player)
+                    }
+                    lineUp.filter {
+                        it.starting5.contains(true)
+                    }.forEachIndexed { index, player ->
+                        startPlayerList.add(player)
+                    }
+                    startPlayerList.sortBy { it.starting5.indexOf(true) }
+                    _startPlayer.value = startPlayerList
+                    _substitutionPlayer.value = subPlayerList
 
-            lineUp.filter {
-                !it.starting5
-            }.forEachIndexed { index, player ->
-                _substitutionPlayer.value!!.add(player)
-                subPlayerList.add(player)
+                    _status.value = LoadApiStatus.DONE
+                }
+                is Result.Error -> {
+                    Log.d("status", "error")
+                    _status.value = LoadApiStatus.ERROR
+                }
             }
-
-            lineUp.filter {
-                it.starting5
-            }.forEachIndexed { index, player ->
-                starPlayerList.add(player)
-            }
-            _startPlayer.value = starPlayerList
-            _substitutionPlayer.value = subPlayerList
-            Log.d("subPlayer2", "${_startPlayer.value}")
-            Log.d("subPlayer3", "${_substitutionPlayer.value}")
         }
     }
 
@@ -411,19 +424,29 @@ class MatchViewModel : ViewModel() {
         }
     }
 
-    fun getMatchRule() {
+    private fun getMatchRule() {
+        _status.value = LoadApiStatus.LOADING
         coroutineScope.launch {
-            rule = HoopRemoteDataSource.getRule()
-            quarterLimit = rule.quarter.toInt() // TODO TO
-            foulLimit = rule.foulOut.toInt()
-            timeOut1Limit = rule.to1.toInt()
-            timeOut2Limit = rule.to2.toInt()
-            _shotClockLimit.value = rule.sClock.toLong()
-            _gameClockLimit.value = rule.gClock.toLong()
-            _shotClock.value = _shotClockLimit.value
-            _gameClockMin.value = _gameClockLimit.value!! - 1
-            shotClockTimer.start()
-            gameClockSecTimer.start()
+            when(val result = HoopRemoteDataSource.getRule()) {
+                is Result.Success -> {
+                    rule = result.data!!
+                    quarterLimit = rule.quarter.toInt() // TODO TO
+                    foulLimit = rule.foulOut.toInt()
+                    timeOut1Limit = rule.to1.toInt()
+                    timeOut2Limit = rule.to2.toInt()
+                    _shotClockLimit.value = rule.sClock.toLong()
+                    _gameClockLimit.value = rule.gClock.toLong()
+                    _shotClock.value = _shotClockLimit.value
+                    _gameClockMin.value = _gameClockLimit.value!! - 1
+                    shotClockTimer.start()
+                    gameClockSecTimer.start()
+                    _status.value = LoadApiStatus.DONE
+                }
+                is Result.Error -> {
+                    Log.d("status", "error")
+                    _status.value = LoadApiStatus.ERROR
+                }
+            }
         }
     }
 

@@ -1,30 +1,27 @@
 package com.aqua.hoophelper.home
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.transition.TransitionManager
-import android.util.Log
-import android.view.HapticFeedbackConstants
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import androidx.core.view.children
 import androidx.databinding.DataBindingUtil
-import androidx.navigation.Navigation
-import androidx.navigation.fragment.findNavController
-import com.aqua.hoophelper.NavigationDirections
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import com.aqua.hoophelper.MainActivityViewModel
 import com.aqua.hoophelper.R
 import com.aqua.hoophelper.databinding.HomeFragmentBinding
-import com.aqua.hoophelper.match.DataType
-import com.aqua.hoophelper.match.DetailDataType
+import com.aqua.hoophelper.util.LoadApiStatus
 
 class HomeFragment : Fragment() {
 
 
     private val viewModel: HomeViewModel by lazy {
         ViewModelProvider(this).get(HomeViewModel::class.java)
+    }
+
+    private val mainViewModel: MainActivityViewModel by lazy {
+        ViewModelProvider(this).get(MainActivityViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -36,8 +33,27 @@ class HomeFragment : Fragment() {
         val binding: HomeFragmentBinding =
             DataBindingUtil.inflate(inflater, R.layout.home_fragment, container,false)
 
-        // spinner
-        viewModel.getTeamList()
+        viewModel.status.observe(viewLifecycleOwner) {
+            when(it) {
+                LoadApiStatus.LOADING -> {
+                    binding.processText.visibility = View.VISIBLE
+                    binding.lottieViewpager.visibility = View.VISIBLE
+                    binding.textInputLayout.visibility = View.GONE
+                    binding.homeViewpager.visibility = View.INVISIBLE
+                    binding.textView.visibility = View.INVISIBLE
+                }
+                LoadApiStatus.DONE -> {
+                    binding.processText.visibility = View.GONE
+                    binding.lottieViewpager.visibility = View.GONE
+                    binding.textInputLayout.visibility = View.VISIBLE
+                    binding.homeViewpager.visibility = View.VISIBLE
+                    binding.textView.visibility = View.VISIBLE
+                }
+                LoadApiStatus.ERROR -> {
+
+                }
+            }
+        }
 
         viewModel.teams.observe(viewLifecycleOwner) {
             val teamAdapter =
@@ -53,20 +69,30 @@ class HomeFragment : Fragment() {
 
         // VPager
         viewModel.teamStat.observe(viewLifecycleOwner) {
-            Log.d("redo2","Hi ${it}")
 
-            val leaderTypes = listOf<String>("Score", "Rebound", "Assist", "Steal", "Block")
+            val leaderTypes = listOf("Score", "Rebound", "Assist", "Steal", "Block")
             if (it.size >= 5) {
                 val adapter = HomeVPagerAdapter(leaderTypes, requireContext(), viewModel)
-
                 binding.homeViewpager.apply {
                     this.offscreenPageLimit = 4
-                    this.adapter?.notifyDataSetChanged()
+                    this.adapter = adapter
+                    setPadding(190, 100, 100, 150)
+                }
+            } else {
+                val adapter = HomeVPagerAdapter(leaderTypes, requireContext(), null)
+                binding.homeViewpager.apply {
+                    this.offscreenPageLimit = 4
                     this.adapter = adapter
                     setPadding(190, 100, 100, 150)
                 }
             }
         }
+
+        // crashlitics
+        binding.crash.setOnClickListener {
+            throw RuntimeException("Test Crash") // Force a crash
+        }
+
         return binding.root
     }
 }
