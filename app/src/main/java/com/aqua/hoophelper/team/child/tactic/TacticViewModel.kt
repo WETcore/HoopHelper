@@ -5,13 +5,19 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.aqua.hoophelper.database.Player
+import com.aqua.hoophelper.database.Result
 import com.aqua.hoophelper.database.remote.HoopRemoteDataSource
+import com.aqua.hoophelper.util.LoadApiStatus
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class TacticViewModel : ViewModel() {
+
+    val _status = MutableLiveData<LoadApiStatus?>()
+    val status: LiveData<LoadApiStatus?>
+        get() = _status
 
     var avatarNum = 1
 
@@ -36,16 +42,25 @@ class TacticViewModel : ViewModel() {
     }
 
     fun setRoster() {
+        _status.value = LoadApiStatus.LOADING
         coroutineScope.launch {
             val starPlayerList = mutableListOf<Player>()
-            _roster.value = HoopRemoteDataSource.getMatchMembers()
-            val lineUp = _roster.value!!
-            lineUp.filter { it.starting5.contains(true) }.forEachIndexed { index, player ->
-                starPlayerList.add(player)
+            when(val result = HoopRemoteDataSource.getMatchMembers()) {
+                is Result.Success -> {
+                    _roster.value = result.data!!
+                    val lineUp = _roster.value!!
+                    lineUp.filter { it.starting5.contains(true) }.forEachIndexed { index, player ->
+                        starPlayerList.add(player)
+                    }
+                    starPlayerList.sortBy { it.starting5.indexOf(true) }
+                    _startPlayer.value = starPlayerList
+                    _status.value = LoadApiStatus.DONE
+                }
+                is Result.Error -> {
+                    Log.d("status", "error")
+                    _status.value = LoadApiStatus.ERROR
+                }
             }
-            starPlayerList.sortBy { it.starting5.indexOf(true) }
-            _startPlayer.value = starPlayerList
-//            Log.d("subPlayer4", "${_startPlayer.value}")
         }
     }
 }

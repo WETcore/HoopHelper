@@ -8,138 +8,166 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/hoop_background"
+        android:background="@color/basil_bg"
         tools:context=".team.child.tactic.TacticFragment">
 
-        <com.aqua.hoophelper.team.child.tactic.TacticCanvas
-            android:id="@+id/tactic"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="60dp"
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottie_tactic"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:lottie_loop="true"
+            app:lottie_autoPlay="true"
+            app:lottie_rawRes="@raw/loader_basketball"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.google.android.material.button.MaterialButtonToggleGroup
-            android:id="@+id/arrow_group"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            app:layout_constraintBottom_toTopOf="@+id/tactic"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:selectionRequired="true"
-            app:singleSelection="true">
+            />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/arrow_normal"
-                style="@style/Widget.App.Button.OutlinedButton.IconOnly"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:icon="@drawable/down_arrow"
-                app:iconSize="30dp" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/arrow_dash"
-                style="@style/Widget.App.Button.OutlinedButton.IconOnly"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:icon="@drawable/arrow_right"
-                app:iconSize="30dp" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/arrow_curl"
-                style="@style/Widget.App.Button.OutlinedButton.IconOnly"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:icon="@drawable/rotated_right_arrow"
-                app:iconSize="30dp" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/arrow_screen"
-                style="@style/Widget.App.Button.OutlinedButton.IconOnly"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:icon="@drawable/letter_t"
-                app:iconSize="30dp" />
-
-        </com.google.android.material.button.MaterialButtonToggleGroup>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/reset_canvas"
-            style="@style/Widget.App.Button.OutlinedButton.IconOnly"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            app:icon="@drawable/reload"
-            app:iconSize="30dp"
-            app:layout_constraintBottom_toTopOf="@+id/tactic"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/player1_avatar"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginBottom="90dp"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/tactic_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintDimensionRatio="w,1:1"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:shapeAppearanceOverlay="@style/circleImage" />
+            app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/player2_avatar"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="16dp"
-            app:layout_constraintBottom_toBottomOf="@+id/player1_avatar"
-            app:layout_constraintDimensionRatio="w,1:1"
-            app:layout_constraintStart_toEndOf="@+id/player1_avatar"
-            app:shapeAppearanceOverlay="@style/circleImage" />
+            <com.aqua.hoophelper.team.child.tactic.TacticCanvas
+                android:id="@+id/tactic"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="60dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/player3_avatar"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="16dp"
-            app:layout_constraintBottom_toBottomOf="@+id/player2_avatar"
-            app:layout_constraintDimensionRatio="w,1:1"
-            app:layout_constraintStart_toEndOf="@+id/player2_avatar"
-            app:shapeAppearanceOverlay="@style/circleImage" />
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/arrow_group"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                app:layout_constraintBottom_toTopOf="@+id/tactic"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:selectionRequired="true"
+                app:singleSelection="true">
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/player4_avatar"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="16dp"
-            app:layout_constraintBottom_toBottomOf="@+id/player3_avatar"
-            app:layout_constraintDimensionRatio="w,1:1"
-            app:layout_constraintStart_toEndOf="@+id/player3_avatar"
-            app:shapeAppearanceOverlay="@style/circleImage" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/arrow_normal"
+                    style="@style/Widget.App.Button.OutlinedButton.IconOnly"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:strokeColor="@color/spinner"
+                    app:icon="@drawable/substract"
+                    app:iconSize="30dp" />
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/player5_avatar"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="16dp"
-            app:layout_constraintBottom_toBottomOf="@+id/player4_avatar"
-            app:layout_constraintDimensionRatio="w,1:1"
-            app:layout_constraintStart_toEndOf="@+id/player4_avatar"
-            app:shapeAppearanceOverlay="@style/circleImage" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/arrow_dash"
+                    style="@style/Widget.App.Button.OutlinedButton.IconOnly"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:strokeColor="@color/spinner"
+                    app:icon="@drawable/substract_copy"
+                    app:iconSize="30dp" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/tactic_fab"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:background="@color/hoop_background"
-            android:foreground="@drawable/ball_of_basketball"
-            app:fab_size="mini"
-            app:layout_constraintBottom_toBottomOf="@+id/player5_avatar"
-            app:layout_constraintEnd_toEndOf="parent" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/arrow_curl"
+                    style="@style/Widget.App.Button.OutlinedButton.IconOnly"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:strokeColor="@color/spinner"
+                    app:icon="@drawable/rotated_right_arrow"
+                    app:iconSize="30dp" />
 
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/arrow_screen"
+                    style="@style/Widget.App.Button.OutlinedButton.IconOnly"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:strokeColor="@color/spinner"
+                    app:icon="@drawable/letter_t"
+                    app:iconSize="30dp" />
+
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/reset_canvas"
+                style="@style/Widget.App.Button.OutlinedButton.IconOnly"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                app:strokeColor="@color/spinner"
+                app:icon="@drawable/reload"
+                app:iconSize="30dp"
+                app:layout_constraintBottom_toTopOf="@+id/tactic"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/player1_avatar"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginBottom="90dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="w,1:1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:shapeAppearanceOverlay="@style/circleImage" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/player2_avatar"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="16dp"
+                app:layout_constraintBottom_toBottomOf="@+id/player1_avatar"
+                app:layout_constraintDimensionRatio="w,1:1"
+                app:layout_constraintStart_toEndOf="@+id/player1_avatar"
+                app:shapeAppearanceOverlay="@style/circleImage" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/player3_avatar"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="16dp"
+                app:layout_constraintBottom_toBottomOf="@+id/player2_avatar"
+                app:layout_constraintDimensionRatio="w,1:1"
+                app:layout_constraintStart_toEndOf="@+id/player2_avatar"
+                app:shapeAppearanceOverlay="@style/circleImage" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/player4_avatar"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="16dp"
+                app:layout_constraintBottom_toBottomOf="@+id/player3_avatar"
+                app:layout_constraintDimensionRatio="w,1:1"
+                app:layout_constraintStart_toEndOf="@+id/player3_avatar"
+                app:shapeAppearanceOverlay="@style/circleImage" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/player5_avatar"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="16dp"
+                app:layout_constraintBottom_toBottomOf="@+id/player4_avatar"
+                app:layout_constraintDimensionRatio="w,1:1"
+                app:layout_constraintStart_toEndOf="@+id/player4_avatar"
+                app:shapeAppearanceOverlay="@style/circleImage" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/tactic_fab"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@color/basil_background"
+                android:foreground="@drawable/ball_of_basketball"
+                app:fab_size="mini"
+                app:layout_constraintBottom_toBottomOf="@+id/player5_avatar"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

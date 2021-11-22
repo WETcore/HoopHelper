@@ -9,7 +9,7 @@
 
         <shape android:shape="oval">
             <solid
-                android:color="@color/hoop_background" />
+                android:color="@color/basil_background" />
         </shape>
     </item>
 </layer-list>

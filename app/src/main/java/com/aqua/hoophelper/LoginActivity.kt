@@ -1,5 +1,6 @@
 package com.aqua.hoophelper
 
+import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.content.Intent
 import android.graphics.Path
@@ -9,11 +10,19 @@ import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
+import android.view.animation.Animation
 import android.view.animation.PathInterpolator
 import androidx.annotation.RequiresApi
 import androidx.core.animation.doOnEnd
+import androidx.dynamicanimation.animation.DynamicAnimation
+import androidx.dynamicanimation.animation.SpringAnimation
+import androidx.dynamicanimation.animation.SpringForce
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
+import androidx.navigation.findNavController
+import com.airbnb.lottie.LottieAnimationView
 import com.aqua.hoophelper.database.Player
 import com.aqua.hoophelper.databinding.ActivityLoginBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -43,39 +52,11 @@ class LoginActivity : AppCompatActivity() {
         val binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Configure Google Sign In
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id))
-            .requestEmail()
-            .build()
+        // nav host TODO
+        val navHostFragment = findNavController(R.id.login_nav_host)
 
-        // getting the value of gso inside the GoogleSignInClient
-        val googleSignInClient = GoogleSignIn.getClient(this, gso)
+//        navHostFragment.navigate(R.id.action_loginFragment_to_tutorFragment)
 
-        // animation & login
-        val displayMetrics = DisplayMetrics()
-        this@LoginActivity.display?.getRealMetrics(displayMetrics)
-        val width = displayMetrics.widthPixels.toFloat()
-        val height = displayMetrics.heightPixels.toFloat()
-        val path = Path()
-        path.moveTo(32f, height-32f)
-
-        binding.googleSignIn.setOnClickListener {
-//            viewModel.signIn(googleSignInClient,this)
-        }
-
-        binding.loginFab.setOnClickListener {
-            path.apply {
-                quadTo(width*0.25f, -1000f,width*0.5f - 120f,height* 0.5f - 60f)
-            }
-            val animator = ObjectAnimator.ofFloat(binding.loginFab, View.X, View.Y, path).apply {
-                duration = 1500
-                start()
-            }
-            animator.doOnEnd {
-                viewModel.signIn(googleSignInClient,this)
-            }
-        }
     }
 
     override fun onStart() {
@@ -88,6 +69,7 @@ class LoginActivity : AppCompatActivity() {
         Log.d("currentUser","${user?.email}")
         viewModel.getUserInfo()
         updateUI(user)
+//        enterTutorUI(user)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -128,8 +110,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun updateUI(user: FirebaseUser?) {
         if (user != null) {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+            findNavController(R.id.login_nav_host).navigate(R.id.action_loginFragment_to_tutorFragment)
         }
     }
 }

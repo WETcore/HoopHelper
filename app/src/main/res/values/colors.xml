@@ -8,26 +8,37 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="hoop_orange">#F44336</color>
-    <color name="hoop_yellow">#FF9800</color>
-    <color name="hoop_red">#C60000</color>
-    <color name="hoop_orange_light">#FF6600</color>
-    <color name="hoop_background">#FFE9C2</color>FFF3B6
+    <color name="basil_bg">#FFFBE6</color>
+    <color name="basil_green_dark">#356859</color>
+    <color name="basil_green">#37966F</color>
+    <color name="basil_green_light">#B9E4C9</color>
+    <color name="basil_orange">#FD5523</color>
+    <color name="basil_orange_bg">#FFA98F</color>
+    <color name="basil_red">#FF1B1B</color>
+    <color name="basil_background">#FFE9C2</color>
+    <color name="basil_yellow">#FFCC6A</color>
 
     <color name="clock_yellow">#FFF87D</color>
     <color name="clock_red">#FF6D24</color>
     <color name="clock_green">#C2E8CE</color>
     <color name="clock_background">#A35709</color>
 
-    <color name="basil_bg">#FFFBE6</color>
-    <color name="basil_green_dark">#356859</color>
-    <color name="basil_green">#37966F</color>
-    <color name="basil_green_light">#B9E4C9</color>
-    <color name="basil_orange">#FD5523</color>
-
-
+    <color name="pie1">#F2C4C4</color>
+    <color name="pie2">#F2D8C4</color>
+    <color name="pie3">#F2EBC4</color>
+    <color name="pie4">#CBF2C4</color>
+    <color name="pie5">#C4EDF2</color>
+    <color name="pie6">#C4C5F2</color>
+    <color name="pie7">#F1C4F2</color>
+    <color name="pie8">#ff6666</color>
+    <color name="pie9">#FFAB66</color>
+    <color name="pie10">#FFE666</color>
+    <color name="pie11">#ADFF66</color>
+    <color name="pie12">#66D9FF</color>
+    <color name="pie13">#7366FF</color>
+    <color name="pie14">#D773FF</color>
+    <color name="pie15">#FF4040</color>
 
     <color name="transparent">#00000000</color>
-
 
 </resources>

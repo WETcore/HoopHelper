@@ -15,6 +15,7 @@ import com.aqua.hoophelper.HoopInfo
 import com.aqua.hoophelper.NavigationDirections
 import com.aqua.hoophelper.R
 import com.aqua.hoophelper.databinding.MatchFragmentBinding
+import com.aqua.hoophelper.util.LoadApiStatus
 
 enum class DataType {
     SCORE, REBOUND, ASSIST, STEAL, BLOCK, TURNOVER, FOUL
@@ -41,14 +42,30 @@ class MatchFragment : Fragment() {
         val binding: MatchFragmentBinding =
             DataBindingUtil.inflate(inflater, R.layout.match_fragment, container,false)
 
-        // get roster from db
+        viewModel.status.observe(viewLifecycleOwner) {
+            when(it) {
+                LoadApiStatus.LOADING -> {
+                    binding.lottieMatch.visibility = View.VISIBLE
+                    binding.matchLayout.visibility = View.GONE
+                }
+                LoadApiStatus.DONE -> {
+                    binding.lottieMatch.visibility = View.GONE
+                    binding.matchLayout.visibility = View.VISIBLE
+                }
+                LoadApiStatus.ERROR -> {
+
+                }
+            }
+        }
+
+        // get roster from db TODO
         viewModel.setRoster()
 
         // safe arg
         val args: MatchFragmentArgs by navArgs()
 
         // Hint for user
-        Toast.makeText(requireContext(), "drag the red dot to the court.", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), "Long press & drag the red dot to the court.", Toast.LENGTH_LONG).show()
 
         // set shot clock
         viewModel.shotClock.observe(viewLifecycleOwner) {
