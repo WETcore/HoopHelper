@@ -3,7 +3,6 @@ package com.aqua.hoophelper.util
 import android.annotation.SuppressLint
 import android.app.*
 import android.content.Intent
-import android.util.Log
 import androidx.lifecycle.LifecycleService
 import com.aqua.hoophelper.R
 import com.aqua.hoophelper.database.remote.HoopRemoteDataSource
@@ -13,15 +12,12 @@ class HoopService: LifecycleService() {
 
     override fun onCreate() {
         super.onCreate()
-        Log.d("service1", "OnCreate1")
     }
 
     @SuppressLint("UnspecifiedImmutableFlag")
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
-        Log.d("service1", "OnStart1")
         HoopRemoteDataSource.getInvitations().observe(this) { invite ->
-            Log.d("service1", "OnObserve1")
             if (!invite.isNullOrEmpty()) {
                 val intent1 = Intent(applicationContext, CheckService::class.java)
                 intent1.apply {
@@ -75,7 +71,6 @@ class HoopService: LifecycleService() {
                     manager.notify(1, notification)
                 }
                 else if (intent?.getBooleanExtra("dualNumber", false) == true) {
-                    Log.d("service1", "dual")
                     var numberList = ""
                     for (i in invite.first().existingNumbers.indices) {
                         numberList += invite.first().existingNumbers[i] + " "
@@ -102,6 +97,5 @@ class HoopService: LifecycleService() {
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.d("service1", "OnDestroy1")
     }
 }

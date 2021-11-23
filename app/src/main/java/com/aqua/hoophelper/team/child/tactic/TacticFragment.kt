@@ -1,20 +1,19 @@
 package com.aqua.hoophelper.team.child.tactic
 
 import android.annotation.SuppressLint
-import android.graphics.*
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffXfermode
 import android.os.Bundle
-import android.util.Log
 import android.view.DragEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
-import com.aqua.hoophelper.MainActivityViewModel
 import com.aqua.hoophelper.R
 import com.aqua.hoophelper.databinding.TacticFragmentBinding
 import com.aqua.hoophelper.util.LoadApiStatus
@@ -96,7 +95,6 @@ class TacticFragment : Fragment() {
             val paint = Paint()
             paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
             canvas.drawRect(0f,0f,500f,500f,paint)
-//            binding.tactic.draw(canvas)
             binding.tactic.clear()
         }
 

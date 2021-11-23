@@ -1,17 +1,13 @@
 package com.aqua.hoophelper.live
 
-import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.aqua.hoophelper.database.Event
-import com.aqua.hoophelper.database.Player
 import com.aqua.hoophelper.database.PlayerStat
 import com.aqua.hoophelper.database.remote.HoopRemoteDataSource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 
 class LiveViewModel : ViewModel() {
 
@@ -20,18 +16,13 @@ class LiveViewModel : ViewModel() {
     val events: LiveData<List<Event>>
         get() = _events
 
-    // 球員數據
-    private var _playerStat = MutableLiveData<PlayerStat>(PlayerStat())
-    val playerStat: LiveData<PlayerStat>
-        get() = _playerStat
-
     // Create a Coroutine scope using a job to be able to cancel when needed
     private var viewModelJob = Job()
 
     // the Coroutine runs using the Main (UI) dispatcher
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-    // 區別動作
+    // recognize event
     fun filterEventType(event: Event): String {
         return when {
             event.assist -> {

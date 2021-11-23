@@ -4,31 +4,24 @@ import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.graphics.Path
 import android.os.Build
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.util.DisplayMetrics
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.core.animation.doOnEnd
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.aqua.hoophelper.LoginActivityViewModel
 import com.aqua.hoophelper.R
-import com.aqua.hoophelper.User
 import com.aqua.hoophelper.databinding.LoginFragmentBinding
-import com.aqua.hoophelper.databinding.TutorFragmentBinding
 import com.aqua.hoophelper.tutor.Tutor
-import com.aqua.hoophelper.tutor.TutorViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 
 class LoginFragment : Fragment() {
-
-    private val viewModel: LoginViewModel by lazy {
-        ViewModelProvider(this).get(LoginViewModel::class.java)
-    }
 
     private val loginViewModel: LoginActivityViewModel by lazy {
         ViewModelProvider(this).get(LoginActivityViewModel::class.java)
@@ -101,11 +94,6 @@ class LoginFragment : Fragment() {
                 start()
             }
             animator.doOnEnd {
-//                SpringAnimation(binding.loginFab, DynamicAnimation.TRANSLATION_Y).apply {
-//                    this.animateToFinalPosition(0f)
-//                    this.setStartVelocity(SpringForce.DAMPING_RATIO_HIGH_BOUNCY)
-//                }.start()
-
                 binding.loginFab.isClickable = false
                 loginViewModel.signIn(googleSignInClient,requireActivity())
             }

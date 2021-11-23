@@ -5,15 +5,12 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.viewpager2.widget.ViewPager2
-import com.aqua.hoophelper.MainActivityViewModel
 import com.aqua.hoophelper.R
 import com.aqua.hoophelper.databinding.TeamFragmentBinding
 import com.aqua.hoophelper.team.child.tactic.Tactic
@@ -23,10 +20,6 @@ class TeamFragment : Fragment() {
 
     private val viewModel: TeamViewModel by lazy {
         ViewModelProvider(this).get(TeamViewModel::class.java)
-    }
-
-    private val mainViewModel: MainActivityViewModel by lazy {
-        ViewModelProvider(this).get(MainActivityViewModel::class.java)
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -44,19 +37,19 @@ class TeamFragment : Fragment() {
         val vPager = binding.teamViewpager
         val title: List<String> = listOf("Manage", "Chart", "Tactic")
         val titleIcon: List<Drawable> = listOf(
-            resources.getDrawable(R.drawable.planning),
-            resources.getDrawable(R.drawable.bar_chart),
-            resources.getDrawable(R.drawable.tactic),
+            resources.getDrawable(R.drawable.planning, null),
+            resources.getDrawable(R.drawable.bar_chart, null),
+            resources.getDrawable(R.drawable.tactic, null),
         )
         vPager.adapter = TeamVPagerAdapter(requireActivity())
 
-        tabLayout.tabTextColors = ColorStateList.valueOf(Color.parseColor("#FF1B1B"))
-        tabLayout.tabIconTint = ColorStateList.valueOf(Color.parseColor("#FF1B1B"))
+        tabLayout.tabTextColors = ColorStateList.valueOf(resources.getColor(R.color.basil_red, null))
+        tabLayout.tabIconTint = ColorStateList.valueOf(resources.getColor(R.color.basil_red, null))
 
         TabLayoutMediator(tabLayout, vPager) { tab, position ->
             tab.text = title[position]
             tab.icon = titleIcon[position]
-            vPager.offscreenPageLimit = 2 //ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT
+            vPager.offscreenPageLimit = 2 //OFFSCREEN_PAGE_LIMIT_DEFAULT
             vPager.setCurrentItem(tab.position, true)
         }.attach()
 

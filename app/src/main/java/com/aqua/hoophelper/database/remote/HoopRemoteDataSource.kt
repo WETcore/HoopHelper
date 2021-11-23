@@ -21,12 +21,10 @@ object HoopRemoteDataSource: HoopRepository {
             FirebaseFirestore.getInstance()
                 .collection("Events")
                 .orderBy("actualTime", Query.Direction.DESCENDING)
-//                .whereEqualTo("teamId", HoopInfo.spinnerSelectedTeamId)
                 .addSnapshotListener { value, error ->
                     it.value = value?.toObjects(Event::class.java) ?: mutableListOf()
                 }
         }
-
         return result
     }
 
@@ -40,7 +38,6 @@ object HoopRemoteDataSource: HoopRepository {
                     it.value = value?.toObjects(Match::class.java) ?: mutableListOf()
                 }
         }
-
         return result
     }
 
@@ -134,7 +131,6 @@ object HoopRemoteDataSource: HoopRepository {
             }
     }
 
-    // TODO get playerId to get event
     override suspend fun getPlayerData(playerId: String): Result<List<Event>> = suspendCoroutine { conti ->
         FirebaseFirestore.getInstance()
             .collection("Events")

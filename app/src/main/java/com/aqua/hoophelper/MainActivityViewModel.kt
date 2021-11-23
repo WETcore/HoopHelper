@@ -1,21 +1,19 @@
 package com.aqua.hoophelper
 
-import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.aqua.hoophelper.database.*
-import com.aqua.hoophelper.database.remote.HoopRemoteDataSource
+import com.aqua.hoophelper.database.Match
+import com.aqua.hoophelper.database.Player
+import com.aqua.hoophelper.database.Team
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 import java.util.*
 
 class MainActivityViewModel: ViewModel() {
 
-    val db = FirebaseFirestore.getInstance()
+    private val db = FirebaseFirestore.getInstance()
 
     var match = Match()
 
@@ -23,10 +21,6 @@ class MainActivityViewModel: ViewModel() {
 
     var player = MutableLiveData<List<Player>>()
     var team = MutableLiveData<List<Team>>()
-
-    var _invites = HoopRemoteDataSource.getInvitations()
-    val invites: LiveData<List<Invitation>>
-        get() = _invites
 
     // Create a Coroutine scope using a job to be able to cancel when needed
     private var viewModelJob = Job()
@@ -57,9 +51,19 @@ class MainActivityViewModel: ViewModel() {
                     } else {
                         matches.lastOrNull{ it.teamId == teamId }?.gaming == true
                     }
-                    Log.d("badge2","${it.value} $teamId")
                 }
         }
+    }
+
+    fun exitMatch() {
+        db.collection("Matches")
+            .whereEqualTo("matchId", match.matchId)
+            .get()
+            .addOnSuccessListener {
+                it.forEach {
+                    it.reference.update("gaming",false)
+                }
+            }
     }
 
     ////////////////

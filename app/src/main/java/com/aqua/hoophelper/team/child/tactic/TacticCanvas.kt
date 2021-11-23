@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.res.Resources
 import android.graphics.*
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import com.aqua.hoophelper.R
@@ -37,11 +36,11 @@ class TacticCanvas(context: Context, attrs: AttributeSet): View(context, attrs) 
 
         // Canvas
         mCanvas = Canvas(bitmap)
-        mCanvas.drawColor(resources.getColor(R.color.basil_background))
+        mCanvas.drawColor(resources.getColor(R.color.basil_background, null))
 
         // Paint
         paint.apply {
-            color = resources.getColor(R.color.basil_green_dark)
+            color = resources.getColor(R.color.basil_green_dark, null)
             strokeWidth = 5f
             isAntiAlias = true
             isDither = true
@@ -50,7 +49,7 @@ class TacticCanvas(context: Context, attrs: AttributeSet): View(context, attrs) 
         }
 
         paintStart.apply {
-            color = resources.getColor(R.color.basil_bg)
+            color = resources.getColor(R.color.basil_bg, null)
             strokeWidth = 5f
             isAntiAlias = true
             style = Paint.Style.FILL
@@ -58,7 +57,7 @@ class TacticCanvas(context: Context, attrs: AttributeSet): View(context, attrs) 
         }
 
         paintEnd.apply {
-            color = resources.getColor(R.color.basil_orange)
+            color = resources.getColor(R.color.basil_orange, null)
             strokeWidth = 5f
             isAntiAlias = true
             style = Paint.Style.FILL
@@ -95,7 +94,6 @@ class TacticCanvas(context: Context, attrs: AttributeSet): View(context, attrs) 
                 if (Arrow.isScreen) {
                     getScreenLine(event.x, event.y, Arrow.isScreen)
                 } else {
-//                    mCanvas.drawCircle(startX, startY, 10f, paintEnd)
                     getScreenLine(event.x, event.y, Arrow.isScreen)
                 }
             }
@@ -139,37 +137,31 @@ class TacticCanvas(context: Context, attrs: AttributeSet): View(context, attrs) 
         if (screen) {
             var crossX = 10f
             var crossY = 10f
-            Log.d("cross", "${dy} ${dx}")
 
             // quadrant
             when {
                 (dx < 0f && abs(dy) <= 10f) || (dx > 0f && abs(dy) <= 10f) -> {
-                    Log.d("cross", "x")
                     crossX = 0f
                     crossY = 10f
                 }
                 (abs(dx) <= 10f && dy > 0f) || (abs(dx) <= 10f && dy < 0f) -> {
-                    Log.d("cross", "y")
                     crossX = 10f
                     crossY = 0f
                 }
                 (dx > 0f && dy > 0f) || (dx < 0f && dy < 0f) -> {
-                    Log.d("cross", "1 3")
                     crossX = 10f
                     crossY = 10f
                 }
 
                 (dx < 0f && dy > 0f) || (dx > 0f && dy < 0f) -> {
-                    Log.d("cross", "2 4")
                     crossX = -10f
                     crossY = 10f
                 }
             }
             mCanvas.drawLine(startX - crossX, startY - crossY, startX + crossX,startY + crossY, paintEnd)
         } else {
-            var arrowX = 10f
-            var arrowY = 10f
-            Log.d("cross", "${dy} ${dx}")
+            val arrowX = 10f
+            val arrowY = 10f
             mCanvas.drawLine(startX - arrowX, startY - arrowY, startX + arrowX,startY + arrowY, paintEnd)
             mCanvas.drawLine(startX - arrowX, startY + arrowY, startX + arrowX,startY - arrowY, paintEnd)
         }
@@ -177,7 +169,7 @@ class TacticCanvas(context: Context, attrs: AttributeSet): View(context, attrs) 
 
     fun clear() {
         mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR)
-        mCanvas.drawColor(resources.getColor(R.color.basil_background))
+        mCanvas.drawColor(resources.getColor(R.color.basil_background, null))
     }
 }
 

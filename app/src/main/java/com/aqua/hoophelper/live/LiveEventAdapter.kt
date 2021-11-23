@@ -3,31 +3,28 @@ package com.aqua.hoophelper.live
 import android.animation.AnimatorInflater
 import android.animation.AnimatorSet
 import android.annotation.SuppressLint
-import android.content.res.ColorStateList
+import android.content.res.Resources
 import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.aqua.hoophelper.R
-import com.aqua.hoophelper.User
 import com.aqua.hoophelper.database.Event
 import com.aqua.hoophelper.databinding.LiveEventItemBinding
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
-import okhttp3.HttpUrl.Companion.toHttpUrl
 
 
-class LiveEventAdapter(val viewModel: LiveViewModel, val events: List<Event>): ListAdapter<Event, LiveEventAdapter.EventViewHolder>(DiffCallback) {
+class LiveEventAdapter(val viewModel: LiveViewModel, private val events: List<Event>):
+    ListAdapter<Event, LiveEventAdapter.EventViewHolder>(DiffCallback) {
 
     class EventViewHolder(var binding: LiveEventItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(event: Event) {
             binding.event = event
-            // TODO sealed class
             binding.executePendingBindings()
         }
     }
@@ -54,15 +51,15 @@ class LiveEventAdapter(val viewModel: LiveViewModel, val events: List<Event>): L
     override fun onBindViewHolder(holder: EventViewHolder, position: Int) {
         val event = getItem(position)
 
+        val context = holder.binding.root.context
+
         // get player data
         val playerStat = viewModel.getTeamPlayerData(event.playerId, events)
 
-        Log.d("zzz","${events}")
-        holder.binding.liveName.text = event.playerName
-        holder.binding.liveNameB.text = event.playerName
-        holder.binding.liveEventTypeText.text = viewModel.filterEventType(event)
-
         holder.binding.apply {
+            liveName.text = event.playerName
+            liveNameB.text = event.playerName
+            liveEventTypeText.text = viewModel.filterEventType(event)
             livePtsChip.text
         }
 
@@ -74,60 +71,60 @@ class LiveEventAdapter(val viewModel: LiveViewModel, val events: List<Event>): L
             condition == "got foul"
                 ) {
             holder.binding.apply {
-                liveName.setTextColor(Color.parseColor("#FD5523"))
-                liveEventTypeText.setTextColor(Color.parseColor("#FD5523"))
-                view2.setBackgroundColor(Color.parseColor("#FD5523"))
-                view3.setBackgroundColor(Color.parseColor("#FD5523"))
-                liveTimeChip.setTextColor(Color.parseColor("#FD5523"))
+                liveName.setTextColor(context.resources.getColor(R.color.basil_orange, null))
+                liveEventTypeText.setTextColor(context.resources.getColor(R.color.basil_orange, null))
+                view2.setBackgroundColor(context.resources.getColor(R.color.basil_orange, null))
+                view3.setBackgroundColor(context.resources.getColor(R.color.basil_orange, null))
+                liveTimeChip.setTextColor(context.resources.getColor(R.color.basil_orange, null))
                 liveTimeChip.setChipStrokeColorResource(R.color.basil_orange)
-                liveZoneChip.setTextColor(Color.parseColor("#FD5523"))
+                liveZoneChip.setTextColor(context.resources.getColor(R.color.basil_orange, null))
                 liveZoneChip.setChipStrokeColorResource(R.color.basil_orange)
-                liveMessageCard.strokeColor = Color.parseColor("#FD5523")
+                liveMessageCard.strokeColor = context.resources.getColor(R.color.basil_orange, null)
 
-                liveNameB.setTextColor(Color.parseColor("#FD5523"))
-                view2B.setBackgroundColor(Color.parseColor("#FD5523"))
-                livePtsChip.setTextColor(Color.parseColor("#FD5523"))
+                liveNameB.setTextColor(context.resources.getColor(R.color.basil_orange, null))
+                view2B.setBackgroundColor(context.resources.getColor(R.color.basil_orange, null))
+                livePtsChip.setTextColor(context.resources.getColor(R.color.basil_orange, null))
                 livePtsChip.setChipStrokeColorResource(R.color.basil_orange)
-                liveRebChip.setTextColor(Color.parseColor("#FD5523"))
+                liveRebChip.setTextColor(context.resources.getColor(R.color.basil_orange, null))
                 liveRebChip.setChipStrokeColorResource(R.color.basil_orange)
-                liveAstChip.setTextColor(Color.parseColor("#FD5523"))
+                liveAstChip.setTextColor(context.resources.getColor(R.color.basil_orange, null))
                 liveAstChip.setChipStrokeColorResource(R.color.basil_orange)
-                liveStlChip.setTextColor(Color.parseColor("#FD5523"))
+                liveStlChip.setTextColor(context.resources.getColor(R.color.basil_orange, null))
                 liveStlChip.setChipStrokeColorResource(R.color.basil_orange)
-                liveBlkChip.setTextColor(Color.parseColor("#FD5523"))
+                liveBlkChip.setTextColor(context.resources.getColor(R.color.basil_orange, null))
                 liveBlkChip.setChipStrokeColorResource(R.color.basil_orange)
-                liveMessageCardB.strokeColor = Color.parseColor("#FD5523")
+                liveMessageCardB.strokeColor = context.resources.getColor(R.color.basil_orange, null)
             }
-
         } else {
             holder.binding.apply {
-                liveName.setTextColor(Color.parseColor("#356859"))
-                liveEventTypeText.setTextColor(Color.parseColor("#356859"))
-                view2.setBackgroundColor(Color.parseColor("#356859"))
-                view3.setBackgroundColor(Color.parseColor("#356859"))
-                liveTimeChip.setTextColor(Color.parseColor("#356859"))
+                liveName.setTextColor(context.resources.getColor(R.color.basil_green_dark, null))
+                liveEventTypeText.setTextColor(context.resources.getColor(R.color.basil_green_dark, null))
+                view2.setBackgroundColor(context.resources.getColor(R.color.basil_green_dark, null))
+                view3.setBackgroundColor(context.resources.getColor(R.color.basil_green_dark, null))
+                liveTimeChip.setTextColor(context.resources.getColor(R.color.basil_green_dark, null))
                 liveTimeChip.setChipStrokeColorResource(R.color.basil_green_dark)
-                liveZoneChip.setTextColor(Color.parseColor("#356859"))
+                liveZoneChip.setTextColor(context.resources.getColor(R.color.basil_green_dark, null))
                 liveZoneChip.setChipStrokeColorResource(R.color.basil_green_dark)
-                liveMessageCard.strokeColor = Color.parseColor("#356859")
+                liveMessageCard.strokeColor = context.resources.getColor(R.color.basil_green_dark, null)
 
-                liveNameB.setTextColor(Color.parseColor("#356859"))
-                view2B.setBackgroundColor(Color.parseColor("#356859"))
-                livePtsChip.setTextColor(Color.parseColor("#356859"))
+                liveNameB.setTextColor(context.resources.getColor(R.color.basil_green_dark, null))
+                view2B.setBackgroundColor(context.resources.getColor(R.color.basil_green_dark, null))
+                livePtsChip.setTextColor(context.resources.getColor(R.color.basil_green_dark, null))
                 livePtsChip.setChipStrokeColorResource(R.color.basil_green_dark)
-                liveRebChip.setTextColor(Color.parseColor("#356859"))
+                liveRebChip.setTextColor(context.resources.getColor(R.color.basil_green_dark, null))
                 liveRebChip.setChipStrokeColorResource(R.color.basil_green_dark)
-                liveAstChip.setTextColor(Color.parseColor("#356859"))
+                liveAstChip.setTextColor(context.resources.getColor(R.color.basil_green_dark, null))
                 liveAstChip.setChipStrokeColorResource(R.color.basil_green_dark)
-                liveStlChip.setTextColor(Color.parseColor("#356859"))
+                liveStlChip.setTextColor(context.resources.getColor(R.color.basil_green_dark, null))
                 liveStlChip.setChipStrokeColorResource(R.color.basil_green_dark)
-                liveBlkChip.setTextColor(Color.parseColor("#356859"))
+                liveBlkChip.setTextColor(context.resources.getColor(R.color.basil_green_dark, null))
                 liveBlkChip.setChipStrokeColorResource(R.color.basil_green_dark)
-                liveMessageCardB.strokeColor = Color.parseColor("#356859")
+                liveMessageCardB.strokeColor = context.resources.getColor(R.color.basil_green_dark, null)
             }
         }
 
-        holder.binding.liveTimeChip.text = "Time |  " + event.matchTimeMin +
+        holder.binding.liveTimeChip.text = "Time |  " +
+                event.matchTimeMin +
                 ":" + event.matchTimeSec +
                 " Qtr: " + event.quarter
 
@@ -163,7 +160,6 @@ class LiveEventAdapter(val viewModel: LiveViewModel, val events: List<Event>): L
 
         // flip card
         var isFront = true
-        val context = holder.binding.root.context
         val scale = context.resources.displayMetrics.density
         holder.binding.liveMessageCard.cameraDistance = 8000 * scale
         holder.binding.liveMessageCardB.cameraDistance = 8000 * scale

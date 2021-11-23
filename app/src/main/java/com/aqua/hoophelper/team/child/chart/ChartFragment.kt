@@ -1,27 +1,17 @@
 package com.aqua.hoophelper.team.child.chart
 
+import android.annotation.SuppressLint
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.anychart.AnyChart
-import com.anychart.chart.common.dataentry.DataEntry
-import com.anychart.chart.common.dataentry.ValueDataEntry
-import com.anychart.enums.Align
 import com.aqua.hoophelper.R
 import com.aqua.hoophelper.databinding.ChartFragmentBinding
-import com.anychart.enums.LegendLayout
-
-import android.annotation.SuppressLint
-import android.graphics.Color
-import android.graphics.Typeface
-import android.util.Log
-import android.widget.ArrayAdapter
-import com.anychart.APIlib
-import com.anychart.AnyChartView
 import com.aqua.hoophelper.util.LoadApiStatus
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
@@ -80,21 +70,21 @@ class ChartFragment : Fragment() {
         viewModel.selectedPlayerData.observe(viewLifecycleOwner) {
             if (!it.isNullOrEmpty()) {
                 val colors = mutableListOf<Int>()
-                colors.add(resources.getColor(R.color.pie1))
-                colors.add(resources.getColor(R.color.pie2))
-                colors.add(resources.getColor(R.color.pie3))
-                colors.add(resources.getColor(R.color.pie4))
-                colors.add(resources.getColor(R.color.pie5))
-                colors.add(resources.getColor(R.color.pie6))
-                colors.add(resources.getColor(R.color.pie7))
-                colors.add(resources.getColor(R.color.pie8))
-                colors.add(resources.getColor(R.color.pie9))
-                colors.add(resources.getColor(R.color.pie10))
-                colors.add(resources.getColor(R.color.pie11))
-                colors.add(resources.getColor(R.color.pie12))
-                colors.add(resources.getColor(R.color.pie13))
-                colors.add(resources.getColor(R.color.pie14))
-                colors.add(resources.getColor(R.color.pie15))
+                colors.add(resources.getColor(R.color.pie1, null))
+                colors.add(resources.getColor(R.color.pie2, null))
+                colors.add(resources.getColor(R.color.pie3, null))
+                colors.add(resources.getColor(R.color.pie4, null))
+                colors.add(resources.getColor(R.color.pie5, null))
+                colors.add(resources.getColor(R.color.pie6, null))
+                colors.add(resources.getColor(R.color.pie7, null))
+                colors.add(resources.getColor(R.color.pie8, null))
+                colors.add(resources.getColor(R.color.pie9, null))
+                colors.add(resources.getColor(R.color.pie10, null))
+                colors.add(resources.getColor(R.color.pie11, null))
+                colors.add(resources.getColor(R.color.pie12, null))
+                colors.add(resources.getColor(R.color.pie13, null))
+                colors.add(resources.getColor(R.color.pie14, null))
+                colors.add(resources.getColor(R.color.pie15, null))
 
                 val dataP = mutableListOf<PieEntry>()
                 dataP.add(PieEntry(it.filter { it.zone == 1 }.filter { it.score2 == true }.size.toFloat(),"Around Rim"))
@@ -116,23 +106,23 @@ class ChartFragment : Fragment() {
 
                 val dataSet = PieDataSet(dataP, "labels")
                 dataSet.valueTextSize = 15f
-                dataSet.valueTextColor = Color.parseColor("#00000000")
+                dataSet.valueTextColor =  resources.getColor(R.color.transparent, null)
                 dataSet.colors = colors
                 val pieData = PieData(dataSet)
                 pieData.setDrawValues(true)
                 binding.chartPie.apply {
-                    setHoleColor(Color.parseColor("#FFE9C2"))
+                    setHoleColor(resources.getColor(R.color.basil_background, null))
                     centerText = "Hot Spot Score"
-                    setCenterTextColor(Color.parseColor("#356859"))
+                    setCenterTextColor(resources.getColor(R.color.basil_green_dark, null))
                     setCenterTextSize(25f)
                     legend.let {
                         it.textSize = 15f
                         it.setDrawInside(false)
                         it.isWordWrapEnabled = true
-                        it.textColor = Color.parseColor("#356859")
+                        it.textColor = resources.getColor(R.color.basil_green_dark, null)
                     }
                     setEntryLabelTextSize(15f)
-                    setEntryLabelColor(Color.parseColor("#356859"))
+                    setEntryLabelColor(resources.getColor(R.color.basil_green_dark, null))
                     setDrawEntryLabels(false)
                     data = pieData
                     invalidate()

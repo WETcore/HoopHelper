@@ -1,23 +1,18 @@
 package com.aqua.hoophelper.team.child.manage
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.text.Editable
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.TextView
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.aqua.hoophelper.R
 import com.aqua.hoophelper.databinding.ManageFragmentBinding
-import com.aqua.hoophelper.team.child.tactic.Tactic
 import com.aqua.hoophelper.util.LoadApiStatus
 
 class ManageFragment : Fragment() {
-
 
     private val viewModel: ManageViewModel by lazy {
         ViewModelProvider(this).get(ManageViewModel::class.java)
@@ -52,7 +47,6 @@ class ManageFragment : Fragment() {
             // lineUp
             viewModel.startPlayer.observe(viewLifecycleOwner) {
                 if (!it.isNullOrEmpty()) {
-                    Log.d("lineUp","${it[0].number}")
                     start5PgText.setText(it[0].number, false)
                     start5SgText.setText(it[1].number, false)
                     start5SfText.setText(it[2].number, false)
@@ -75,12 +69,10 @@ class ManageFragment : Fragment() {
                 start5SfText.setAdapter(teamAdapter)
                 start5PfText.setAdapter(teamAdapter)
                 start5CText.setAdapter(teamAdapter)
-                Log.d("subPlayer4", "${viewModel.subNum}")
             }
 
             start5PgText.setOnItemClickListener { parent, view, position, id ->
                 viewModel.switchLineUp(position, 0)
-                Log.d("lineup","${viewModel.startPlayer.value}")
             }
             start5SgText.setOnItemClickListener { parent, view, position, id ->
                 viewModel.switchLineUp(position, 1)
@@ -94,11 +86,9 @@ class ManageFragment : Fragment() {
             start5CText.setOnItemClickListener { parent, view, position, id ->
                 viewModel.switchLineUp(position, 4)
             }
-        }
 
         // set rule
-        binding.apply {
-            setRuleButton.setOnClickListener { //TODO 初始值從db拿，以下放回VM
+            setRuleButton.setOnClickListener {
                 viewModel.rule.quarter = quarterEdit.text.toString()
                 viewModel.rule.gClock = gameClockEdit.text.toString()
                 viewModel.rule.sClock = shotClockEdit.text.toString()

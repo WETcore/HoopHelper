@@ -1,7 +1,6 @@
 package com.aqua.hoophelper.home
 
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,31 +10,36 @@ import com.aqua.hoophelper.database.remote.HoopRemoteDataSource
 import com.aqua.hoophelper.match.DataType
 import com.aqua.hoophelper.match.DetailDataType
 import com.aqua.hoophelper.util.LoadApiStatus
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 class HomeViewModel : ViewModel() {
+
+    val leaderTypes = listOf("Score", "Rebound", "Assist", "Steal", "Block")
 
     val _status = MutableLiveData<LoadApiStatus?>()
     val status: LiveData<LoadApiStatus?>
         get() = _status
 
-    // 球隊名稱列表
+    // team name list
     var teamNameList = mutableListOf<String>()
 
-    // 球隊中球員數據
+    // stat of team player
     private var _teamStat = MutableLiveData<MutableList<PlayerStat>>(mutableListOf())
     val teamStat: LiveData<MutableList<PlayerStat>>
         get() = _teamStat
 
 
-    // 球隊列表
+    // team list
     private var _teams = MutableLiveData<List<Team>>()
     val teams: LiveData<List<Team>>
         get() = _teams
 
-    // 球員列表
+    // player list
     private var _teamPlayers = MutableLiveData<List<Player>>(listOf(Player()))
-    val teamPlayers: LiveData<List<Player>>
+    private val teamPlayers: LiveData<List<Player>>
         get() = _teamPlayers
 
     // Create a Coroutine scope using a job to be able to cancel when needed
@@ -53,7 +57,7 @@ class HomeViewModel : ViewModel() {
         coroutineScope.launch {
             when(val result = HoopRemoteDataSource.getTeams()) {
                 is Result.Success -> {
-                    _teams.value = result.data!!.filter { it.jerseyNumbers.size >= 5 }
+                    _teams.value = result.data.filter { it.jerseyNumbers.size >= 5 }
                     for (i in teams.value!!.indices) {
                         teamNameList.add(teams.value!![i].name)
                     }
@@ -69,7 +73,7 @@ class HomeViewModel : ViewModel() {
         return teamNameList
     }
 
-    // 取得球員名單與數據
+    // get player list
     fun selectedTeam(pos: Int) {
         _status.value = LoadApiStatus.LOADING
         HoopInfo.spinnerSelectedTeamId.value = teams.value!![pos].id
@@ -90,7 +94,7 @@ class HomeViewModel : ViewModel() {
     private fun getTeamPlayersData(players: List<Player>, listSize: Int) {
         coroutineScope.launch {
             var data: List<Event>
-            var playerStat = PlayerStat()
+            var playerStat: PlayerStat
             val playerStats = mutableListOf<PlayerStat>()
             for (i in 0 until listSize) {
                 when (val result = HoopRemoteDataSource.getPlayerData(players[i].id)) {

@@ -1,10 +1,5 @@
 package com.aqua.hoophelper
 
-import android.animation.ObjectAnimator
-import android.graphics.Path
-import android.util.DisplayMetrics
-import android.view.View
-import androidx.core.animation.doOnEnd
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel

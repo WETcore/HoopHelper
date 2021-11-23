@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.aqua.hoophelper.database.Event
 import com.aqua.hoophelper.database.Player
 import com.aqua.hoophelper.database.Result
 import com.aqua.hoophelper.database.Rule
@@ -18,11 +17,11 @@ import kotlinx.coroutines.launch
 
 class ManageViewModel : ViewModel() {
 
-    val _status = MutableLiveData<LoadApiStatus?>()
+    private val _status = MutableLiveData<LoadApiStatus?>()
     val status: LiveData<LoadApiStatus?>
         get() = _status
 
-    val db = FirebaseFirestore.getInstance()
+    private val db = FirebaseFirestore.getInstance()
 
     var rule = Rule()
 
@@ -31,16 +30,12 @@ class ManageViewModel : ViewModel() {
     val startPlayer: LiveData<MutableList<Player>>
         get() = _startPlayer
 
-    // substitutionPlayer 替補
+    // substitutionPlayer
     private var _substitutionPlayer = MutableLiveData<MutableList<Player>>(mutableListOf())
     val substitutionPlayer: LiveData<MutableList<Player>>
         get() = _substitutionPlayer
-    var subNum = mutableListOf<String>()
 
-    // roster
-    private var _roster = MutableLiveData<List<Player>>()
-    val roster: LiveData<List<Player>>
-        get() = _roster
+    var subNum = mutableListOf<String>()
 
     // Create a Coroutine scope using a job to be able to cancel when needed
     private var viewModelJob = Job()
@@ -55,15 +50,14 @@ class ManageViewModel : ViewModel() {
     fun setRule() {
         db.collection("Rule").document("rule").set(rule)
     }
-    fun setRoster() {
+    private fun setRoster() {
         _status.value = LoadApiStatus.LOADING
         coroutineScope.launch {
             val starPlayerList = mutableListOf<Player>()
             val subPlayerList = mutableListOf<Player>()
             when(val result = HoopRemoteDataSource.getMatchMembers()) {
                 is Result.Success -> {
-                    _roster.value = result.data!!
-                    val lineUp = _roster.value!!
+                    val lineUp = result.data
                     lineUp.filter { !it.starting5.contains(true) }.forEachIndexed { index, player ->
                         _substitutionPlayer.value!!.add(player)
                         subPlayerList.add(player)
@@ -83,12 +77,6 @@ class ManageViewModel : ViewModel() {
                 }
             }
         }
-    }
-
-    fun refresh() {
-        _roster.value = _roster.value
-        _startPlayer.value = _startPlayer.value
-        _substitutionPlayer.value = _substitutionPlayer.value
     }
 
     fun switchLineUp(spinnerPos: Int, pos: Int) {

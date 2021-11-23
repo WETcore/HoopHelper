@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import com.aqua.hoophelper.database.Event
 import com.aqua.hoophelper.database.Match
 import com.aqua.hoophelper.database.Player
-import com.aqua.hoophelper.database.PlayerStat
 import com.aqua.hoophelper.database.Result
 import com.aqua.hoophelper.database.remote.HoopRemoteDataSource
 import com.aqua.hoophelper.util.LoadApiStatus

@@ -1,11 +1,6 @@
 package com.aqua.hoophelper.profile
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.net.Uri
 import android.util.Log
-import androidx.core.app.ActivityCompat.startActivityForResult
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -16,7 +11,6 @@ import com.aqua.hoophelper.database.Result
 import com.aqua.hoophelper.database.Team
 import com.aqua.hoophelper.database.remote.HoopRemoteDataSource
 import com.aqua.hoophelper.util.LoadApiStatus
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -25,11 +19,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import java.lang.Exception
-import java.net.URI
-import java.net.URL
-
-const val RC_SIGN_IN = 0
 
 class ProfileViewModel : ViewModel() {
 
@@ -148,7 +137,7 @@ class ProfileViewModel : ViewModel() {
         coroutineScope.launch {
             invitation.id = db.collection("Invitations").document().id
             invitation.teamId = User.teamId
-            invitation.inviteeMail = mail// + binding.mailLayout.suffixText
+            invitation.inviteeMail = mail
             invitation.playerName = name
             invitation.existingNumbers = HoopRemoteDataSource.getTeamInfo().jerseyNumbers
 
@@ -194,7 +183,6 @@ class ProfileViewModel : ViewModel() {
         db.collection("Players")
             .whereEqualTo("id", roster.value!![releasePos].id)
             .get().addOnSuccessListener {
-                Log.d("auth","HiH ${roster.value!![releasePos]}")
                 it.documents.first().reference.delete()
             }
         db.collection("Players")

@@ -4,16 +4,15 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
+import com.aqua.hoophelper.databinding.ActivityMainBinding
 import com.aqua.hoophelper.util.HoopService
 import com.aqua.hoophelper.util.RestartBroadcastReceiver
-import com.aqua.hoophelper.databinding.ActivityMainBinding
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
@@ -57,9 +56,9 @@ class MainActivity : AppCompatActivity() {
                             binding.bottomBar.menu.getItem(4).isChecked = true
                             navHostFragment.navigate(NavigationDirections.navToProfile())
                         }.apply {
-                            setTextColor(Color.parseColor("#FD5523"))
-                            setActionTextColor(Color.parseColor("#356859"))
-                            setBackgroundTint(Color.parseColor("#FFFBE6"))
+                            setTextColor(resources.getColor(R.color.basil_orange, null))
+                            setActionTextColor(resources.getColor(R.color.basil_green_dark, null))
+                            setBackgroundTint(resources.getColor(R.color.basil_bg, null))
                         }.show()
                 }
                 User.teamMembers.size <= 5 -> {
@@ -68,9 +67,9 @@ class MainActivity : AppCompatActivity() {
                             binding.bottomBar.menu.getItem(4).isChecked = true
                             navHostFragment.navigate(NavigationDirections.navToProfile())
                         }.apply {
-                            setTextColor(Color.parseColor("#FD5523"))
-                            setActionTextColor(Color.parseColor("#356859"))
-                            setBackgroundTint(Color.parseColor("#FFFBE6"))
+                            setTextColor(resources.getColor(R.color.basil_orange, null))
+                            setActionTextColor(resources.getColor(R.color.basil_green_dark, null))
+                            setBackgroundTint(resources.getColor(R.color.basil_bg, null))
                         }.show()
                 }
                 else -> {
@@ -100,9 +99,9 @@ class MainActivity : AppCompatActivity() {
                                     binding.bottomBar.menu.getItem(4).isChecked = true
                                     navHostFragment.navigate(NavigationDirections.navToProfile())
                                 }.apply {
-                                    setTextColor(Color.parseColor("#FD5523"))
-                                    setActionTextColor(Color.parseColor("#356859"))
-                                    setBackgroundTint(Color.parseColor("#FFFBE6"))
+                                    setTextColor(resources.getColor(R.color.basil_orange, null))
+                                    setActionTextColor(resources.getColor(R.color.basil_green_dark, null))
+                                    setBackgroundTint(resources.getColor(R.color.basil_bg, null))
                                 }.show()
                             false
                         }
@@ -113,9 +112,9 @@ class MainActivity : AppCompatActivity() {
                                     binding.bottomBar.menu.getItem(4).isChecked = true
                                     navHostFragment.navigate(NavigationDirections.navToProfile())
                                 }.apply {
-                                    setTextColor(Color.parseColor("#FD5523"))
-                                    setActionTextColor(Color.parseColor("#356859"))
-                                    setBackgroundTint(Color.parseColor("#FFFBE6"))
+                                    setTextColor(resources.getColor(R.color.basil_orange, null))
+                                    setActionTextColor(resources.getColor(R.color.basil_green_dark, null))
+                                    setBackgroundTint(resources.getColor(R.color.basil_bg, null))
                                 }.show()
                             false
                         }
@@ -139,10 +138,6 @@ class MainActivity : AppCompatActivity() {
                     navHostFragment.navigate(NavigationDirections.navToProfile())
                     true
                 }
-                R.id.matchFragment -> {
-                    Log.d("nav","Hi")
-                    true
-                }
                 else -> false
             }
         }
@@ -159,22 +154,12 @@ class MainActivity : AppCompatActivity() {
 
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        if (findViewById<BottomNavigationView>(R.id.bottom_bar).menu.getItem(0).isChecked) {
-        }
         findViewById<View>(R.id.fab).isClickable = true
         findViewById<BottomAppBar>(R.id.app_bar).let {
             it.behavior.slideUp(it)
         }
         if (findViewById<BottomNavigationView>(R.id.bottom_bar).menu.getItem(2).isChecked) {
-            viewModel.db // TODO move to model, auto close game need same fun
-                .collection("Matches")
-                .whereEqualTo("matchId", viewModel.match.matchId)
-                .get()
-                .addOnSuccessListener {
-                    it.forEach {
-                        it.reference.update("gaming",false)
-                    }
-                }
+            viewModel.exitMatch()
         }
         return super.onKeyDown(keyCode, event)
     }

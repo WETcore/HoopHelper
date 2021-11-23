@@ -10,7 +10,6 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.aqua.hoophelper.MainActivityViewModel
 import com.aqua.hoophelper.R
 import com.aqua.hoophelper.User
 import com.aqua.hoophelper.databinding.ProfileFragmentBinding
@@ -22,10 +21,6 @@ class ProfileFragment : Fragment() {
 
     private val viewModel: ProfileViewModel by lazy {
         ViewModelProvider(this).get(ProfileViewModel::class.java)
-    }
-
-    private val mViewModel: MainActivityViewModel by lazy {
-        ViewModelProvider(this).get(MainActivityViewModel::class.java)
     }
 
     @SuppressLint("ResourceAsColor", "SetTextI18n")

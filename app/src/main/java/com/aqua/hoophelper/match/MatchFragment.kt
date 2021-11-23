@@ -1,14 +1,13 @@
 package com.aqua.hoophelper.match
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.*
 import android.widget.ArrayAdapter
-import androidx.fragment.app.Fragment
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.aqua.hoophelper.HoopInfo
@@ -27,7 +26,6 @@ enum class DetailDataType {
 }
 
 class MatchFragment : Fragment() {
-
 
     private val viewModel: MatchViewModel by lazy {
         ViewModelProvider(this).get(MatchViewModel::class.java)
@@ -58,10 +56,7 @@ class MatchFragment : Fragment() {
             }
         }
 
-        // get roster from db TODO
-        viewModel.setRoster()
-
-        // safe arg
+        // safe arg match id
         val args: MatchFragmentArgs by navArgs()
 
         // Hint for user
@@ -159,12 +154,9 @@ class MatchFragment : Fragment() {
         }
 
         viewModel.startPlayer.observe(viewLifecycleOwner) {
-            Log.d("tag","${it}")
             if (!it.isNullOrEmpty()) {
+                viewModel.setFirstPlayer(it.first())
                 binding.player1Chip.text = it[0].number
-                if (viewModel.playerNum == "") viewModel.playerNum = it.first().number
-                if (viewModel.playerName == "") viewModel.playerName = it.first().name
-                if (viewModel.playerImage == "") viewModel.playerImage = it.first().avatar
                 binding.player2Chip.text = it[1].number
                 binding.player3Chip.text = it[2].number
                 binding.player4Chip.text = it[3].number
@@ -173,58 +165,51 @@ class MatchFragment : Fragment() {
         }
 
         /// record data
-        // 改變launch顯示文字
+        // set launch chip text
         viewModel.zone.observe(viewLifecycleOwner) {
             binding.launchChip.text = when(it) {
-                1 -> "A"//"Around Rim"
-                2 -> "B"//"L.Elbow"
-                3 -> "C"//"Mid Straight"
-                4 -> "D"//"R.Elbow"
-                5 -> "E"//"L.Baseline"
-                6 -> "F"//"L.Wing"
-                7 -> "G"//"Long Straight"
-                8 -> "H"//"R.Wing"
-                9 -> "I"//"R.Baseline"
-                10 -> "J"//"L.Corner"
-                11 -> "K"//"L.3Points"
-                12 -> "L"//"Arc"
-                13 -> "M"//"R.3Points"
-                14 -> "N"//"R.Corner"
-                else -> "O"//"Area"
+                1 -> "A"
+                2 -> "B"
+                3 -> "C"
+                4 -> "D"
+                5 -> "E"
+                6 -> "F"
+                7 -> "G"
+                8 -> "H"
+                9 -> "I"
+                10 -> "J"
+                11 -> "K"
+                12 -> "L"
+                13 -> "M"
+                14 -> "N"
+                else -> "O"
             }
         }
 
-        //開啟子選單
+        // launch record chip menu
         binding.launchChip.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
-
                 binding.chipGroup.visibility = View.VISIBLE
-                Log.d("launch","open ${binding.chipGroup.visibility} ${binding.scoreChip.x} ${binding.launchChip.x}")
             } else {
-                Log.d("record","${viewModel.event}")
                 binding.chipGroup.visibility = View.GONE
-                Log.d("launch","close ${binding.chipGroup.visibility}")
             }
         }
 
-        // 拖曳
+        // vibrate & drag
         binding.launchChip.setOnLongClickListener {
-            // 震動
             it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
-            // 拖曳
             val shadow = View.DragShadowBuilder(it)
             it.startDragAndDrop(null, shadow, it,0)
             false
         }
-        // 獲取螢幕解析度
+        // get screen resolution
         val displayMetrics = DisplayMetrics()
         requireActivity().display?.getRealMetrics(displayMetrics)
 
-        // 拖曳 get zone data
+        // drag & get zone data
         binding.root.setOnDragListener{ v, event ->
             when(event.action) {
                 DragEvent.ACTION_DROP -> {
-                    Log.d("pos","${event.x.toInt()} ${event.y.toInt()}")
                     if (viewModel.getDiameter(event.x,event.y,displayMetrics.widthPixels,displayMetrics.heightPixels)) {
                         binding.launchChip.isCheckable = false
                         Toast.makeText(requireContext(),"drag the red dot to the court.",Toast.LENGTH_SHORT).show()
@@ -276,7 +261,7 @@ class MatchFragment : Fragment() {
                 }
                 R.id.foul_chip -> {
                     viewModel.setStatData(DataType.FOUL, args.matchId)
-                    var buffer = viewModel.startPlayer.value!![viewModel.selectPlayerPos]
+                    val buffer = viewModel.startPlayer.value!![viewModel.selectPlayerPos]
                     viewModel.getFoulCount(viewModel.playerNum, buffer)
                     group.clearCheck()
                 }
@@ -284,7 +269,7 @@ class MatchFragment : Fragment() {
             binding.launchChip.isChecked = false
         }
 
-        // 罰球
+        // free throw
         binding.freeThrowSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
                 binding.ftChipGroup.visibility = View.VISIBLE
@@ -298,11 +283,9 @@ class MatchFragment : Fragment() {
         }
         binding.ftInChip.setOnClickListener {
             viewModel.setFreeThrowData(true, args.matchId)
-            Log.d("record","${viewModel.event}")
         }
         binding.ftOutChip.setOnClickListener {
             viewModel.setFreeThrowData(false, args.matchId)
-            Log.d("record","${viewModel.event}")
         }
 
         // event history & cancel event
@@ -320,8 +303,6 @@ class MatchFragment : Fragment() {
         binding.historyChip.setOnCheckedChangeListener { buttonView, isChecked ->
             binding.historyChip.isCloseIconVisible = isChecked
         }
-
         return binding.root
     }
-
 }

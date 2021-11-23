@@ -8,7 +8,6 @@ import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.aqua.hoophelper.MainActivityViewModel
 import com.aqua.hoophelper.R
 import com.aqua.hoophelper.databinding.HomeFragmentBinding
 import com.aqua.hoophelper.util.LoadApiStatus
@@ -18,10 +17,6 @@ class HomeFragment : Fragment() {
 
     private val viewModel: HomeViewModel by lazy {
         ViewModelProvider(this).get(HomeViewModel::class.java)
-    }
-
-    private val mainViewModel: MainActivityViewModel by lazy {
-        ViewModelProvider(this).get(MainActivityViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -58,8 +53,10 @@ class HomeFragment : Fragment() {
         viewModel.teams.observe(viewLifecycleOwner) {
             val teamAdapter =
                 ArrayAdapter(requireContext(), R.layout.home_team_item, viewModel.teamNameList)
-            binding.teamText.setAdapter(teamAdapter)
-            binding.teamText.setText(viewModel.teams.value?.first()?.name, false)
+            binding.teamText.apply {
+                setAdapter(teamAdapter)
+                setText(viewModel.teams.value?.first()?.name, false)
+            }
         }
 
         // set selected Team
@@ -69,28 +66,23 @@ class HomeFragment : Fragment() {
 
         // VPager
         viewModel.teamStat.observe(viewLifecycleOwner) {
-
-            val leaderTypes = listOf("Score", "Rebound", "Assist", "Steal", "Block")
-            if (it.size >= 5) {
-                val adapter = HomeVPagerAdapter(leaderTypes, requireContext(), viewModel)
-                binding.homeViewpager.apply {
-                    this.offscreenPageLimit = 4
-                    this.adapter = adapter
-                    setPadding(190, 100, 100, 150)
-                }
+            val adapter: HomeVPagerAdapter
+            adapter = if (it.size >= 5) {
+                HomeVPagerAdapter(viewModel.leaderTypes, requireContext(), viewModel)
             } else {
-                val adapter = HomeVPagerAdapter(leaderTypes, requireContext(), null)
-                binding.homeViewpager.apply {
-                    this.offscreenPageLimit = 4
-                    this.adapter = adapter
-                    setPadding(190, 100, 100, 150)
-                }
+                HomeVPagerAdapter(viewModel.leaderTypes, requireContext(), null)
+            }
+            binding.homeViewpager.apply {
+                this.offscreenPageLimit = 4
+                this.adapter = adapter
+                setPadding(190, 100, 100, 150)
             }
         }
 
-        // crashlitics
+        // crashlytics
         binding.crash.setOnClickListener {
-            throw RuntimeException("Test Crash") // Force a crash
+            // Force a crash
+            throw RuntimeException("Test Crash")
         }
 
         return binding.root

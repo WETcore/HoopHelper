@@ -1,32 +1,15 @@
 package com.aqua.hoophelper
 
-import android.animation.Animator
-import android.animation.ObjectAnimator
 import android.content.Intent
-import android.graphics.Path
-import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.util.Log
-import android.view.View
-import android.view.animation.Animation
-import android.view.animation.PathInterpolator
-import androidx.annotation.RequiresApi
-import androidx.core.animation.doOnEnd
-import androidx.dynamicanimation.animation.DynamicAnimation
-import androidx.dynamicanimation.animation.SpringAnimation
-import androidx.dynamicanimation.animation.SpringForce
-import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.Navigation
 import androidx.navigation.findNavController
-import com.airbnb.lottie.LottieAnimationView
 import com.aqua.hoophelper.database.Player
 import com.aqua.hoophelper.databinding.ActivityLoginBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -44,19 +27,12 @@ class LoginActivity : AppCompatActivity() {
         ViewModelProvider(this).get(LoginActivityViewModel::class.java)
     }
 
-    @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         // binding
         val binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        // nav host TODO
-        val navHostFragment = findNavController(R.id.login_nav_host)
-
-//        navHostFragment.navigate(R.id.action_loginFragment_to_tutorFragment)
-
     }
 
     override fun onStart() {
@@ -69,7 +45,6 @@ class LoginActivity : AppCompatActivity() {
         Log.d("currentUser","${user?.email}")
         viewModel.getUserInfo()
         updateUI(user)
-//        enterTutorUI(user)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
