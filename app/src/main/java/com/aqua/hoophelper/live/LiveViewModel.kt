@@ -67,29 +67,20 @@ class LiveViewModel : ViewModel() {
 
     fun getTeamPlayerData(id: String, events: List<Event>): PlayerStat {
 
-        val buffer = events.filter { it.playerId == id }
+        val playerEvents = events.filter { it.playerId == id }
 
-        val ast = buffer.filter { it.assist }.size
-        val ptI = buffer.filter { it.score2 == true }.size
-        val ptO = buffer.filter { it.score2 == false }.size
-        val pt3I = buffer.filter { it.score3 == true }.size
-        val pt3O = buffer.filter { it.score3 == false }.size
-        val reb = buffer.filter { it.rebound }.size
-        val stl = buffer.filter { it.steal }.size
-        val blk = buffer.filter { it.block }.size
-        val ftI = buffer.filter { it.freeThrow == true }.size
-        val ftO = buffer.filter { it.freeThrow == false }.size
-        val tov = buffer.filter { it.turnover }.size
-        val foul = buffer.filter { it.foul }.size
+        val ptI = playerEvents.filter { it.score2 == true }.size
+        val pt3I = playerEvents.filter { it.score3 == true }.size
+        val ftI = playerEvents.filter { it.freeThrow == true }.size
 
         return PlayerStat(
             "name",
             "num",
-            pts = (ptI*2 + pt3I*3 + ftI),
-            reb,
-            ast,
-            stl,
-            blk,
+            pts = (ptI * 2 + pt3I * 3 + ftI),
+            playerEvents.filter { it.rebound }.size,
+            playerEvents.filter { it.assist }.size,
+            playerEvents.filter { it.steal }.size,
+            playerEvents.filter { it.block }.size,
         )
     }
 

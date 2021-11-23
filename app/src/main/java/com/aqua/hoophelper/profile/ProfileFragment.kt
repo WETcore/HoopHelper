@@ -31,7 +31,7 @@ class ProfileFragment : Fragment() {
 
         // binding
         val binding: ProfileFragmentBinding =
-            DataBindingUtil.inflate(inflater, R.layout.profile_fragment, container,false)
+            DataBindingUtil.inflate(inflater, R.layout.profile_fragment, container, false)
 
         fun setAuth() {
             when {
@@ -188,7 +188,11 @@ class ProfileFragment : Fragment() {
                             }
                             .show()
                     } else {
-                        Toast.makeText(requireContext(), "Need at least one player", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            requireContext(),
+                            "Need at least one player",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
             }
@@ -209,7 +213,10 @@ class ProfileFragment : Fragment() {
             if (binding.mailEdit.text?.length != 0 &&
                 binding.inviteNameEdit.text?.length != 0
             ) {
-                viewModel.sendInvitation(binding.mailEdit.text.toString(), binding.inviteNameEdit.text.toString())
+                viewModel.sendInvitation(
+                    binding.mailEdit.text.toString(),
+                    binding.inviteNameEdit.text.toString()
+                )
             }
         }
 

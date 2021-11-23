@@ -8,7 +8,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 
-class CheckService: LifecycleService() {
+class CheckService : LifecycleService() {
 
     override fun onCreate() {
         super.onCreate()
@@ -27,7 +27,6 @@ class CheckService: LifecycleService() {
         player.avatar = Firebase.auth.currentUser?.photoUrl.toString()
 
         val remoteInput = RemoteInput.getResultsFromIntent(intent)
-
 
 
         // check accept or cancel
@@ -55,7 +54,7 @@ class CheckService: LifecycleService() {
                                     .whereEqualTo("id", player.teamId)
                                     .get().addOnCompleteListener {
                                         it.result.documents.first().reference
-                                        .update("jerseyNumbers",numbers.toList())
+                                            .update("jerseyNumbers", numbers.toList())
                                     }
                                 it.result.documents.first().reference.delete()
                                 stopService(Intent(applicationContext, HoopService::class.java))

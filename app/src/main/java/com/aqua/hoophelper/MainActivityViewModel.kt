@@ -11,7 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import java.util.*
 
-class MainActivityViewModel: ViewModel() {
+class MainActivityViewModel : ViewModel() {
 
     private val db = FirebaseFirestore.getInstance()
 
@@ -49,7 +49,7 @@ class MainActivityViewModel: ViewModel() {
                     it.value = if (matches.isNullOrEmpty()) {
                         false
                     } else {
-                        matches.lastOrNull{ it.teamId == teamId }?.gaming == true
+                        matches.lastOrNull { it.teamId == teamId }?.gaming == true
                     }
                 }
         }
@@ -61,7 +61,7 @@ class MainActivityViewModel: ViewModel() {
             .get()
             .addOnSuccessListener {
                 it.forEach {
-                    it.reference.update("gaming",false)
+                    it.reference.update("gaming", false)
                 }
             }
     }

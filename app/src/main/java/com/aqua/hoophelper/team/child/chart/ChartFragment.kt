@@ -31,10 +31,10 @@ class ChartFragment : Fragment() {
     ): View? {
         // binding
         val binding: ChartFragmentBinding =
-            DataBindingUtil.inflate(inflater, R.layout.chart_fragment, container,false)
+            DataBindingUtil.inflate(inflater, R.layout.chart_fragment, container, false)
 
         viewModel.status.observe(viewLifecycleOwner) {
-            when(it) {
+            when (it) {
                 LoadApiStatus.LOADING -> {
                     binding.lottieChart.visibility = View.VISIBLE
                     binding.chartLayout.visibility = View.GONE
@@ -50,7 +50,8 @@ class ChartFragment : Fragment() {
         }
 
         // spinner
-        val playerAdapter = ArrayAdapter(requireContext(), R.layout.home_team_item, viewModel.playerList)
+        val playerAdapter =
+            ArrayAdapter(requireContext(), R.layout.home_team_item, viewModel.playerList)
         binding.playerEdit.setAdapter(playerAdapter)
         viewModel.roster.observe(viewLifecycleOwner) {
             it.forEachIndexed { index, player ->
@@ -87,29 +88,48 @@ class ChartFragment : Fragment() {
                 colors.add(resources.getColor(R.color.pie15, null))
 
                 val dataP = mutableListOf<PieEntry>()
-                dataP.add(PieEntry(it.filter { it.zone == 1 }.filter { it.score2 == true }.size.toFloat(),"Around Rim"))
-                dataP.add(PieEntry(it.filter { it.zone == 2 }.filter { it.score2 == true }.size.toFloat(),"Left Elbow"))
-                dataP.add(PieEntry(it.filter { it.zone == 3 }.filter { it.score2 == true }.size.toFloat(),"Mid Straight"))
-                dataP.add(PieEntry(it.filter { it.zone == 4 }.filter { it.score2 == true }.size.toFloat(),"Right Elbow"))
-                dataP.add(PieEntry(it.filter { it.zone == 5 }.filter { it.score2 == true }.size.toFloat(),"Left Baseline"))
-                dataP.add(PieEntry(it.filter { it.zone == 6 }.filter { it.score2 == true }.size.toFloat(),"Left Wing"))
-                dataP.add(PieEntry(it.filter { it.zone == 7 }.filter { it.score2 == true }.size.toFloat(),"Long Straight"))
-                dataP.add(PieEntry(it.filter { it.zone == 8 }.filter { it.score2 == true }.size.toFloat(),"Right Wing"))
-                dataP.add(PieEntry(it.filter { it.zone == 9 }.filter { it.score2 == true }.size.toFloat(),"Right Baseline"))
-                dataP.add(PieEntry(it.filter { it.zone == 10 }.filter { it.score3 == true }.size.toFloat(),"Left Corner"))
-                dataP.add(PieEntry(it.filter { it.zone == 11 }.filter { it.score3 == true }.size.toFloat(),"Left 3Points"))
-                dataP.add(PieEntry(it.filter { it.zone == 12 }.filter { it.score3 == true }.size.toFloat(),"Top of Arc"))
-                dataP.add(PieEntry(it.filter { it.zone == 13 }.filter { it.score3 == true }.size.toFloat(),"Right 3Points"))
-                dataP.add(PieEntry(it.filter { it.zone == 14 }.filter { it.score3 == true }.size.toFloat(),"Right Corner"))
-                dataP.add(PieEntry(it.filter { it.zone == -1 }.filter { it.freeThrow == true }.size.toFloat(),"FreeThrow Line"))
-
+                dataP.apply {
+                    add(PieEntry(it.filter { it.zone == 1 }
+                        .filter { it.score2 == true }.size.toFloat(), "Around Rim"))
+                    add(PieEntry(it.filter { it.zone == 2 }
+                        .filter { it.score2 == true }.size.toFloat(), "Left Elbow"))
+                    add(PieEntry(it.filter { it.zone == 3 }
+                        .filter { it.score2 == true }.size.toFloat(), "Mid Straight"))
+                    add(PieEntry(it.filter { it.zone == 4 }
+                        .filter { it.score2 == true }.size.toFloat(), "Right Elbow"))
+                    add(PieEntry(it.filter { it.zone == 5 }
+                        .filter { it.score2 == true }.size.toFloat(), "Left Baseline"))
+                    add(PieEntry(it.filter { it.zone == 6 }
+                        .filter { it.score2 == true }.size.toFloat(), "Left Wing"))
+                    add(PieEntry(it.filter { it.zone == 7 }
+                        .filter { it.score2 == true }.size.toFloat(), "Long Straight"))
+                    add(PieEntry(it.filter { it.zone == 8 }
+                        .filter { it.score2 == true }.size.toFloat(), "Right Wing"))
+                    add(PieEntry(it.filter { it.zone == 9 }
+                        .filter { it.score2 == true }.size.toFloat(), "Right Baseline"))
+                    add(PieEntry(it.filter { it.zone == 10 }
+                        .filter { it.score3 == true }.size.toFloat(), "Left Corner"))
+                    add(PieEntry(it.filter { it.zone == 11 }
+                        .filter { it.score3 == true }.size.toFloat(), "Left 3Points"))
+                    add(PieEntry(it.filter { it.zone == 12 }
+                        .filter { it.score3 == true }.size.toFloat(), "Top of Arc"))
+                    add(PieEntry(it.filter { it.zone == 13 }
+                        .filter { it.score3 == true }.size.toFloat(), "Right 3Points"))
+                    add(PieEntry(it.filter { it.zone == 14 }
+                        .filter { it.score3 == true }.size.toFloat(), "Right Corner"))
+                    add(PieEntry(it.filter { it.zone == -1 }
+                        .filter { it.freeThrow == true }.size.toFloat(), "FreeThrow Line"))
+                }
 
                 val dataSet = PieDataSet(dataP, "labels")
-                dataSet.valueTextSize = 15f
-                dataSet.valueTextColor =  resources.getColor(R.color.transparent, null)
-                dataSet.colors = colors
+                dataSet.apply {
+                    valueTextSize = 15f
+                    valueTextColor = resources.getColor(R.color.transparent, null)
+                    this.colors = colors
+                }
                 val pieData = PieData(dataSet)
                 pieData.setDrawValues(true)
+
                 binding.chartPie.apply {
                     setHoleColor(resources.getColor(R.color.basil_background, null))
                     centerText = "Hot Spot Score"

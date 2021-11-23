@@ -38,10 +38,10 @@ class MatchFragment : Fragment() {
 
         // binding
         val binding: MatchFragmentBinding =
-            DataBindingUtil.inflate(inflater, R.layout.match_fragment, container,false)
+            DataBindingUtil.inflate(inflater, R.layout.match_fragment, container, false)
 
         viewModel.status.observe(viewLifecycleOwner) {
-            when(it) {
+            when (it) {
                 LoadApiStatus.LOADING -> {
                     binding.lottieMatch.visibility = View.VISIBLE
                     binding.matchLayout.visibility = View.GONE
@@ -60,7 +60,11 @@ class MatchFragment : Fragment() {
         val args: MatchFragmentArgs by navArgs()
 
         // Hint for user
-        Toast.makeText(requireContext(), "Long press & drag the red dot to the court.", Toast.LENGTH_LONG).show()
+        Toast.makeText(
+            requireContext(),
+            "Long press & drag the red dot to the court.",
+            Toast.LENGTH_LONG
+        ).show()
 
         // set shot clock
         viewModel.shotClock.observe(viewLifecycleOwner) {
@@ -90,9 +94,8 @@ class MatchFragment : Fragment() {
                 findNavController().navigate(NavigationDirections.navToHome())
                 viewModel.shotClockTimer.cancel()
                 viewModel.gameClockSecTimer.cancel()
-                Toast.makeText (requireContext(),"Game over.",Toast.LENGTH_SHORT).show()
-            }
-            else if (it == viewModel.quarterLimit/2) {
+                Toast.makeText(requireContext(), "Game over.", Toast.LENGTH_SHORT).show()
+            } else if (it == viewModel.quarterLimit / 2) {
                 viewModel.timeOut = 0
                 binding.pauseMatchChip.isCheckable = true
             }
@@ -101,8 +104,8 @@ class MatchFragment : Fragment() {
         // set pause
         binding.pauseMatchChip.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
-                if(viewModel.setTimeOutCount()) {
-                    Toast.makeText(requireContext(), "limit",Toast.LENGTH_SHORT).show()
+                if (viewModel.setTimeOutCount()) {
+                    Toast.makeText(requireContext(), "limit", Toast.LENGTH_SHORT).show()
                     binding.pauseMatchChip.isChecked = false
                     binding.pauseMatchChip.isCheckable = false
                 } else {
@@ -119,7 +122,7 @@ class MatchFragment : Fragment() {
 
         // select player
         binding.playerChipGroup.setOnCheckedChangeListener { group, checkedId ->
-            when(checkedId) {
+            when (checkedId) {
                 R.id.player1_chip -> {
                     viewModel.selectPlayer(0)
                 }
@@ -143,7 +146,8 @@ class MatchFragment : Fragment() {
             it.forEach { player ->
                 viewModel.subNum.add(player.number)
             }
-            val teamAdapter = ArrayAdapter(requireContext(), R.layout.match_team_item, viewModel.subNum)
+            val teamAdapter =
+                ArrayAdapter(requireContext(), R.layout.match_team_item, viewModel.subNum)
             binding.subPlayerText.setAdapter(teamAdapter)
         }
 
@@ -167,7 +171,7 @@ class MatchFragment : Fragment() {
         /// record data
         // set launch chip text
         viewModel.zone.observe(viewLifecycleOwner) {
-            binding.launchChip.text = when(it) {
+            binding.launchChip.text = when (it) {
                 1 -> "A"
                 2 -> "B"
                 3 -> "C"
@@ -197,9 +201,12 @@ class MatchFragment : Fragment() {
 
         // vibrate & drag
         binding.launchChip.setOnLongClickListener {
-            it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
+            it.performHapticFeedback(
+                HapticFeedbackConstants.LONG_PRESS,
+                HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING
+            )
             val shadow = View.DragShadowBuilder(it)
-            it.startDragAndDrop(null, shadow, it,0)
+            it.startDragAndDrop(null, shadow, it, 0)
             false
         }
         // get screen resolution
@@ -207,12 +214,22 @@ class MatchFragment : Fragment() {
         requireActivity().display?.getRealMetrics(displayMetrics)
 
         // drag & get zone data
-        binding.root.setOnDragListener{ v, event ->
-            when(event.action) {
+        binding.root.setOnDragListener { v, event ->
+            when (event.action) {
                 DragEvent.ACTION_DROP -> {
-                    if (viewModel.getDiameter(event.x,event.y,displayMetrics.widthPixels,displayMetrics.heightPixels)) {
+                    if (viewModel.getDiameter(
+                            event.x,
+                            event.y,
+                            displayMetrics.widthPixels,
+                            displayMetrics.heightPixels
+                        )
+                    ) {
                         binding.launchChip.isCheckable = false
-                        Toast.makeText(requireContext(),"drag the red dot to the court.",Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            requireContext(),
+                            "drag the red dot to the court.",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     } else binding.launchChip.isCheckable = true
                     binding.launchChip.x = (event.x - 60)
                     binding.launchChip.y = (event.y - 60)
@@ -222,12 +239,13 @@ class MatchFragment : Fragment() {
         }
         // write data
         binding.chipGroup.setOnCheckedChangeListener { group, checkedId ->
-            when(checkedId) {
+            when (checkedId) {
                 R.id.score_chip -> {
                     if (viewModel.zone.value?.toInt() != 0) {
                         viewModel.setScoreData(true, args.matchId)
                     } else {
-                        Toast.makeText(requireContext(),"Selected Zone first.",Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "Selected Zone first.", Toast.LENGTH_SHORT)
+                            .show()
                     }
                     group.clearCheck()
                 }
@@ -235,7 +253,8 @@ class MatchFragment : Fragment() {
                     if (viewModel.zone.value?.toInt() != 0) {
                         viewModel.setScoreData(false, args.matchId)
                     } else {
-                        Toast.makeText(requireContext(),"Selected Zone first.",Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "Selected Zone first.", Toast.LENGTH_SHORT)
+                            .show()
                     }
                     group.clearCheck()
                 }
@@ -291,7 +310,8 @@ class MatchFragment : Fragment() {
         // event history & cancel event
         viewModel.lastEvent.observe(viewLifecycleOwner) {
             if (!it.isNullOrEmpty()) {
-                binding.historyChip.text = viewModel.setHistoryText(it.filter { it.matchId ==HoopInfo.matchId })
+                binding.historyChip.text =
+                    viewModel.setHistoryText(it.filter { it.matchId == HoopInfo.matchId })
             }
         }
 

@@ -25,9 +25,9 @@ class TutorChildFragment(private val tutorTypeFilter: TutorTypeFilter) : Fragmen
 
         // binding
         val binding: TutorChildFragmentBinding =
-            DataBindingUtil.inflate(inflater, R.layout.tutor_child_fragment, container,false)
+            DataBindingUtil.inflate(inflater, R.layout.tutor_child_fragment, container, false)
 
-        when(tutorTypeFilter) {
+        when (tutorTypeFilter) {
             TutorTypeFilter.CREATE_TEAM -> {
                 binding.tutorText.text = "Create and Manage Your Team"
                 binding.tutorImage.setAnimation(R.raw.create_team)

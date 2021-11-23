@@ -30,7 +30,7 @@ class TeamFragment : Fragment() {
 
         // binding
         val binding: TeamFragmentBinding =
-            DataBindingUtil.inflate(inflater, R.layout.team_fragment, container,false)
+            DataBindingUtil.inflate(inflater, R.layout.team_fragment, container, false)
 
         // set tab
         val tabLayout = binding.tabLayout
@@ -43,7 +43,8 @@ class TeamFragment : Fragment() {
         )
         vPager.adapter = TeamVPagerAdapter(requireActivity())
 
-        tabLayout.tabTextColors = ColorStateList.valueOf(resources.getColor(R.color.basil_red, null))
+        tabLayout.tabTextColors =
+            ColorStateList.valueOf(resources.getColor(R.color.basil_red, null))
         tabLayout.tabIconTint = ColorStateList.valueOf(resources.getColor(R.color.basil_red, null))
 
         TabLayoutMediator(tabLayout, vPager) { tab, position ->

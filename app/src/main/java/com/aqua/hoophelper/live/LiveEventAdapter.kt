@@ -18,7 +18,7 @@ import com.aqua.hoophelper.databinding.LiveEventItemBinding
 import com.bumptech.glide.Glide
 
 
-class LiveEventAdapter(val viewModel: LiveViewModel, private val events: List<Event>):
+class LiveEventAdapter(val viewModel: LiveViewModel, private val events: List<Event>) :
     ListAdapter<Event, LiveEventAdapter.EventViewHolder>(DiffCallback) {
 
     class EventViewHolder(var binding: LiveEventItemBinding) :
@@ -43,8 +43,10 @@ class LiveEventAdapter(val viewModel: LiveViewModel, private val events: List<Ev
         parent: ViewGroup,
         viewType: Int
     ): EventViewHolder {
-        return EventViewHolder(LiveEventItemBinding
-            .inflate(LayoutInflater.from(parent.context), parent, false))
+        return EventViewHolder(
+            LiveEventItemBinding
+                .inflate(LayoutInflater.from(parent.context), parent, false)
+        )
     }
 
     @SuppressLint("SetTextI18n", "ResourceType")
@@ -64,15 +66,20 @@ class LiveEventAdapter(val viewModel: LiveViewModel, private val events: List<Ev
         }
 
         val condition = viewModel.filterEventType(event)
-        if(condition == "got turnover" ||
+        if (condition == "got turnover" ||
             condition == "miss 2 points" ||
             condition == "miss 3 points" ||
             condition == "miss a free throw" ||
             condition == "got foul"
-                ) {
+        ) {
             holder.binding.apply {
                 liveName.setTextColor(context.resources.getColor(R.color.basil_orange, null))
-                liveEventTypeText.setTextColor(context.resources.getColor(R.color.basil_orange, null))
+                liveEventTypeText.setTextColor(
+                    context.resources.getColor(
+                        R.color.basil_orange,
+                        null
+                    )
+                )
                 view2.setBackgroundColor(context.resources.getColor(R.color.basil_orange, null))
                 view3.setBackgroundColor(context.resources.getColor(R.color.basil_orange, null))
                 liveTimeChip.setTextColor(context.resources.getColor(R.color.basil_orange, null))
@@ -93,22 +100,44 @@ class LiveEventAdapter(val viewModel: LiveViewModel, private val events: List<Ev
                 liveStlChip.setChipStrokeColorResource(R.color.basil_orange)
                 liveBlkChip.setTextColor(context.resources.getColor(R.color.basil_orange, null))
                 liveBlkChip.setChipStrokeColorResource(R.color.basil_orange)
-                liveMessageCardB.strokeColor = context.resources.getColor(R.color.basil_orange, null)
+                liveMessageCardB.strokeColor =
+                    context.resources.getColor(R.color.basil_orange, null)
             }
         } else {
             holder.binding.apply {
                 liveName.setTextColor(context.resources.getColor(R.color.basil_green_dark, null))
-                liveEventTypeText.setTextColor(context.resources.getColor(R.color.basil_green_dark, null))
+                liveEventTypeText.setTextColor(
+                    context.resources.getColor(
+                        R.color.basil_green_dark,
+                        null
+                    )
+                )
                 view2.setBackgroundColor(context.resources.getColor(R.color.basil_green_dark, null))
                 view3.setBackgroundColor(context.resources.getColor(R.color.basil_green_dark, null))
-                liveTimeChip.setTextColor(context.resources.getColor(R.color.basil_green_dark, null))
+                liveTimeChip.setTextColor(
+                    context.resources.getColor(
+                        R.color.basil_green_dark,
+                        null
+                    )
+                )
                 liveTimeChip.setChipStrokeColorResource(R.color.basil_green_dark)
-                liveZoneChip.setTextColor(context.resources.getColor(R.color.basil_green_dark, null))
+                liveZoneChip.setTextColor(
+                    context.resources.getColor(
+                        R.color.basil_green_dark,
+                        null
+                    )
+                )
                 liveZoneChip.setChipStrokeColorResource(R.color.basil_green_dark)
-                liveMessageCard.strokeColor = context.resources.getColor(R.color.basil_green_dark, null)
+                liveMessageCard.strokeColor =
+                    context.resources.getColor(R.color.basil_green_dark, null)
 
                 liveNameB.setTextColor(context.resources.getColor(R.color.basil_green_dark, null))
-                view2B.setBackgroundColor(context.resources.getColor(R.color.basil_green_dark, null))
+                view2B.setBackgroundColor(
+                    context.resources.getColor(
+                        R.color.basil_green_dark,
+                        null
+                    )
+                )
                 livePtsChip.setTextColor(context.resources.getColor(R.color.basil_green_dark, null))
                 livePtsChip.setChipStrokeColorResource(R.color.basil_green_dark)
                 liveRebChip.setTextColor(context.resources.getColor(R.color.basil_green_dark, null))
@@ -119,7 +148,8 @@ class LiveEventAdapter(val viewModel: LiveViewModel, private val events: List<Ev
                 liveStlChip.setChipStrokeColorResource(R.color.basil_green_dark)
                 liveBlkChip.setTextColor(context.resources.getColor(R.color.basil_green_dark, null))
                 liveBlkChip.setChipStrokeColorResource(R.color.basil_green_dark)
-                liveMessageCardB.strokeColor = context.resources.getColor(R.color.basil_green_dark, null)
+                liveMessageCardB.strokeColor =
+                    context.resources.getColor(R.color.basil_green_dark, null)
             }
         }
 
@@ -129,7 +159,7 @@ class LiveEventAdapter(val viewModel: LiveViewModel, private val events: List<Ev
                 " Qtr: " + event.quarter
 
         holder.binding.liveZoneChip.text = "Zone |  " +
-                when(event.zone) {
+                when (event.zone) {
                     1 -> "Around Rim"
                     2 -> "Left Elbow"
                     3 -> "Mid Straight"
@@ -164,8 +194,10 @@ class LiveEventAdapter(val viewModel: LiveViewModel, private val events: List<Ev
         holder.binding.liveMessageCard.cameraDistance = 8000 * scale
         holder.binding.liveMessageCardB.cameraDistance = 8000 * scale
         holder.binding.liveMessageCard.setOnClickListener {
-            val animF = AnimatorInflater.loadAnimator(context, R.animator.front_animator) as AnimatorSet
-            val animB = AnimatorInflater.loadAnimator(context, R.animator.back_animator) as AnimatorSet
+            val animF =
+                AnimatorInflater.loadAnimator(context, R.animator.front_animator) as AnimatorSet
+            val animB =
+                AnimatorInflater.loadAnimator(context, R.animator.back_animator) as AnimatorSet
             isFront = if (isFront) {
                 animF.setTarget(holder.binding.liveMessageCard)
                 animB.setTarget(holder.binding.liveMessageCardB)
@@ -193,11 +225,4 @@ class LiveEventAdapter(val viewModel: LiveViewModel, private val events: List<Ev
 
         holder.bind(event)
     }
-
-    override fun getItemViewType(position: Int): Int {
-        return super.getItemViewType(position)
-    }
-}
-
-sealed class EventType(var data: Event) {
 }

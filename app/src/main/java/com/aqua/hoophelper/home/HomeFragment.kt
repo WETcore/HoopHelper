@@ -26,10 +26,10 @@ class HomeFragment : Fragment() {
 
         // binding
         val binding: HomeFragmentBinding =
-            DataBindingUtil.inflate(inflater, R.layout.home_fragment, container,false)
+            DataBindingUtil.inflate(inflater, R.layout.home_fragment, container, false)
 
         viewModel.status.observe(viewLifecycleOwner) {
-            when(it) {
+            when (it) {
                 LoadApiStatus.LOADING -> {
                     binding.processText.visibility = View.VISIBLE
                     binding.lottieViewpager.visibility = View.VISIBLE
@@ -53,6 +53,7 @@ class HomeFragment : Fragment() {
         viewModel.teams.observe(viewLifecycleOwner) {
             val teamAdapter =
                 ArrayAdapter(requireContext(), R.layout.home_team_item, viewModel.teamNameList)
+
             binding.teamText.apply {
                 setAdapter(teamAdapter)
                 setText(viewModel.teams.value?.first()?.name, false)
@@ -66,12 +67,12 @@ class HomeFragment : Fragment() {
 
         // VPager
         viewModel.teamStat.observe(viewLifecycleOwner) {
-            val adapter: HomeVPagerAdapter
-            adapter = if (it.size >= 5) {
+            val adapter = if (it.size >= 5) {
                 HomeVPagerAdapter(viewModel.leaderTypes, requireContext(), viewModel)
             } else {
                 HomeVPagerAdapter(viewModel.leaderTypes, requireContext(), null)
             }
+
             binding.homeViewpager.apply {
                 this.offscreenPageLimit = 4
                 this.adapter = adapter

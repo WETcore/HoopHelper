@@ -8,7 +8,7 @@ import com.aqua.hoophelper.R
 import com.aqua.hoophelper.database.remote.HoopRemoteDataSource
 import java.io.Serializable
 
-class HoopService: LifecycleService() {
+class HoopService : LifecycleService() {
 
     override fun onCreate() {
         super.onCreate()
@@ -21,20 +21,29 @@ class HoopService: LifecycleService() {
             if (!invite.isNullOrEmpty()) {
                 val intent1 = Intent(applicationContext, CheckService::class.java)
                 intent1.apply {
-                    putExtra("teamId",invite.first().teamId)
-                    putExtra("inviteId",invite.first().id)
-                    putExtra("mail",invite.first().inviteeMail)
-                    putExtra("name",invite.first().playerName)
-                    putExtra("numbers", invite.first().existingNumbers.toMutableSet() as Serializable)
-                    putExtra("toggle",true)
+                    putExtra("teamId", invite.first().teamId)
+                    putExtra("inviteId", invite.first().id)
+                    putExtra("mail", invite.first().inviteeMail)
+                    putExtra("name", invite.first().playerName)
+                    putExtra(
+                        "numbers",
+                        invite.first().existingNumbers.toMutableSet() as Serializable
+                    )
+                    putExtra("toggle", true)
                 }
                 val serviceActionPendingIntent1 =
                     PendingIntent
-                        .getService(applicationContext,
+                        .getService(
+                            applicationContext,
                             1,
                             intent1,
-                            PendingIntent.FLAG_CANCEL_CURRENT)
-                val action1 = Notification.Action.Builder(R.drawable.ball_icon, "ACCEPT",serviceActionPendingIntent1)
+                            PendingIntent.FLAG_CANCEL_CURRENT
+                        )
+                val action1 = Notification.Action.Builder(
+                    R.drawable.ball_icon,
+                    "ACCEPT",
+                    serviceActionPendingIntent1
+                )
                     .addRemoteInput(
                         RemoteInput.Builder("numKey")
                             .setLabel("Jersey Number")
@@ -43,15 +52,21 @@ class HoopService: LifecycleService() {
                     .build()
 
                 val intent2 = Intent(applicationContext, CheckService::class.java)
-                intent2.putExtra("inviteId",invite.first().id)
-                intent2.putExtra("toggle",false)
+                intent2.putExtra("inviteId", invite.first().id)
+                intent2.putExtra("toggle", false)
                 val serviceActionPendingIntent2 =
                     PendingIntent
-                        .getService(applicationContext,
+                        .getService(
+                            applicationContext,
                             2,
                             intent2,
-                            PendingIntent.FLAG_CANCEL_CURRENT)
-                val action2 = Notification.Action.Builder(R.drawable.ball_icon, "CANCEL",serviceActionPendingIntent2).build()
+                            PendingIntent.FLAG_CANCEL_CURRENT
+                        )
+                val action2 = Notification.Action.Builder(
+                    R.drawable.ball_icon,
+                    "CANCEL",
+                    serviceActionPendingIntent2
+                ).build()
 
                 val channel =
                     NotificationChannel("1", "Invite", NotificationManager.IMPORTANCE_HIGH)
@@ -69,8 +84,7 @@ class HoopService: LifecycleService() {
                     val manager = this.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
                     manager.createNotificationChannel(channel)
                     manager.notify(1, notification)
-                }
-                else if (intent?.getBooleanExtra("dualNumber", false) == true) {
+                } else if (intent?.getBooleanExtra("dualNumber", false) == true) {
                     var numberList = ""
                     for (i in invite.first().existingNumbers.indices) {
                         numberList += invite.first().existingNumbers[i] + " "

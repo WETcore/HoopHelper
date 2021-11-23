@@ -38,7 +38,7 @@ class HomeViewModel : ViewModel() {
         get() = _teams
 
     // player list
-    private var _teamPlayers = MutableLiveData<List<Player>>(listOf(Player()))
+    private var _teamPlayers = MutableLiveData(listOf(Player()))
     private val teamPlayers: LiveData<List<Player>>
         get() = _teamPlayers
 
@@ -55,7 +55,7 @@ class HomeViewModel : ViewModel() {
     private fun getTeamList(): List<String> {
         _status.value = LoadApiStatus.LOADING
         coroutineScope.launch {
-            when(val result = HoopRemoteDataSource.getTeams()) {
+            when (val result = HoopRemoteDataSource.getTeams()) {
                 is Result.Success -> {
                     _teams.value = result.data.filter { it.jerseyNumbers.size >= 5 }
                     for (i in teams.value!!.indices) {
@@ -80,7 +80,7 @@ class HomeViewModel : ViewModel() {
         coroutineScope.launch {
             when (val result = HoopRemoteDataSource.getSelectedTeamMembers()) {
                 is Result.Success -> {
-                    _teamPlayers.value = result.data!!
+                    _teamPlayers.value = result.data
                     getTeamPlayersData(teamPlayers.value!!, teamPlayers.value!!.size)
                 }
                 is Result.Error -> {
@@ -100,30 +100,17 @@ class HomeViewModel : ViewModel() {
                 when (val result = HoopRemoteDataSource.getPlayerData(players[i].id)) {
                     is Result.Success -> {
                         data = result.data
-                        val id = players[i].id
-                        val num = players[i].number
-                        val name = players[i].name
-                        val ast = data.filter { it.assist }.size
                         val ptI = data.filter { it.score2 == true }.size
-                        val ptO = data.filter { it.score2 == false }.size
                         val pt3I = data.filter { it.score3 == true }.size
-                        val pt3O = data.filter { it.score3 == false }.size
-                        val reb = data.filter { it.rebound }.size
-                        val stl = data.filter { it.steal }.size
-                        val blk = data.filter { it.block }.size
                         val ftI = data.filter { it.freeThrow == true }.size
-                        val ftO = data.filter { it.freeThrow == false }.size
-                        val tov = data.filter { it.turnover }.size
-                        val foul = data.filter { it.foul }.size
-
                         playerStat = PlayerStat(
-                            name,
-                            num,
-                            pts = (ptI*2 + pt3I*3 + ftI),
-                            reb,
-                            ast,
-                            stl,
-                            blk,
+                            players[i].name,
+                            players[i].number,
+                            pts = (ptI * 2 + pt3I * 3 + ftI),
+                            data.filter { it.rebound }.size,
+                            data.filter { it.assist }.size,
+                            data.filter { it.steal }.size,
+                            data.filter { it.block }.size,
                         )
                         playerStats.add(playerStat)
                         _teamStat.value = playerStats
@@ -139,7 +126,7 @@ class HomeViewModel : ViewModel() {
     }
 
     fun getLeaderMainData(type: DataType): Pair<String, String> {
-        return when(type) {
+        return when (type) {
             DataType.SCORE -> {
                 teamStat.value?.sortByDescending { it.pts }
                 val leaderMainData = teamStat.value?.get(0)
@@ -165,12 +152,12 @@ class HomeViewModel : ViewModel() {
                 val leaderMainData = teamStat.value?.get(0)
                 Pair(leaderMainData?.name ?: "", (leaderMainData?.blk ?: 0).toString())
             }
-            else -> Pair("","else")
+            else -> Pair("", "else")
         }
     }
 
     fun getLeaderDetailData(detailDataType: DetailDataType, dataType: DataType): String {
-        when(dataType) {
+        when (dataType) {
             DataType.SCORE -> {
                 teamStat.value?.sortByDescending { it.pts }
             }
@@ -189,7 +176,7 @@ class HomeViewModel : ViewModel() {
             else -> teamStat.value
         }
 
-        return when(detailDataType) {
+        return when (detailDataType) {
             DetailDataType.PTS -> {
                 (teamStat.value?.get(0)?.pts ?: 0).toString()
             }

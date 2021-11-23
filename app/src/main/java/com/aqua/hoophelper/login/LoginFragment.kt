@@ -34,9 +34,9 @@ class LoginFragment : Fragment() {
     ): View? {
         // binding
         val binding: LoginFragmentBinding =
-            DataBindingUtil.inflate(inflater, R.layout.login_fragment, container,false)
+            DataBindingUtil.inflate(inflater, R.layout.login_fragment, container, false)
 
-        binding.lottiePlay.addAnimatorListener(object : Animator.AnimatorListener{
+        binding.lottiePlay.addAnimatorListener(object : Animator.AnimatorListener {
             var animateSwitch = false
             override fun onAnimationStart(animation: Animator?) {
                 // TODO("Not yet implemented")
@@ -77,17 +77,17 @@ class LoginFragment : Fragment() {
         val width = displayMetrics.widthPixels.toFloat()
         val height = displayMetrics.heightPixels.toFloat()
         val path = Path()
-        path.moveTo(32f, height-104f)
+        path.moveTo(32f, height - 104f)
 
         binding.googleSignIn.setOnClickListener {
             Tutor.finished.value = false
-            loginViewModel.signIn(googleSignInClient,requireActivity())
+            loginViewModel.signIn(googleSignInClient, requireActivity())
         }
 
         binding.loginFab.setOnClickListener {
             Tutor.finished.value = false
             path.apply {
-                quadTo(width*0.25f, 0f,width*0.5f,height* 0.145f)
+                quadTo(width * 0.25f, 0f, width * 0.5f, height * 0.145f)
             }
             val animator = ObjectAnimator.ofFloat(binding.loginFab, View.X, View.Y, path).apply {
                 duration = 500
@@ -95,7 +95,7 @@ class LoginFragment : Fragment() {
             }
             animator.doOnEnd {
                 binding.loginFab.isClickable = false
-                loginViewModel.signIn(googleSignInClient,requireActivity())
+                loginViewModel.signIn(googleSignInClient, requireActivity())
             }
         }
 

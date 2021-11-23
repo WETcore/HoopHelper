@@ -26,7 +26,7 @@ class LiveFragment : Fragment() {
 
         // binding
         val binding: LiveFragmentBinding =
-            DataBindingUtil.inflate(inflater, R.layout.live_fragment, container,false)
+            DataBindingUtil.inflate(inflater, R.layout.live_fragment, container, false)
 
         // safe args
         val args: LiveFragmentArgs by navArgs()

@@ -31,7 +31,7 @@ class ProfileViewModel : ViewModel() {
 
     var player = Player()
     var team = Team()
-    var invitation =Invitation()
+    var invitation = Invitation()
 
     // roster
     var _roster = MutableLiveData<List<Player>>()
@@ -84,7 +84,7 @@ class ProfileViewModel : ViewModel() {
         botPlayer.apply {
             avatar =
                 "https://images.unsplash.com/photo-1546776310-eef45dd6d63c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1410&q=80"
-            teamId= team.id
+            teamId = team.id
             listOf("T1", "T2", "T3", "T4", "T5").forEachIndexed { index, s ->
                 starting5[index] = true
                 id = s
@@ -100,13 +100,12 @@ class ProfileViewModel : ViewModel() {
     fun setRoster() {
         _status.value = LoadApiStatus.LOADING
         coroutineScope.launch {
-            when(val result = HoopRemoteDataSource.getMatchMembers()) { //TODO
+            when (val result = HoopRemoteDataSource.getMatchMembers()) { //TODO
                 is Result.Success -> {
                     _roster.value = result.data!!
                     if (!initState) {
                         _status.value = LoadApiStatus.DONE
-                    }
-                    else initState = !initState
+                    } else initState = !initState
                 }
                 is Result.Error -> {
                     Log.d("status", "error")
@@ -128,7 +127,7 @@ class ProfileViewModel : ViewModel() {
             setRoster()
             false
         } else {
-          true
+            true
         }
     }
 
@@ -148,7 +147,7 @@ class ProfileViewModel : ViewModel() {
     fun getPlayerUserInfo() {
         _status.value = LoadApiStatus.LOADING
         coroutineScope.launch {
-            when(val result = HoopRemoteDataSource.getTeams()) {
+            when (val result = HoopRemoteDataSource.getTeams()) {
                 is Result.Success -> {
                     _teamInfo.value = result.data.firstOrNull { it.id == User.teamId }
                 }
@@ -157,7 +156,7 @@ class ProfileViewModel : ViewModel() {
                     _status.value = LoadApiStatus.ERROR
                 }
             }
-            when(val result = HoopRemoteDataSource.getPlayer()) {
+            when (val result = HoopRemoteDataSource.getPlayer()) {
                 is Result.Success -> {
                     _userInfo.value = result.data!!
                     _status.value = LoadApiStatus.DONE
@@ -179,7 +178,7 @@ class ProfileViewModel : ViewModel() {
         }
     }
 
-    fun setNewCaptain(id:  MutableList<String>, position: Int) {
+    fun setNewCaptain(id: MutableList<String>, position: Int) {
         db.collection("Players")
             .whereEqualTo("id", roster.value!![releasePos].id)
             .get().addOnSuccessListener {
@@ -193,7 +192,10 @@ class ProfileViewModel : ViewModel() {
         db.collection("Teams")
             .whereEqualTo("id", User.teamId)
             .get().addOnSuccessListener {
-                it.documents.first().reference.update("jerseyNumbers", FieldValue.arrayRemove(roster.value!![releasePos].number))
+                it.documents.first().reference.update(
+                    "jerseyNumbers",
+                    FieldValue.arrayRemove(roster.value!![releasePos].number)
+                )
             }
     }
 

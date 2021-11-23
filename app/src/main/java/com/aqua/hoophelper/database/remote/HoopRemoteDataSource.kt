@@ -13,7 +13,7 @@ import com.google.firebase.ktx.Firebase
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-object HoopRemoteDataSource: HoopRepository {
+object HoopRemoteDataSource : HoopRepository {
 
     override fun getEvents(): LiveData<List<Event>> {
         val result = MutableLiveData<List<Event>>()
@@ -80,7 +80,8 @@ object HoopRemoteDataSource: HoopRepository {
                     conti.resume(Result.Success(result))
                 } else {
                     task.exception?.let {
-                        Log.d("error",
+                        Log.d(
+                            "error",
                             "[${this::class.simpleName}] Error getting documents. ${it.message}"
                         )
                         conti.resume(Result.Error(it))
@@ -100,7 +101,8 @@ object HoopRemoteDataSource: HoopRepository {
                     conti.resume(Result.Success(result))
                 } else {
                     task.exception?.let {
-                        Log.d("error",
+                        Log.d(
+                            "error",
                             "[${this::class.simpleName}] Error getting documents. ${it.message}"
                         )
                         conti.resume(Result.Error(it))
@@ -110,47 +112,51 @@ object HoopRemoteDataSource: HoopRepository {
             }
     }
 
-    override suspend fun getSelectedTeamMembers(): Result<List<Player>> = suspendCoroutine { conti ->
-        FirebaseFirestore.getInstance()
-            .collection("Players")
-            .whereEqualTo("teamId", HoopInfo.spinnerSelectedTeamId.value!!)
-            .get()
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    val result = task.result?.toObjects(Player::class.java) ?: mutableListOf()
-                    conti.resume(Result.Success(result))
-                } else {
-                    task.exception?.let {
-                        Log.d("error",
-                            "[${this::class.simpleName}] Error getting documents. ${it.message}"
-                        )
-                        conti.resume(Result.Error(it))
-                        return@addOnCompleteListener
+    override suspend fun getSelectedTeamMembers(): Result<List<Player>> =
+        suspendCoroutine { conti ->
+            FirebaseFirestore.getInstance()
+                .collection("Players")
+                .whereEqualTo("teamId", HoopInfo.spinnerSelectedTeamId.value!!)
+                .get()
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val result = task.result?.toObjects(Player::class.java) ?: mutableListOf()
+                        conti.resume(Result.Success(result))
+                    } else {
+                        task.exception?.let {
+                            Log.d(
+                                "error",
+                                "[${this::class.simpleName}] Error getting documents. ${it.message}"
+                            )
+                            conti.resume(Result.Error(it))
+                            return@addOnCompleteListener
+                        }
                     }
                 }
-            }
-    }
+        }
 
-    override suspend fun getPlayerData(playerId: String): Result<List<Event>> = suspendCoroutine { conti ->
-        FirebaseFirestore.getInstance()
-            .collection("Events")
-            .whereEqualTo("playerId", playerId)
-            .get()
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    val result = task.result?.toObjects(Event::class.java) ?: mutableListOf()
-                    conti.resume(Result.Success(result))
-                } else {
-                    task.exception?.let {
-                        Log.d("error",
-                            "[${this::class.simpleName}] Error getting documents. ${it.message}"
-                        )
-                        conti.resume(Result.Error(it))
-                        return@addOnCompleteListener
+    override suspend fun getPlayerData(playerId: String): Result<List<Event>> =
+        suspendCoroutine { conti ->
+            FirebaseFirestore.getInstance()
+                .collection("Events")
+                .whereEqualTo("playerId", playerId)
+                .get()
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val result = task.result?.toObjects(Event::class.java) ?: mutableListOf()
+                        conti.resume(Result.Success(result))
+                    } else {
+                        task.exception?.let {
+                            Log.d(
+                                "error",
+                                "[${this::class.simpleName}] Error getting documents. ${it.message}"
+                            )
+                            conti.resume(Result.Error(it))
+                            return@addOnCompleteListener
+                        }
                     }
                 }
-            }
-    }
+        }
 
     override suspend fun getUserInfo(): List<Player> = suspendCoroutine { conti ->
         if (User.account != null) {
@@ -165,7 +171,7 @@ object HoopRemoteDataSource: HoopRepository {
                         User.isCaptain = result.first().captain
                         User.id = result.first().id
                     }
-                    Log.d("userInfo","${User.account?.email}")
+                    Log.d("userInfo", "${User.account?.email}")
                     conti.resume(result)
                 }
         }
@@ -195,7 +201,8 @@ object HoopRemoteDataSource: HoopRepository {
                     conti.resume(Result.Success(result))
                 } else {
                     task.exception?.let {
-                        Log.d("error",
+                        Log.d(
+                            "error",
                             "[${this::class.simpleName}] Error getting documents. ${it.message}"
                         )
                         conti.resume(Result.Error(it))
@@ -216,7 +223,8 @@ object HoopRemoteDataSource: HoopRepository {
                     conti.resume(Result.Success(result))
                 } else {
                     task.exception?.let {
-                        Log.d("error",
+                        Log.d(
+                            "error",
                             "[${this::class.simpleName}] Error getting documents. ${it.message}"
                         )
                         conti.resume(Result.Error(it))

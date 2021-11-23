@@ -17,7 +17,8 @@ import com.aqua.hoophelper.util.LoadApiStatus
 class HomeVPagerAdapter(
     private val list: List<String>,
     private val context: Context,
-    private val viewModel: HomeViewModel?): PagerAdapter() {
+    private val viewModel: HomeViewModel?
+) : PagerAdapter() {
 
     override fun getCount(): Int {
         return list.size
@@ -46,7 +47,7 @@ class HomeVPagerAdapter(
 
         type.text = list[position]
 
-        val mainDataType = when(position) {
+        val mainDataType = when (position) {
             0 -> {
                 DataType.SCORE
             }
@@ -88,8 +89,10 @@ class HomeVPagerAdapter(
         card.cameraDistance = 8000 * scale
         cardB.cameraDistance = 8000 * scale
         card.setOnClickListener {
-            val animF = AnimatorInflater.loadAnimator(context, R.animator.front_animator) as AnimatorSet
-            val animB = AnimatorInflater.loadAnimator(context, R.animator.back_animator) as AnimatorSet
+            val animF =
+                AnimatorInflater.loadAnimator(context, R.animator.front_animator) as AnimatorSet
+            val animB =
+                AnimatorInflater.loadAnimator(context, R.animator.back_animator) as AnimatorSet
             isFront = if (isFront) {
                 animF.setTarget(card)
                 animB.setTarget(cardB)

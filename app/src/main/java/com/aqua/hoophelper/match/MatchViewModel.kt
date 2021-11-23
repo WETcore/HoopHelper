@@ -25,6 +25,15 @@ import kotlin.math.*
 
 const val COURT_TOP = 0.15
 const val COURT_BOTTOM = 0.57
+const val THREE_LINE_LEFT = 0.09
+const val THREE_LINE_RIGHT = 0.9
+const val CORNER_BOTTOM_BOUND = 0.167
+const val ROUND_DEGREE = 180
+const val SLOPE_80 = 80.0
+const val SLOPE_65 = 65.0
+const val DIAMETER1 = 0.083
+const val DIAMETER2 = 0.153
+const val DIAMETER3 = 0.241
 
 class MatchViewModel : ViewModel() {
 
@@ -33,7 +42,7 @@ class MatchViewModel : ViewModel() {
         get() = _status
 
     // Firebase
-    val db = FirebaseFirestore.getInstance()
+    private val db = FirebaseFirestore.getInstance()
 
     // database
     var event = Event()
@@ -77,7 +86,6 @@ class MatchViewModel : ViewModel() {
         get() = _quarter
 
 
-
     //////////////////
     // player num send to db
     var playerNum = ""
@@ -89,7 +97,7 @@ class MatchViewModel : ViewModel() {
 
     // roster
     private var _roster = MutableLiveData<List<Player>>()
-    val roster: LiveData<List<Player>>
+    private val roster: LiveData<List<Player>>
         get() = _roster
 
     // startingPlayer
@@ -136,6 +144,7 @@ class MatchViewModel : ViewModel() {
                 _shotClock.value = _shotClock.value?.minus(1L)
             }
         }
+
         override fun onFinish() {}
     }
 
@@ -145,11 +154,12 @@ class MatchViewModel : ViewModel() {
                 _gameClockSec.value = _gameClockSec.value?.minus(1L)
             }
         }
+
         override fun onFinish() {}
     }
 
     fun setGameClockMin(sec: Long) {
-        if ( sec >= 60) {
+        if (sec >= 60) {
             _gameClockMin.value = _gameClockMin.value?.minus(1L)
         }
     }
@@ -195,10 +205,9 @@ class MatchViewModel : ViewModel() {
         event.playerName = playerName
         event.playerImage = playerImage
         event.zone = zone.value!!
-        if (zone.value!! in 1..9)  {
+        if (zone.value!! in 1..9) {
             event.score2 = countIn
-        }
-        else if (zone.value!! in 10..14) {
+        } else if (zone.value!! in 10..14) {
             event.score3 = countIn
         }
         db.collection("Events").add(event)
@@ -236,7 +245,7 @@ class MatchViewModel : ViewModel() {
         event.matchTimeSec = gameClockSec.value.toString()
         event.quarter = quarter.value.toString()
         event.zone = zone.value!!
-        when(type) {
+        when (type) {
             DataType.REBOUND -> {
                 event.rebound = true
             }
@@ -260,63 +269,48 @@ class MatchViewModel : ViewModel() {
     }
 
     fun getDiameter(x: Float, y: Float, w: Int, h: Int): Boolean {
-        Log.i("dia","x: $x y: $y  x/w ${x/w} ${y/h}")
-        val dm = sqrt((x-(w/2)).pow(2) + (y-(h*0.2)).pow(2))/2
-        val slope = y/(x-(w/2))
+        Log.i("dia", "x: $x y: $y  x/w ${x / w} ${y / h}")
+        val dm = sqrt((x - (w / 2)).pow(2) + (y - (h * 0.2)).pow(2)) / 2
+        val slope = y / (x - (w / 2))
 
-        if (y/h in COURT_TOP..COURT_BOTTOM) {
-            if (dm/w < 0.083) {
+        if (y / h in COURT_TOP..COURT_BOTTOM) {
+            if (dm / w < DIAMETER1) {
                 selectZone(1)
-            }
-            else if (dm/w < 0.153) {
-                if (slope in 0.0..tan((80.0 * PI)/180)) {
+            } else if (dm / w < DIAMETER2) {
+                if (slope in 0.0..tan((SLOPE_80 * PI) / ROUND_DEGREE)) {
                     selectZone(4)
-                }
-                else if (slope > tan((80.0 * PI)/180) || slope < tan((-80.0 * PI)/180)) {
+                } else if (slope > tan((SLOPE_80 * PI) / ROUND_DEGREE) || slope < tan((-SLOPE_80 * PI) / ROUND_DEGREE)) {
                     selectZone(3)
-                }
-                else {
+                } else {
                     selectZone(2)
                 }
-            }
-            else if (dm < (w * 0.241) && x in (0.09 * w)..(0.9 * w)) {
-                if(slope in 0.0..tan((65.0 * PI)/180) && (x/w) < 0.9) {
+            } else if (dm < (w * DIAMETER3) && x in (THREE_LINE_LEFT * w)..(THREE_LINE_RIGHT * w)) {
+                if (slope in 0.0..tan((SLOPE_65 * PI) / ROUND_DEGREE) && (x / w) < THREE_LINE_RIGHT) {
                     selectZone(9)
-                }
-                else if (slope in tan((65.0 * PI)/180)..tan((80.0 * PI)/180)) {
+                } else if (slope in tan((SLOPE_65 * PI) / ROUND_DEGREE)..tan((SLOPE_80 * PI) / ROUND_DEGREE)) {
                     selectZone(8)
-                }
-                else if (slope > tan((80.0 * PI)/180) || slope < tan((-80.0 * PI)/180)) {
+                } else if (slope > tan((SLOPE_80 * PI) / ROUND_DEGREE) || slope < tan((-SLOPE_80 * PI) / ROUND_DEGREE)) {
                     selectZone(7)
-                }
-                else if (slope in tan((-80.0 * PI)/180)..tan((-65.0 * PI)/180)) {
+                } else if (slope in tan((-SLOPE_80 * PI) / ROUND_DEGREE)..tan((-SLOPE_65 * PI) / ROUND_DEGREE)) {
                     selectZone(6)
-                }
-                else if (slope > tan((-65.0 * PI)/180) && (x/w) > 0.09) {
+                } else if (slope > tan((-SLOPE_65 * PI) / ROUND_DEGREE) && (x / w) > THREE_LINE_LEFT) {
                     selectZone(5)
-                }
-                else Log.d("dia","${x} ${w} ${atan(slope)/PI*180} in zone 3 error")
-            }
-            else if (x/w > 0.9 && y/h <= (COURT_TOP + 0.167)) {
+                } else Log.d("dia", "${x} ${w} ${atan(slope) / PI * ROUND_DEGREE} in zone 3 error")
+            } else if (x / w > THREE_LINE_RIGHT && y / h <= (COURT_TOP + CORNER_BOTTOM_BOUND)) {
                 selectZone(14)
-            }
-            else if (x/w < 0.09 && y/h <= 0.362) {
+            } else if (x / w < THREE_LINE_LEFT && y / h <= (COURT_TOP + CORNER_BOTTOM_BOUND)) {
                 selectZone(10)
-            }
-            else if(dm/w > 0.241) {
-                if (slope in 0.0..tan((80.0 * PI)/180)) {
+            } else if (dm / w > DIAMETER3) {
+                if (slope in 0.0..tan((SLOPE_80 * PI) / ROUND_DEGREE)) {
                     selectZone(13)
-                }
-                else if (slope > tan((80.0 * PI)/180) || slope < tan((-80.0 * PI)/180)) {
+                } else if (slope > tan((SLOPE_80 * PI) / ROUND_DEGREE) || slope < tan((-SLOPE_80 * PI) / ROUND_DEGREE)) {
                     selectZone(12)
-                }
-                else if (slope in tan((-80.0 * PI)/180)..0.0) {
+                } else if (slope in tan((-SLOPE_80 * PI) / ROUND_DEGREE)..0.0) {
                     selectZone(11)
                 }
             }
             return false
-        }
-        else return true
+        } else return true
     }
 
     fun getSubPlayer2Starting(position: Int) {
@@ -333,10 +327,9 @@ class MatchViewModel : ViewModel() {
     }
 
     fun setHistoryText(it: List<Event>): String {
-        if (it.isNullOrEmpty()){
+        if (it.isNullOrEmpty()) {
             return "latest event"
-        }
-        else{
+        } else {
             it[0].run {
                 return when {
                     assist -> "assist"
@@ -372,7 +365,7 @@ class MatchViewModel : ViewModel() {
         coroutineScope.launch {
             val startPlayerList = mutableListOf<Player>()
             val subPlayerList = mutableListOf<Player>()
-            when(val result = HoopRemoteDataSource.getMatchMembers()) {
+            when (val result = HoopRemoteDataSource.getMatchMembers()) {
                 is Result.Success -> {
                     _roster.value = result.data!!
                     val lineUp = roster.value!!
@@ -406,7 +399,7 @@ class MatchViewModel : ViewModel() {
             it.playerNum == playerNum && it.matchId == HoopInfo.matchId
         }?.size?.plus(1)
         if (count != null) {
-            if(count >= foulLimit) {
+            if (count >= foulLimit) {
                 getSubPlayer2Starting(0)
                 changeSubPlayer(onCourtPlayer, 0)
             }
@@ -416,7 +409,7 @@ class MatchViewModel : ViewModel() {
     private fun getMatchRule() {
         _status.value = LoadApiStatus.LOADING
         coroutineScope.launch {
-            when(val result = HoopRemoteDataSource.getRule()) {
+            when (val result = HoopRemoteDataSource.getRule()) {
                 is Result.Success -> {
                     rule = result.data!!
                     quarterLimit = rule.quarter.toInt()
@@ -441,7 +434,7 @@ class MatchViewModel : ViewModel() {
 
     fun setTimeOutCount(): Boolean {
         timeOut += 1
-        return if (quarter.value!! <= quarterLimit/2) {
+        return if (quarter.value!! <= quarterLimit / 2) {
             timeOut > timeOut1Limit
         } else {
             timeOut > timeOut2Limit

@@ -83,7 +83,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.bottomBar.setOnItemSelectedListener {
-            when(it.itemId) {
+            when (it.itemId) {
                 R.id.homeFragment -> {
                     binding.fab.isClickable = true
                     binding.appBar.behavior.slideUp(binding.appBar)
@@ -100,7 +100,12 @@ class MainActivity : AppCompatActivity() {
                                     navHostFragment.navigate(NavigationDirections.navToProfile())
                                 }.apply {
                                     setTextColor(resources.getColor(R.color.basil_orange, null))
-                                    setActionTextColor(resources.getColor(R.color.basil_green_dark, null))
+                                    setActionTextColor(
+                                        resources.getColor(
+                                            R.color.basil_green_dark,
+                                            null
+                                        )
+                                    )
                                     setBackgroundTint(resources.getColor(R.color.basil_bg, null))
                                 }.show()
                             false
@@ -113,7 +118,12 @@ class MainActivity : AppCompatActivity() {
                                     navHostFragment.navigate(NavigationDirections.navToProfile())
                                 }.apply {
                                     setTextColor(resources.getColor(R.color.basil_orange, null))
-                                    setActionTextColor(resources.getColor(R.color.basil_green_dark, null))
+                                    setActionTextColor(
+                                        resources.getColor(
+                                            R.color.basil_green_dark,
+                                            null
+                                        )
+                                    )
                                     setBackgroundTint(resources.getColor(R.color.basil_bg, null))
                                 }.show()
                             false

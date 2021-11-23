@@ -25,7 +25,7 @@ class TutorFragment : Fragment() {
     ): View? {
         // binding
         val binding: TutorFragmentBinding =
-            DataBindingUtil.inflate(inflater, R.layout.tutor_fragment, container,false)
+            DataBindingUtil.inflate(inflater, R.layout.tutor_fragment, container, false)
 
         // VPager
         val adapter = TutorAdapter(requireActivity())
