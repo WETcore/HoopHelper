@@ -17,7 +17,7 @@ import com.aqua.hoophelper.databinding.MatchFragmentBinding
 import com.aqua.hoophelper.util.LoadApiStatus
 
 enum class DataType { //TODO
-    SCORE, REBOUND, ASSIST, STEAL, BLOCK, TURNOVER, FOUL
+    SCORE, REBOUND, ASSIST, STEAL, BLOCK, TURNOVER, FOUL, FREE_THROW
 }
 
 enum class DetailDataType { //TODO
@@ -242,7 +242,7 @@ class MatchFragment : Fragment() {
             when (checkedId) {
                 R.id.score_chip -> {
                     if (viewModel.zone.value?.toInt() != 0) {
-                        viewModel.setScoreData(true, args.matchId)
+                        viewModel.setEventData(args.matchId, DataType.SCORE, true)
                     } else {
                         Toast.makeText(requireContext(), "Selected Zone first.", Toast.LENGTH_SHORT)
                             .show()
@@ -251,7 +251,7 @@ class MatchFragment : Fragment() {
                 }
                 R.id.miss_chip -> {
                     if (viewModel.zone.value?.toInt() != 0) {
-                        viewModel.setScoreData(false, args.matchId)
+                        viewModel.setEventData(args.matchId, DataType.SCORE, false)
                     } else {
                         Toast.makeText(requireContext(), "Selected Zone first.", Toast.LENGTH_SHORT)
                             .show()
@@ -259,27 +259,27 @@ class MatchFragment : Fragment() {
                     group.clearCheck()
                 }
                 R.id.rebound_chip -> {
-                    viewModel.setStatData(DataType.REBOUND, args.matchId)
+                    viewModel.setEventData(args.matchId, DataType.REBOUND, false)
                     group.clearCheck()
                 }
                 R.id.assist_chip -> {
-                    viewModel.setStatData(DataType.ASSIST, args.matchId)
+                    viewModel.setEventData(args.matchId, DataType.ASSIST, false)
                     group.clearCheck()
                 }
                 R.id.steal_chip -> {
-                    viewModel.setStatData(DataType.STEAL, args.matchId)
+                    viewModel.setEventData(args.matchId, DataType.STEAL, false)
                     group.clearCheck()
                 }
                 R.id.block_chip -> {
-                    viewModel.setStatData(DataType.BLOCK, args.matchId)
+                    viewModel.setEventData(args.matchId, DataType.BLOCK, false)
                     group.clearCheck()
                 }
                 R.id.turnover_chip -> {
-                    viewModel.setStatData(DataType.TURNOVER, args.matchId)
+                    viewModel.setEventData(args.matchId, DataType.TURNOVER, false)
                     group.clearCheck()
                 }
                 R.id.foul_chip -> {
-                    viewModel.setStatData(DataType.FOUL, args.matchId)
+                    viewModel.setEventData(args.matchId, DataType.FOUL, false)
                     val buffer = viewModel.startPlayer.value!![viewModel.selectPlayerPos]
                     viewModel.getFoulCount(viewModel.playerNum, buffer)
                     group.clearCheck()
@@ -301,10 +301,10 @@ class MatchFragment : Fragment() {
             }
         }
         binding.ftInChip.setOnClickListener {
-            viewModel.setFreeThrowData(true, args.matchId)
+            viewModel.setEventData(args.matchId, DataType.FREE_THROW, true)
         }
         binding.ftOutChip.setOnClickListener {
-            viewModel.setFreeThrowData(false, args.matchId)
+            viewModel.setEventData(args.matchId, DataType.FREE_THROW, false)
         }
 
         // event history & cancel event

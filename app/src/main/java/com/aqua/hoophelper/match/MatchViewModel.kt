@@ -191,61 +191,33 @@ class MatchViewModel : ViewModel() {
         event.score3 = null
     }
 
-    fun setScoreData(countIn: Boolean, mId: String) {
+    ///////////////////////////////////////////////////////////////////////////////
+    fun setEventData(mId: String, type: DataType, isCount: Boolean) {
         resetData()
-        event.eventId = db.collection("Events").document().id
-        event.matchId = mId
-        event.teamId = User.teamId
-        event.playerId = startPlayer.value?.get(selectPlayerPos)?.id ?: ""
-        event.actualTime = Calendar.getInstance().timeInMillis
-        event.matchTimeMin = gameClockMin.value.toString()
-        event.matchTimeSec = gameClockSec.value.toString()
-        event.quarter = quarter.value.toString()
-        event.playerNum = playerNum
-        event.playerName = playerName
-        event.playerImage = playerImage
-        event.zone = zone.value!!
-        if (zone.value!! in 1..9) {
-            event.score2 = countIn
-        } else if (zone.value!! in 10..14) {
-            event.score3 = countIn
+        event.apply {
+            eventId = db.collection("Events").document().id
+            matchId = mId
+            teamId = User.teamId
+            playerId = startPlayer.value?.get(selectPlayerPos)?.id ?: ""
+            actualTime = Calendar.getInstance().timeInMillis
+            this.playerNum = (this@MatchViewModel).playerNum
+            this.playerName = (this@MatchViewModel).playerName
+            this.playerImage = (this@MatchViewModel).playerImage
+            matchTimeMin = gameClockMin.value.toString()
+            matchTimeSec = gameClockSec.value.toString()
+            this.quarter = (this@MatchViewModel).quarter.value.toString()
+            if (type != DataType.FREE_THROW) {
+                this.zone = (this@MatchViewModel).zone.value!!
+            }
         }
-        db.collection("Events").add(event)
-    }
-
-    fun setFreeThrowData(bool: Boolean, mId: String) {
-        resetData()
-        event.eventId = db.collection("Events").document().id
-        event.matchId = mId
-        event.teamId = User.teamId
-        event.playerId = startPlayer.value?.get(selectPlayerPos)?.id ?: ""
-        event.actualTime = Calendar.getInstance().timeInMillis
-        event.playerNum = playerNum
-        event.playerName = playerName
-        event.playerImage = playerImage
-        event.zone = -1
-        event.matchTimeMin = gameClockMin.value.toString()
-        event.matchTimeSec = gameClockSec.value.toString()
-        event.quarter = quarter.value.toString()
-        event.freeThrow = bool
-        db.collection("Events").add(event)
-    }
-
-    fun setStatData(type: DataType, mId: String) {
-        resetData()
-        event.eventId = db.collection("Events").document().id
-        event.matchId = mId
-        event.teamId = User.teamId
-        event.playerId = startPlayer.value?.get(selectPlayerPos)?.id ?: ""
-        event.actualTime = Calendar.getInstance().timeInMillis
-        event.playerNum = playerNum
-        event.playerName = playerName
-        event.playerImage = playerImage
-        event.matchTimeMin = gameClockMin.value.toString()
-        event.matchTimeSec = gameClockSec.value.toString()
-        event.quarter = quarter.value.toString()
-        event.zone = zone.value!!
         when (type) {
+            DataType.SCORE -> {
+                if (zone.value!! in 1..9) {
+                    event.score2 = isCount
+                } else if (zone.value!! in 10..14) {
+                    event.score3 = isCount
+                }
+            }
             DataType.REBOUND -> {
                 event.rebound = true
             }
@@ -264,9 +236,14 @@ class MatchViewModel : ViewModel() {
             DataType.FOUL -> {
                 event.foul = true
             }
+            DataType.FREE_THROW -> {
+                event.zone = -1
+                event.freeThrow = isCount
+            }
         }
         db.collection("Events").add(event)
     }
+    ///////////////////////////////////////////////////////////////////////////////
 
     fun getDiameter(x: Float, y: Float, w: Int, h: Int): Boolean {
         Log.i("dia", "x: $x y: $y  x/w ${x / w} ${y / h}")
