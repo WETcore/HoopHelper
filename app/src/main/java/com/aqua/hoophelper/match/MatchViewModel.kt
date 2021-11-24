@@ -124,7 +124,7 @@ class MatchViewModel : ViewModel() {
 
     // foul
     private var _foul = HoopRemoteDataSource.getEvents()
-    val foul: LiveData<List<Event>>
+    private val foul: LiveData<List<Event>>
         get() = _foul
 
     // Create a Coroutine scope using a job to be able to cancel when needed
@@ -363,8 +363,8 @@ class MatchViewModel : ViewModel() {
     private fun setRoster() {
         _status.value = LoadApiStatus.LOADING
         coroutineScope.launch {
-            val startPlayerList = mutableListOf<Player>()
-            val subPlayerList = mutableListOf<Player>()
+            val startPlayers = mutableListOf<Player>()
+            val subPlayers = mutableListOf<Player>()
             when (val result = HoopRemoteDataSource.getMatchMembers()) {
                 is Result.Success -> {
                     _roster.value = result.data!!
@@ -373,16 +373,16 @@ class MatchViewModel : ViewModel() {
                         !it.starting5.contains(true)
                     }.forEachIndexed { index, player ->
                         _substitutionPlayer.value!!.add(player)
-                        subPlayerList.add(player)
+                        subPlayers.add(player)
                     }
                     lineUp.filter {
                         it.starting5.contains(true)
                     }.forEachIndexed { index, player ->
-                        startPlayerList.add(player)
+                        startPlayers.add(player)
                     }
-                    startPlayerList.sortBy { it.starting5.indexOf(true) }
-                    _startPlayer.value = startPlayerList
-                    _substitutionPlayer.value = subPlayerList
+                    startPlayers.sortBy { it.starting5.indexOf(true) }
+                    _startPlayer.value = startPlayers
+                    _substitutionPlayer.value = subPlayers
 
                     _status.value = LoadApiStatus.DONE
                 }

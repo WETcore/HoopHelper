@@ -24,7 +24,7 @@ class HomeViewModel : ViewModel() {
         get() = _status
 
     // team name list
-    var teamNameList = mutableListOf<String>()
+    var teamNames = mutableListOf<String>()
 
     // stat of team player
     private var _teamStat = MutableLiveData<MutableList<PlayerStat>>(mutableListOf())
@@ -59,7 +59,7 @@ class HomeViewModel : ViewModel() {
                 is Result.Success -> {
                     _teams.value = result.data.filter { it.jerseyNumbers.size >= 5 }
                     for (i in teams.value!!.indices) {
-                        teamNameList.add(teams.value!![i].name)
+                        teamNames.add(teams.value!![i].name)
                     }
                     HoopInfo.spinnerSelectedTeamId.value = teams.value!!.first().id
                     selectedTeam(0)
@@ -70,7 +70,7 @@ class HomeViewModel : ViewModel() {
                 }
             }
         }
-        return teamNameList
+        return teamNames
     }
 
     // get player list
@@ -120,8 +120,6 @@ class HomeViewModel : ViewModel() {
                     }
                 }
             }
-
-
         }
     }
 
@@ -129,27 +127,27 @@ class HomeViewModel : ViewModel() {
         return when (type) {
             DataType.SCORE -> {
                 teamStat.value?.sortByDescending { it.pts }
-                val leaderMainData = teamStat.value?.get(0)
+                val leaderMainData = teamStat.value?.first()
                 Pair(leaderMainData?.name ?: "", (leaderMainData?.pts ?: 0).toString())
             }
             DataType.ASSIST -> {
                 teamStat.value?.sortByDescending { it.ast }
-                val leaderMainData = teamStat.value?.get(0)
+                val leaderMainData = teamStat.value?.first()
                 Pair(leaderMainData?.name ?: "", (leaderMainData?.ast ?: 0).toString())
             }
             DataType.REBOUND -> {
                 teamStat.value?.sortByDescending { it.reb }
-                val leaderMainData = teamStat.value?.get(0)
+                val leaderMainData = teamStat.value?.first()
                 Pair(leaderMainData?.name ?: "", (leaderMainData?.reb ?: 0).toString())
             }
             DataType.STEAL -> {
                 teamStat.value?.sortByDescending { it.stl }
-                val leaderMainData = teamStat.value?.get(0)
+                val leaderMainData = teamStat.value?.first()
                 Pair(leaderMainData?.name ?: "", (leaderMainData?.stl ?: 0).toString())
             }
             DataType.BLOCK -> {
                 teamStat.value?.sortByDescending { it.blk }
-                val leaderMainData = teamStat.value?.get(0)
+                val leaderMainData = teamStat.value?.first()
                 Pair(leaderMainData?.name ?: "", (leaderMainData?.blk ?: 0).toString())
             }
             else -> Pair("", "else")
@@ -178,19 +176,19 @@ class HomeViewModel : ViewModel() {
 
         return when (detailDataType) {
             DetailDataType.PTS -> {
-                (teamStat.value?.get(0)?.pts ?: 0).toString()
+                (teamStat.value?.first()?.pts ?: 0).toString()
             }
             DetailDataType.AST -> {
-                (teamStat.value?.get(0)?.ast ?: 0).toString()
+                (teamStat.value?.first()?.ast ?: 0).toString()
             }
             DetailDataType.REB -> {
-                (teamStat.value?.get(0)?.reb ?: 0).toString()
+                (teamStat.value?.first()?.reb ?: 0).toString()
             }
             DetailDataType.STL -> {
-                (teamStat.value?.get(0)?.stl ?: 0).toString()
+                (teamStat.value?.first()?.stl ?: 0).toString()
             }
             DetailDataType.BLK -> {
-                (teamStat.value?.get(0)?.blk ?: 0).toString()
+                (teamStat.value?.first()?.blk ?: 0).toString()
             }
             else -> ""
         }

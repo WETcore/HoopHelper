@@ -1,7 +1,6 @@
 package com.aqua.hoophelper.team.child.chart
 
 import android.annotation.SuppressLint
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -51,13 +50,13 @@ class ChartFragment : Fragment() {
 
         // spinner
         val playerAdapter =
-            ArrayAdapter(requireContext(), R.layout.home_team_item, viewModel.playerList)
+            ArrayAdapter(requireContext(), R.layout.home_team_item, viewModel.players)
         binding.playerEdit.setAdapter(playerAdapter)
         viewModel.roster.observe(viewLifecycleOwner) {
             it.forEachIndexed { index, player ->
-                viewModel.playerList.add(index, player.name)
+                viewModel.players.add(index, player.name)
             }
-            binding.playerEdit.setText(viewModel.playerList.first(), false)
+            binding.playerEdit.setText(viewModel.players.first(), false)
         }
         binding.playerEdit.setOnItemClickListener { parent, view, position, id ->
             val player = viewModel.roster.value?.get(position)

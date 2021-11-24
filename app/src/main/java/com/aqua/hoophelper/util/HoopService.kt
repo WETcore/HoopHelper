@@ -85,14 +85,14 @@ class HoopService : LifecycleService() {
                     manager.createNotificationChannel(channel)
                     manager.notify(1, notification)
                 } else if (intent?.getBooleanExtra("dualNumber", false) == true) {
-                    var numberList = ""
+                    var numbers = ""
                     for (i in invite.first().existingNumbers.indices) {
-                        numberList += invite.first().existingNumbers[i] + " "
+                        numbers += invite.first().existingNumbers[i] + " "
                     }
                     val notification = Notification.Builder(applicationContext, "1")
                         .setContentTitle("Hoooooop~")
                         .setContentText("Number existed!")
-                        .setStyle(Notification.BigTextStyle().bigText(numberList))
+                        .setStyle(Notification.BigTextStyle().bigText(numbers))
                         .setSmallIcon(R.drawable.ball_icon)
                         .addAction(action1)
                         .addAction(action2)

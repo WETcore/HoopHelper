@@ -39,15 +39,15 @@ class TacticViewModel : ViewModel() {
     private fun setRoster() {
         _status.value = LoadApiStatus.LOADING
         coroutineScope.launch {
-            val starPlayerList = mutableListOf<Player>()
+            val starPlayers = mutableListOf<Player>()
             when(val result = HoopRemoteDataSource.getMatchMembers()) {
                 is Result.Success -> {
                     val lineUp = result.data
                     lineUp.filter { it.starting5.contains(true) }.forEachIndexed { index, player ->
-                        starPlayerList.add(player)
+                        starPlayers.add(player)
                     }
-                    starPlayerList.sortBy { it.starting5.indexOf(true) }
-                    _startPlayer.value = starPlayerList
+                    starPlayers.sortBy { it.starting5.indexOf(true) }
+                    _startPlayer.value = starPlayers
                     _status.value = LoadApiStatus.DONE
                 }
                 is Result.Error -> {

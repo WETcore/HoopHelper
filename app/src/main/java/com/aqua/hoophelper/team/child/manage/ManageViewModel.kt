@@ -53,21 +53,21 @@ class ManageViewModel : ViewModel() {
     private fun setRoster() {
         _status.value = LoadApiStatus.LOADING
         coroutineScope.launch {
-            val starPlayerList = mutableListOf<Player>()
-            val subPlayerList = mutableListOf<Player>()
+            val starPlayers = mutableListOf<Player>()
+            val subPlayers = mutableListOf<Player>()
             when(val result = HoopRemoteDataSource.getMatchMembers()) {
                 is Result.Success -> {
                     val lineUp = result.data
                     lineUp.filter { !it.starting5.contains(true) }.forEachIndexed { index, player ->
                         _substitutionPlayer.value!!.add(player)
-                        subPlayerList.add(player)
+                        subPlayers.add(player)
                     }
                     lineUp.filter { it.starting5.contains(true) }.forEachIndexed { index, player ->
-                        starPlayerList.add(player)
+                        starPlayers.add(player)
                     }
-                    starPlayerList.sortBy { it.starting5.indexOf(true) }
-                    _startPlayer.value = starPlayerList
-                    _substitutionPlayer.value = subPlayerList
+                    starPlayers.sortBy { it.starting5.indexOf(true) }
+                    _startPlayer.value = starPlayers
+                    _substitutionPlayer.value = subPlayers
 
                     _status.value = LoadApiStatus.DONE
                 }
@@ -83,15 +83,15 @@ class ManageViewModel : ViewModel() {
         val bufferPlayer = substitutionPlayer.value!![spinnerPos]
         val startPlayer = startPlayer.value!![pos]
 
-        val bufferLineupList = mutableListOf(false, false, false, false, false)
+        val bufferLineups = mutableListOf(false, false, false, false, false)
 
         db.collection("Players")
             .get().addOnCompleteListener {
                 it.result.documents.apply {
-                    bufferLineupList[pos] = true
-                    first { it["id"] == bufferPlayer.id }.reference.update("starting5", bufferLineupList)
-                    bufferLineupList[pos] = false
-                    first { it["id"] == startPlayer.id }.reference.update("starting5", bufferLineupList)
+                    bufferLineups[pos] = true
+                    first { it["id"] == bufferPlayer.id }.reference.update("starting5", bufferLineups)
+                    bufferLineups[pos] = false
+                    first { it["id"] == startPlayer.id }.reference.update("starting5", bufferLineups)
 
                     setRoster()
                 }

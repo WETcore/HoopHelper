@@ -62,7 +62,6 @@ class LiveEventAdapter(val viewModel: LiveViewModel, private val events: List<Ev
             liveName.text = event.playerName
             liveNameB.text = event.playerName
             liveEventTypeText.text = viewModel.filterEventType(event)
-            livePtsChip.text
         }
 
         val condition = viewModel.filterEventType(event)

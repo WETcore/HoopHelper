@@ -52,7 +52,7 @@ class HomeFragment : Fragment() {
 
         viewModel.teams.observe(viewLifecycleOwner) {
             val teamAdapter =
-                ArrayAdapter(requireContext(), R.layout.home_team_item, viewModel.teamNameList)
+                ArrayAdapter(requireContext(), R.layout.home_team_item, viewModel.teamNames)
 
             binding.teamText.apply {
                 setAdapter(teamAdapter)

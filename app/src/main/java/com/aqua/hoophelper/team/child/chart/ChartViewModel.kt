@@ -25,12 +25,8 @@ class ChartViewModel : ViewModel() {
     val roster: LiveData<List<Player>>
     get() = _roster
 
-    private val _matches = HoopRemoteDataSource.getMatches()
-    val matches: LiveData<List<Match>>
-        get() = _matches
-
     private val _events = MutableLiveData<List<Event>>()
-    val events: LiveData<List<Event>>
+    private val events: LiveData<List<Event>>
         get() = _events
 
     private val _selectedPlayerData = MutableLiveData<List<Event>>()
@@ -38,7 +34,7 @@ class ChartViewModel : ViewModel() {
         get() = _selectedPlayerData
 
     // spinner
-    var playerList = mutableListOf<String>()
+    var players = mutableListOf<String>()
 
     // Create a Coroutine scope using a job to be able to cancel when needed
     private var viewModelJob = Job()

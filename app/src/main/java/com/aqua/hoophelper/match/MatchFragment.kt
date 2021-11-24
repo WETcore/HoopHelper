@@ -16,11 +16,11 @@ import com.aqua.hoophelper.R
 import com.aqua.hoophelper.databinding.MatchFragmentBinding
 import com.aqua.hoophelper.util.LoadApiStatus
 
-enum class DataType {
+enum class DataType { //TODO
     SCORE, REBOUND, ASSIST, STEAL, BLOCK, TURNOVER, FOUL
 }
 
-enum class DetailDataType {
+enum class DetailDataType { //TODO
     PTS, FG, ThreeP, FT, TOV,
     REB, AST, STL, BLK, PF
 }
