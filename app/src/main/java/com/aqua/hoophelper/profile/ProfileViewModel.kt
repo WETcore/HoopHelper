@@ -10,7 +10,10 @@ import com.aqua.hoophelper.database.Player
 import com.aqua.hoophelper.database.Result
 import com.aqua.hoophelper.database.Team
 import com.aqua.hoophelper.database.remote.HoopRemoteDataSource
+import com.aqua.hoophelper.util.INVITATIONS
 import com.aqua.hoophelper.util.LoadApiStatus
+import com.aqua.hoophelper.util.PLAYERS
+import com.aqua.hoophelper.util.TEAMS
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -67,19 +70,19 @@ class ProfileViewModel : ViewModel() {
     fun sendTeamInfo(teamName: String, playerNum: String) {
         team.name = teamName
         team.jerseyNumbers = mutableListOf(playerNum, "T1", "T2", "T3", "T4", "T5")
-        team.id = db.collection("Teams").document().id
-        db.collection("Teams").add(team)
+        team.id = db.collection(TEAMS).document().id
+        db.collection(TEAMS).add(team)
     }
 
     fun sendCaptainInfo(number: String, name: String) {
         player.email = User.account?.email ?: "error"
-        player.id = db.collection("Players").document().id
+        player.id = db.collection(PLAYERS).document().id
         player.teamId = team.id
         player.number = number
         player.name = name
         player.captain = true
         player.avatar = Firebase.auth.currentUser?.photoUrl.toString()
-        db.collection("Players").add(player)
+        db.collection(PLAYERS).add(player)
         val botPlayer = Player()
         botPlayer.apply {
             avatar =
@@ -90,7 +93,7 @@ class ProfileViewModel : ViewModel() {
                 id = s
                 botPlayer.name = s
                 botPlayer.number = s
-                db.collection("Players").add(botPlayer)
+                db.collection(PLAYERS).add(botPlayer)
             }
         }
     }
@@ -102,7 +105,7 @@ class ProfileViewModel : ViewModel() {
         coroutineScope.launch {
             when (val result = HoopRemoteDataSource.getMatchMembers()) { //TODO
                 is Result.Success -> {
-                    _roster.value = result.data!!
+                    _roster.value = result.data ?: listOf()
                     if (!initState) {
                         _status.value = LoadApiStatus.DONE
                     } else initState = !initState
@@ -117,9 +120,9 @@ class ProfileViewModel : ViewModel() {
 
     var releasePos = 0
     fun removePlayer(): Boolean {
-        val buffer = roster.value!![releasePos]
+        val buffer = roster.value?.get(releasePos) ?: Player()
         return if (buffer.id != userInfo.value?.id) { // remove normal player
-            db.collection("Players")
+            db.collection(PLAYERS)
                 .whereEqualTo("id", buffer.id)
                 .get().addOnSuccessListener {
                     it.documents.first().reference.delete()
@@ -134,13 +137,13 @@ class ProfileViewModel : ViewModel() {
     fun sendInvitation(mail: String, name: String) {
 
         coroutineScope.launch {
-            invitation.id = db.collection("Invitations").document().id
+            invitation.id = db.collection(INVITATIONS).document().id
             invitation.teamId = User.teamId
             invitation.inviteeMail = mail
             invitation.playerName = name
             invitation.existingNumbers = HoopRemoteDataSource.getTeamInfo().jerseyNumbers
 
-            db.collection("Invitations").add(invitation)
+            db.collection(INVITATIONS).add(invitation)
         }
     }
 
@@ -158,7 +161,7 @@ class ProfileViewModel : ViewModel() {
             }
             when (val result = HoopRemoteDataSource.getPlayer()) {
                 is Result.Success -> {
-                    _userInfo.value = result.data!!
+                    _userInfo.value = result.data ?: Player()
                     _status.value = LoadApiStatus.DONE
                 }
                 is Result.Error -> {
@@ -174,27 +177,27 @@ class ProfileViewModel : ViewModel() {
         coroutineScope.launch {
             HoopRemoteDataSource.getUserInfo()
             HoopRemoteDataSource.getMatchMembers()
-            _authToggle.value = !_authToggle.value!!
+            _authToggle.value = !(_authToggle.value ?: false)
         }
     }
 
     fun setNewCaptain(id: MutableList<String>, position: Int) {
-        db.collection("Players")
-            .whereEqualTo("id", roster.value!![releasePos].id)
+        db.collection(PLAYERS)
+            .whereEqualTo("id", roster.value?.get(releasePos)?.id)
             .get().addOnSuccessListener {
                 it.documents.first().reference.delete()
             }
-        db.collection("Players")
+        db.collection(PLAYERS)
             .whereEqualTo("id", id[position])
             .get().addOnSuccessListener {
                 it.documents.first().reference.update("captain", true)
             }
-        db.collection("Teams")
+        db.collection(TEAMS)
             .whereEqualTo("id", User.teamId)
             .get().addOnSuccessListener {
                 it.documents.first().reference.update(
                     "jerseyNumbers",
-                    FieldValue.arrayRemove(roster.value!![releasePos].number)
+                    FieldValue.arrayRemove(roster.value?.get(releasePos)?.number)
                 )
             }
     }

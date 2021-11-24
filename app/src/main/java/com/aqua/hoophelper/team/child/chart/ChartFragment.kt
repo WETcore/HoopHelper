@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.aqua.hoophelper.R
 import com.aqua.hoophelper.databinding.ChartFragmentBinding
 import com.aqua.hoophelper.util.LoadApiStatus
+import com.aqua.hoophelper.util.Zone
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
@@ -60,7 +61,7 @@ class ChartFragment : Fragment() {
         }
         binding.playerEdit.setOnItemClickListener { parent, view, position, id ->
             val player = viewModel.roster.value?.get(position)
-            viewModel.getPlayerStats(player!!.id)
+            viewModel.getPlayerStats(player?.id ?: "")
         }
 
         /**
@@ -89,35 +90,35 @@ class ChartFragment : Fragment() {
                 val dataP = mutableListOf<PieEntry>()
                 dataP.apply {
                     add(PieEntry(it.filter { it.zone == 1 }
-                        .filter { it.score2 == true }.size.toFloat(), "Around Rim"))
+                        .filter { it.score2 == true }.size.toFloat(), Zone.AROUND_RIM.value))
                     add(PieEntry(it.filter { it.zone == 2 }
-                        .filter { it.score2 == true }.size.toFloat(), "Left Elbow"))
+                        .filter { it.score2 == true }.size.toFloat(), Zone.L_ELBOW.value))
                     add(PieEntry(it.filter { it.zone == 3 }
-                        .filter { it.score2 == true }.size.toFloat(), "Mid Straight"))
+                        .filter { it.score2 == true }.size.toFloat(), Zone.MID_STR.value))
                     add(PieEntry(it.filter { it.zone == 4 }
-                        .filter { it.score2 == true }.size.toFloat(), "Right Elbow"))
+                        .filter { it.score2 == true }.size.toFloat(), Zone.R_ELBOW.value))
                     add(PieEntry(it.filter { it.zone == 5 }
-                        .filter { it.score2 == true }.size.toFloat(), "Left Baseline"))
+                        .filter { it.score2 == true }.size.toFloat(), Zone.L_BASELINE.value))
                     add(PieEntry(it.filter { it.zone == 6 }
-                        .filter { it.score2 == true }.size.toFloat(), "Left Wing"))
+                        .filter { it.score2 == true }.size.toFloat(), Zone.L_WING.value))
                     add(PieEntry(it.filter { it.zone == 7 }
-                        .filter { it.score2 == true }.size.toFloat(), "Long Straight"))
+                        .filter { it.score2 == true }.size.toFloat(), Zone.LONG_STR.value))
                     add(PieEntry(it.filter { it.zone == 8 }
-                        .filter { it.score2 == true }.size.toFloat(), "Right Wing"))
+                        .filter { it.score2 == true }.size.toFloat(), Zone.R_WING.value))
                     add(PieEntry(it.filter { it.zone == 9 }
-                        .filter { it.score2 == true }.size.toFloat(), "Right Baseline"))
+                        .filter { it.score2 == true }.size.toFloat(), Zone.R_BASELINE.value))
                     add(PieEntry(it.filter { it.zone == 10 }
-                        .filter { it.score3 == true }.size.toFloat(), "Left Corner"))
+                        .filter { it.score3 == true }.size.toFloat(), Zone.L_CORNER.value))
                     add(PieEntry(it.filter { it.zone == 11 }
-                        .filter { it.score3 == true }.size.toFloat(), "Left 3Points"))
+                        .filter { it.score3 == true }.size.toFloat(), Zone.L_3PT.value))
                     add(PieEntry(it.filter { it.zone == 12 }
-                        .filter { it.score3 == true }.size.toFloat(), "Top of Arc"))
+                        .filter { it.score3 == true }.size.toFloat(), Zone.ARC.value))
                     add(PieEntry(it.filter { it.zone == 13 }
-                        .filter { it.score3 == true }.size.toFloat(), "Right 3Points"))
+                        .filter { it.score3 == true }.size.toFloat(), Zone.R_3PT.value))
                     add(PieEntry(it.filter { it.zone == 14 }
-                        .filter { it.score3 == true }.size.toFloat(), "Right Corner"))
+                        .filter { it.score3 == true }.size.toFloat(), Zone.R_CORNER.value))
                     add(PieEntry(it.filter { it.zone == -1 }
-                        .filter { it.freeThrow == true }.size.toFloat(), "FreeThrow Line"))
+                        .filter { it.freeThrow == true }.size.toFloat(), Zone.FT.value))
                 }
 
                 val dataSet = PieDataSet(dataP, "labels")

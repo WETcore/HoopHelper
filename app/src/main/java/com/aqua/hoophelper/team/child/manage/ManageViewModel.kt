@@ -9,6 +9,9 @@ import com.aqua.hoophelper.database.Result
 import com.aqua.hoophelper.database.Rule
 import com.aqua.hoophelper.database.remote.HoopRemoteDataSource
 import com.aqua.hoophelper.util.LoadApiStatus
+import com.aqua.hoophelper.util.PLAYERS
+import com.aqua.hoophelper.util.RULE
+import com.aqua.hoophelper.util.RULE_DOC
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -48,7 +51,7 @@ class ManageViewModel : ViewModel() {
     }
 
     fun setRule() {
-        db.collection("Rule").document("rule").set(rule)
+        db.collection(RULE).document(RULE_DOC).set(rule)
     }
     private fun setRoster() {
         _status.value = LoadApiStatus.LOADING
@@ -59,7 +62,7 @@ class ManageViewModel : ViewModel() {
                 is Result.Success -> {
                     val lineUp = result.data
                     lineUp.filter { !it.starting5.contains(true) }.forEachIndexed { index, player ->
-                        _substitutionPlayer.value!!.add(player)
+                        _substitutionPlayer.value?.add(player)
                         subPlayers.add(player)
                     }
                     lineUp.filter { it.starting5.contains(true) }.forEachIndexed { index, player ->
@@ -80,12 +83,12 @@ class ManageViewModel : ViewModel() {
     }
 
     fun switchLineUp(spinnerPos: Int, pos: Int) {
-        val bufferPlayer = substitutionPlayer.value!![spinnerPos]
-        val startPlayer = startPlayer.value!![pos]
+        val bufferPlayer = substitutionPlayer.value?.get(spinnerPos) ?: Player()
+        val startPlayer = startPlayer.value?.get(pos) ?: Player()
 
         val bufferLineups = mutableListOf(false, false, false, false, false)
 
-        db.collection("Players")
+        db.collection(PLAYERS)
             .get().addOnCompleteListener {
                 it.result.documents.apply {
                     bufferLineups[pos] = true

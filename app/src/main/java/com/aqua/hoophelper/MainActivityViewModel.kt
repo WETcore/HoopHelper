@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.aqua.hoophelper.database.Match
 import com.aqua.hoophelper.database.Player
 import com.aqua.hoophelper.database.Team
+import com.aqua.hoophelper.util.MATCHES
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -30,20 +31,20 @@ class MainActivityViewModel : ViewModel() {
 
     fun setMatchInfo() {
         match.gaming = true
-        match.matchId = db.collection("Matches").document().id
+        match.matchId = db.collection(MATCHES).document().id
         HoopInfo.matchId = match.matchId
         match.teamId = User.teamId
         match.date = cal.get(Calendar.DATE).toString()
         match.time = cal.get(Calendar.HOUR_OF_DAY).toString()
         match.actualTime = Calendar.getInstance().timeInMillis
-        db.collection("Matches").add(match)
+        db.collection(MATCHES).add(match)
     }
 
     val badgeSwitch = MutableLiveData<Boolean>(false)
 
     fun showBadge(teamId: String) {
         badgeSwitch.let {
-            db.collection("Matches") // TODO to model
+            db.collection(MATCHES) // TODO to model
                 .addSnapshotListener { value, error ->
                     val matches = value?.toObjects(Match::class.java)?.sortedBy { it.actualTime }
                     it.value = if (matches.isNullOrEmpty()) {
@@ -56,7 +57,7 @@ class MainActivityViewModel : ViewModel() {
     }
 
     fun exitMatch() {
-        db.collection("Matches")
+        db.collection(MATCHES)
             .whereEqualTo("matchId", match.matchId)
             .get()
             .addOnSuccessListener {

@@ -58,10 +58,10 @@ class HomeViewModel : ViewModel() {
             when (val result = HoopRemoteDataSource.getTeams()) {
                 is Result.Success -> {
                     _teams.value = result.data.filter { it.jerseyNumbers.size >= 5 }
-                    for (i in teams.value!!.indices) {
-                        teamNames.add(teams.value!![i].name)
+                    for (i in (teams.value?.indices ?: IntRange(0,0))) {
+                        teamNames.add(teams.value?.get(i)?.name ?: "")
                     }
-                    HoopInfo.spinnerSelectedTeamId.value = teams.value!!.first().id
+                    HoopInfo.spinnerSelectedTeamId.value = teams.value?.first()?.id ?: ""
                     selectedTeam(0)
                 }
                 is Result.Error -> {
@@ -76,12 +76,12 @@ class HomeViewModel : ViewModel() {
     // get player list
     fun selectedTeam(pos: Int) {
         _status.value = LoadApiStatus.LOADING
-        HoopInfo.spinnerSelectedTeamId.value = teams.value!![pos].id
+        HoopInfo.spinnerSelectedTeamId.value = teams.value?.get(pos)?.id ?: ""
         coroutineScope.launch {
             when (val result = HoopRemoteDataSource.getSelectedTeamMembers()) {
                 is Result.Success -> {
                     _teamPlayers.value = result.data
-                    getTeamPlayersData(teamPlayers.value!!, teamPlayers.value!!.size)
+                    getTeamPlayersData(teamPlayers.value ?: listOf(), teamPlayers.value?.size ?: 0)
                 }
                 is Result.Error -> {
                     Log.d("status", "error")

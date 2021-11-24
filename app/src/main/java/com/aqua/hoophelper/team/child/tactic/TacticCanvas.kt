@@ -8,25 +8,27 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import com.aqua.hoophelper.R
+import com.aqua.hoophelper.util.VALUE_TEN
+import com.aqua.hoophelper.util.VALUE_ZERO
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.sin
 
-class TacticCanvas(context: Context, attrs: AttributeSet): View(context, attrs) {
+class TacticCanvas(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
     private var path: Path = Path()
     private var paint: Paint = Paint()
     private var paintStart: Paint = Paint()
     private var paintEnd: Paint = Paint()
     private var bitmap: Bitmap
-    private var mCanvas: Canvas
+    private var tacticCanvas: Canvas
 
-    private var originX:Float = 0f
-    private var originY:Float = 0f
+    private var originX: Float = 0f
+    private var originY: Float = 0f
 
-    private var startX:Float = 0f
-    private var startY:Float = 0f
+    private var startX: Float = 0f
+    private var startY: Float = 0f
 
     init {
         // bitmap
@@ -35,8 +37,8 @@ class TacticCanvas(context: Context, attrs: AttributeSet): View(context, attrs) 
         bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
 
         // Canvas
-        mCanvas = Canvas(bitmap)
-        mCanvas.drawColor(resources.getColor(R.color.basil_background, null))
+        tacticCanvas = Canvas(bitmap)
+        tacticCanvas.drawColor(resources.getColor(R.color.basil_background, null))
 
         // Paint
         paint.apply {
@@ -67,15 +69,15 @@ class TacticCanvas(context: Context, attrs: AttributeSet): View(context, attrs) 
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
-        canvas!!.drawBitmap(bitmap, 0f, 0f, paint)
+        canvas?.drawBitmap(bitmap, 0f, 0f, paint)
     }
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        when(event.action){
+        when (event.action) {
             MotionEvent.ACTION_DOWN -> {
                 Tactic.vPagerSwipe.value = false
-                mCanvas.drawCircle(event.x, event.y, 10f, paintStart)
+                tacticCanvas.drawCircle(event.x, event.y, 10f, paintStart)
                 path.reset()
                 path.moveTo(event.x, event.y)
                 originX = event.x
@@ -111,12 +113,12 @@ class TacticCanvas(context: Context, attrs: AttributeSet): View(context, attrs) 
             val curlX = stopX + sin(Arrow.wave * PI / 18).toFloat() * 40f
             val curlY = stopY + cos(Arrow.wave * PI / 18).toFloat() * 40f
             path.quadTo(startX, startY, curlX, curlY)
-            mCanvas.drawPath(path, paint)
+            tacticCanvas.drawPath(path, paint)
             startX = curlX
             startY = curlY
         } else {
             path.quadTo(startX, startY, stopX, stopY)
-            mCanvas.drawPath(path, paint)
+            tacticCanvas.drawPath(path, paint)
             startX = stopX
             startY = stopY
         }
@@ -135,41 +137,59 @@ class TacticCanvas(context: Context, attrs: AttributeSet): View(context, attrs) 
         val dy = -(stopY - originY)
 
         if (screen) {
-            var crossX = 10f
-            var crossY = 10f
+            var crossX = VALUE_TEN
+            var crossY = VALUE_TEN
 
             // quadrant
             when {
                 (dx < 0f && abs(dy) <= 10f) || (dx > 0f && abs(dy) <= 10f) -> {
-                    crossX = 0f
-                    crossY = 10f
+                    crossX = VALUE_ZERO
+                    crossY = VALUE_TEN
                 }
                 (abs(dx) <= 10f && dy > 0f) || (abs(dx) <= 10f && dy < 0f) -> {
-                    crossX = 10f
-                    crossY = 0f
+                    crossX = VALUE_TEN
+                    crossY = VALUE_ZERO
                 }
                 (dx > 0f && dy > 0f) || (dx < 0f && dy < 0f) -> {
-                    crossX = 10f
-                    crossY = 10f
+                    crossX = VALUE_TEN
+                    crossY = VALUE_TEN
                 }
 
                 (dx < 0f && dy > 0f) || (dx > 0f && dy < 0f) -> {
-                    crossX = -10f
-                    crossY = 10f
+                    crossX = -VALUE_TEN
+                    crossY = VALUE_TEN
                 }
             }
-            mCanvas.drawLine(startX - crossX, startY - crossY, startX + crossX,startY + crossY, paintEnd)
+            tacticCanvas.drawLine(
+                startX - crossX,
+                startY - crossY,
+                startX + crossX,
+                startY + crossY,
+                paintEnd
+            )
         } else {
-            val arrowX = 10f
-            val arrowY = 10f
-            mCanvas.drawLine(startX - arrowX, startY - arrowY, startX + arrowX,startY + arrowY, paintEnd)
-            mCanvas.drawLine(startX - arrowX, startY + arrowY, startX + arrowX,startY - arrowY, paintEnd)
+            val arrowX = VALUE_TEN
+            val arrowY = VALUE_TEN
+            tacticCanvas.drawLine(
+                startX - arrowX,
+                startY - arrowY,
+                startX + arrowX,
+                startY + arrowY,
+                paintEnd
+            )
+            tacticCanvas.drawLine(
+                startX - arrowX,
+                startY + arrowY,
+                startX + arrowX,
+                startY - arrowY,
+                paintEnd
+            )
         }
     }
 
     fun clear() {
-        mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR)
-        mCanvas.drawColor(resources.getColor(R.color.basil_background, null))
+        tacticCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR)
+        tacticCanvas.drawColor(resources.getColor(R.color.basil_background, null))
     }
 }
 

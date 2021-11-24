@@ -42,7 +42,6 @@ class LoginActivity : AppCompatActivity() {
         // Check if user is signed in (non-null) and update UI accordingly.
         val user = auth.currentUser
         User.account = user
-        Log.d("currentUser", "${user?.email}")
         viewModel.getUserInfo()
         updateUI(user)
     }
@@ -56,7 +55,7 @@ class LoginActivity : AppCompatActivity() {
                 // Google Sign In was successful, authenticate with Firebase
                 val account = task.getResult(ApiException::class.java)
                 Log.d("login", "firebaseAuthWithGoogle:" + account.email)
-                firebaseAuthWithGoogle(account.idToken!!)
+                firebaseAuthWithGoogle(account.idToken ?: "")
             } catch (e: ApiException) {
                 // Google Sign In failed, update UI appropriately
                 Log.w("login", "Google sign in failed", e)

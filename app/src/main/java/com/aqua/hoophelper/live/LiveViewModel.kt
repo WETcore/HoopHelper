@@ -26,42 +26,42 @@ class LiveViewModel : ViewModel() {
     fun filterEventType(event: Event): String {
         return when {
             event.assist -> {
-                "sent " + "assist"
+                LiveMessage.AST.value
             }
             event.block -> {
-                "sent " + "block"
+                LiveMessage.BLK.value
             }
             event.foul -> {
-                "got " + "foul"
+                LiveMessage.FOUL.value
             }
             event.rebound -> {
-                "got " + "rebound"
+                LiveMessage.REB.value
             }
             event.steal -> {
-                "got " + "steal"
+                LiveMessage.STL.value
             }
             event.turnover -> {
-                "got " + "turnover"
+                LiveMessage.TOV.value
             }
             event.score2 == true -> {
-                "made " + "2 points"
+                LiveMessage.IN_2.value
             }
             event.score2 == false -> {
-                "miss " + "2 points"
+                LiveMessage.OUT_2.value
             }
             event.score3 == true -> {
-                "made " + "3 points"
+                LiveMessage.IN_3.value
             }
             event.score3 == false -> {
-                "miss " + "3 points"
+                LiveMessage.OUT_3.value
             }
             event.freeThrow == true -> {
-                "made a free throw"
+                LiveMessage.FT_IN.value
             }
             event.freeThrow == false -> {
-                "miss a free throw"
+                LiveMessage.FT_OUT.value
             }
-            else -> "else"
+            else -> LiveMessage.ELSE.value
         }
     }
 

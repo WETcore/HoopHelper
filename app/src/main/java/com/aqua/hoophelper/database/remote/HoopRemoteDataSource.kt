@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.aqua.hoophelper.HoopInfo
 import com.aqua.hoophelper.User
 import com.aqua.hoophelper.database.*
+import com.aqua.hoophelper.util.*
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -19,7 +20,7 @@ object HoopRemoteDataSource : HoopRepository {
         val result = MutableLiveData<List<Event>>()
         result.let {
             FirebaseFirestore.getInstance()
-                .collection("Events")
+                .collection(EVENTS)
                 .orderBy("actualTime", Query.Direction.DESCENDING)
                 .addSnapshotListener { value, error ->
                     it.value = value?.toObjects(Event::class.java) ?: mutableListOf()
@@ -32,7 +33,7 @@ object HoopRemoteDataSource : HoopRepository {
         val result = MutableLiveData<List<Match>>()
         result.let {
             FirebaseFirestore.getInstance()
-                .collection("Matches")
+                .collection(MATCHES)
                 .orderBy("actualTime", Query.Direction.DESCENDING)
                 .addSnapshotListener { value, error ->
                     it.value = value?.toObjects(Match::class.java) ?: mutableListOf()
@@ -45,7 +46,7 @@ object HoopRemoteDataSource : HoopRepository {
         val result = MutableLiveData<List<Player>>()
         result.let {
             FirebaseFirestore.getInstance()
-                .collection("Players")
+                .collection(PLAYERS)
                 .whereEqualTo("teamId", User.teamId)
                 .addSnapshotListener { value, error ->
                     it.value = value?.toObjects(Player::class.java) ?: mutableListOf()
@@ -58,7 +59,7 @@ object HoopRemoteDataSource : HoopRepository {
         val result = MutableLiveData<List<Invitation>>()
         result.let {
             FirebaseFirestore.getInstance()
-                .collection("Invitations")
+                .collection(INVITATIONS)
                 .whereEqualTo("inviteeMail", Firebase.auth.currentUser?.email)
                 .addSnapshotListener { value, error ->
                     it.value = value?.toObjects(Invitation::class.java) ?: mutableListOf()
@@ -70,7 +71,7 @@ object HoopRemoteDataSource : HoopRepository {
     // captain participate the match. find captain's member
     override suspend fun getMatchMembers(): Result<List<Player>> = suspendCoroutine { conti ->
         val db = FirebaseFirestore.getInstance()
-        db.collection("Players")
+        db.collection(PLAYERS)
             .whereEqualTo("teamId", User.teamId)
             .get()
             .addOnCompleteListener { task ->
@@ -93,7 +94,7 @@ object HoopRemoteDataSource : HoopRepository {
 
     override suspend fun getTeams(): Result<List<Team>> = suspendCoroutine { conti ->
         FirebaseFirestore.getInstance()
-            .collection("Teams")
+            .collection(TEAMS)
             .get()
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
@@ -115,8 +116,8 @@ object HoopRemoteDataSource : HoopRepository {
     override suspend fun getSelectedTeamMembers(): Result<List<Player>> =
         suspendCoroutine { conti ->
             FirebaseFirestore.getInstance()
-                .collection("Players")
-                .whereEqualTo("teamId", HoopInfo.spinnerSelectedTeamId.value!!)
+                .collection(PLAYERS)
+                .whereEqualTo("teamId", HoopInfo.spinnerSelectedTeamId.value)
                 .get()
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
@@ -138,7 +139,7 @@ object HoopRemoteDataSource : HoopRepository {
     override suspend fun getPlayerData(playerId: String): Result<List<Event>> =
         suspendCoroutine { conti ->
             FirebaseFirestore.getInstance()
-                .collection("Events")
+                .collection(EVENTS)
                 .whereEqualTo("playerId", playerId)
                 .get()
                 .addOnCompleteListener { task ->
@@ -161,7 +162,7 @@ object HoopRemoteDataSource : HoopRepository {
     override suspend fun getUserInfo(): List<Player> = suspendCoroutine { conti ->
         if (User.account != null) {
             FirebaseFirestore.getInstance()
-                .collection("Players")
+                .collection(PLAYERS)
                 .whereEqualTo("email", User.account?.email)
                 .get()
                 .addOnCompleteListener {
@@ -180,7 +181,7 @@ object HoopRemoteDataSource : HoopRepository {
     override suspend fun getTeamInfo(): Team = suspendCoroutine { conti ->
         if (User.account != null) {
             FirebaseFirestore.getInstance()
-                .collection("Teams")
+                .collection(TEAMS)
                 .whereEqualTo("id", User.teamId)
                 .get()
                 .addOnCompleteListener {
@@ -192,8 +193,8 @@ object HoopRemoteDataSource : HoopRepository {
 
     override suspend fun getRule(): Result<Rule> = suspendCoroutine { conti ->
         FirebaseFirestore.getInstance()
-            .collection("Rule")
-            .document("rule")
+            .collection(RULE)
+            .document(RULE_DOC)
             .get()
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
@@ -214,7 +215,7 @@ object HoopRemoteDataSource : HoopRepository {
 
     override suspend fun getPlayer(): Result<Player> = suspendCoroutine { conti ->
         FirebaseFirestore.getInstance()
-            .collection("Players")
+            .collection(PLAYERS)
             .whereEqualTo("id", User.id)
             .get()
             .addOnCompleteListener { task ->
@@ -236,7 +237,7 @@ object HoopRemoteDataSource : HoopRepository {
 
     override suspend fun getTeamEvents(): List<Event> = suspendCoroutine { conti ->
         FirebaseFirestore.getInstance()
-            .collection("Events")
+            .collection(EVENTS)
             .whereEqualTo("teamId", User.teamId)
             .get()
             .addOnCompleteListener {

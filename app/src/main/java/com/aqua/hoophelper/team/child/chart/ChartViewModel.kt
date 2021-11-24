@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.aqua.hoophelper.database.Event
-import com.aqua.hoophelper.database.Match
 import com.aqua.hoophelper.database.Player
 import com.aqua.hoophelper.database.Result
 import com.aqua.hoophelper.database.remote.HoopRemoteDataSource
@@ -51,7 +50,7 @@ class ChartViewModel : ViewModel() {
         coroutineScope.launch {
             when(val result = HoopRemoteDataSource.getMatchMembers()) {
                 is Result.Success -> {
-                    _roster.value = result.data!!
+                    _roster.value = result.data ?: listOf()
                     getPlayerStats(roster.value?.first()?.id ?: "")
                 }
                 is Result.Error -> {

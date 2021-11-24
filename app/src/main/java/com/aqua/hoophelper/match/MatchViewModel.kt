@@ -13,7 +13,7 @@ import com.aqua.hoophelper.database.Player
 import com.aqua.hoophelper.database.Result
 import com.aqua.hoophelper.database.Rule
 import com.aqua.hoophelper.database.remote.HoopRemoteDataSource
-import com.aqua.hoophelper.util.LoadApiStatus
+import com.aqua.hoophelper.util.*
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import kotlinx.coroutines.CoroutineScope
@@ -22,18 +22,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.math.*
-
-const val COURT_TOP = 0.15
-const val COURT_BOTTOM = 0.57
-const val THREE_LINE_LEFT = 0.09
-const val THREE_LINE_RIGHT = 0.9
-const val CORNER_BOTTOM_BOUND = 0.167
-const val ROUND_DEGREE = 180
-const val SLOPE_80 = 80.0
-const val SLOPE_65 = 65.0
-const val DIAMETER1 = 0.083
-const val DIAMETER2 = 0.153
-const val DIAMETER3 = 0.241
 
 class MatchViewModel : ViewModel() {
 
@@ -57,6 +45,16 @@ class MatchViewModel : ViewModel() {
 
     // time out
     var timeOut = 0
+
+    // player num send to db
+    var playerNum = ""
+    var playerName = ""
+    var playerImage = ""
+
+    // selectPlayer chip position
+    var selectPlayerPos = 0
+
+    var subNum = mutableListOf<String>()
 
     var _shotClockLimit = MutableLiveData<Long>(24L)
     val shotClockLimit: LiveData<Long>
@@ -85,16 +83,6 @@ class MatchViewModel : ViewModel() {
     val quarter: LiveData<Int>
         get() = _quarter
 
-
-    //////////////////
-    // player num send to db
-    var playerNum = ""
-    var playerName = ""
-    var playerImage = ""
-
-    // selectPlayer chip position
-    var selectPlayerPos = 0
-
     // roster
     private var _roster = MutableLiveData<List<Player>>()
     private val roster: LiveData<List<Player>>
@@ -109,8 +97,6 @@ class MatchViewModel : ViewModel() {
     private var _substitutionPlayer = MutableLiveData<MutableList<Player>>(mutableListOf())
     val substitutionPlayer: LiveData<MutableList<Player>>
         get() = _substitutionPlayer
-
-    var subNum = mutableListOf<String>()
 
     // zone
     private var _zone = MutableLiveData<Int>(0)
@@ -195,7 +181,7 @@ class MatchViewModel : ViewModel() {
     fun setEventData(mId: String, type: DataType, isCount: Boolean) {
         resetData()
         event.apply {
-            eventId = db.collection("Events").document().id
+            eventId = db.collection(EVENTS).document().id
             matchId = mId
             teamId = User.teamId
             playerId = startPlayer.value?.get(selectPlayerPos)?.id ?: ""
@@ -241,7 +227,7 @@ class MatchViewModel : ViewModel() {
                 event.freeThrow = isCount
             }
         }
-        db.collection("Events").add(event)
+        db.collection(EVENTS).add(event)
     }
     ///////////////////////////////////////////////////////////////////////////////
 
@@ -305,30 +291,30 @@ class MatchViewModel : ViewModel() {
 
     fun setHistoryText(it: List<Event>): String {
         if (it.isNullOrEmpty()) {
-            return "latest event"
+            return EventType.INIT.value
         } else {
-            it[0].run {
+            it.first().run {
                 return when {
-                    assist -> "assist"
-                    block -> "block"
-                    foul -> "foul"
-                    freeThrow == true -> "FT In"
-                    freeThrow == false -> "FT out"
-                    rebound -> "rebound"
-                    score2 == true -> "2pt In"
-                    score2 == false -> "2pt Out"
-                    score3 == true -> "3pt In"
-                    score3 == false -> "3pt Out"
-                    steal -> "steal"
-                    turnover -> "turnover"
-                    else -> "else"
+                    assist -> EventType.AST.value
+                    block -> EventType.BLK.value
+                    foul -> EventType.FOUL.value
+                    rebound -> EventType.REB.value
+                    steal -> EventType.STL.value
+                    turnover -> EventType.TOV.value
+                    score2 == true -> EventType.IN_2.value
+                    score2 == false -> EventType.OUT_2.value
+                    score3 == true -> EventType.IN_3.value
+                    score3 == false -> EventType.OUT_3.value
+                    freeThrow == true -> EventType.FT_IN.value
+                    freeThrow == false -> EventType.FT_OUT.value
+                    else -> EventType.ELSE.value
                 }
             }
         }
     }
 
     fun cancelEvent() {
-        db.collection("Events")
+        db.collection(EVENTS)
             .orderBy("actualTime", Query.Direction.DESCENDING)
             .limit(1).get().addOnSuccessListener {
                 it.forEach {

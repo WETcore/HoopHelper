@@ -13,6 +13,7 @@ import androidx.navigation.fragment.navArgs
 import com.aqua.hoophelper.HoopInfo
 import com.aqua.hoophelper.NavigationDirections
 import com.aqua.hoophelper.R
+import com.aqua.hoophelper.database.Player
 import com.aqua.hoophelper.databinding.MatchFragmentBinding
 import com.aqua.hoophelper.util.LoadApiStatus
 
@@ -21,8 +22,7 @@ enum class DataType { //TODO
 }
 
 enum class DetailDataType { //TODO
-    PTS, FG, ThreeP, FT, TOV,
-    REB, AST, STL, BLK, PF
+    PTS, REB, AST, STL, BLK
 }
 
 class MatchFragment : Fragment() {
@@ -77,7 +77,7 @@ class MatchFragment : Fragment() {
         // set game clock
         viewModel.gameClockSec.observe(viewLifecycleOwner) {
             binding.gameClockSec.text = it.toString()
-            viewModel.setGameClockMin(viewModel.gameClockSec.value!!)
+            viewModel.setGameClockMin(viewModel.gameClockSec.value ?: 60L)
             if (it == 0L) {
                 viewModel._gameClockSec.value = 60L
             }
@@ -85,7 +85,7 @@ class MatchFragment : Fragment() {
         viewModel.gameClockMin.observe(viewLifecycleOwner) {
             binding.gameClockMin.text = it.toString()
             if (it == 0L) {
-                viewModel._gameClockMin.value = viewModel.gameClockLimit.value!! - 1
+                viewModel._gameClockMin.value = (viewModel.gameClockLimit.value ?: 12L) - 1
                 viewModel._quarter.value = viewModel._quarter.value?.plus(1)
             }
         }
@@ -152,7 +152,7 @@ class MatchFragment : Fragment() {
         }
 
         binding.subPlayerText.setOnItemClickListener { parent, view, position, id ->
-            val buffer = viewModel.startPlayer.value!![viewModel.selectPlayerPos]
+            val buffer = viewModel.startPlayer.value?.get(viewModel.selectPlayerPos) ?: Player()
             viewModel.getSubPlayer2Starting(position)
             viewModel.changeSubPlayer(buffer, position)
         }
@@ -280,7 +280,7 @@ class MatchFragment : Fragment() {
                 }
                 R.id.foul_chip -> {
                     viewModel.setEventData(args.matchId, DataType.FOUL, false)
-                    val buffer = viewModel.startPlayer.value!![viewModel.selectPlayerPos]
+                    val buffer = viewModel.startPlayer.value?.get(viewModel.selectPlayerPos) ?: Player()
                     viewModel.getFoulCount(viewModel.playerNum, buffer)
                     group.clearCheck()
                 }

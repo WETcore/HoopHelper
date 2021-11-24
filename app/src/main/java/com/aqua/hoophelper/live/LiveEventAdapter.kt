@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.aqua.hoophelper.R
 import com.aqua.hoophelper.database.Event
 import com.aqua.hoophelper.databinding.LiveEventItemBinding
+import com.aqua.hoophelper.util.Zone
 import com.bumptech.glide.Glide
 
 
@@ -65,11 +66,11 @@ class LiveEventAdapter(val viewModel: LiveViewModel, private val events: List<Ev
         }
 
         val condition = viewModel.filterEventType(event)
-        if (condition == "got turnover" ||
-            condition == "miss 2 points" ||
-            condition == "miss 3 points" ||
-            condition == "miss a free throw" ||
-            condition == "got foul"
+        if (condition == LiveMessage.TOV.value ||
+            condition == LiveMessage.OUT_2.value ||
+            condition == LiveMessage.OUT_3.value ||
+            condition == LiveMessage.FT_OUT.value ||
+            condition == LiveMessage.FOUL.value
         ) {
             holder.binding.apply {
                 liveName.setTextColor(context.resources.getColor(R.color.basil_orange, null))
@@ -159,21 +160,21 @@ class LiveEventAdapter(val viewModel: LiveViewModel, private val events: List<Ev
 
         holder.binding.liveZoneChip.text = "Zone |  " +
                 when (event.zone) {
-                    1 -> "Around Rim"
-                    2 -> "Left Elbow"
-                    3 -> "Mid Straight"
-                    4 -> "Right Elbow"
-                    5 -> "Left Baseline"
-                    6 -> "Left Wing"
-                    7 -> "Long Straight"
-                    8 -> "Right Wing"
-                    9 -> "Right Baseline"
-                    10 -> "Left Corner"
-                    11 -> "Left 3Points"
-                    12 -> "Top of Arc"
-                    13 -> "Right 3Points"
-                    14 -> "Right Corner"
-                    else -> "FreeThrow Line"
+                    1 -> Zone.AROUND_RIM.value
+                    2 -> Zone.L_ELBOW.value
+                    3 -> Zone.MID_STR.value
+                    4 -> Zone.R_ELBOW.value
+                    5 -> Zone.L_BASELINE.value
+                    6 -> Zone.L_WING.value
+                    7 -> Zone.LONG_STR.value
+                    8 -> Zone.R_WING.value
+                    9 -> Zone.R_BASELINE.value
+                    10 -> Zone.L_CORNER.value
+                    11 -> Zone.L_3PT.value
+                    12 -> Zone.ARC.value
+                    13 -> Zone.R_3PT.value
+                    14 -> Zone.R_CORNER.value
+                    else -> Zone.FT.value
                 }
 
         holder.binding.apply {

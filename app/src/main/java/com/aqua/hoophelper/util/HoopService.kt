@@ -21,15 +21,15 @@ class HoopService : LifecycleService() {
             if (!invite.isNullOrEmpty()) {
                 val intent1 = Intent(applicationContext, CheckService::class.java)
                 intent1.apply {
-                    putExtra("teamId", invite.first().teamId)
-                    putExtra("inviteId", invite.first().id)
-                    putExtra("mail", invite.first().inviteeMail)
-                    putExtra("name", invite.first().playerName)
+                    putExtra(TEAM_ID, invite.first().teamId)
+                    putExtra(INVITE_ID, invite.first().id)
+                    putExtra(MAIL, invite.first().inviteeMail)
+                    putExtra(NAME, invite.first().playerName)
                     putExtra(
-                        "numbers",
+                        NUMBERS,
                         invite.first().existingNumbers.toMutableSet() as Serializable
                     )
-                    putExtra("toggle", true)
+                    putExtra(TOGGLE, true)
                 }
                 val serviceActionPendingIntent1 =
                     PendingIntent
@@ -52,8 +52,8 @@ class HoopService : LifecycleService() {
                     .build()
 
                 val intent2 = Intent(applicationContext, CheckService::class.java)
-                intent2.putExtra("inviteId", invite.first().id)
-                intent2.putExtra("toggle", false)
+                intent2.putExtra(INVITE_ID, invite.first().id)
+                intent2.putExtra(TOGGLE, false)
                 val serviceActionPendingIntent2 =
                     PendingIntent
                         .getService(
@@ -72,7 +72,7 @@ class HoopService : LifecycleService() {
                     NotificationChannel("1", "Invite", NotificationManager.IMPORTANCE_HIGH)
 
                 // check recall or not
-                if (intent?.getBooleanExtra("dualNumber", false) == false) {
+                if (intent?.getBooleanExtra(DUAL_NUMBER, false) == false) {
                     val notification = Notification.Builder(applicationContext, "1")
                         .setContentTitle("Hoooooop~")
                         .setContentText("Invitation")
@@ -84,7 +84,7 @@ class HoopService : LifecycleService() {
                     val manager = this.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
                     manager.createNotificationChannel(channel)
                     manager.notify(1, notification)
-                } else if (intent?.getBooleanExtra("dualNumber", false) == true) {
+                } else if (intent?.getBooleanExtra(DUAL_NUMBER, false) == true) {
                     var numbers = ""
                     for (i in invite.first().existingNumbers.indices) {
                         numbers += invite.first().existingNumbers[i] + " "
