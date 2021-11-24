@@ -76,7 +76,7 @@ class MatchViewModel : ViewModel() {
     val gameClockSec: LiveData<Long>
         get() = _gameClockSec
 
-    var _gameClockMin = MutableLiveData<Long>(gameClockLimit.value!!)
+    var _gameClockMin = MutableLiveData<Long>(gameClockLimit.value)
     val gameClockMin: LiveData<Long>
         get() = _gameClockMin
 
@@ -140,7 +140,7 @@ class MatchViewModel : ViewModel() {
 
     val shotClockTimer = object : CountDownTimer(Long.MAX_VALUE, 1000L) {
         override fun onTick(millisUntilFinished: Long) {
-            if (shotClock.value!! != 0L) {
+            if (shotClock.value != 0L) {
                 _shotClock.value = _shotClock.value?.minus(1L)
             }
         }
@@ -150,7 +150,7 @@ class MatchViewModel : ViewModel() {
 
     val gameClockSecTimer = object : CountDownTimer(Long.MAX_VALUE, 1000L) {
         override fun onTick(millisUntilFinished: Long) {
-            if (gameClockSec.value!! != 0L) {
+            if (gameClockSec.value != 0L) {
                 _gameClockSec.value = _gameClockSec.value?.minus(1L)
             }
         }
@@ -166,10 +166,10 @@ class MatchViewModel : ViewModel() {
 
     fun selectPlayer(pos: Int): String {
         selectPlayerPos = pos
-        playerNum = startPlayer.value!![pos].number
-        playerName = startPlayer.value!![pos].name
-        playerImage = startPlayer.value!![pos].avatar
-        return startPlayer.value!![pos].number
+        playerNum = startPlayer.value?.get(pos)?.number ?: ""
+        playerName = startPlayer.value?.get(pos)?.name ?: ""
+        playerImage = startPlayer.value?.get(pos)?.avatar ?: ""
+        return startPlayer.value?.get(pos)?.number ?: ""
     }
 
     private fun selectZone(selectedZone: Int) {
@@ -207,14 +207,14 @@ class MatchViewModel : ViewModel() {
             matchTimeSec = gameClockSec.value.toString()
             this.quarter = (this@MatchViewModel).quarter.value.toString()
             if (type != DataType.FREE_THROW) {
-                this.zone = (this@MatchViewModel).zone.value!!
+                this.zone = (this@MatchViewModel).zone.value ?: 0
             }
         }
         when (type) {
             DataType.SCORE -> {
-                if (zone.value!! in 1..9) {
+                if (zone.value in 1..9) {
                     event.score2 = isCount
-                } else if (zone.value!! in 10..14) {
+                } else if (zone.value in 10..14) {
                     event.score3 = isCount
                 }
             }
@@ -291,15 +291,15 @@ class MatchViewModel : ViewModel() {
     }
 
     fun getSubPlayer2Starting(position: Int) {
-        _startPlayer.value!![selectPlayerPos] = substitutionPlayer.value!![position]
+        _startPlayer.value?.set(selectPlayerPos, substitutionPlayer.value?.get(position) ?: Player())
         _startPlayer.value = _startPlayer.value
-        playerNum = _startPlayer.value!![selectPlayerPos].number
-        playerName = _startPlayer.value!![selectPlayerPos].name
-        playerImage = _startPlayer.value!![selectPlayerPos].avatar
+        playerNum = _startPlayer.value?.get(selectPlayerPos)?.number ?: ""
+        playerName = _startPlayer.value?.get(selectPlayerPos)?.name ?: ""
+        playerImage = _startPlayer.value?.get(selectPlayerPos)?.avatar ?: ""
     }
 
     fun changeSubPlayer(onCourtPlayer: Player, spinnerPos: Int) {
-        _substitutionPlayer.value!![spinnerPos] = onCourtPlayer
+        _substitutionPlayer.value?.set(spinnerPos, onCourtPlayer)
         _substitutionPlayer.value = _substitutionPlayer.value
     }
 
@@ -344,12 +344,12 @@ class MatchViewModel : ViewModel() {
             val subPlayers = mutableListOf<Player>()
             when (val result = HoopRemoteDataSource.getMatchMembers()) {
                 is Result.Success -> {
-                    _roster.value = result.data!!
-                    val lineUp = roster.value!!
+                    _roster.value = result.data ?: listOf()
+                    val lineUp = roster.value ?: listOf()
                     lineUp.filter {
                         !it.starting5.contains(true)
                     }.forEachIndexed { index, player ->
-                        _substitutionPlayer.value!!.add(player)
+                        _substitutionPlayer.value?.add(player)
                         subPlayers.add(player)
                     }
                     lineUp.filter {
@@ -388,7 +388,7 @@ class MatchViewModel : ViewModel() {
         coroutineScope.launch {
             when (val result = HoopRemoteDataSource.getRule()) {
                 is Result.Success -> {
-                    rule = result.data!!
+                    rule = result.data
                     quarterLimit = rule.quarter.toInt()
                     foulLimit = rule.foulOut.toInt()
                     timeOut1Limit = rule.to1.toInt()
@@ -396,7 +396,7 @@ class MatchViewModel : ViewModel() {
                     _shotClockLimit.value = rule.sClock.toLong()
                     _gameClockLimit.value = rule.gClock.toLong()
                     _shotClock.value = _shotClockLimit.value
-                    _gameClockMin.value = _gameClockLimit.value!! - 1
+                    _gameClockMin.value = (_gameClockLimit.value ?: 12L) - 1
                     shotClockTimer.start()
                     gameClockSecTimer.start()
                     _status.value = LoadApiStatus.DONE
@@ -411,7 +411,7 @@ class MatchViewModel : ViewModel() {
 
     fun setTimeOutCount(): Boolean {
         timeOut += 1
-        return if (quarter.value!! <= quarterLimit / 2) {
+        return if ((quarter.value ?: 1) <= quarterLimit / 2) {
             timeOut > timeOut1Limit
         } else {
             timeOut > timeOut2Limit
