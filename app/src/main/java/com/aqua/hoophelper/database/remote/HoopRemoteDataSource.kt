@@ -414,4 +414,112 @@ object HoopRemoteDataSource : HoopRepository {
             }
     }
 
+    suspend fun setEvent(event: Event): Result<Boolean> = suspendCoroutine { conti ->
+        val events = FirebaseFirestore.getInstance().collection(EVENTS)
+        event.eventId = events.document().id
+
+        events.document()
+            .set(event)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    conti.resume(Result.Success(true))
+                } else {
+                    task.exception?.let {
+                        Log.d(
+                            "error",
+                            "[${this::class.simpleName}] Error getting documents. ${it.message}"
+                        )
+                        conti.resume(Result.Error(it))
+                        return@addOnCompleteListener
+                    }
+                }
+            }
+    }
+
+    suspend fun deleteEvent(): Result<Boolean> = suspendCoroutine { conti ->
+        val events = FirebaseFirestore.getInstance().collection(EVENTS)
+        events.orderBy("actualTime", Query.Direction.DESCENDING)
+            .get().addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    task.result.documents.first().reference.delete()
+                    conti.resume(Result.Success(true))
+                } else {
+                    task.exception?.let {
+                        Log.d(
+                            "error",
+                            "[${this::class.simpleName}] Error getting documents. ${it.message}"
+                        )
+                        conti.resume(Result.Error(it))
+                        return@addOnCompleteListener
+                    }
+                }
+            }
+    }
+
+    suspend fun setRule(rule: Rule): Result<Boolean> = suspendCoroutine { conti ->
+        val rules = FirebaseFirestore.getInstance().collection(RULE)
+        rules.document(RULE_DOC)
+            .set(rule).addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    conti.resume(Result.Success(true))
+                } else {
+                    task.exception?.let {
+                        Log.d(
+                            "error",
+                            "[${this::class.simpleName}] Error getting documents. ${it.message}"
+                        )
+                        conti.resume(Result.Error(it))
+                        return@addOnCompleteListener
+                    }
+                }
+            }
+    }
+
+    suspend fun updateLineup(subPlayer: Player, startPlayer: Player, position: Int): Result<Boolean> = suspendCoroutine { conti ->
+        val players = FirebaseFirestore.getInstance().collection(PLAYERS)
+        val bufferLineups = mutableListOf(false, false, false, false, false)
+
+        players.get().addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    task.result.documents.apply {
+                        bufferLineups[position] = true
+                        first { it["id"] == subPlayer.id }.reference.update("starting5", bufferLineups)
+                        bufferLineups[position] = false
+                        first { it["id"] == startPlayer.id }.reference.update("starting5", bufferLineups)
+                    }
+                    conti.resume(Result.Success(true))
+                } else {
+                    task.exception?.let {
+                        Log.d(
+                            "error",
+                            "[${this::class.simpleName}] Error getting documents. ${it.message}"
+                        )
+                        conti.resume(Result.Error(it))
+                        return@addOnCompleteListener
+                    }
+                }
+            }
+    }
+
+    suspend fun setMatchInfo(match: Match): Result<Boolean> = suspendCoroutine { conti ->
+        val matches = FirebaseFirestore.getInstance().collection(MATCHES)
+        match.matchId = matches.id
+
+        matches.document()
+            .set(match).addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    conti.resume(Result.Success(true))
+                } else {
+                    task.exception?.let {
+                        Log.d(
+                            "error",
+                            "[${this::class.simpleName}] Error getting documents. ${it.message}"
+                        )
+                        conti.resume(Result.Error(it))
+                        return@addOnCompleteListener
+                    }
+                }
+            }
+    }
+
 }

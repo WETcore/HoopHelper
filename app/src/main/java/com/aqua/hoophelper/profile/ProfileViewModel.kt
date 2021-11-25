@@ -11,8 +11,6 @@ import com.aqua.hoophelper.database.Team
 import com.aqua.hoophelper.database.remote.HoopRemoteDataSource
 import com.aqua.hoophelper.util.*
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

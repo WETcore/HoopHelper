@@ -10,8 +10,6 @@ import com.aqua.hoophelper.database.Rule
 import com.aqua.hoophelper.database.remote.HoopRemoteDataSource
 import com.aqua.hoophelper.util.LoadApiStatus
 import com.aqua.hoophelper.util.PLAYERS
-import com.aqua.hoophelper.util.RULE
-import com.aqua.hoophelper.util.RULE_DOC
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -23,8 +21,6 @@ class ManageViewModel : ViewModel() {
     private val _status = MutableLiveData<LoadApiStatus?>()
     val status: LiveData<LoadApiStatus?>
         get() = _status
-
-    private val db = FirebaseFirestore.getInstance()
 
     var rule = Rule()
 
@@ -51,7 +47,15 @@ class ManageViewModel : ViewModel() {
     }
 
     fun setRule() {
-        db.collection(RULE).document(RULE_DOC).set(rule)
+        coroutineScope.launch {
+            when(val result = HoopRemoteDataSource.setRule(rule)) {
+                is Result.Success -> {
+                }
+                is Result.Error -> {
+                    Log.d("status", "error")
+                }
+            }
+        }
     }
     private fun setRoster() {
         _status.value = LoadApiStatus.LOADING
@@ -83,22 +87,19 @@ class ManageViewModel : ViewModel() {
     }
 
     fun switchLineUp(spinnerPos: Int, pos: Int) {
-        val bufferPlayer = substitutionPlayer.value?.get(spinnerPos) ?: Player()
+        val subPlayer = substitutionPlayer.value?.get(spinnerPos) ?: Player()
         val startPlayer = startPlayer.value?.get(pos) ?: Player()
 
-        val bufferLineups = mutableListOf(false, false, false, false, false)
-
-        db.collection(PLAYERS)
-            .get().addOnCompleteListener {
-                it.result.documents.apply {
-                    bufferLineups[pos] = true
-                    first { it["id"] == bufferPlayer.id }.reference.update("starting5", bufferLineups)
-                    bufferLineups[pos] = false
-                    first { it["id"] == startPlayer.id }.reference.update("starting5", bufferLineups)
-
+        coroutineScope.launch {
+            when(val result = HoopRemoteDataSource.updateLineup(subPlayer, startPlayer, pos)) {
+                is Result.Success -> {
                     setRoster()
                 }
+                is Result.Error -> {
+                    Log.d("status", "error")
+                }
             }
+        }
     }
 
 }

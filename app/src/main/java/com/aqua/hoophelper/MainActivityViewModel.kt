@@ -1,17 +1,20 @@
 package com.aqua.hoophelper
 
+import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.aqua.hoophelper.database.Match
-import com.aqua.hoophelper.database.Player
-import com.aqua.hoophelper.database.Team
+import com.aqua.hoophelper.database.*
+import com.aqua.hoophelper.database.remote.HoopRemoteDataSource
 import com.aqua.hoophelper.util.HoopInfo
+import com.aqua.hoophelper.util.LoadApiStatus
 import com.aqua.hoophelper.util.MATCHES
 import com.aqua.hoophelper.util.User
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import java.util.*
 
 class MainActivityViewModel : ViewModel() {
@@ -19,6 +22,10 @@ class MainActivityViewModel : ViewModel() {
     private val db = FirebaseFirestore.getInstance()
 
     var match = Match()
+
+    private var _matches = MutableLiveData<List<Match>>()
+    val matches: LiveData<List<Match>>
+        get() = _matches
 
     private val cal = Calendar.getInstance()
 
@@ -32,20 +39,36 @@ class MainActivityViewModel : ViewModel() {
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     fun setMatchInfo() {
-        match.gaming = true
-        match.matchId = db.collection(MATCHES).document().id
+        match.apply {
+            gaming = true
+            teamId = User.teamId
+            date = cal.get(Calendar.DATE).toString()
+            time = cal.get(Calendar.HOUR_OF_DAY).toString()
+            actualTime = Calendar.getInstance().timeInMillis
+        }
         HoopInfo.matchId = match.matchId
-        match.teamId = User.teamId
-        match.date = cal.get(Calendar.DATE).toString()
-        match.time = cal.get(Calendar.HOUR_OF_DAY).toString()
-        match.actualTime = Calendar.getInstance().timeInMillis
-        db.collection(MATCHES).add(match)
+
+        coroutineScope.launch {
+            when(val result = HoopRemoteDataSource.setMatchInfo(match)) {
+                is Result.Success -> {
+                }
+                is Result.Error -> {
+                    Log.d("status", "error")
+                }
+            }
+        }
     }
 
     val badgeSwitch = MutableLiveData<Boolean>(false)
 
     fun showBadge(teamId: String) {
         badgeSwitch.let {
+//            it.value = if (matches.value.isNullOrEmpty()) {
+//                false
+//            } else {
+//                (matches.value ?: listOf()).lastOrNull { it.teamId == teamId }?.gaming == true
+//            }
+
             db.collection(MATCHES) // TODO to model
                 .addSnapshotListener { value, error ->
                     val matches = value?.toObjects(Match::class.java)?.sortedBy { it.actualTime }
@@ -59,7 +82,7 @@ class MainActivityViewModel : ViewModel() {
     }
 
     fun exitMatch() {
-        db.collection(MATCHES)
+        db.collection(MATCHES) //TODO
             .whereEqualTo("matchId", match.matchId)
             .get()
             .addOnSuccessListener {

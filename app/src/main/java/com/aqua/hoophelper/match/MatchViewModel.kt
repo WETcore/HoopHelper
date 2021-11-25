@@ -12,8 +12,6 @@ import com.aqua.hoophelper.database.Result
 import com.aqua.hoophelper.database.Rule
 import com.aqua.hoophelper.database.remote.HoopRemoteDataSource
 import com.aqua.hoophelper.util.*
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -27,14 +25,10 @@ class MatchViewModel : ViewModel() {
     val status: LiveData<LoadApiStatus?>
         get() = _status
 
-    // Firebase
-    private val db = FirebaseFirestore.getInstance()
-
     // database
     var event = Event()
     var match = Match()
     var rule = Rule()
-
 
     var quarterLimit = 4
     var foulLimit = 6
@@ -44,7 +38,6 @@ class MatchViewModel : ViewModel() {
     // time out
     var timeOut = 0
 
-    // player num send to db
     var playerNum = ""
     var playerName = ""
     var playerImage = ""
@@ -179,7 +172,6 @@ class MatchViewModel : ViewModel() {
     fun setEventData(mId: String, type: DataType, isCount: Boolean) {
         resetData()
         event.apply {
-            eventId = db.collection(EVENTS).document().id
             matchId = mId
             teamId = User.teamId
             playerId = startPlayer.value?.get(selectPlayerPos)?.id ?: ""
@@ -225,7 +217,16 @@ class MatchViewModel : ViewModel() {
                 event.freeThrow = isCount
             }
         }
-        db.collection(EVENTS).add(event)
+
+        coroutineScope.launch {
+            when(val result = HoopRemoteDataSource.setEvent(event)) {
+                is Result.Success -> {
+                }
+                is Result.Error -> {
+                    Log.d("status", "error")
+                }
+            }
+        }
     }
     ///////////////////////////////////////////////////////////////////////////////
 
@@ -312,13 +313,15 @@ class MatchViewModel : ViewModel() {
     }
 
     fun cancelEvent() {
-        db.collection(EVENTS)
-            .orderBy("actualTime", Query.Direction.DESCENDING)
-            .limit(1).get().addOnSuccessListener {
-                it.forEach {
-                    it.reference.delete()
+        coroutineScope.launch {
+            when (val result = HoopRemoteDataSource.deleteEvent()) {
+                is Result.Success -> {
+                }
+                is Result.Error -> {
+                    Log.d("status", "error")
                 }
             }
+        }
     }
 
     private fun setRoster() {
