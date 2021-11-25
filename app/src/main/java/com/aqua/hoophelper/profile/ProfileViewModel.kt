@@ -21,12 +21,11 @@ import kotlinx.coroutines.launch
 
 class ProfileViewModel : ViewModel() {
 
+    var releasePos = 0
+
     val _status = MutableLiveData<LoadApiStatus?>()
     val status: LiveData<LoadApiStatus?>
         get() = _status
-
-    // Firebase
-    val db = FirebaseFirestore.getInstance() //TODO
 
     var player = Player()
     var team = Team()
@@ -60,36 +59,82 @@ class ProfileViewModel : ViewModel() {
 
     init {
         getUserInfo()
+        getTeamJerseyNumbers()
         setRoster()
     }
 
-    fun sendTeamInfo(teamName: String, playerNum: String) {
+    fun sendTeamInfo(teamName: String, playerNum: String, playerName: String) {
+        _status.value = LoadApiStatus.LOADING
         team.name = teamName
         team.jerseyNumbers = mutableListOf(playerNum, "T1", "T2", "T3", "T4", "T5")
-        team.id = db.collection(TEAMS).document().id //TODO
-        db.collection(TEAMS).add(team) //TODO
+
+        player.apply {
+            email = User.account?.email ?: "error"
+            number = playerNum
+            this.name = playerName
+            captain = true
+            avatar = Firebase.auth.currentUser?.photoUrl.toString()
+        }
+
+        coroutineScope.launch {
+            when(val result = HoopRemoteDataSource.setTeamInfo(team)) {
+                is Result.Success -> {
+                    sendCaptainInfo(playerNum, playerName)
+                }
+                is Result.Error -> {
+                    Log.d("status", "error")
+                    _status.value = LoadApiStatus.ERROR
+                }
+            }
+        }
     }
 
-    fun sendCaptainInfo(number: String, name: String) {
-        player.email = User.account?.email ?: "error"
-        player.id = db.collection(PLAYERS).document().id //TODO
-        player.teamId = team.id
-        player.number = number
-        player.name = name
-        player.captain = true
-        player.avatar = Firebase.auth.currentUser?.photoUrl.toString()
-        db.collection(PLAYERS).add(player) //TODO
+    private fun sendCaptainInfo(playerNum: String, playerName: String) {
+        player.apply {
+            email = User.account?.email ?: "error"
+            number = playerNum
+            name = playerName
+            captain = true
+            avatar = Firebase.auth.currentUser?.photoUrl.toString()
+        }
+
+        coroutineScope.launch {
+            when(val result = HoopRemoteDataSource.setCaptainInfo(player)) {
+                is Result.Success -> {
+                    sendMockTeammate()
+//                    _status.value = LoadApiStatus.DONE
+                }
+                is Result.Error -> {
+                    Log.d("status", "error")
+                    _status.value = LoadApiStatus.ERROR
+                }
+            }
+        }
+    }
+
+    private fun sendMockTeammate() {
         val botPlayer = Player()
         botPlayer.apply {
-            avatar =
-                "https://images.unsplash.com/photo-1546776310-eef45dd6d63c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1410&q=80"
+            avatar = ROBOT_IMAGE
             teamId = team.id
-            listOf("T1", "T2", "T3", "T4", "T5").forEachIndexed { index, s ->
-                starting5[index] = true
-                id = s
-                botPlayer.name = s
-                botPlayer.number = s
-                db.collection(PLAYERS).add(botPlayer) //TODO
+            coroutineScope.launch {
+                val mockTeammate = listOf("T1", "T2", "T3", "T4", "T5")
+                mockTeammate.forEachIndexed { index, value ->
+                    starting5 = Player().starting5
+                    starting5[index] = true
+                    id = value
+                    botPlayer.name = value
+                    botPlayer.number = value
+                    when(val result = HoopRemoteDataSource.setMockTeammate(this@apply)) {
+                        is Result.Success -> {
+                            if (index == mockTeammate.lastIndex) _status.value = LoadApiStatus.DONE
+                        }
+                        is Result.Error -> {
+                            Log.d("status", "error")
+                            _status.value = LoadApiStatus.ERROR
+                        }
+                    }
+                }
             }
         }
     }
@@ -97,9 +142,8 @@ class ProfileViewModel : ViewModel() {
 
     var initState = true
     private fun setRoster() {
-        _status.value = LoadApiStatus.LOADING
         coroutineScope.launch {
-            when (val result = HoopRemoteDataSource.getMatchMembers()) { //TODO
+            when (val result = HoopRemoteDataSource.getMatchMembers()) {
                 is Result.Success -> {
                     _roster.value = result.data ?: listOf()
                     if (!initState) {
@@ -114,15 +158,21 @@ class ProfileViewModel : ViewModel() {
         }
     }
 
-    var releasePos = 0
     fun removePlayer(): Boolean {
-        val buffer = roster.value?.get(releasePos) ?: Player()
-        return if (buffer.id != userInfo.value?.id) { // remove normal player
-            db.collection(PLAYERS) //TODO
-                .whereEqualTo("id", buffer.id)
-                .get().addOnSuccessListener {
-                    it.documents.first().reference.delete()
+        _status.value = LoadApiStatus.LOADING
+        val byePlayer = roster.value?.get(releasePos) ?: Player()
+        return if (byePlayer.id != userInfo.value?.id) { // remove player who is not a captain
+            coroutineScope.launch {
+                when (val result = HoopRemoteDataSource.deletePlayer(byePlayer)) {
+                    is Result.Success -> {
+                        _status.value = LoadApiStatus.DONE
+                    }
+                    is Result.Error -> {
+                        Log.d("status", "error")
+                        _status.value = LoadApiStatus.ERROR
+                    }
                 }
+            }
             setRoster()
             false
         } else {
@@ -130,16 +180,38 @@ class ProfileViewModel : ViewModel() {
         }
     }
 
-    fun sendInvitation(mail: String, name: String) {
-
+    private fun getTeamJerseyNumbers() {
         coroutineScope.launch {
-            invitation.id = db.collection(INVITATIONS).document().id //TODO
-            invitation.teamId = User.teamId
-            invitation.inviteeMail = mail
-            invitation.playerName = name
-            invitation.existingNumbers = HoopRemoteDataSource.getTeamInfo().jerseyNumbers
+            when(val result = HoopRemoteDataSource.getTeamInfo()) {
+                is Result.Success -> {
+                    _status.value = LoadApiStatus.DONE
+                }
+                is Result.Error -> {
+                    Log.d("status", "error")
+                    _status.value = LoadApiStatus.ERROR
+                }
+            }
+        }
+    }
 
-            db.collection(INVITATIONS).add(invitation) //TODO
+    fun sendInvitation(mail: String, name: String) {
+        _status.value = LoadApiStatus.LOADING
+        coroutineScope.launch {
+            invitation.apply {
+                teamId = User.teamId
+                inviteeMail = mail
+                playerName = name
+                existingNumbers = User.teamJerseyNumbers
+            }
+            when(val result = HoopRemoteDataSource.setInvitationInfo(invitation)) {
+                is Result.Success -> {
+                    _status.value = LoadApiStatus.DONE
+                }
+                is Result.Error -> {
+                    Log.d("status", "error")
+                    _status.value = LoadApiStatus.ERROR
+                }
+            }
         }
     }
 
@@ -170,6 +242,7 @@ class ProfileViewModel : ViewModel() {
     }
 
     fun getUserInfo() {
+        _status.value = LoadApiStatus.LOADING
         coroutineScope.launch {
             HoopRemoteDataSource.getUserInfo()
             HoopRemoteDataSource.getMatchMembers()
@@ -178,24 +251,34 @@ class ProfileViewModel : ViewModel() {
     }
 
     fun setNewCaptain(id: MutableList<String>, position: Int) {
-        db.collection(PLAYERS) //TODO
-            .whereEqualTo("id", roster.value?.get(releasePos)?.id)
-            .get().addOnSuccessListener {
-                it.documents.first().reference.delete()
+        _status.value = LoadApiStatus.LOADING
+        coroutineScope.launch {
+            when(val result = HoopRemoteDataSource.deletePlayer(roster.value?.get(releasePos) ?: Player())) {
+                is Result.Success -> {
+                }
+                is Result.Error -> {
+                    Log.d("status", "error")
+                    _status.value = LoadApiStatus.ERROR
+                }
             }
-        db.collection(PLAYERS) //TODO
-            .whereEqualTo("id", id[position])
-            .get().addOnSuccessListener {
-                it.documents.first().reference.update("captain", true)
+            when(val result = HoopRemoteDataSource.updateCaptain(id[position])) {
+                is Result.Success -> {
+                }
+                is Result.Error -> {
+                    Log.d("status", "error")
+                    _status.value = LoadApiStatus.ERROR
+                }
             }
-        db.collection(TEAMS) //TODO
-            .whereEqualTo("id", User.teamId)
-            .get().addOnSuccessListener {
-                it.documents.first().reference.update(
-                    "jerseyNumbers",
-                    FieldValue.arrayRemove(roster.value?.get(releasePos)?.number)
-                )
+            when(val result = HoopRemoteDataSource.updateJerseyNumbers(roster.value?.get(releasePos)?.number ?: "")) {
+                is Result.Success -> {
+                    _status.value = LoadApiStatus.DONE
+                }
+                is Result.Error -> {
+                    Log.d("status", "error")
+                    _status.value = LoadApiStatus.ERROR
+                }
             }
+        }
     }
 
 }

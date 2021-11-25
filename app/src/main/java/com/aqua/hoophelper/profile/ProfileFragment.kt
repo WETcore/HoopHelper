@@ -142,9 +142,6 @@ class ProfileFragment : Fragment() {
             ) {
                 viewModel.sendTeamInfo(
                     binding.teamNameEdit.text.toString(),
-                    binding.playerNumEdit.text.toString()
-                )
-                viewModel.sendCaptainInfo(
                     binding.playerNumEdit.text.toString(),
                     binding.nicknameEdit.text.toString()
                 )
@@ -163,18 +160,18 @@ class ProfileFragment : Fragment() {
                 binding.releaseInput.error = null
                 // change captain
                 if (viewModel.removePlayer()) {
-                    val playerId = mutableListOf<String>()
-                    val playerNum = mutableListOf<String>()
+                    val playerIds = mutableListOf<String>()
+                    val playerNums = mutableListOf<String>()
                     viewModel.roster.value?.forEach { player ->
                         if (player.id != viewModel.userInfo.value?.id) {
-                            playerId.add(player.id)
-                            playerNum.add(player.number)
+                            playerIds.add(player.id)
+                            playerNums.add(player.number)
                         }
                     }
-                    if (playerId.isNotEmpty()) {
+                    if (playerIds.isNotEmpty()) {
                         MaterialAlertDialogBuilder(requireContext())
                             .setTitle("Choose New Captain")
-                            .setSingleChoiceItems(playerNum.toTypedArray(), 0) { dialog, which ->
+                            .setSingleChoiceItems(playerNums.toTypedArray(), 0) { dialog, which ->
                             }
                             .setNeutralButton("Cancel") { dialog, which ->
                                 dialog.cancel()
@@ -182,7 +179,7 @@ class ProfileFragment : Fragment() {
                             .setPositiveButton("Confirm") { dialog, which ->
                                 val position = (dialog as androidx.appcompat.app.AlertDialog)
                                     .listView.checkedItemPosition
-                                viewModel.setNewCaptain(playerId, position)
+                                viewModel.setNewCaptain(playerIds, position)
                                 viewModel.getPlayerUserInfo()
                                 dialog.dismiss()
                             }

@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.aqua.hoophelper.database.*
 import com.aqua.hoophelper.util.*
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.ktx.Firebase
@@ -68,8 +69,7 @@ object HoopRemoteDataSource : HoopRepository {
 
     // captain participate the match. find captain's member
     override suspend fun getMatchMembers(): Result<List<Player>> = suspendCoroutine { conti ->
-        val db = FirebaseFirestore.getInstance()
-        db.collection(PLAYERS)
+            FirebaseFirestore.getInstance().collection(PLAYERS)
             .whereEqualTo("teamId", User.teamId)
             .get()
             .addOnCompleteListener { task ->
@@ -176,15 +176,27 @@ object HoopRemoteDataSource : HoopRepository {
         }
     }
 
-    override suspend fun getTeamInfo(): Team = suspendCoroutine { conti ->
+    override suspend fun getTeamInfo(): Result<Team> = suspendCoroutine { conti ->
         if (User.account != null) {
             FirebaseFirestore.getInstance()
                 .collection(TEAMS)
                 .whereEqualTo("id", User.teamId)
                 .get()
-                .addOnCompleteListener {
-                    val result = it.result?.toObjects(Team::class.java)?.first() ?: Team()
-                    conti.resume(result)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val result = task.result?.toObjects(Team::class.java)?.first() ?: Team()
+                        User.teamJerseyNumbers = result.jerseyNumbers
+                        conti.resume(Result.Success(result))
+                    } else {
+                        task.exception?.let {
+                            Log.d(
+                                "error",
+                                "[${this::class.simpleName}] Error getting documents. ${it.message}"
+                            )
+                            conti.resume(Result.Error(it))
+                            return@addOnCompleteListener
+                        }
+                    }
                 }
         }
     }
@@ -241,6 +253,164 @@ object HoopRemoteDataSource : HoopRepository {
             .addOnCompleteListener {
                 val result = it.result.toObjects(Event::class.java)
                 conti.resume(result)
+            }
+    }
+
+    suspend fun setTeamInfo(team: Team): Result<Boolean> = suspendCoroutine { conti ->
+        val teams = FirebaseFirestore.getInstance().collection(TEAMS)
+
+        team.id = teams.document().id
+        User.teamId = team.id
+
+        teams.document()
+            .set(team)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    conti.resume(Result.Success(true))
+                } else {
+                    task.exception?.let {
+                        Log.d(
+                            "error",
+                            "[${this::class.simpleName}] Error getting documents. ${it.message}"
+                        )
+                        conti.resume(Result.Error(it))
+                        return@addOnCompleteListener
+                    }
+                }
+            }
+    }
+
+    suspend fun setCaptainInfo(player: Player): Result<Boolean> = suspendCoroutine { conti ->
+        val players = FirebaseFirestore.getInstance().collection(PLAYERS)
+
+        player.id = players.document().id
+        player.teamId = User.teamId
+        User.id = player.id
+        User.isCaptain = true
+
+        players.document()
+            .set(player)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    conti.resume(Result.Success(true))
+                } else {
+                    task.exception?.let {
+                        Log.d(
+                            "error",
+                            "[${this::class.simpleName}] Error getting documents. ${it.message}"
+                        )
+                        conti.resume(Result.Error(it))
+                        return@addOnCompleteListener
+                    }
+                }
+            }
+    }
+
+    suspend fun setMockTeammate(player: Player): Result<Boolean> = suspendCoroutine { conti ->
+        val players = FirebaseFirestore.getInstance().collection(PLAYERS)
+        players.document()
+            .set(player)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+//                    Log.d("post","${User.isCaptain}")
+                    conti.resume(Result.Success(true))
+                } else {
+                    task.exception?.let {
+                        Log.d(
+                            "error",
+                            "[${this::class.simpleName}] Error getting documents. ${it.message}"
+                        )
+                        conti.resume(Result.Error(it))
+                        return@addOnCompleteListener
+                    }
+                }
+            }
+    }
+
+    suspend fun deletePlayer(player: Player): Result<Boolean> = suspendCoroutine { conti ->
+        val players = FirebaseFirestore.getInstance().collection(PLAYERS)
+        players.whereEqualTo("id", player.id)
+            .get().addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    task.result.documents.first().reference.delete()
+                    conti.resume(Result.Success(true))
+                } else {
+                    task.exception?.let {
+                        Log.d(
+                            "error",
+                            "[${this::class.simpleName}] Error getting documents. ${it.message}"
+                        )
+                        conti.resume(Result.Error(it))
+                        return@addOnCompleteListener
+                    }
+                }
+            }
+    }
+
+    suspend fun setInvitationInfo(invitation: Invitation): Result<Boolean> = suspendCoroutine { conti ->
+        val invitations = FirebaseFirestore.getInstance().collection(INVITATIONS)
+        invitation.id = invitations.document().id
+
+        invitations.document()
+            .set(invitation)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    conti.resume(Result.Success(true))
+                } else {
+                    task.exception?.let {
+                        Log.d(
+                            "error",
+                            "[${this::class.simpleName}] Error getting documents. ${it.message}"
+                        )
+                        conti.resume(Result.Error(it))
+                        return@addOnCompleteListener
+                    }
+                }
+            }
+    }
+
+    suspend fun updateCaptain(playerId: String): Result<Boolean> = suspendCoroutine { conti ->
+        val players = FirebaseFirestore.getInstance().collection(PLAYERS)
+
+        players.whereEqualTo("id",playerId)
+            .get().addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    task.result.documents.first().reference.update("captain", true)
+                    conti.resume(Result.Success(true))
+                } else {
+                    task.exception?.let {
+                        Log.d(
+                            "error",
+                            "[${this::class.simpleName}] Error getting documents. ${it.message}"
+                        )
+                        conti.resume(Result.Error(it))
+                        return@addOnCompleteListener
+                    }
+                }
+            }
+    }
+
+    suspend fun updateJerseyNumbers(number: String): Result<Boolean> = suspendCoroutine { conti ->
+        val teams = FirebaseFirestore.getInstance().collection(TEAMS)
+
+        teams.whereEqualTo("id", User.teamId)
+            .get().addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    task.result.documents.first().reference.update(
+                    "jerseyNumbers",
+                    FieldValue.arrayRemove(number)
+                )
+                    conti.resume(Result.Success(true))
+                } else {
+                    task.exception?.let {
+                        Log.d(
+                            "error",
+                            "[${this::class.simpleName}] Error getting documents. ${it.message}"
+                        )
+                        conti.resume(Result.Error(it))
+                        return@addOnCompleteListener
+                    }
+                }
             }
     }
 

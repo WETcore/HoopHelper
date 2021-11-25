@@ -43,3 +43,8 @@ const val DIAMETER3 = 0.241
  */
 const val VALUE_ZERO = 0f
 const val VALUE_TEN = 10f
+
+/**
+ * mock teammate
+ */
+const val ROBOT_IMAGE = "https://images.unsplash.com/photo-1546776310-eef45dd6d63c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1410&q=80"

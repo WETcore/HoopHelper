@@ -10,6 +10,7 @@ object User {
     var teamMembers = listOf<Player>()
     var isCaptain = false
     var id = ""
+    var teamJerseyNumbers = listOf<String>()
 }
 
 object HoopInfo {
