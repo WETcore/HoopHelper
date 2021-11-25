@@ -4,11 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
-import com.aqua.hoophelper.database.Player
 import com.aqua.hoophelper.databinding.ActivityLoginBinding
+import com.aqua.hoophelper.util.User
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
@@ -87,17 +86,4 @@ class LoginActivity : AppCompatActivity() {
             findNavController(R.id.login_nav_host).navigate(R.id.action_loginFragment_to_tutorFragment)
         }
     }
-}
-
-object User {
-    var account: FirebaseUser? = null
-    var teamId = ""
-    var teamMembers = listOf<Player>()
-    var isCaptain = false
-    var id = ""
-}
-
-object HoopInfo {
-    var spinnerSelectedTeamId = MutableLiveData("")
-    var matchId = ""
 }

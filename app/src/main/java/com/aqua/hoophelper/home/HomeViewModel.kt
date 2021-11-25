@@ -4,11 +4,11 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.aqua.hoophelper.HoopInfo
 import com.aqua.hoophelper.database.*
 import com.aqua.hoophelper.database.remote.HoopRemoteDataSource
-import com.aqua.hoophelper.match.DataType
-import com.aqua.hoophelper.match.DetailDataType
+import com.aqua.hoophelper.util.DataType
+import com.aqua.hoophelper.util.DetailDataType
+import com.aqua.hoophelper.util.HoopInfo
 import com.aqua.hoophelper.util.LoadApiStatus
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

@@ -5,8 +5,6 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.aqua.hoophelper.HoopInfo
-import com.aqua.hoophelper.User
 import com.aqua.hoophelper.database.Event
 import com.aqua.hoophelper.database.Match
 import com.aqua.hoophelper.database.Player

@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.aqua.hoophelper.R
 import com.aqua.hoophelper.databinding.TeamFragmentBinding
-import com.aqua.hoophelper.team.child.tactic.Tactic
+import com.aqua.hoophelper.util.Tactic
 import com.google.android.material.tabs.TabLayoutMediator
 
 class TeamFragment : Fragment() {

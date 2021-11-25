@@ -10,8 +10,8 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.viewpager.widget.PagerAdapter
 import com.aqua.hoophelper.R
-import com.aqua.hoophelper.match.DataType
-import com.aqua.hoophelper.match.DetailDataType
+import com.aqua.hoophelper.util.DataType
+import com.aqua.hoophelper.util.DetailDataType
 import com.aqua.hoophelper.util.LoadApiStatus
 
 class HomeVPagerAdapter(

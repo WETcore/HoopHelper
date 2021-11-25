@@ -17,7 +17,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.aqua.hoophelper.LoginActivityViewModel
 import com.aqua.hoophelper.R
 import com.aqua.hoophelper.databinding.LoginFragmentBinding
-import com.aqua.hoophelper.tutor.Tutor
+import com.aqua.hoophelper.util.Tutor
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 

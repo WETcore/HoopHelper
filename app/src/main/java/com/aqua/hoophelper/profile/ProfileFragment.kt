@@ -11,9 +11,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.aqua.hoophelper.R
-import com.aqua.hoophelper.User
 import com.aqua.hoophelper.databinding.ProfileFragmentBinding
 import com.aqua.hoophelper.util.LoadApiStatus
+import com.aqua.hoophelper.util.User
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 

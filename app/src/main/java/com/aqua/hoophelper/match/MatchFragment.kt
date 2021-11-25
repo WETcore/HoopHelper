@@ -10,20 +10,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.aqua.hoophelper.HoopInfo
 import com.aqua.hoophelper.NavigationDirections
 import com.aqua.hoophelper.R
 import com.aqua.hoophelper.database.Player
 import com.aqua.hoophelper.databinding.MatchFragmentBinding
+import com.aqua.hoophelper.util.DataType
+import com.aqua.hoophelper.util.HoopInfo
 import com.aqua.hoophelper.util.LoadApiStatus
-
-enum class DataType { //TODO
-    SCORE, REBOUND, ASSIST, STEAL, BLOCK, TURNOVER, FOUL, FREE_THROW
-}
-
-enum class DetailDataType { //TODO
-    PTS, REB, AST, STL, BLK
-}
 
 class MatchFragment : Fragment() {
 
@@ -172,21 +165,21 @@ class MatchFragment : Fragment() {
         // set launch chip text
         viewModel.zone.observe(viewLifecycleOwner) {
             binding.launchChip.text = when (it) {
-                1 -> "A"
-                2 -> "B"
-                3 -> "C"
-                4 -> "D"
-                5 -> "E"
-                6 -> "F"
-                7 -> "G"
-                8 -> "H"
-                9 -> "I"
-                10 -> "J"
-                11 -> "K"
-                12 -> "L"
-                13 -> "M"
-                14 -> "N"
-                else -> "O"
+                1 -> ZoneMark.AROUND_RIM.value
+                2 -> ZoneMark.L_ELBOW.value
+                3 -> ZoneMark.MID_STR.value
+                4 -> ZoneMark.R_ELBOW.value
+                5 -> ZoneMark.L_BASELINE.value
+                6 -> ZoneMark.L_WING.value
+                7 -> ZoneMark.LONG_STR.value
+                8 -> ZoneMark.R_WING.value
+                9 -> ZoneMark.R_BASELINE.value
+                10 -> ZoneMark.L_CORNER.value
+                11 -> ZoneMark.L_3PT.value
+                12 -> ZoneMark.ARC.value
+                13 -> ZoneMark.R_3PT.value
+                14 -> ZoneMark.R_CORNER.value
+                else -> ZoneMark.ELSE.value
             }
         }
 

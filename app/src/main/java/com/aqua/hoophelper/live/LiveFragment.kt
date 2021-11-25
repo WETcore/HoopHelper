@@ -8,10 +8,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
-import com.aqua.hoophelper.HoopInfo
 import com.aqua.hoophelper.R
 import com.aqua.hoophelper.database.Event
 import com.aqua.hoophelper.databinding.LiveFragmentBinding
+import com.aqua.hoophelper.util.HoopInfo
 
 class LiveFragment : Fragment() {
 

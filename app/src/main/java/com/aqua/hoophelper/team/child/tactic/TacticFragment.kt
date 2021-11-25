@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.aqua.hoophelper.R
 import com.aqua.hoophelper.databinding.TacticFragmentBinding
+import com.aqua.hoophelper.util.Arrow
 import com.aqua.hoophelper.util.LoadApiStatus
 import com.bumptech.glide.Glide
 

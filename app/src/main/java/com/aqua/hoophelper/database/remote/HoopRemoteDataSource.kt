@@ -3,8 +3,6 @@ package com.aqua.hoophelper.database.remote
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.aqua.hoophelper.HoopInfo
-import com.aqua.hoophelper.User
 import com.aqua.hoophelper.database.*
 import com.aqua.hoophelper.util.*
 import com.google.firebase.auth.ktx.auth

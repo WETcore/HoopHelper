@@ -1,5 +1,11 @@
 package com.aqua.hoophelper.util
 
+enum class LoadApiStatus {
+    LOADING,
+    ERROR,
+    DONE
+}
+
 enum class Zone(val value: String) {
     AROUND_RIM("Around Rim"),
     L_ELBOW("Left Elbow"),
@@ -16,4 +22,12 @@ enum class Zone(val value: String) {
     R_3PT("Right 3Points"),
     R_CORNER("Right Corner"),
     FT("FreeThrow Line"),
+}
+
+enum class DataType {
+    SCORE, REBOUND, ASSIST, STEAL, BLOCK, TURNOVER, FOUL, FREE_THROW
+}
+
+enum class DetailDataType {
+    PTS, REB, AST, STL, BLK
 }

@@ -2,7 +2,6 @@ package com.aqua.hoophelper
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.View
@@ -11,8 +10,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.aqua.hoophelper.databinding.ActivityMainBinding
+import com.aqua.hoophelper.util.HoopInfo
 import com.aqua.hoophelper.util.HoopService
 import com.aqua.hoophelper.util.RestartBroadcastReceiver
+import com.aqua.hoophelper.util.User
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar

@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.aqua.hoophelper.R
 import com.aqua.hoophelper.databinding.TutorChildFragmentBinding
+import com.aqua.hoophelper.util.Tutor
 
 class TutorChildFragment(private val tutorTypeFilter: TutorTypeFilter) : Fragment() {
 

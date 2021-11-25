@@ -8,6 +8,8 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import com.aqua.hoophelper.R
+import com.aqua.hoophelper.util.Arrow
+import com.aqua.hoophelper.util.Tactic
 import com.aqua.hoophelper.util.VALUE_TEN
 import com.aqua.hoophelper.util.VALUE_ZERO
 import kotlin.math.PI
@@ -191,11 +193,4 @@ class TacticCanvas(context: Context, attrs: AttributeSet) : View(context, attrs)
         tacticCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR)
         tacticCanvas.drawColor(resources.getColor(R.color.basil_background, null))
     }
-}
-
-object Arrow {
-    var wave = 1f
-    var isDash = false
-    var isCurl = false
-    var isScreen = false
 }

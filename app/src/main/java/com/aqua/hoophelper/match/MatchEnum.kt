@@ -1,17 +1,21 @@
 package com.aqua.hoophelper.match
 
-enum class Court(val value: Double) {
-    COURT_TOP(0.15),
-    COURT_BOTTOM(0.57),
-    THREE_LINE_LEFT(0.09),
-    THREE_LINE_RIGHT(0.9),
-    CORNER_BOTTOM_BOUND(0.167),
-    ROUND_DEGREE(180.0),
-    SLOPE_80(80.0),
-    SLOPE_65(65.0),
-    DIAMETER1(0.083),
-    DIAMETER2(0.153),
-    DIAMETER3(0.241),
+enum class ZoneMark(val value: String) {
+    AROUND_RIM("A"),
+    L_ELBOW("B"),
+    MID_STR("C"),
+    R_ELBOW("D"),
+    L_BASELINE("E"),
+    L_WING("F"),
+    LONG_STR("G"),
+    R_WING("H"),
+    R_BASELINE("I"),
+    L_CORNER("J"),
+    L_3PT("K"),
+    ARC("L"),
+    R_3PT("M"),
+    R_CORNER("N"),
+    ELSE("O")
 }
 
 enum class EventType(val value: String) {

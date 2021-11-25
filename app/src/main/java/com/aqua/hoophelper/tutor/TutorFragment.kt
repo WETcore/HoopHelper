@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.aqua.hoophelper.MainActivity
 import com.aqua.hoophelper.R
 import com.aqua.hoophelper.databinding.TutorFragmentBinding
+import com.aqua.hoophelper.util.Tutor
 
 class TutorFragment : Fragment() {
 

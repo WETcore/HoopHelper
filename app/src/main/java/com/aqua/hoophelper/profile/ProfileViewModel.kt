@@ -4,16 +4,12 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.aqua.hoophelper.User
 import com.aqua.hoophelper.database.Invitation
 import com.aqua.hoophelper.database.Player
 import com.aqua.hoophelper.database.Result
 import com.aqua.hoophelper.database.Team
 import com.aqua.hoophelper.database.remote.HoopRemoteDataSource
-import com.aqua.hoophelper.util.INVITATIONS
-import com.aqua.hoophelper.util.LoadApiStatus
-import com.aqua.hoophelper.util.PLAYERS
-import com.aqua.hoophelper.util.TEAMS
+import com.aqua.hoophelper.util.*
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -30,7 +26,7 @@ class ProfileViewModel : ViewModel() {
         get() = _status
 
     // Firebase
-    val db = FirebaseFirestore.getInstance()
+    val db = FirebaseFirestore.getInstance() //TODO
 
     var player = Player()
     var team = Team()
@@ -70,19 +66,19 @@ class ProfileViewModel : ViewModel() {
     fun sendTeamInfo(teamName: String, playerNum: String) {
         team.name = teamName
         team.jerseyNumbers = mutableListOf(playerNum, "T1", "T2", "T3", "T4", "T5")
-        team.id = db.collection(TEAMS).document().id
-        db.collection(TEAMS).add(team)
+        team.id = db.collection(TEAMS).document().id //TODO
+        db.collection(TEAMS).add(team) //TODO
     }
 
     fun sendCaptainInfo(number: String, name: String) {
         player.email = User.account?.email ?: "error"
-        player.id = db.collection(PLAYERS).document().id
+        player.id = db.collection(PLAYERS).document().id //TODO
         player.teamId = team.id
         player.number = number
         player.name = name
         player.captain = true
         player.avatar = Firebase.auth.currentUser?.photoUrl.toString()
-        db.collection(PLAYERS).add(player)
+        db.collection(PLAYERS).add(player) //TODO
         val botPlayer = Player()
         botPlayer.apply {
             avatar =
@@ -93,14 +89,14 @@ class ProfileViewModel : ViewModel() {
                 id = s
                 botPlayer.name = s
                 botPlayer.number = s
-                db.collection(PLAYERS).add(botPlayer)
+                db.collection(PLAYERS).add(botPlayer) //TODO
             }
         }
     }
 
 
     var initState = true
-    fun setRoster() {
+    private fun setRoster() {
         _status.value = LoadApiStatus.LOADING
         coroutineScope.launch {
             when (val result = HoopRemoteDataSource.getMatchMembers()) { //TODO
@@ -122,7 +118,7 @@ class ProfileViewModel : ViewModel() {
     fun removePlayer(): Boolean {
         val buffer = roster.value?.get(releasePos) ?: Player()
         return if (buffer.id != userInfo.value?.id) { // remove normal player
-            db.collection(PLAYERS)
+            db.collection(PLAYERS) //TODO
                 .whereEqualTo("id", buffer.id)
                 .get().addOnSuccessListener {
                     it.documents.first().reference.delete()
@@ -137,13 +133,13 @@ class ProfileViewModel : ViewModel() {
     fun sendInvitation(mail: String, name: String) {
 
         coroutineScope.launch {
-            invitation.id = db.collection(INVITATIONS).document().id
+            invitation.id = db.collection(INVITATIONS).document().id //TODO
             invitation.teamId = User.teamId
             invitation.inviteeMail = mail
             invitation.playerName = name
             invitation.existingNumbers = HoopRemoteDataSource.getTeamInfo().jerseyNumbers
 
-            db.collection(INVITATIONS).add(invitation)
+            db.collection(INVITATIONS).add(invitation) //TODO
         }
     }
 
@@ -182,17 +178,17 @@ class ProfileViewModel : ViewModel() {
     }
 
     fun setNewCaptain(id: MutableList<String>, position: Int) {
-        db.collection(PLAYERS)
+        db.collection(PLAYERS) //TODO
             .whereEqualTo("id", roster.value?.get(releasePos)?.id)
             .get().addOnSuccessListener {
                 it.documents.first().reference.delete()
             }
-        db.collection(PLAYERS)
+        db.collection(PLAYERS) //TODO
             .whereEqualTo("id", id[position])
             .get().addOnSuccessListener {
                 it.documents.first().reference.update("captain", true)
             }
-        db.collection(TEAMS)
+        db.collection(TEAMS) //TODO
             .whereEqualTo("id", User.teamId)
             .get().addOnSuccessListener {
                 it.documents.first().reference.update(

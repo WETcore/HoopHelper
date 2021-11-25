@@ -58,7 +58,3 @@ class TacticViewModel : ViewModel() {
         }
     }
 }
-
-object Tactic {
-    val vPagerSwipe = MutableLiveData(true)
-}

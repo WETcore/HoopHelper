@@ -5,7 +5,9 @@ import androidx.lifecycle.ViewModel
 import com.aqua.hoophelper.database.Match
 import com.aqua.hoophelper.database.Player
 import com.aqua.hoophelper.database.Team
+import com.aqua.hoophelper.util.HoopInfo
 import com.aqua.hoophelper.util.MATCHES
+import com.aqua.hoophelper.util.User
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
