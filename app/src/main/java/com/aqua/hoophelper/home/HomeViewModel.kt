@@ -49,10 +49,10 @@ class HomeViewModel : ViewModel() {
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     init {
-        getTeamList()
+        getTeams()
     }
 
-    private fun getTeamList(): List<String> {
+    private fun getTeams(): List<String> {
         _status.value = LoadApiStatus.LOADING
         coroutineScope.launch {
             when (val result = HoopRemoteDataSource.getTeams()) {
@@ -190,7 +190,6 @@ class HomeViewModel : ViewModel() {
             DetailDataType.BLK -> {
                 (teamStat.value?.first()?.blk ?: 0).toString()
             }
-            else -> ""
         }
     }
 
