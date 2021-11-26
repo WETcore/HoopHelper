@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 interface HoopRepository {
 
     fun getEvents(): LiveData<List<Event>>
-    fun getMatches(): LiveData<List<Match>>
+    fun getMatches(teamId: String): LiveData<List<Match>>
     fun getRoster(): MutableLiveData<List<Player>>
     fun getInvitations(): MutableLiveData<List<Invitation>>
 

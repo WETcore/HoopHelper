@@ -28,14 +28,18 @@ object HoopRemoteDataSource : HoopRepository {
         return result
     }
 
-    override fun getMatches(): LiveData<List<Match>> {
+    override fun getMatches(teamId: String): LiveData<List<Match>> {
         val result = MutableLiveData<List<Match>>()
         result.let {
             FirebaseFirestore.getInstance()
                 .collection(MATCHES)
-                .orderBy("actualTime", Query.Direction.DESCENDING)
                 .addSnapshotListener { value, error ->
-                    it.value = value?.toObjects(Match::class.java) ?: mutableListOf()
+                    val matches = value?.toObjects(Match::class.java)?.sortedBy { it.actualTime }
+                    Badge.isGaming.value = if (matches.isNullOrEmpty()) {
+                        false
+                    } else {
+                        matches.lastOrNull { it.teamId == teamId }?.gaming == true
+                    }
                 }
         }
         return result
@@ -312,7 +316,6 @@ object HoopRemoteDataSource : HoopRepository {
             .set(player)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-//                    Log.d("post","${User.isCaptain}")
                     conti.resume(Result.Success(true))
                 } else {
                     task.exception?.let {
@@ -503,11 +506,31 @@ object HoopRemoteDataSource : HoopRepository {
 
     suspend fun setMatchInfo(match: Match): Result<Boolean> = suspendCoroutine { conti ->
         val matches = FirebaseFirestore.getInstance().collection(MATCHES)
-        match.matchId = matches.id
-
+        match.matchId = matches.document().id
         matches.document()
             .set(match).addOnCompleteListener { task ->
                 if (task.isSuccessful) {
+                    conti.resume(Result.Success(true))
+                } else {
+                    task.exception?.let {
+                        Log.d(
+                            "error",
+                            "[${this::class.simpleName}] Error getting documents. ${it.message}"
+                        )
+                        conti.resume(Result.Error(it))
+                        return@addOnCompleteListener
+                    }
+                }
+            }
+    }
+
+    suspend fun updateMatchStatus(match: Match): Result<Boolean> = suspendCoroutine { conti ->
+        val matches = FirebaseFirestore.getInstance().collection(MATCHES)
+
+        matches.whereEqualTo("matchId", match.matchId)
+            .get().addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    task.result.documents.first().reference.update("gaming", false)
                     conti.resume(Result.Success(true))
                 } else {
                     task.exception?.let {

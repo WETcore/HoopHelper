@@ -10,10 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.aqua.hoophelper.databinding.ActivityMainBinding
-import com.aqua.hoophelper.util.HoopInfo
-import com.aqua.hoophelper.util.HoopService
-import com.aqua.hoophelper.util.RestartBroadcastReceiver
-import com.aqua.hoophelper.util.User
+import com.aqua.hoophelper.util.*
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
@@ -40,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         HoopInfo.spinnerSelectedTeamId.observe(this) {
             viewModel.showBadge(it)
         }
-        viewModel.badgeSwitch.observe(this) {
+        Badge.isGaming.observe(this) {
             binding.bottomBar.getOrCreateBadge(R.id.liveFragment).isVisible = it
         }
 
@@ -140,7 +137,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.liveFragment -> {
                     binding.fab.isClickable = false
                     binding.appBar.behavior.slideUp(binding.appBar)
-                    navHostFragment.navigate(NavigationDirections.navToLive(viewModel.badgeSwitch.value ?: false))
+                    navHostFragment.navigate(NavigationDirections.navToLive(Badge.isGaming.value ?: false))
                     true
                 }
                 R.id.profileFragment -> {

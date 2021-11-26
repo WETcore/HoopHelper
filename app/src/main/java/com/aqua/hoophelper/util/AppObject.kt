@@ -32,3 +32,7 @@ object Arrow {
     var isCurl = false
     var isScreen = false
 }
+
+object Badge {
+    val isGaming = MutableLiveData(false)
+}
