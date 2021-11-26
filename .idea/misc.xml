@@ -40,6 +40,8 @@
         <entry key="app/src/main/res/layout/tutor_child_fragment.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/layout/tutor_fragment.xml" value="0.24635416666666668" />
         <entry key="app/src/main/res/menu/menu.xml" value="0.2625" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.3640625" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.3640625" />
         <entry key="app/src/main/res/xml/player_chip.xml" value="0.2734375" />
       </map>
     </option>
