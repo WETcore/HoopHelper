@@ -1,13 +1,15 @@
 package com.aqua.hoophelper
 
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.aqua.hoophelper.database.*
+import com.aqua.hoophelper.database.Match
+import com.aqua.hoophelper.database.Player
+import com.aqua.hoophelper.database.Result
+import com.aqua.hoophelper.database.Team
 import com.aqua.hoophelper.database.remote.HoopRemoteDataSource
-import com.aqua.hoophelper.util.*
-import com.google.firebase.firestore.FirebaseFirestore
+import com.aqua.hoophelper.util.HoopInfo
+import com.aqua.hoophelper.util.User
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

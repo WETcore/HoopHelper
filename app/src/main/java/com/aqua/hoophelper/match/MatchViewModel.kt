@@ -47,11 +47,11 @@ class MatchViewModel : ViewModel() {
 
     var subNum = mutableListOf<String>()
 
-    var _shotClockLimit = MutableLiveData<Long>(24L)
+    var _shotClockLimit = MutableLiveData(24L)
     val shotClockLimit: LiveData<Long>
         get() = _shotClockLimit
 
-    var _gameClockLimit = MutableLiveData<Long>(12L)
+    var _gameClockLimit = MutableLiveData(12L)
     val gameClockLimit: LiveData<Long>
         get() = _gameClockLimit
 
@@ -61,7 +61,7 @@ class MatchViewModel : ViewModel() {
         get() = _shotClock
 
     // game clock
-    var _gameClockSec = MutableLiveData<Long>(60L)
+    var _gameClockSec = MutableLiveData(60L)
     val gameClockSec: LiveData<Long>
         get() = _gameClockSec
 
@@ -70,7 +70,7 @@ class MatchViewModel : ViewModel() {
         get() = _gameClockMin
 
     // quarter
-    var _quarter = MutableLiveData<Int>(1)
+    var _quarter = MutableLiveData(1)
     val quarter: LiveData<Int>
         get() = _quarter
 
@@ -90,7 +90,7 @@ class MatchViewModel : ViewModel() {
         get() = _substitutionPlayer
 
     // zone
-    private var _zone = MutableLiveData<Int>(0)
+    private var _zone = MutableLiveData(0)
     val zone: LiveData<Int>
         get() = _zone
 
@@ -257,7 +257,7 @@ class MatchViewModel : ViewModel() {
                     selectZone(6)
                 } else if (slope > tan((-SLOPE_65 * PI) / ROUND_DEGREE) && (x / w) > THREE_LINE_LEFT) {
                     selectZone(5)
-                } else Log.d("dia", "${x} ${w} ${atan(slope) / PI * ROUND_DEGREE} in zone 3 error")
+                } else Log.d("dia", "$x $w ${atan(slope) / PI * ROUND_DEGREE} in zone 3 error")
             } else if (x / w > THREE_LINE_RIGHT && y / h <= (COURT_TOP + CORNER_BOTTOM_BOUND)) {
                 selectZone(14)
             } else if (x / w < THREE_LINE_LEFT && y / h <= (COURT_TOP + CORNER_BOTTOM_BOUND)) {
@@ -331,7 +331,9 @@ class MatchViewModel : ViewModel() {
             val subPlayers = mutableListOf<Player>()
             when (val result = HoopRemoteDataSource.getMatchMembers()) {
                 is Result.Success -> {
-                    _roster.value = result.data ?: listOf()
+                    result.data.let {
+                        _roster.value = it
+                    }
                     val lineUp = roster.value ?: listOf()
                     lineUp.filter {
                         !it.starting5.contains(true)

@@ -22,7 +22,7 @@ class TutorChildFragment(private val tutorTypeFilter: TutorTypeFilter) : Fragmen
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         // binding
         val binding: TutorChildFragmentBinding =

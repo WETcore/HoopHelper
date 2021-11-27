@@ -45,7 +45,7 @@ class ProfileViewModel : ViewModel() {
         get() = _teamInfo
 
     // authToggle
-    var _authToggle = MutableLiveData<Boolean>(false)
+    var _authToggle = MutableLiveData(false)
     val authToggle: LiveData<Boolean>
         get() = _authToggle
 
@@ -143,7 +143,7 @@ class ProfileViewModel : ViewModel() {
         coroutineScope.launch {
             when (val result = HoopRemoteDataSource.getMatchMembers()) {
                 is Result.Success -> {
-                    _roster.value = result.data ?: listOf()
+                    _roster.value = result.data
                     if (!initState) {
                         _status.value = LoadApiStatus.DONE
                     } else initState = !initState
@@ -227,7 +227,7 @@ class ProfileViewModel : ViewModel() {
             }
             when (val result = HoopRemoteDataSource.getPlayer()) {
                 is Result.Success -> {
-                    _userInfo.value = result.data ?: Player()
+                    _userInfo.value = result.data
                     _status.value = LoadApiStatus.DONE
                 }
                 is Result.Error -> {

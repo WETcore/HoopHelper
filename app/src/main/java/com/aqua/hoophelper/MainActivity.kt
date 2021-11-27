@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
         binding.fab.setOnClickListener {
             when {
                 User.teamId.length <= 5 -> {
-                    Snackbar.make(binding.root, "No team no game~", Snackbar.LENGTH_SHORT)
+                    Snackbar.make(binding.root, "No team no game~", Snackbar.LENGTH_SHORT) //TODO
                         .setAction("create team") {
                             binding.bottomBar.menu.getItem(4).isChecked = true
                             navHostFragment.navigate(NavigationDirections.navToProfile())

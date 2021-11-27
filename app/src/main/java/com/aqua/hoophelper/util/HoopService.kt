@@ -10,10 +10,6 @@ import java.io.Serializable
 
 class HoopService : LifecycleService() {
 
-    override fun onCreate() {
-        super.onCreate()
-    }
-
     @SuppressLint("UnspecifiedImmutableFlag")
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
@@ -109,7 +105,4 @@ class HoopService : LifecycleService() {
         return START_NOT_STICKY
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-    }
 }

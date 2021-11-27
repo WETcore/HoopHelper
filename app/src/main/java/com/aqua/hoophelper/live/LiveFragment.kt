@@ -22,7 +22,7 @@ class LiveFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         // binding
         val binding: LiveFragmentBinding =
@@ -32,38 +32,38 @@ class LiveFragment : Fragment() {
         val args: LiveFragmentArgs by navArgs()
 
         if (args.isGaming) {
-            binding.lottieNothing.visibility = View.GONE
-            binding.nothingText.visibility = View.GONE
-            binding.liveRecycler.visibility = View.VISIBLE
+            setGamingVisibility(binding)
 
             // adapt recycler
-            var adapter = LiveEventAdapter(viewModel, listOf(Event()))
-            binding.liveRecycler.adapter = adapter
+            var adapter: LiveEventAdapter
 
             viewModel.events.observe(viewLifecycleOwner) { its ->
-                adapter = LiveEventAdapter(
-                    viewModel,
-                    its.filter {
-                        it.matchId == its.first().matchId
-                                && it.teamId == HoopInfo.spinnerSelectedTeamId.value
-                    }
-                )
+                val events = its.filter {
+                    it.matchId == its.first().matchId
+                            && it.teamId == HoopInfo.spinnerSelectedTeamId.value
+                }
+
+                adapter = LiveEventAdapter(viewModel, events)
                 binding.liveRecycler.adapter = adapter
-                its.sortedByDescending { it.actualTime }
-                adapter.submitList(
-                    its.filter {
-                        it.matchId == its.first().matchId
-                                && it.teamId == HoopInfo.spinnerSelectedTeamId.value
-                    }
-                )
+                adapter.submitList(events)
             }
-            (binding.liveRecycler.adapter as LiveEventAdapter).notifyItemChanged(0)
+
         } else {
-            binding.lottieNothing.visibility = View.VISIBLE
-            binding.nothingText.visibility = View.VISIBLE
-            binding.liveRecycler.visibility = View.GONE
+            setNoGameVisibility(binding)
         }
 
         return binding.root
+    }
+
+    private fun setNoGameVisibility(binding: LiveFragmentBinding) {
+        binding.lottieNothing.visibility = View.VISIBLE
+        binding.nothingText.visibility = View.VISIBLE
+        binding.liveRecycler.visibility = View.GONE
+    }
+
+    private fun setGamingVisibility(binding: LiveFragmentBinding) {
+        binding.lottieNothing.visibility = View.GONE
+        binding.nothingText.visibility = View.GONE
+        binding.liveRecycler.visibility = View.VISIBLE
     }
 }

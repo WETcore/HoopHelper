@@ -10,10 +10,6 @@ import com.google.firebase.ktx.Firebase
 
 class CheckService : LifecycleService() {
 
-    override fun onCreate() {
-        super.onCreate()
-    }
-
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
         super.onStartCommand(intent, flags, startId)
@@ -75,7 +71,4 @@ class CheckService : LifecycleService() {
         return START_REDELIVER_INTENT
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-    }
 }

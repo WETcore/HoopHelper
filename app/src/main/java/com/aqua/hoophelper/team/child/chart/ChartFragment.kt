@@ -28,7 +28,7 @@ class ChartFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // binding
         val binding: ChartFragmentBinding =
             DataBindingUtil.inflate(inflater, R.layout.chart_fragment, container, false)

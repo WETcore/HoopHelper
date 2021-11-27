@@ -27,13 +27,14 @@ class MatchFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         // binding
         val binding: MatchFragmentBinding =
             DataBindingUtil.inflate(inflater, R.layout.match_fragment, container, false)
 
         viewModel.status.observe(viewLifecycleOwner) {
+
             when (it) {
                 LoadApiStatus.LOADING -> {
                     binding.lottieMatch.visibility = View.VISIBLE
@@ -61,6 +62,7 @@ class MatchFragment : Fragment() {
 
         // set shot clock
         viewModel.shotClock.observe(viewLifecycleOwner) {
+
             binding.shotClock.text = it.toString()
             if (it == 0L) {
                 viewModel._shotClock.value = viewModel.shotClockLimit.value
@@ -69,20 +71,25 @@ class MatchFragment : Fragment() {
 
         // set game clock
         viewModel.gameClockSec.observe(viewLifecycleOwner) {
+
             binding.gameClockSec.text = it.toString()
             viewModel.setGameClockMin(viewModel.gameClockSec.value ?: 60L)
             if (it == 0L) {
                 viewModel._gameClockSec.value = 60L
             }
         }
+
         viewModel.gameClockMin.observe(viewLifecycleOwner) {
+
             binding.gameClockMin.text = it.toString()
             if (it == 0L) {
                 viewModel._gameClockMin.value = (viewModel.gameClockLimit.value ?: 12L) - 1
                 viewModel._quarter.value = viewModel._quarter.value?.plus(1)
             }
         }
+
         viewModel.quarter.observe(viewLifecycleOwner) {
+
             if (it > viewModel.quarterLimit) {
                 findNavController().navigate(NavigationDirections.navToHome())
                 viewModel.shotClockTimer.cancel()
@@ -94,8 +101,10 @@ class MatchFragment : Fragment() {
             }
             binding.quarter.text = it.toString()
         }
+
         // set pause
         binding.pauseMatchChip.setOnCheckedChangeListener { buttonView, isChecked ->
+
             if (isChecked) {
                 if (viewModel.setTimeOutCount()) {
                     Toast.makeText(requireContext(), "limit", Toast.LENGTH_SHORT).show()
@@ -115,6 +124,7 @@ class MatchFragment : Fragment() {
 
         // select player
         binding.playerChipGroup.setOnCheckedChangeListener { group, checkedId ->
+
             when (checkedId) {
                 R.id.player1_chip -> {
                     viewModel.selectPlayer(0)
@@ -133,9 +143,11 @@ class MatchFragment : Fragment() {
                 }
             }
         }
+
         // select substitution player
         viewModel.substitutionPlayer.observe(viewLifecycleOwner) {
-            viewModel.subNum = mutableListOf<String>()
+
+            viewModel.subNum = mutableListOf()
             it.forEach { player ->
                 viewModel.subNum.add(player.number)
             }
@@ -145,42 +157,24 @@ class MatchFragment : Fragment() {
         }
 
         binding.subPlayerText.setOnItemClickListener { parent, view, position, id ->
+
             val buffer = viewModel.startPlayer.value?.get(viewModel.selectPlayerPos) ?: Player()
             viewModel.getSubPlayer2Starting(position)
             viewModel.changeSubPlayer(buffer, position)
         }
 
         viewModel.startPlayer.observe(viewLifecycleOwner) {
+
             if (!it.isNullOrEmpty()) {
                 viewModel.setFirstPlayer(it.first())
-                binding.player1Chip.text = it[0].number
-                binding.player2Chip.text = it[1].number
-                binding.player3Chip.text = it[2].number
-                binding.player4Chip.text = it[3].number
-                binding.player5Chip.text = it[4].number
+                setPlayerChipNumber(binding, it)
             }
         }
 
         /// record data
         // set launch chip text
         viewModel.zone.observe(viewLifecycleOwner) {
-            binding.launchChip.text = when (it) {
-                1 -> ZoneMark.AROUND_RIM.value
-                2 -> ZoneMark.L_ELBOW.value
-                3 -> ZoneMark.MID_STR.value
-                4 -> ZoneMark.R_ELBOW.value
-                5 -> ZoneMark.L_BASELINE.value
-                6 -> ZoneMark.L_WING.value
-                7 -> ZoneMark.LONG_STR.value
-                8 -> ZoneMark.R_WING.value
-                9 -> ZoneMark.R_BASELINE.value
-                10 -> ZoneMark.L_CORNER.value
-                11 -> ZoneMark.L_3PT.value
-                12 -> ZoneMark.ARC.value
-                13 -> ZoneMark.R_3PT.value
-                14 -> ZoneMark.R_CORNER.value
-                else -> ZoneMark.ELSE.value
-            }
+            binding.launchChip.text = setZoneName(it)
         }
 
         // launch record chip menu
@@ -210,7 +204,8 @@ class MatchFragment : Fragment() {
         binding.root.setOnDragListener { v, event ->
             when (event.action) {
                 DragEvent.ACTION_DROP -> {
-                    if (viewModel.getDiameter(
+                    if (
+                        viewModel.getDiameter(
                             event.x,
                             event.y,
                             displayMetrics.widthPixels,
@@ -223,7 +218,9 @@ class MatchFragment : Fragment() {
                             "drag the red dot to the court.",
                             Toast.LENGTH_SHORT
                         ).show()
-                    } else binding.launchChip.isCheckable = true
+                    } else {
+                        binding.launchChip.isCheckable = true
+                    }
                     binding.launchChip.x = (event.x - 60)
                     binding.launchChip.y = (event.y - 60)
                 }
@@ -273,8 +270,10 @@ class MatchFragment : Fragment() {
                 }
                 R.id.foul_chip -> {
                     viewModel.setEventData(args.matchId, DataType.FOUL, false)
-                    val buffer = viewModel.startPlayer.value?.get(viewModel.selectPlayerPos) ?: Player()
-                    viewModel.getFoulCount(viewModel.playerNum, buffer)
+                    viewModel.getFoulCount(
+                        viewModel.playerNum,
+                        viewModel.startPlayer.value?.get(viewModel.selectPlayerPos) ?: Player()
+                    )
                     group.clearCheck()
                 }
             }
@@ -317,5 +316,36 @@ class MatchFragment : Fragment() {
             binding.historyChip.isCloseIconVisible = isChecked
         }
         return binding.root
+    }
+
+    private fun setPlayerChipNumber(
+        binding: MatchFragmentBinding,
+        players: MutableList<Player>
+    ) {
+        binding.apply {
+            player1Chip.text = players[0].number
+            player2Chip.text = players[1].number
+            player3Chip.text = players[2].number
+            player4Chip.text = players[3].number
+            player5Chip.text = players[4].number
+        }
+    }
+
+    private fun setZoneName(zone: Int?) = when (zone) {
+        1 -> ZoneMark.AROUND_RIM.value
+        2 -> ZoneMark.L_ELBOW.value
+        3 -> ZoneMark.MID_STR.value
+        4 -> ZoneMark.R_ELBOW.value
+        5 -> ZoneMark.L_BASELINE.value
+        6 -> ZoneMark.L_WING.value
+        7 -> ZoneMark.LONG_STR.value
+        8 -> ZoneMark.R_WING.value
+        9 -> ZoneMark.R_BASELINE.value
+        10 -> ZoneMark.L_CORNER.value
+        11 -> ZoneMark.L_3PT.value
+        12 -> ZoneMark.ARC.value
+        13 -> ZoneMark.R_3PT.value
+        14 -> ZoneMark.R_CORNER.value
+        else -> ZoneMark.ELSE.value
     }
 }

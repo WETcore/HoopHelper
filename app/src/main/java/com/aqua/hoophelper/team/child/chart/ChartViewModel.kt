@@ -50,7 +50,7 @@ class ChartViewModel : ViewModel() {
         coroutineScope.launch {
             when(val result = HoopRemoteDataSource.getMatchMembers()) {
                 is Result.Success -> {
-                    _roster.value = result.data ?: listOf()
+                    _roster.value = result.data
                     getPlayerStats(roster.value?.first()?.id ?: "")
                 }
                 is Result.Error -> {

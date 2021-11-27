@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">HoopHelper</string>
+    <string name="app_name">LeHoop</string>
 
     <!--  team List  -->
     <string-array name="Team">

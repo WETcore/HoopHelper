@@ -9,8 +9,6 @@ import com.aqua.hoophelper.database.Result
 import com.aqua.hoophelper.database.Rule
 import com.aqua.hoophelper.database.remote.HoopRemoteDataSource
 import com.aqua.hoophelper.util.LoadApiStatus
-import com.aqua.hoophelper.util.PLAYERS
-import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -46,7 +44,23 @@ class ManageViewModel : ViewModel() {
         setRoster()
     }
 
-    fun setRule() {
+    fun setRule(
+        quarter: String,
+        gameClock: String,
+        shotClock: String,
+        foulOut: String,
+        turnover1: String,
+        turnover2: String
+    ) {
+        rule.apply {
+            this.quarter = quarter
+            gClock = gameClock
+            sClock = shotClock
+            this.foulOut = foulOut
+            to1 = turnover1
+            to2 = turnover2
+        }
+
         coroutineScope.launch {
             when(val result = HoopRemoteDataSource.setRule(rule)) {
                 is Result.Success -> {
@@ -101,5 +115,4 @@ class ManageViewModel : ViewModel() {
             }
         }
     }
-
 }

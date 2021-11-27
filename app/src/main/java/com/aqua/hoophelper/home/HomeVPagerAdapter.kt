@@ -32,8 +32,6 @@ class HomeVPagerAdapter(
 
         val view = LayoutInflater.from(context).inflate(R.layout.home_card, container, false)
 
-        //get data
-
         //set data to UI
         val leaderName = view.findViewById<TextView>(R.id.leader_name)
         val type = view.findViewById<TextView>(R.id.leader_stat_type)

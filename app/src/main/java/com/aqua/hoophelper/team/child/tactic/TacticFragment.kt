@@ -15,6 +15,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.aqua.hoophelper.R
+import com.aqua.hoophelper.database.Player
 import com.aqua.hoophelper.databinding.TacticFragmentBinding
 import com.aqua.hoophelper.util.Arrow
 import com.aqua.hoophelper.util.LoadApiStatus
@@ -30,7 +31,7 @@ class TacticFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // binding
         val binding: TacticFragmentBinding =
             DataBindingUtil.inflate(inflater, R.layout.tactic_fragment, container,false)
@@ -101,26 +102,7 @@ class TacticFragment : Fragment() {
 
         viewModel.startPlayer.observe(viewLifecycleOwner) {
             if (it.size > 0) {
-                Glide
-                    .with(binding.root)
-                    .load(it[0].avatar.toUri())
-                    .into(binding.player1Avatar)
-                Glide
-                    .with(binding.root)
-                    .load(it[1].avatar.toUri())
-                    .into(binding.player2Avatar)
-                Glide
-                    .with(binding.root)
-                    .load(it[2].avatar.toUri())
-                    .into(binding.player3Avatar)
-                Glide
-                    .with(binding.root)
-                    .load(it[3].avatar.toUri())
-                    .into(binding.player4Avatar)
-                Glide
-                    .with(binding.root)
-                    .load(it[4].avatar.toUri())
-                    .into(binding.player5Avatar)
+                setPlayerAvatar(binding, it)
             }
         }
 
@@ -158,32 +140,7 @@ class TacticFragment : Fragment() {
             root.setOnDragListener{ v, event ->
                 when(event.action) {
                     DragEvent.ACTION_DROP -> {
-                        when(viewModel.avatarNum) {
-                            0 -> {
-                                tacticFab.x = (event.x - 30)
-                                tacticFab.y = (event.y - 30)
-                            }
-                            1 -> {
-                                player1Avatar.x = (event.x - 60)
-                                player1Avatar.y = (event.y - 60)
-                            }
-                            2 -> {
-                                player2Avatar.x = (event.x - 60)
-                                player2Avatar.y = (event.y - 60)
-                            }
-                            3 -> {
-                                player3Avatar.x = (event.x - 60)
-                                player3Avatar.y = (event.y - 60)
-                            }
-                            4 -> {
-                                player4Avatar.x = (event.x - 60)
-                                player4Avatar.y = (event.y - 60)
-                            }
-                            5 -> {
-                                player5Avatar.x = (event.x - 60)
-                                player5Avatar.y = (event.y - 60)
-                            }
-                        }
+                        moveAvatar(event)
                     }
                 }
                 true
@@ -193,7 +150,53 @@ class TacticFragment : Fragment() {
         return binding.root
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    private fun setPlayerAvatar(
+        binding: TacticFragmentBinding,
+        players: MutableList<Player>
+    ) {
+        for (i in players.indices) {
+            var avatar = binding.player1Avatar
+            when(i) {
+                0 -> avatar = binding.player1Avatar
+                1 -> avatar = binding.player2Avatar
+                2 -> avatar = binding.player3Avatar
+                3 -> avatar = binding.player4Avatar
+                4 -> avatar = binding.player5Avatar
+            }
+            Glide
+                .with(binding.root)
+                .load(players[i].avatar.toUri())
+                .into(avatar)
+        }
     }
+
+    private fun TacticFragmentBinding.moveAvatar(event: DragEvent) {
+        when (viewModel.avatarNum) {
+            0 -> {
+                tacticFab.x = (event.x - 30)
+                tacticFab.y = (event.y - 30)
+            }
+            1 -> {
+                player1Avatar.x = (event.x - 60)
+                player1Avatar.y = (event.y - 60)
+            }
+            2 -> {
+                player2Avatar.x = (event.x - 60)
+                player2Avatar.y = (event.y - 60)
+            }
+            3 -> {
+                player3Avatar.x = (event.x - 60)
+                player3Avatar.y = (event.y - 60)
+            }
+            4 -> {
+                player4Avatar.x = (event.x - 60)
+                player4Avatar.y = (event.y - 60)
+            }
+            5 -> {
+                player5Avatar.x = (event.x - 60)
+                player5Avatar.y = (event.y - 60)
+            }
+        }
+    }
+
 }

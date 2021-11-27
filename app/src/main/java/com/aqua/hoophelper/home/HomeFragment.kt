@@ -22,7 +22,7 @@ class HomeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         // binding
         val binding: HomeFragmentBinding =
@@ -31,18 +31,10 @@ class HomeFragment : Fragment() {
         viewModel.status.observe(viewLifecycleOwner) {
             when (it) {
                 LoadApiStatus.LOADING -> {
-                    binding.processText.visibility = View.VISIBLE
-                    binding.lottieViewpager.visibility = View.VISIBLE
-                    binding.textInputLayout.visibility = View.GONE
-                    binding.homeViewpager.visibility = View.INVISIBLE
-                    binding.textView.visibility = View.INVISIBLE
+                    setLoadingVisibility(binding)
                 }
                 LoadApiStatus.DONE -> {
-                    binding.processText.visibility = View.GONE
-                    binding.lottieViewpager.visibility = View.GONE
-                    binding.textInputLayout.visibility = View.VISIBLE
-                    binding.homeViewpager.visibility = View.VISIBLE
-                    binding.textView.visibility = View.VISIBLE
+                    setDoneVisibility(binding)
                 }
                 LoadApiStatus.ERROR -> {
 
@@ -87,5 +79,25 @@ class HomeFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    private fun setDoneVisibility(binding: HomeFragmentBinding) {
+        binding.apply {
+            processText.visibility = View.GONE
+            lottieViewpager.visibility = View.GONE
+            textInputLayout.visibility = View.VISIBLE
+            homeViewpager.visibility = View.VISIBLE
+            textView.visibility = View.VISIBLE
+        }
+    }
+
+    private fun setLoadingVisibility(binding: HomeFragmentBinding) {
+        binding.apply {
+            processText.visibility = View.VISIBLE
+            lottieViewpager.visibility = View.VISIBLE
+            textInputLayout.visibility = View.GONE
+            homeViewpager.visibility = View.INVISIBLE
+            textView.visibility = View.INVISIBLE
+        }
     }
 }
