@@ -174,11 +174,13 @@ class MatchFragment : Fragment() {
         /// record data
         // set launch chip text
         viewModel.zone.observe(viewLifecycleOwner) {
+
             binding.launchChip.text = setZoneName(it)
         }
 
         // launch record chip menu
         binding.launchChip.setOnCheckedChangeListener { buttonView, isChecked ->
+
             if (isChecked) {
                 binding.chipGroup.visibility = View.VISIBLE
             } else {
@@ -188,6 +190,7 @@ class MatchFragment : Fragment() {
 
         // vibrate & drag
         binding.launchChip.setOnLongClickListener {
+
             it.performHapticFeedback(
                 HapticFeedbackConstants.LONG_PRESS,
                 HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING
@@ -202,6 +205,7 @@ class MatchFragment : Fragment() {
 
         // drag & get zone data
         binding.root.setOnDragListener { v, event ->
+
             when (event.action) {
                 DragEvent.ACTION_DROP -> {
                     if (
@@ -229,6 +233,7 @@ class MatchFragment : Fragment() {
         }
         // write data
         binding.chipGroup.setOnCheckedChangeListener { group, checkedId ->
+
             when (checkedId) {
                 R.id.score_chip -> {
                     if (viewModel.zone.value?.toInt() != 0) {
@@ -282,6 +287,7 @@ class MatchFragment : Fragment() {
 
         // free throw
         binding.freeThrowSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+
             if (isChecked) {
                 binding.ftChipGroup.visibility = View.VISIBLE
                 viewModel.shotClockTimer.cancel()
@@ -293,14 +299,17 @@ class MatchFragment : Fragment() {
             }
         }
         binding.ftInChip.setOnClickListener {
+
             viewModel.setEventData(args.matchId, DataType.FREE_THROW, true)
         }
         binding.ftOutChip.setOnClickListener {
+
             viewModel.setEventData(args.matchId, DataType.FREE_THROW, false)
         }
 
         // event history & cancel event
         viewModel.lastEvent.observe(viewLifecycleOwner) {
+
             if (!it.isNullOrEmpty()) {
                 binding.historyChip.text =
                     viewModel.setHistoryText(it.filter { it.matchId == HoopInfo.matchId })
@@ -308,11 +317,13 @@ class MatchFragment : Fragment() {
         }
 
         binding.historyChip.setOnCloseIconClickListener {
+
             viewModel.cancelEvent()
             binding.historyChip.isCloseIconVisible = false
             binding.historyChip.isChecked = false
         }
         binding.historyChip.setOnCheckedChangeListener { buttonView, isChecked ->
+
             binding.historyChip.isCloseIconVisible = isChecked
         }
         return binding.root

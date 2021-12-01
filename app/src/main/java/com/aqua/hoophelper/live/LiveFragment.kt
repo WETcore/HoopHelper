@@ -38,10 +38,8 @@ class LiveFragment : Fragment() {
             var adapter: LiveEventAdapter
 
             viewModel.events.observe(viewLifecycleOwner) { its ->
-                val events = its.filter {
-                    it.matchId == its.first().matchId
-                            && it.teamId == HoopInfo.spinnerSelectedTeamId.value
-                }
+
+                val events = viewModel.filterEvents(its)
 
                 adapter = LiveEventAdapter(viewModel, events)
                 binding.liveRecycler.adapter = adapter

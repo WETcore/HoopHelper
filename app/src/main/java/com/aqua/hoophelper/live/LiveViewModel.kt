@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.aqua.hoophelper.database.Event
 import com.aqua.hoophelper.database.PlayerStat
 import com.aqua.hoophelper.database.remote.HoopRemoteDataSource
+import com.aqua.hoophelper.util.HoopInfo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -83,5 +84,11 @@ class LiveViewModel : ViewModel() {
             playerEvents.filter { it.block }.size,
         )
     }
+
+    fun filterEvents(its: List<Event>) =
+        its.filter {
+            it.matchId == its.first().matchId
+                    && it.teamId == HoopInfo.spinnerSelectedTeamId.value
+        }
 
 }
