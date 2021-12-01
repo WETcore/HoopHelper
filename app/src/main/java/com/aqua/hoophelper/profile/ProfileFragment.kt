@@ -62,6 +62,7 @@ class ProfileFragment : Fragment() {
                             }
                         }
                     }
+
                     User.teamId.length > 5 -> {
                         viewModel.getPlayerUserInfo()
                         manageRosterLayout.visibility = View.GONE

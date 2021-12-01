@@ -5,8 +5,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.View
+import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.aqua.hoophelper.databinding.ActivityMainBinding
@@ -49,26 +51,10 @@ class MainActivity : AppCompatActivity() {
         binding.fab.setOnClickListener {
             when {
                 User.teamId.length <= 5 -> {
-                    Snackbar.make(binding.root, "No team no game~", Snackbar.LENGTH_SHORT) //TODO
-                        .setAction("create team") {
-                            binding.bottomBar.menu.getItem(4).isChecked = true
-                            navHostFragment.navigate(NavigationDirections.navToProfile())
-                        }.apply {
-                            setTextColor(resources.getColor(R.color.basil_orange, null))
-                            setActionTextColor(resources.getColor(R.color.basil_green_dark, null))
-                            setBackgroundTint(resources.getColor(R.color.basil_bg, null))
-                        }.show()
+                    setSnackbar(binding, navHostFragment, "No team no game~", "create team")
                 }
                 User.teamMembers.size <= 5 -> {
-                    Snackbar.make(binding.root, "At least 5 players", Snackbar.LENGTH_SHORT)
-                        .setAction("assemble") {
-                            binding.bottomBar.menu.getItem(4).isChecked = true
-                            navHostFragment.navigate(NavigationDirections.navToProfile())
-                        }.apply {
-                            setTextColor(resources.getColor(R.color.basil_orange, null))
-                            setActionTextColor(resources.getColor(R.color.basil_green_dark, null))
-                            setBackgroundTint(resources.getColor(R.color.basil_bg, null))
-                        }.show()
+                    setSnackbar(binding, navHostFragment, "At least 5 players", "assemble")
                 }
                 else -> {
                     binding.appBar.behavior.slideDown(binding.appBar)
@@ -92,38 +78,12 @@ class MainActivity : AppCompatActivity() {
                     when {
                         User.teamId.length <= 5 -> {
                             binding.fab.isClickable = true
-                            Snackbar.make(binding.root, "No team no game~", Snackbar.LENGTH_SHORT)
-                                .setAction("create team") {
-                                    binding.bottomBar.menu.getItem(4).isChecked = true
-                                    navHostFragment.navigate(NavigationDirections.navToProfile())
-                                }.apply {
-                                    setTextColor(resources.getColor(R.color.basil_orange, null))
-                                    setActionTextColor(
-                                        resources.getColor(
-                                            R.color.basil_green_dark,
-                                            null
-                                        )
-                                    )
-                                    setBackgroundTint(resources.getColor(R.color.basil_bg, null))
-                                }.show()
+                            setSnackbar(binding, navHostFragment, "No team no game~", "create team")
                             false
                         }
                         User.teamMembers.size <= 5 -> {
                             binding.fab.isClickable = true
-                            Snackbar.make(binding.root, "At least 5 players", Snackbar.LENGTH_SHORT)
-                                .setAction("assemble") {
-                                    binding.bottomBar.menu.getItem(4).isChecked = true
-                                    navHostFragment.navigate(NavigationDirections.navToProfile())
-                                }.apply {
-                                    setTextColor(resources.getColor(R.color.basil_orange, null))
-                                    setActionTextColor(
-                                        resources.getColor(
-                                            R.color.basil_green_dark,
-                                            null
-                                        )
-                                    )
-                                    setBackgroundTint(resources.getColor(R.color.basil_bg, null))
-                                }.show()
+                            setSnackbar(binding, navHostFragment, "At least 5 players", "assemble")
                             false
                         }
                         else -> {
@@ -149,6 +109,23 @@ class MainActivity : AppCompatActivity() {
                 else -> false
             }
         }
+    }
+
+    private fun setSnackbar(
+        binding: ActivityMainBinding,
+        navHostFragment: NavController,
+        hint: String,
+        action: String,
+    ) {
+        Snackbar.make(binding.root, hint, Snackbar.LENGTH_SHORT)
+            .setAction(action) {
+                binding.bottomBar.menu.getItem(4).isChecked = true
+                navHostFragment.navigate(NavigationDirections.navToProfile())
+            }.apply {
+                setTextColor(resources.getColor(R.color.basil_orange, null))
+                setActionTextColor(resources.getColor(R.color.basil_green_dark, null))
+                setBackgroundTint(resources.getColor(R.color.basil_bg, null))
+            }.show()
     }
 
     override fun onDestroy() {

@@ -40,6 +40,7 @@ class TeamFragment : Fragment() {
             resources.getDrawable(R.drawable.bar_chart, null),
             resources.getDrawable(R.drawable.tactic, null),
         )
+
         vPager.adapter = TeamVPagerAdapter(requireActivity())
 
         tabLayout.tabTextColors =
