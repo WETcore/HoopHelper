@@ -1,19 +1,17 @@
 package com.aqua.hoophelper.live
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
-import com.aqua.hoophelper.HoopInfo
 import com.aqua.hoophelper.R
 import com.aqua.hoophelper.database.Event
-import com.aqua.hoophelper.database.remote.HoopRemoteDataSource
 import com.aqua.hoophelper.databinding.LiveFragmentBinding
+import com.aqua.hoophelper.util.HoopInfo
 
 class LiveFragment : Fragment() {
 
@@ -24,50 +22,46 @@ class LiveFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         // binding
         val binding: LiveFragmentBinding =
-            DataBindingUtil.inflate(inflater, R.layout.live_fragment, container,false)
+            DataBindingUtil.inflate(inflater, R.layout.live_fragment, container, false)
 
         // safe args
         val args: LiveFragmentArgs by navArgs()
 
         if (args.isGaming) {
-            binding.lottieNothing.visibility = View.GONE
-            binding.nothingText.visibility = View.GONE
-            binding.liveRecycler.visibility = View.VISIBLE
+            setGamingVisibility(binding)
 
             // adapt recycler
-            var adapter = LiveEventAdapter(viewModel, listOf(Event()))
-            binding.liveRecycler.adapter = adapter
+            var adapter: LiveEventAdapter
 
             viewModel.events.observe(viewLifecycleOwner) { its ->
-                adapter = LiveEventAdapter(
-                    viewModel,
-                    its.filter {
-                        it.matchId == its.first().matchId
-                                && it.teamId == HoopInfo.spinnerSelectedTeamId.value
-                    }
-                )
+
+                val events = viewModel.filterEvents(its)
+
+                adapter = LiveEventAdapter(viewModel, events)
                 binding.liveRecycler.adapter = adapter
-                its.sortedByDescending { it.actualTime }
-                adapter.submitList(
-                    its.filter {
-                        it.matchId == its.first().matchId
-                                && it.teamId == HoopInfo.spinnerSelectedTeamId.value
-                    }
-                )
+                adapter.submitList(events)
             }
-            (binding.liveRecycler.adapter as LiveEventAdapter).notifyItemChanged(0)
+
         } else {
-            binding.lottieNothing.visibility = View.VISIBLE
-            binding.nothingText.visibility = View.VISIBLE
-            binding.liveRecycler.visibility = View.GONE
+            setNoGameVisibility(binding)
         }
 
-
-
         return binding.root
+    }
+
+    private fun setNoGameVisibility(binding: LiveFragmentBinding) {
+        binding.lottieNothing.visibility = View.VISIBLE
+        binding.nothingText.visibility = View.VISIBLE
+        binding.liveRecycler.visibility = View.GONE
+    }
+
+    private fun setGamingVisibility(binding: LiveFragmentBinding) {
+        binding.lottieNothing.visibility = View.GONE
+        binding.nothingText.visibility = View.GONE
+        binding.liveRecycler.visibility = View.VISIBLE
     }
 }

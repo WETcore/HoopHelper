@@ -5,9 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.aqua.hoophelper.database.Event
-import com.aqua.hoophelper.database.Match
 import com.aqua.hoophelper.database.Player
-import com.aqua.hoophelper.database.PlayerStat
 import com.aqua.hoophelper.database.Result
 import com.aqua.hoophelper.database.remote.HoopRemoteDataSource
 import com.aqua.hoophelper.util.LoadApiStatus
@@ -26,12 +24,8 @@ class ChartViewModel : ViewModel() {
     val roster: LiveData<List<Player>>
     get() = _roster
 
-    private val _matches = HoopRemoteDataSource.getMatches()
-    val matches: LiveData<List<Match>>
-        get() = _matches
-
     private val _events = MutableLiveData<List<Event>>()
-    val events: LiveData<List<Event>>
+    private val events: LiveData<List<Event>>
         get() = _events
 
     private val _selectedPlayerData = MutableLiveData<List<Event>>()
@@ -39,7 +33,7 @@ class ChartViewModel : ViewModel() {
         get() = _selectedPlayerData
 
     // spinner
-    var playerList = mutableListOf<String>()
+    var players = mutableListOf<String>()
 
     // Create a Coroutine scope using a job to be able to cancel when needed
     private var viewModelJob = Job()
@@ -56,7 +50,7 @@ class ChartViewModel : ViewModel() {
         coroutineScope.launch {
             when(val result = HoopRemoteDataSource.getMatchMembers()) {
                 is Result.Success -> {
-                    _roster.value = result.data!!
+                    _roster.value = result.data
                     getPlayerStats(roster.value?.first()?.id ?: "")
                 }
                 is Result.Error -> {

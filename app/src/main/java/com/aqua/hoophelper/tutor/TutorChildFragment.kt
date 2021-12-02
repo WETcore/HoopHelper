@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.aqua.hoophelper.R
 import com.aqua.hoophelper.databinding.TutorChildFragmentBinding
+import com.aqua.hoophelper.util.Tutor
 
 class TutorChildFragment(private val tutorTypeFilter: TutorTypeFilter) : Fragment() {
 
@@ -21,13 +22,13 @@ class TutorChildFragment(private val tutorTypeFilter: TutorTypeFilter) : Fragmen
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         // binding
         val binding: TutorChildFragmentBinding =
-            DataBindingUtil.inflate(inflater, R.layout.tutor_child_fragment, container,false)
+            DataBindingUtil.inflate(inflater, R.layout.tutor_child_fragment, container, false)
 
-        when(tutorTypeFilter) {
+        when (tutorTypeFilter) {
             TutorTypeFilter.CREATE_TEAM -> {
                 binding.tutorText.text = "Create and Manage Your Team"
                 binding.tutorImage.setAnimation(R.raw.create_team)
