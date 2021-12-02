@@ -1,17 +1,14 @@
 package com.aqua.hoophelper.live
 
-import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.aqua.hoophelper.database.Event
-import com.aqua.hoophelper.database.Player
 import com.aqua.hoophelper.database.PlayerStat
 import com.aqua.hoophelper.database.remote.HoopRemoteDataSource
+import com.aqua.hoophelper.util.HoopInfo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 
 class LiveViewModel : ViewModel() {
 
@@ -20,86 +17,78 @@ class LiveViewModel : ViewModel() {
     val events: LiveData<List<Event>>
         get() = _events
 
-    // 球員數據
-    private var _playerStat = MutableLiveData<PlayerStat>(PlayerStat())
-    val playerStat: LiveData<PlayerStat>
-        get() = _playerStat
-
     // Create a Coroutine scope using a job to be able to cancel when needed
     private var viewModelJob = Job()
 
     // the Coroutine runs using the Main (UI) dispatcher
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-    // 區別動作
+    // recognize event
     fun filterEventType(event: Event): String {
         return when {
             event.assist -> {
-                "sent " + "assist"
+                LiveMessage.AST.value
             }
             event.block -> {
-                "sent " + "block"
+                LiveMessage.BLK.value
             }
             event.foul -> {
-                "got " + "foul"
+                LiveMessage.FOUL.value
             }
             event.rebound -> {
-                "got " + "rebound"
+                LiveMessage.REB.value
             }
             event.steal -> {
-                "got " + "steal"
+                LiveMessage.STL.value
             }
             event.turnover -> {
-                "got " + "turnover"
+                LiveMessage.TOV.value
             }
             event.score2 == true -> {
-                "made " + "2 points"
+                LiveMessage.IN_2.value
             }
             event.score2 == false -> {
-                "miss " + "2 points"
+                LiveMessage.OUT_2.value
             }
             event.score3 == true -> {
-                "made " + "3 points"
+                LiveMessage.IN_3.value
             }
             event.score3 == false -> {
-                "miss " + "3 points"
+                LiveMessage.OUT_3.value
             }
             event.freeThrow == true -> {
-                "made a free throw"
+                LiveMessage.FT_IN.value
             }
             event.freeThrow == false -> {
-                "miss a free throw"
+                LiveMessage.FT_OUT.value
             }
-            else -> "else"
+            else -> LiveMessage.ELSE.value
         }
     }
 
     fun getTeamPlayerData(id: String, events: List<Event>): PlayerStat {
 
-        val buffer = events.filter { it.playerId == id }
+        val playerEvents = events.filter { it.playerId == id }
 
-        val ast = buffer.filter { it.assist }.size
-        val ptI = buffer.filter { it.score2 == true }.size
-        val ptO = buffer.filter { it.score2 == false }.size
-        val pt3I = buffer.filter { it.score3 == true }.size
-        val pt3O = buffer.filter { it.score3 == false }.size
-        val reb = buffer.filter { it.rebound }.size
-        val stl = buffer.filter { it.steal }.size
-        val blk = buffer.filter { it.block }.size
-        val ftI = buffer.filter { it.freeThrow == true }.size
-        val ftO = buffer.filter { it.freeThrow == false }.size
-        val tov = buffer.filter { it.turnover }.size
-        val foul = buffer.filter { it.foul }.size
+        val ptI = playerEvents.filter { it.score2 == true }.size
+        val pt3I = playerEvents.filter { it.score3 == true }.size
+        val ftI = playerEvents.filter { it.freeThrow == true }.size
 
         return PlayerStat(
             "name",
             "num",
-            pts = (ptI*2 + pt3I*3 + ftI),
-            reb,
-            ast,
-            stl,
-            blk,
+            pts = (ptI * 2 + pt3I * 3 + ftI),
+            playerEvents.filter { it.rebound }.size,
+            playerEvents.filter { it.assist }.size,
+            playerEvents.filter { it.steal }.size,
+            playerEvents.filter { it.block }.size,
         )
     }
+
+    fun filterEvents(its: List<Event>) =
+        its.filter {
+            it.matchId == its.first().matchId
+                    && it.teamId == HoopInfo.spinnerSelectedTeamId.value
+        }
 
 }

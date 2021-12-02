@@ -2,19 +2,13 @@ package com.aqua.hoophelper.util
 
 import android.app.RemoteInput
 import android.content.Intent
-import android.util.Log
 import androidx.lifecycle.LifecycleService
 import com.aqua.hoophelper.database.Player
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 
-class CheckService: LifecycleService() {
-
-    override fun onCreate() {
-        super.onCreate()
-        Log.d("service2", "OnCreate2")
-    }
+class CheckService : LifecycleService() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
@@ -22,50 +16,42 @@ class CheckService: LifecycleService() {
 
         val player = Player()
 
-        player.email = intent?.getStringExtra("mail") ?: "No"
-        player.id = intent?.getStringExtra("inviteId") ?: "No"
-        player.teamId = intent?.getStringExtra("teamId") ?: "No"
-        player.name = intent?.getStringExtra("name") ?: "No"
+        player.email = intent?.getStringExtra(MAIL) ?: ""
+        player.id = intent?.getStringExtra(INVITE_ID) ?: ""
+        player.teamId = intent?.getStringExtra(TEAM_ID) ?: ""
+        player.name = intent?.getStringExtra(NAME) ?: ""
         player.avatar = Firebase.auth.currentUser?.photoUrl.toString()
 
         val remoteInput = RemoteInput.getResultsFromIntent(intent)
 
-
-
         // check accept or cancel
         val db = FirebaseFirestore.getInstance()
-        if (intent?.getBooleanExtra("toggle", false) == true) {
+        if (intent?.getBooleanExtra(TOGGLE, false) == true) {
             if (remoteInput != null) {
                 player.number = remoteInput.getCharSequence("numKey").toString()
-                val numbers = intent.getSerializableExtra("numbers") as MutableSet<String>
+                val numbers = intent.getSerializableExtra(NUMBERS) as MutableSet<String>
                 val bufferSize = numbers.size
                 numbers.add(player.number)
                 // check dual number
                 if (numbers.size == bufferSize) {
-//                    Log.d("service2", "Hi")
                     val reIntent = Intent(applicationContext, HoopService::class.java)
-                    reIntent.putExtra("dualNumber", true)
+                    reIntent.putExtra(DUAL_NUMBER, true)
                     stopService(Intent(applicationContext, HoopService::class.java))
                     startService(reIntent)
                     stopSelf()
                 } else {
                     if (player.id.length > 5) {
-                        Log.d("service2", "Hi2 ${player.id}")
-                        db.collection("Invitations")
+                        db.collection(INVITATIONS)
                             .whereEqualTo("id", player.id)
                             .get().addOnCompleteListener {
-                                Log.d("service2", "Hi2---")
-                                db.collection("Players").add(player)
-
-                                db.collection("Teams")
+                                db.collection(PLAYERS).add(player)
+                                db.collection(TEAMS)
                                     .whereEqualTo("id", player.teamId)
                                     .get().addOnCompleteListener {
                                         it.result.documents.first().reference
-                                        .update("jerseyNumbers",numbers.toList())
+                                            .update("jerseyNumbers", numbers.toList())
                                     }
-
                                 it.result.documents.first().reference.delete()
-                                Log.d("service2", "Hi2----")
                                 stopService(Intent(applicationContext, HoopService::class.java))
                                 stopSelf()
                             }
@@ -73,24 +59,16 @@ class CheckService: LifecycleService() {
                 }
             }
         } else {
-            db.collection("Invitations")
+            db.collection(INVITATIONS)
                 .whereEqualTo("id", player.id)
                 .get().addOnCompleteListener {
-                    Log.d("service2","Hi3---")
                     it.result.documents.first().reference.delete()
-                    Log.d("service2","Hi3----")
                     stopService(Intent(applicationContext, HoopService::class.java))
                     stopSelf()
                 }
         }
 
-
-
         return START_REDELIVER_INTENT
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d("service2", "OnDestroy2")
-    }
 }

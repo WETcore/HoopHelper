@@ -15,16 +15,11 @@ import kotlinx.coroutines.launch
 
 class TacticViewModel : ViewModel() {
 
-    val _status = MutableLiveData<LoadApiStatus?>()
+    private val _status = MutableLiveData<LoadApiStatus?>()
     val status: LiveData<LoadApiStatus?>
         get() = _status
 
     var avatarNum = 1
-
-    // roster
-    private var _roster = MutableLiveData<List<Player>>()
-    val roster: LiveData<List<Player>>
-        get() = _roster
 
     // startingPlayer
     private var _startPlayer = MutableLiveData<MutableList<Player>>(mutableListOf())
@@ -41,19 +36,18 @@ class TacticViewModel : ViewModel() {
         setRoster()
     }
 
-    fun setRoster() {
+    private fun setRoster() {
         _status.value = LoadApiStatus.LOADING
         coroutineScope.launch {
-            val starPlayerList = mutableListOf<Player>()
+            val starPlayers = mutableListOf<Player>()
             when(val result = HoopRemoteDataSource.getMatchMembers()) {
                 is Result.Success -> {
-                    _roster.value = result.data!!
-                    val lineUp = _roster.value!!
+                    val lineUp = result.data
                     lineUp.filter { it.starting5.contains(true) }.forEachIndexed { index, player ->
-                        starPlayerList.add(player)
+                        starPlayers.add(player)
                     }
-                    starPlayerList.sortBy { it.starting5.indexOf(true) }
-                    _startPlayer.value = starPlayerList
+                    starPlayers.sortBy { it.starting5.indexOf(true) }
+                    _startPlayer.value = starPlayers
                     _status.value = LoadApiStatus.DONE
                 }
                 is Result.Error -> {
@@ -63,8 +57,4 @@ class TacticViewModel : ViewModel() {
             }
         }
     }
-}
-
-object Tactic {
-    val vPagerSwipe = MutableLiveData(true)
 }

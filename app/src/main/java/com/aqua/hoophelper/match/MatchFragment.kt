@@ -1,33 +1,24 @@
 package com.aqua.hoophelper.match
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.*
 import android.widget.ArrayAdapter
-import androidx.fragment.app.Fragment
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.aqua.hoophelper.HoopInfo
 import com.aqua.hoophelper.NavigationDirections
 import com.aqua.hoophelper.R
+import com.aqua.hoophelper.database.Player
 import com.aqua.hoophelper.databinding.MatchFragmentBinding
+import com.aqua.hoophelper.util.DataType
+import com.aqua.hoophelper.util.HoopInfo
 import com.aqua.hoophelper.util.LoadApiStatus
 
-enum class DataType {
-    SCORE, REBOUND, ASSIST, STEAL, BLOCK, TURNOVER, FOUL
-}
-
-enum class DetailDataType {
-    PTS, FG, ThreeP, FT, TOV,
-    REB, AST, STL, BLK, PF
-}
-
 class MatchFragment : Fragment() {
-
 
     private val viewModel: MatchViewModel by lazy {
         ViewModelProvider(this).get(MatchViewModel::class.java)
@@ -36,14 +27,15 @@ class MatchFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         // binding
         val binding: MatchFragmentBinding =
-            DataBindingUtil.inflate(inflater, R.layout.match_fragment, container,false)
+            DataBindingUtil.inflate(inflater, R.layout.match_fragment, container, false)
 
         viewModel.status.observe(viewLifecycleOwner) {
-            when(it) {
+
+            when (it) {
                 LoadApiStatus.LOADING -> {
                     binding.lottieMatch.visibility = View.VISIBLE
                     binding.matchLayout.visibility = View.GONE
@@ -58,17 +50,19 @@ class MatchFragment : Fragment() {
             }
         }
 
-        // get roster from db TODO
-        viewModel.setRoster()
-
-        // safe arg
+        // safe arg match id
         val args: MatchFragmentArgs by navArgs()
 
         // Hint for user
-        Toast.makeText(requireContext(), "Long press & drag the red dot to the court.", Toast.LENGTH_LONG).show()
+        Toast.makeText(
+            requireContext(),
+            "Long press & drag the red dot to the court.",
+            Toast.LENGTH_LONG
+        ).show()
 
         // set shot clock
         viewModel.shotClock.observe(viewLifecycleOwner) {
+
             binding.shotClock.text = it.toString()
             if (it == 0L) {
                 viewModel._shotClock.value = viewModel.shotClockLimit.value
@@ -77,37 +71,43 @@ class MatchFragment : Fragment() {
 
         // set game clock
         viewModel.gameClockSec.observe(viewLifecycleOwner) {
+
             binding.gameClockSec.text = it.toString()
-            viewModel.setGameClockMin(viewModel.gameClockSec.value!!)
+            viewModel.setGameClockMin(viewModel.gameClockSec.value ?: 60L)
             if (it == 0L) {
                 viewModel._gameClockSec.value = 60L
             }
         }
+
         viewModel.gameClockMin.observe(viewLifecycleOwner) {
+
             binding.gameClockMin.text = it.toString()
             if (it == 0L) {
-                viewModel._gameClockMin.value = viewModel.gameClockLimit.value!! - 1
+                viewModel._gameClockMin.value = (viewModel.gameClockLimit.value ?: 12L) - 1
                 viewModel._quarter.value = viewModel._quarter.value?.plus(1)
             }
         }
+
         viewModel.quarter.observe(viewLifecycleOwner) {
+
             if (it > viewModel.quarterLimit) {
                 findNavController().navigate(NavigationDirections.navToHome())
                 viewModel.shotClockTimer.cancel()
                 viewModel.gameClockSecTimer.cancel()
-                Toast.makeText (requireContext(),"Game over.",Toast.LENGTH_SHORT).show()
-            }
-            else if (it == viewModel.quarterLimit/2) {
+                Toast.makeText(requireContext(), "Game over.", Toast.LENGTH_SHORT).show()
+            } else if (it == viewModel.quarterLimit / 2) {
                 viewModel.timeOut = 0
                 binding.pauseMatchChip.isCheckable = true
             }
             binding.quarter.text = it.toString()
         }
+
         // set pause
         binding.pauseMatchChip.setOnCheckedChangeListener { buttonView, isChecked ->
+
             if (isChecked) {
-                if(viewModel.setTimeOutCount()) {
-                    Toast.makeText(requireContext(), "limit",Toast.LENGTH_SHORT).show()
+                if (viewModel.setTimeOutCount()) {
+                    Toast.makeText(requireContext(), "limit", Toast.LENGTH_SHORT).show()
                     binding.pauseMatchChip.isChecked = false
                     binding.pauseMatchChip.isCheckable = false
                 } else {
@@ -124,7 +124,8 @@ class MatchFragment : Fragment() {
 
         // select player
         binding.playerChipGroup.setOnCheckedChangeListener { group, checkedId ->
-            when(checkedId) {
+
+            when (checkedId) {
                 R.id.player1_chip -> {
                     viewModel.selectPlayer(0)
                 }
@@ -142,93 +143,88 @@ class MatchFragment : Fragment() {
                 }
             }
         }
+
         // select substitution player
         viewModel.substitutionPlayer.observe(viewLifecycleOwner) {
-            viewModel.subNum = mutableListOf<String>()
+
+            viewModel.subNum = mutableListOf()
             it.forEach { player ->
                 viewModel.subNum.add(player.number)
             }
-            val teamAdapter = ArrayAdapter(requireContext(), R.layout.match_team_item, viewModel.subNum)
+            val teamAdapter =
+                ArrayAdapter(requireContext(), R.layout.match_team_item, viewModel.subNum)
             binding.subPlayerText.setAdapter(teamAdapter)
         }
 
         binding.subPlayerText.setOnItemClickListener { parent, view, position, id ->
-            val buffer = viewModel.startPlayer.value!![viewModel.selectPlayerPos]
+
+            val buffer = viewModel.startPlayer.value?.get(viewModel.selectPlayerPos) ?: Player()
             viewModel.getSubPlayer2Starting(position)
             viewModel.changeSubPlayer(buffer, position)
         }
 
         viewModel.startPlayer.observe(viewLifecycleOwner) {
-            Log.d("tag","${it}")
+
             if (!it.isNullOrEmpty()) {
-                binding.player1Chip.text = it[0].number
-                if (viewModel.playerNum == "") viewModel.playerNum = it.first().number
-                if (viewModel.playerName == "") viewModel.playerName = it.first().name
-                if (viewModel.playerImage == "") viewModel.playerImage = it.first().avatar
-                binding.player2Chip.text = it[1].number
-                binding.player3Chip.text = it[2].number
-                binding.player4Chip.text = it[3].number
-                binding.player5Chip.text = it[4].number
+                viewModel.setFirstPlayer(it.first())
+                setPlayerChipNumber(binding, it)
             }
         }
 
         /// record data
-        // 改變launch顯示文字
+        // set launch chip text
         viewModel.zone.observe(viewLifecycleOwner) {
-            binding.launchChip.text = when(it) {
-                1 -> "A"//"Around Rim"
-                2 -> "B"//"L.Elbow"
-                3 -> "C"//"Mid Straight"
-                4 -> "D"//"R.Elbow"
-                5 -> "E"//"L.Baseline"
-                6 -> "F"//"L.Wing"
-                7 -> "G"//"Long Straight"
-                8 -> "H"//"R.Wing"
-                9 -> "I"//"R.Baseline"
-                10 -> "J"//"L.Corner"
-                11 -> "K"//"L.3Points"
-                12 -> "L"//"Arc"
-                13 -> "M"//"R.3Points"
-                14 -> "N"//"R.Corner"
-                else -> "O"//"Area"
-            }
+
+            binding.launchChip.text = setZoneName(it)
         }
 
-        //開啟子選單
+        // launch record chip menu
         binding.launchChip.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked) {
 
+            if (isChecked) {
                 binding.chipGroup.visibility = View.VISIBLE
-                Log.d("launch","open ${binding.chipGroup.visibility} ${binding.scoreChip.x} ${binding.launchChip.x}")
             } else {
-                Log.d("record","${viewModel.event}")
                 binding.chipGroup.visibility = View.GONE
-                Log.d("launch","close ${binding.chipGroup.visibility}")
             }
         }
 
-        // 拖曳
+        // vibrate & drag
         binding.launchChip.setOnLongClickListener {
-            // 震動
-            it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
-            // 拖曳
+
+            it.performHapticFeedback(
+                HapticFeedbackConstants.LONG_PRESS,
+                HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING
+            )
             val shadow = View.DragShadowBuilder(it)
-            it.startDragAndDrop(null, shadow, it,0)
+            it.startDragAndDrop(null, shadow, it, 0)
             false
         }
-        // 獲取螢幕解析度
+        // get screen resolution
         val displayMetrics = DisplayMetrics()
         requireActivity().display?.getRealMetrics(displayMetrics)
 
-        // 拖曳 get zone data
-        binding.root.setOnDragListener{ v, event ->
-            when(event.action) {
+        // drag & get zone data
+        binding.root.setOnDragListener { v, event ->
+
+            when (event.action) {
                 DragEvent.ACTION_DROP -> {
-                    Log.d("pos","${event.x.toInt()} ${event.y.toInt()}")
-                    if (viewModel.getDiameter(event.x,event.y,displayMetrics.widthPixels,displayMetrics.heightPixels)) {
+                    if (
+                        viewModel.getDiameter(
+                            event.x,
+                            event.y,
+                            displayMetrics.widthPixels,
+                            displayMetrics.heightPixels
+                        )
+                    ) {
                         binding.launchChip.isCheckable = false
-                        Toast.makeText(requireContext(),"drag the red dot to the court.",Toast.LENGTH_SHORT).show()
-                    } else binding.launchChip.isCheckable = true
+                        Toast.makeText(
+                            requireContext(),
+                            "drag the red dot to the court.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
+                        binding.launchChip.isCheckable = true
+                    }
                     binding.launchChip.x = (event.x - 60)
                     binding.launchChip.y = (event.y - 60)
                 }
@@ -237,55 +233,61 @@ class MatchFragment : Fragment() {
         }
         // write data
         binding.chipGroup.setOnCheckedChangeListener { group, checkedId ->
-            when(checkedId) {
+
+            when (checkedId) {
                 R.id.score_chip -> {
                     if (viewModel.zone.value?.toInt() != 0) {
-                        viewModel.setScoreData(true, args.matchId)
+                        viewModel.setEventData(args.matchId, DataType.SCORE, true)
                     } else {
-                        Toast.makeText(requireContext(),"Selected Zone first.",Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "Selected Zone first.", Toast.LENGTH_SHORT)
+                            .show()
                     }
                     group.clearCheck()
                 }
                 R.id.miss_chip -> {
                     if (viewModel.zone.value?.toInt() != 0) {
-                        viewModel.setScoreData(false, args.matchId)
+                        viewModel.setEventData(args.matchId, DataType.SCORE, false)
                     } else {
-                        Toast.makeText(requireContext(),"Selected Zone first.",Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "Selected Zone first.", Toast.LENGTH_SHORT)
+                            .show()
                     }
                     group.clearCheck()
                 }
                 R.id.rebound_chip -> {
-                    viewModel.setStatData(DataType.REBOUND, args.matchId)
+                    viewModel.setEventData(args.matchId, DataType.REBOUND, false)
                     group.clearCheck()
                 }
                 R.id.assist_chip -> {
-                    viewModel.setStatData(DataType.ASSIST, args.matchId)
+                    viewModel.setEventData(args.matchId, DataType.ASSIST, false)
                     group.clearCheck()
                 }
                 R.id.steal_chip -> {
-                    viewModel.setStatData(DataType.STEAL, args.matchId)
+                    viewModel.setEventData(args.matchId, DataType.STEAL, false)
                     group.clearCheck()
                 }
                 R.id.block_chip -> {
-                    viewModel.setStatData(DataType.BLOCK, args.matchId)
+                    viewModel.setEventData(args.matchId, DataType.BLOCK, false)
                     group.clearCheck()
                 }
                 R.id.turnover_chip -> {
-                    viewModel.setStatData(DataType.TURNOVER, args.matchId)
+                    viewModel.setEventData(args.matchId, DataType.TURNOVER, false)
                     group.clearCheck()
                 }
                 R.id.foul_chip -> {
-                    viewModel.setStatData(DataType.FOUL, args.matchId)
-                    var buffer = viewModel.startPlayer.value!![viewModel.selectPlayerPos]
-                    viewModel.getFoulCount(viewModel.playerNum, buffer)
+                    viewModel.setEventData(args.matchId, DataType.FOUL, false)
+                    viewModel.getFoulCount(
+                        viewModel.playerNum,
+                        viewModel.startPlayer.value?.get(viewModel.selectPlayerPos) ?: Player()
+                    )
                     group.clearCheck()
                 }
             }
             binding.launchChip.isChecked = false
         }
 
-        // 罰球
+        // free throw
         binding.freeThrowSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+
             if (isChecked) {
                 binding.ftChipGroup.visibility = View.VISIBLE
                 viewModel.shotClockTimer.cancel()
@@ -297,31 +299,64 @@ class MatchFragment : Fragment() {
             }
         }
         binding.ftInChip.setOnClickListener {
-            viewModel.setFreeThrowData(true, args.matchId)
-            Log.d("record","${viewModel.event}")
+
+            viewModel.setEventData(args.matchId, DataType.FREE_THROW, true)
         }
         binding.ftOutChip.setOnClickListener {
-            viewModel.setFreeThrowData(false, args.matchId)
-            Log.d("record","${viewModel.event}")
+
+            viewModel.setEventData(args.matchId, DataType.FREE_THROW, false)
         }
 
         // event history & cancel event
         viewModel.lastEvent.observe(viewLifecycleOwner) {
+
             if (!it.isNullOrEmpty()) {
-                binding.historyChip.text = viewModel.setHistoryText(it.filter { it.matchId ==HoopInfo.matchId })
+                binding.historyChip.text =
+                    viewModel.setHistoryText(it.filter { it.matchId == HoopInfo.matchId })
             }
         }
 
         binding.historyChip.setOnCloseIconClickListener {
+
             viewModel.cancelEvent()
             binding.historyChip.isCloseIconVisible = false
             binding.historyChip.isChecked = false
         }
         binding.historyChip.setOnCheckedChangeListener { buttonView, isChecked ->
+
             binding.historyChip.isCloseIconVisible = isChecked
         }
-
         return binding.root
     }
 
+    private fun setPlayerChipNumber(
+        binding: MatchFragmentBinding,
+        players: MutableList<Player>
+    ) {
+        binding.apply {
+            player1Chip.text = players[0].number
+            player2Chip.text = players[1].number
+            player3Chip.text = players[2].number
+            player4Chip.text = players[3].number
+            player5Chip.text = players[4].number
+        }
+    }
+
+    private fun setZoneName(zone: Int?) = when (zone) {
+        1 -> ZoneMark.AROUND_RIM.value
+        2 -> ZoneMark.L_ELBOW.value
+        3 -> ZoneMark.MID_STR.value
+        4 -> ZoneMark.R_ELBOW.value
+        5 -> ZoneMark.L_BASELINE.value
+        6 -> ZoneMark.L_WING.value
+        7 -> ZoneMark.LONG_STR.value
+        8 -> ZoneMark.R_WING.value
+        9 -> ZoneMark.R_BASELINE.value
+        10 -> ZoneMark.L_CORNER.value
+        11 -> ZoneMark.L_3PT.value
+        12 -> ZoneMark.ARC.value
+        13 -> ZoneMark.R_3PT.value
+        14 -> ZoneMark.R_CORNER.value
+        else -> ZoneMark.ELSE.value
+    }
 }

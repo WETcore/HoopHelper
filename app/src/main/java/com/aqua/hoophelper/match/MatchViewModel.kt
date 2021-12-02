@@ -5,17 +5,13 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.aqua.hoophelper.HoopInfo
-import com.aqua.hoophelper.User
 import com.aqua.hoophelper.database.Event
 import com.aqua.hoophelper.database.Match
 import com.aqua.hoophelper.database.Player
 import com.aqua.hoophelper.database.Result
 import com.aqua.hoophelper.database.Rule
 import com.aqua.hoophelper.database.remote.HoopRemoteDataSource
-import com.aqua.hoophelper.util.LoadApiStatus
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
+import com.aqua.hoophelper.util.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -23,23 +19,16 @@ import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.math.*
 
-const val COURT_TOP = 0.15
-const val COURT_BOTTOM = 0.57
-
 class MatchViewModel : ViewModel() {
 
     val _status = MutableLiveData<LoadApiStatus?>()
     val status: LiveData<LoadApiStatus?>
         get() = _status
 
-    // Firebase
-    val db = FirebaseFirestore.getInstance()
-
     // database
     var event = Event()
     var match = Match()
     var rule = Rule()
-
 
     var quarterLimit = 4
     var foulLimit = 6
@@ -49,11 +38,20 @@ class MatchViewModel : ViewModel() {
     // time out
     var timeOut = 0
 
-    var _shotClockLimit = MutableLiveData<Long>(24L)
+    var playerNum = ""
+    var playerName = ""
+    var playerImage = ""
+
+    // selectPlayer chip position
+    var selectPlayerPos = 0
+
+    var subNum = mutableListOf<String>()
+
+    var _shotClockLimit = MutableLiveData(24L)
     val shotClockLimit: LiveData<Long>
         get() = _shotClockLimit
 
-    var _gameClockLimit = MutableLiveData<Long>(12L)
+    var _gameClockLimit = MutableLiveData(12L)
     val gameClockLimit: LiveData<Long>
         get() = _gameClockLimit
 
@@ -63,33 +61,22 @@ class MatchViewModel : ViewModel() {
         get() = _shotClock
 
     // game clock
-    var _gameClockSec = MutableLiveData<Long>(60L)
+    var _gameClockSec = MutableLiveData(60L)
     val gameClockSec: LiveData<Long>
         get() = _gameClockSec
 
-    var _gameClockMin = MutableLiveData<Long>(gameClockLimit.value!!)
+    var _gameClockMin = MutableLiveData<Long>(gameClockLimit.value)
     val gameClockMin: LiveData<Long>
         get() = _gameClockMin
 
     // quarter
-    var _quarter = MutableLiveData<Int>(1)
+    var _quarter = MutableLiveData(1)
     val quarter: LiveData<Int>
         get() = _quarter
 
-
-
-    //////////////////
-    // player num send to db
-    var playerNum = ""
-    var playerName = ""
-    var playerImage = ""
-
-    // selectPlayerPos 紀錄按那個 chip
-    var selectPlayerPos = 0
-
     // roster
     private var _roster = MutableLiveData<List<Player>>()
-    val roster: LiveData<List<Player>>
+    private val roster: LiveData<List<Player>>
         get() = _roster
 
     // startingPlayer
@@ -97,22 +84,15 @@ class MatchViewModel : ViewModel() {
     val startPlayer: LiveData<MutableList<Player>>
         get() = _startPlayer
 
-    // substitutionPlayer 替補
+    // substitutionPlayer
     private var _substitutionPlayer = MutableLiveData<MutableList<Player>>(mutableListOf())
     val substitutionPlayer: LiveData<MutableList<Player>>
         get() = _substitutionPlayer
 
-    var subNum = mutableListOf<String>()
-
     // zone
-    private var _zone = MutableLiveData<Int>(0)
+    private var _zone = MutableLiveData(0)
     val zone: LiveData<Int>
         get() = _zone
-
-    // record
-    private var _record = MutableLiveData<Boolean>(false)
-    val record: LiveData<Boolean>
-        get() = _record
 
     // last event
     private var _lastEvent = HoopRemoteDataSource.getEvents()
@@ -121,7 +101,7 @@ class MatchViewModel : ViewModel() {
 
     // foul
     private var _foul = HoopRemoteDataSource.getEvents()
-    val foul: LiveData<List<Event>>
+    private val foul: LiveData<List<Event>>
         get() = _foul
 
     // Create a Coroutine scope using a job to be able to cancel when needed
@@ -132,42 +112,44 @@ class MatchViewModel : ViewModel() {
 
     init {
         getMatchRule()
+        setRoster()
     }
 
     val shotClockTimer = object : CountDownTimer(Long.MAX_VALUE, 1000L) {
         override fun onTick(millisUntilFinished: Long) {
-            Log.d("timer", "start")
-            if (shotClock.value!! == 0L) {} else {
+            if (shotClock.value != 0L) {
                 _shotClock.value = _shotClock.value?.minus(1L)
             }
         }
+
         override fun onFinish() {}
     }
 
     val gameClockSecTimer = object : CountDownTimer(Long.MAX_VALUE, 1000L) {
         override fun onTick(millisUntilFinished: Long) {
-            if (gameClockSec.value!! == 0L) {} else {
+            if (gameClockSec.value != 0L) {
                 _gameClockSec.value = _gameClockSec.value?.minus(1L)
             }
         }
+
         override fun onFinish() {}
     }
 
     fun setGameClockMin(sec: Long) {
-        if ( sec >= 60) {
+        if (sec >= 60) {
             _gameClockMin.value = _gameClockMin.value?.minus(1L)
         }
     }
 
     fun selectPlayer(pos: Int): String {
         selectPlayerPos = pos
-        playerNum = startPlayer.value!![pos].number
-        playerName = startPlayer.value!![pos].name
-        playerImage = startPlayer.value!![pos].avatar
-        return startPlayer.value!![pos].number
+        playerNum = startPlayer.value?.get(pos)?.number ?: ""
+        playerName = startPlayer.value?.get(pos)?.name ?: ""
+        playerImage = startPlayer.value?.get(pos)?.avatar ?: ""
+        return startPlayer.value?.get(pos)?.number ?: ""
     }
 
-    fun selectZone(selectedZone: Int) {
+    private fun selectZone(selectedZone: Int) {
         _zone.value = selectedZone
     }
 
@@ -186,219 +168,187 @@ class MatchViewModel : ViewModel() {
         event.score3 = null
     }
 
-    fun setScoreData(countIn: Boolean, mId: String) {
+    ///////////////////////////////////////////////////////////////////////////////
+    fun setEventData(mId: String, type: DataType, isCount: Boolean) {
         resetData()
-        event.eventId = db.collection("Events").document().id
-        event.matchId = mId
-        event.teamId = User.teamId
-        event.playerId = startPlayer.value?.get(selectPlayerPos)?.id ?: ""
-        event.actualTime = Calendar.getInstance().timeInMillis
-        event.matchTimeMin = gameClockMin.value.toString()
-        event.matchTimeSec = gameClockSec.value.toString()
-        event.quarter = quarter.value.toString()
-        _record.value = countIn
-        event.playerNum = playerNum
-        event.playerName = playerName
-        event.playerImage = playerImage
-        event.zone = zone.value!!
-        if (zone.value!! in 1..9)  {
-            event.score2 = _record.value!!
+        event.apply {
+            matchId = mId
+            teamId = User.teamId
+            playerId = startPlayer.value?.get(selectPlayerPos)?.id ?: ""
+            actualTime = Calendar.getInstance().timeInMillis
+            this.playerNum = (this@MatchViewModel).playerNum
+            this.playerName = (this@MatchViewModel).playerName
+            this.playerImage = (this@MatchViewModel).playerImage
+            matchTimeMin = gameClockMin.value.toString()
+            matchTimeSec = gameClockSec.value.toString()
+            this.quarter = (this@MatchViewModel).quarter.value.toString()
+            if (type != DataType.FREE_THROW) {
+                this.zone = (this@MatchViewModel).zone.value ?: 0
+            }
         }
-        else if (zone.value!! in 10..14) {
-            event.score3 = _record.value!!
-        }
-        db.collection("Events").add(event)
-    }
-
-    fun setFreeThrowData(bool: Boolean, mId: String) {
-        resetData()
-        event.eventId = db.collection("Events").document().id
-        event.matchId = mId
-        event.teamId = User.teamId
-        event.playerId = startPlayer.value?.get(selectPlayerPos)?.id ?: ""
-        event.actualTime = Calendar.getInstance().timeInMillis
-        event.playerNum = playerNum
-        event.playerName = playerName
-        event.playerImage = playerImage
-        event.zone = -1
-        event.matchTimeMin = gameClockMin.value.toString()
-        event.matchTimeSec = gameClockSec.value.toString()
-        event.quarter = quarter.value.toString()
-        event.freeThrow = bool
-        db.collection("Events").add(event)
-    }
-
-    fun setStatData(type: DataType, mId: String) {
-        resetData()
-        event.eventId = db.collection("Events").document().id
-        event.matchId = mId
-        event.teamId = User.teamId
-        event.playerId = startPlayer.value?.get(selectPlayerPos)?.id ?: ""
-        event.actualTime = Calendar.getInstance().timeInMillis
-        event.playerNum = playerNum
-        event.playerName = playerName
-        event.playerImage = playerImage
-        event.matchTimeMin = gameClockMin.value.toString()
-        event.matchTimeSec = gameClockSec.value.toString()
-        event.quarter = quarter.value.toString()
-        event.zone = zone.value!!
-        _record.value = true
-        when(type) {
+        when (type) {
+            DataType.SCORE -> {
+                if (zone.value in 1..9) {
+                    event.score2 = isCount
+                } else if (zone.value in 10..14) {
+                    event.score3 = isCount
+                }
+            }
             DataType.REBOUND -> {
-                event.rebound = _record.value!!
+                event.rebound = true
             }
             DataType.ASSIST -> {
-                event.assist = _record.value!!
+                event.assist = true
             }
             DataType.STEAL -> {
-                event.steal = _record.value!!
+                event.steal = true
             }
             DataType.BLOCK -> {
-                event.block = _record.value!!
+                event.block = true
             }
             DataType.TURNOVER -> {
-                event.turnover = _record.value!!
+                event.turnover = true
             }
             DataType.FOUL -> {
-                event.foul = _record.value!!
+                event.foul = true
+            }
+            DataType.FREE_THROW -> {
+                event.zone = -1
+                event.freeThrow = isCount
             }
         }
-        db.collection("Events").add(event)
-    }
 
+        coroutineScope.launch {
+            when(val result = HoopRemoteDataSource.setEvent(event)) {
+                is Result.Success -> {
+                }
+                is Result.Error -> {
+                    Log.d("status", "error")
+                }
+            }
+        }
+    }
+    ///////////////////////////////////////////////////////////////////////////////
 
     fun getDiameter(x: Float, y: Float, w: Int, h: Int): Boolean {
-        Log.i("dia","x: $x y: $y  x/w ${x/w} ${y/h}")
-        val dm = sqrt((x-(w/2)).pow(2) + (y-(h*0.2)).pow(2))/2
-        val slope = y/(x-(w/2))
+        Log.i("dia", "x: $x y: $y  x/w ${x / w} ${y / h}")
+        val dm = sqrt((x - (w / 2)).pow(2) + (y - (h * 0.2)).pow(2)) / 2
+        val slope = y / (x - (w / 2))
 
-        if (y/h in COURT_TOP..COURT_BOTTOM) {
-            if (dm/w < 0.083) {
+        if (y / h in COURT_TOP..COURT_BOTTOM) {
+            if (dm / w < DIAMETER1) {
                 selectZone(1)
-            }
-            else if (dm/w < 0.153) {
-                if (slope in 0.0..tan((80.0 * PI)/180)) {
+            } else if (dm / w < DIAMETER2) {
+                if (slope in 0.0..tan((SLOPE_80 * PI) / ROUND_DEGREE)) {
                     selectZone(4)
-                }
-                else if (slope > tan((80.0 * PI)/180) || slope < tan((-80.0 * PI)/180)) {
+                } else if (slope > tan((SLOPE_80 * PI) / ROUND_DEGREE) || slope < tan((-SLOPE_80 * PI) / ROUND_DEGREE)) {
                     selectZone(3)
-                }
-                else {
+                } else {
                     selectZone(2)
                 }
-            }
-            else if (dm < (w * 0.241) && x in (0.09 * w)..(0.9 * w)) {
-                if(slope in 0.0..tan((65.0 * PI)/180) && (x/w) < 0.9) {
+            } else if (dm < (w * DIAMETER3) && x in (THREE_LINE_LEFT * w)..(THREE_LINE_RIGHT * w)) {
+                if (slope in 0.0..tan((SLOPE_65 * PI) / ROUND_DEGREE) && (x / w) < THREE_LINE_RIGHT) {
                     selectZone(9)
-                }
-                else if (slope in tan((65.0 * PI)/180)..tan((80.0 * PI)/180)) {
+                } else if (slope in tan((SLOPE_65 * PI) / ROUND_DEGREE)..tan((SLOPE_80 * PI) / ROUND_DEGREE)) {
                     selectZone(8)
-                }
-                else if (slope > tan((80.0 * PI)/180) || slope < tan((-80.0 * PI)/180)) {
+                } else if (slope > tan((SLOPE_80 * PI) / ROUND_DEGREE) || slope < tan((-SLOPE_80 * PI) / ROUND_DEGREE)) {
                     selectZone(7)
-                }
-                else if (slope in tan((-80.0 * PI)/180)..tan((-65.0 * PI)/180)) {
+                } else if (slope in tan((-SLOPE_80 * PI) / ROUND_DEGREE)..tan((-SLOPE_65 * PI) / ROUND_DEGREE)) {
                     selectZone(6)
-                }
-                else if (slope > tan((-65.0 * PI)/180) && (x/w) > 0.09) {
+                } else if (slope > tan((-SLOPE_65 * PI) / ROUND_DEGREE) && (x / w) > THREE_LINE_LEFT) {
                     selectZone(5)
-                }
-                else Log.d("dia","${x} ${w} ${atan(slope)/PI*180} in zone 3 error")
-            }
-            else if (x/w > 0.9 && y/h <= (COURT_TOP + 0.167)) {
+                } else Log.d("dia", "$x $w ${atan(slope) / PI * ROUND_DEGREE} in zone 3 error")
+            } else if (x / w > THREE_LINE_RIGHT && y / h <= (COURT_TOP + CORNER_BOTTOM_BOUND)) {
                 selectZone(14)
-            }
-            else if (x/w < 0.09 && y/h <= 0.362) {
+            } else if (x / w < THREE_LINE_LEFT && y / h <= (COURT_TOP + CORNER_BOTTOM_BOUND)) {
                 selectZone(10)
-            }
-            else if(dm/w > 0.241) {
-                if (slope in 0.0..tan((80.0 * PI)/180)) {
+            } else if (dm / w > DIAMETER3) {
+                if (slope in 0.0..tan((SLOPE_80 * PI) / ROUND_DEGREE)) {
                     selectZone(13)
-                }
-                else if (slope > tan((80.0 * PI)/180) || slope < tan((-80.0 * PI)/180)) {
+                } else if (slope > tan((SLOPE_80 * PI) / ROUND_DEGREE) || slope < tan((-SLOPE_80 * PI) / ROUND_DEGREE)) {
                     selectZone(12)
-                }
-                else if (slope in tan((-80.0 * PI)/180)..0.0) {
+                } else if (slope in tan((-SLOPE_80 * PI) / ROUND_DEGREE)..0.0) {
                     selectZone(11)
                 }
             }
             return false
-        }
-        else return true
+        } else return true
     }
 
     fun getSubPlayer2Starting(position: Int) {
-        _startPlayer.value!![selectPlayerPos] = substitutionPlayer.value!![position]
+        _startPlayer.value?.set(selectPlayerPos, substitutionPlayer.value?.get(position) ?: Player())
         _startPlayer.value = _startPlayer.value
-        playerNum = _startPlayer.value!![selectPlayerPos].number
-        playerName = _startPlayer.value!![selectPlayerPos].name
-        playerImage = _startPlayer.value!![selectPlayerPos].avatar
+        playerNum = _startPlayer.value?.get(selectPlayerPos)?.number ?: ""
+        playerName = _startPlayer.value?.get(selectPlayerPos)?.name ?: ""
+        playerImage = _startPlayer.value?.get(selectPlayerPos)?.avatar ?: ""
     }
 
     fun changeSubPlayer(onCourtPlayer: Player, spinnerPos: Int) {
-        _substitutionPlayer.value!![spinnerPos] = onCourtPlayer
+        _substitutionPlayer.value?.set(spinnerPos, onCourtPlayer)
         _substitutionPlayer.value = _substitutionPlayer.value
-        Log.d("poss","sub ${spinnerPos} ${substitutionPlayer.value}")
     }
 
     fun setHistoryText(it: List<Event>): String {
-        if (it.isNullOrEmpty()){
-            return "latest event"
-        }
-        else{
-            it[0].run {
+        if (it.isNullOrEmpty()) {
+            return EventType.INIT.value
+        } else {
+            it.first().run {
                 return when {
-                    assist -> "assist"
-                    block -> "block"
-                    foul -> "foul"
-                    freeThrow == true -> "FT In"
-                    freeThrow == false -> "FT out"
-                    rebound -> "rebound"
-                    score2 == true -> "2pt In"
-                    score2 == false -> "2pt Out"
-                    score3 == true -> "3pt In"
-                    score3 == false -> "3pt Out"
-                    steal -> "steal"
-                    turnover -> "turnover"
-                    else -> "else"
+                    assist -> EventType.AST.value
+                    block -> EventType.BLK.value
+                    foul -> EventType.FOUL.value
+                    rebound -> EventType.REB.value
+                    steal -> EventType.STL.value
+                    turnover -> EventType.TOV.value
+                    score2 == true -> EventType.IN_2.value
+                    score2 == false -> EventType.OUT_2.value
+                    score3 == true -> EventType.IN_3.value
+                    score3 == false -> EventType.OUT_3.value
+                    freeThrow == true -> EventType.FT_IN.value
+                    freeThrow == false -> EventType.FT_OUT.value
+                    else -> EventType.ELSE.value
                 }
             }
         }
     }
 
     fun cancelEvent() {
-        db.collection("Events")
-            .orderBy("actualTime", Query.Direction.DESCENDING)
-            .limit(1).get().addOnSuccessListener {
-                it.forEach {
-                    it.reference.delete()
+        coroutineScope.launch {
+            when (val result = HoopRemoteDataSource.deleteEvent()) {
+                is Result.Success -> {
+                }
+                is Result.Error -> {
+                    Log.d("status", "error")
                 }
             }
+        }
     }
 
-    fun setRoster() {
+    private fun setRoster() {
         _status.value = LoadApiStatus.LOADING
         coroutineScope.launch {
-            val startPlayerList = mutableListOf<Player>()
-            val subPlayerList = mutableListOf<Player>()
-            when(val result = HoopRemoteDataSource.getMatchMembers()) {
+            val startPlayers = mutableListOf<Player>()
+            val subPlayers = mutableListOf<Player>()
+            when (val result = HoopRemoteDataSource.getMatchMembers()) {
                 is Result.Success -> {
-                    _roster.value = result.data!!
-                    val lineUp = _roster.value!!
+                    result.data.let {
+                        _roster.value = it
+                    }
+                    val lineUp = roster.value ?: listOf()
                     lineUp.filter {
                         !it.starting5.contains(true)
                     }.forEachIndexed { index, player ->
-                        _substitutionPlayer.value!!.add(player)
-                        subPlayerList.add(player)
+                        _substitutionPlayer.value?.add(player)
+                        subPlayers.add(player)
                     }
                     lineUp.filter {
                         it.starting5.contains(true)
                     }.forEachIndexed { index, player ->
-                        startPlayerList.add(player)
+                        startPlayers.add(player)
                     }
-                    startPlayerList.sortBy { it.starting5.indexOf(true) }
-                    _startPlayer.value = startPlayerList
-                    _substitutionPlayer.value = subPlayerList
+                    startPlayers.sortBy { it.starting5.indexOf(true) }
+                    _startPlayer.value = startPlayers
+                    _substitutionPlayer.value = subPlayers
 
                     _status.value = LoadApiStatus.DONE
                 }
@@ -411,15 +361,13 @@ class MatchViewModel : ViewModel() {
     }
 
     fun getFoulCount(playerNum: String, onCourtPlayer: Player) {
-        var count = _foul.value?.filter {
+        val count = foul.value?.filter {
             it.playerNum == playerNum && it.matchId == HoopInfo.matchId
         }?.size?.plus(1)
         if (count != null) {
-            if(count >= foulLimit) {
+            if (count >= foulLimit) {
                 getSubPlayer2Starting(0)
                 changeSubPlayer(onCourtPlayer, 0)
-//                player = subNum[0]
-                Log.d("foulLog","Hi $count")
             }
         }
     }
@@ -427,17 +375,17 @@ class MatchViewModel : ViewModel() {
     private fun getMatchRule() {
         _status.value = LoadApiStatus.LOADING
         coroutineScope.launch {
-            when(val result = HoopRemoteDataSource.getRule()) {
+            when (val result = HoopRemoteDataSource.getRule()) {
                 is Result.Success -> {
-                    rule = result.data!!
-                    quarterLimit = rule.quarter.toInt() // TODO TO
+                    rule = result.data
+                    quarterLimit = rule.quarter.toInt()
                     foulLimit = rule.foulOut.toInt()
                     timeOut1Limit = rule.to1.toInt()
                     timeOut2Limit = rule.to2.toInt()
                     _shotClockLimit.value = rule.sClock.toLong()
                     _gameClockLimit.value = rule.gClock.toLong()
                     _shotClock.value = _shotClockLimit.value
-                    _gameClockMin.value = _gameClockLimit.value!! - 1
+                    _gameClockMin.value = (_gameClockLimit.value ?: 12L) - 1
                     shotClockTimer.start()
                     gameClockSecTimer.start()
                     _status.value = LoadApiStatus.DONE
@@ -452,11 +400,17 @@ class MatchViewModel : ViewModel() {
 
     fun setTimeOutCount(): Boolean {
         timeOut += 1
-        return if (quarter.value!! <= quarterLimit/2) {
+        return if ((quarter.value ?: 1) <= quarterLimit / 2) {
             timeOut > timeOut1Limit
         } else {
             timeOut > timeOut2Limit
         }
+    }
+
+    fun setFirstPlayer(player: Player) {
+        if (playerNum == "") playerNum = player.number
+        if (playerName == "") playerName = player.name
+        if (playerImage == "") playerImage = player.avatar
     }
 
     ////////////////

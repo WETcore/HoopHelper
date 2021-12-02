@@ -2,19 +2,17 @@ package com.aqua.hoophelper.tutor
 
 import android.animation.Animator
 import android.content.Intent
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.aqua.hoophelper.MainActivity
 import com.aqua.hoophelper.R
-import com.aqua.hoophelper.databinding.ProfileFragmentBinding
 import com.aqua.hoophelper.databinding.TutorFragmentBinding
-import com.aqua.hoophelper.profile.ProfileViewModel
+import com.aqua.hoophelper.util.Tutor
 
 class TutorFragment : Fragment() {
 
@@ -25,10 +23,10 @@ class TutorFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // binding
         val binding: TutorFragmentBinding =
-            DataBindingUtil.inflate(inflater, R.layout.tutor_fragment, container,false)
+            DataBindingUtil.inflate(inflater, R.layout.tutor_fragment, container, false)
 
         // VPager
         val adapter = TutorAdapter(requireActivity())

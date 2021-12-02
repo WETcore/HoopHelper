@@ -2,18 +2,17 @@ package com.aqua.hoophelper
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.KeyEvent
 import android.view.View
+import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
-import com.aqua.hoophelper.util.HoopService
-import com.aqua.hoophelper.util.RestartBroadcastReceiver
 import com.aqua.hoophelper.databinding.ActivityMainBinding
+import com.aqua.hoophelper.util.*
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
@@ -40,7 +39,7 @@ class MainActivity : AppCompatActivity() {
         HoopInfo.spinnerSelectedTeamId.observe(this) {
             viewModel.showBadge(it)
         }
-        viewModel.badgeSwitch.observe(this) {
+        Badge.isGaming.observe(this) {
             binding.bottomBar.getOrCreateBadge(R.id.liveFragment).isVisible = it
         }
 
@@ -52,26 +51,10 @@ class MainActivity : AppCompatActivity() {
         binding.fab.setOnClickListener {
             when {
                 User.teamId.length <= 5 -> {
-                    Snackbar.make(binding.root, "No team no game~", Snackbar.LENGTH_SHORT)
-                        .setAction("create team") {
-                            binding.bottomBar.menu.getItem(4).isChecked = true
-                            navHostFragment.navigate(NavigationDirections.navToProfile())
-                        }.apply {
-                            setTextColor(Color.parseColor("#FD5523"))
-                            setActionTextColor(Color.parseColor("#356859"))
-                            setBackgroundTint(Color.parseColor("#FFFBE6"))
-                        }.show()
+                    setSnackbar(binding, navHostFragment, "No team no game~", "create team")
                 }
                 User.teamMembers.size <= 5 -> {
-                    Snackbar.make(binding.root, "At least 5 players", Snackbar.LENGTH_SHORT)
-                        .setAction("assemble") {
-                            binding.bottomBar.menu.getItem(4).isChecked = true
-                            navHostFragment.navigate(NavigationDirections.navToProfile())
-                        }.apply {
-                            setTextColor(Color.parseColor("#FD5523"))
-                            setActionTextColor(Color.parseColor("#356859"))
-                            setBackgroundTint(Color.parseColor("#FFFBE6"))
-                        }.show()
+                    setSnackbar(binding, navHostFragment, "At least 5 players", "assemble")
                 }
                 else -> {
                     binding.appBar.behavior.slideDown(binding.appBar)
@@ -84,7 +67,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.bottomBar.setOnItemSelectedListener {
-            when(it.itemId) {
+            when (it.itemId) {
                 R.id.homeFragment -> {
                     binding.fab.isClickable = true
                     binding.appBar.behavior.slideUp(binding.appBar)
@@ -95,28 +78,12 @@ class MainActivity : AppCompatActivity() {
                     when {
                         User.teamId.length <= 5 -> {
                             binding.fab.isClickable = true
-                            Snackbar.make(binding.root, "No team no game~", Snackbar.LENGTH_SHORT)
-                                .setAction("create team") {
-                                    binding.bottomBar.menu.getItem(4).isChecked = true
-                                    navHostFragment.navigate(NavigationDirections.navToProfile())
-                                }.apply {
-                                    setTextColor(Color.parseColor("#FD5523"))
-                                    setActionTextColor(Color.parseColor("#356859"))
-                                    setBackgroundTint(Color.parseColor("#FFFBE6"))
-                                }.show()
+                            setSnackbar(binding, navHostFragment, "No team no game~", "create team")
                             false
                         }
                         User.teamMembers.size <= 5 -> {
                             binding.fab.isClickable = true
-                            Snackbar.make(binding.root, "At least 5 players", Snackbar.LENGTH_SHORT)
-                                .setAction("assemble") {
-                                    binding.bottomBar.menu.getItem(4).isChecked = true
-                                    navHostFragment.navigate(NavigationDirections.navToProfile())
-                                }.apply {
-                                    setTextColor(Color.parseColor("#FD5523"))
-                                    setActionTextColor(Color.parseColor("#356859"))
-                                    setBackgroundTint(Color.parseColor("#FFFBE6"))
-                                }.show()
+                            setSnackbar(binding, navHostFragment, "At least 5 players", "assemble")
                             false
                         }
                         else -> {
@@ -130,7 +97,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.liveFragment -> {
                     binding.fab.isClickable = false
                     binding.appBar.behavior.slideUp(binding.appBar)
-                    navHostFragment.navigate(NavigationDirections.navToLive(viewModel.badgeSwitch.value!!))
+                    navHostFragment.navigate(NavigationDirections.navToLive(Badge.isGaming.value ?: false))
                     true
                 }
                 R.id.profileFragment -> {
@@ -139,13 +106,26 @@ class MainActivity : AppCompatActivity() {
                     navHostFragment.navigate(NavigationDirections.navToProfile())
                     true
                 }
-                R.id.matchFragment -> {
-                    Log.d("nav","Hi")
-                    true
-                }
                 else -> false
             }
         }
+    }
+
+    private fun setSnackbar(
+        binding: ActivityMainBinding,
+        navHostFragment: NavController,
+        hint: String,
+        action: String,
+    ) {
+        Snackbar.make(binding.root, hint, Snackbar.LENGTH_SHORT)
+            .setAction(action) {
+                binding.bottomBar.menu.getItem(4).isChecked = true
+                navHostFragment.navigate(NavigationDirections.navToProfile())
+            }.apply {
+                setTextColor(resources.getColor(R.color.basil_orange, null))
+                setActionTextColor(resources.getColor(R.color.basil_green_dark, null))
+                setBackgroundTint(resources.getColor(R.color.basil_bg, null))
+            }.show()
     }
 
     override fun onDestroy() {
@@ -159,22 +139,12 @@ class MainActivity : AppCompatActivity() {
 
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        if (findViewById<BottomNavigationView>(R.id.bottom_bar).menu.getItem(0).isChecked) {
-        }
         findViewById<View>(R.id.fab).isClickable = true
         findViewById<BottomAppBar>(R.id.app_bar).let {
             it.behavior.slideUp(it)
         }
         if (findViewById<BottomNavigationView>(R.id.bottom_bar).menu.getItem(2).isChecked) {
-            viewModel.db // TODO move to model, auto close game need same fun
-                .collection("Matches")
-                .whereEqualTo("matchId", viewModel.match.matchId)
-                .get()
-                .addOnSuccessListener {
-                    it.forEach {
-                        it.reference.update("gaming",false)
-                    }
-                }
+            viewModel.exitMatch()
         }
         return super.onKeyDown(keyCode, event)
     }

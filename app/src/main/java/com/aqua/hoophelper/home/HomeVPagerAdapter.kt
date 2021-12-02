@@ -3,7 +3,6 @@ package com.aqua.hoophelper.home
 import android.animation.AnimatorInflater
 import android.animation.AnimatorSet
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,15 +10,15 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.viewpager.widget.PagerAdapter
 import com.aqua.hoophelper.R
-import com.aqua.hoophelper.database.PlayerStat
-import com.aqua.hoophelper.match.DataType
-import com.aqua.hoophelper.match.DetailDataType
+import com.aqua.hoophelper.util.DataType
+import com.aqua.hoophelper.util.DetailDataType
 import com.aqua.hoophelper.util.LoadApiStatus
 
 class HomeVPagerAdapter(
     private val list: List<String>,
     private val context: Context,
-    private val viewModel: HomeViewModel?): PagerAdapter() {
+    private val viewModel: HomeViewModel?
+) : PagerAdapter() {
 
     override fun getCount(): Int {
         return list.size
@@ -32,10 +31,6 @@ class HomeVPagerAdapter(
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
 
         val view = LayoutInflater.from(context).inflate(R.layout.home_card, container, false)
-
-        Log.d("redo3","Hi ${position}")
-
-        //get data
 
         //set data to UI
         val leaderName = view.findViewById<TextView>(R.id.leader_name)
@@ -50,7 +45,7 @@ class HomeVPagerAdapter(
 
         type.text = list[position]
 
-        val mainDataType = when(position) {
+        val mainDataType = when (position) {
             0 -> {
                 DataType.SCORE
             }
@@ -69,7 +64,7 @@ class HomeVPagerAdapter(
             else -> DataType.TURNOVER
         }
         if (viewModel != null) {
-            leaderName.text = viewModel.getLeaderMainData(mainDataType).first // TODO
+            leaderName.text = viewModel.getLeaderMainData(mainDataType).first
             leaderNameB.text = viewModel.getLeaderMainData(mainDataType).first
             statMain.text = viewModel.getLeaderMainData(mainDataType).second
 
@@ -92,8 +87,10 @@ class HomeVPagerAdapter(
         card.cameraDistance = 8000 * scale
         cardB.cameraDistance = 8000 * scale
         card.setOnClickListener {
-            val animF = AnimatorInflater.loadAnimator(context, R.animator.front_animator) as AnimatorSet
-            val animB = AnimatorInflater.loadAnimator(context, R.animator.back_animator) as AnimatorSet
+            val animF =
+                AnimatorInflater.loadAnimator(context, R.animator.front_animator) as AnimatorSet
+            val animB =
+                AnimatorInflater.loadAnimator(context, R.animator.back_animator) as AnimatorSet
             isFront = if (isFront) {
                 animF.setTarget(card)
                 animB.setTarget(cardB)

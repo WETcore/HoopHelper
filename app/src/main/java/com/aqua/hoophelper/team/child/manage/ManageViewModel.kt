@@ -4,13 +4,11 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.aqua.hoophelper.database.Event
 import com.aqua.hoophelper.database.Player
 import com.aqua.hoophelper.database.Result
 import com.aqua.hoophelper.database.Rule
 import com.aqua.hoophelper.database.remote.HoopRemoteDataSource
 import com.aqua.hoophelper.util.LoadApiStatus
-import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -18,11 +16,9 @@ import kotlinx.coroutines.launch
 
 class ManageViewModel : ViewModel() {
 
-    val _status = MutableLiveData<LoadApiStatus?>()
+    private val _status = MutableLiveData<LoadApiStatus?>()
     val status: LiveData<LoadApiStatus?>
         get() = _status
-
-    val db = FirebaseFirestore.getInstance()
 
     var rule = Rule()
 
@@ -31,16 +27,12 @@ class ManageViewModel : ViewModel() {
     val startPlayer: LiveData<MutableList<Player>>
         get() = _startPlayer
 
-    // substitutionPlayer 替補
+    // substitutionPlayer
     private var _substitutionPlayer = MutableLiveData<MutableList<Player>>(mutableListOf())
     val substitutionPlayer: LiveData<MutableList<Player>>
         get() = _substitutionPlayer
-    var subNum = mutableListOf<String>()
 
-    // roster
-    private var _roster = MutableLiveData<List<Player>>()
-    val roster: LiveData<List<Player>>
-        get() = _roster
+    var subNum = mutableListOf<String>()
 
     // Create a Coroutine scope using a job to be able to cancel when needed
     private var viewModelJob = Job()
@@ -52,28 +44,51 @@ class ManageViewModel : ViewModel() {
         setRoster()
     }
 
-    fun setRule() {
-        db.collection("Rule").document("rule").set(rule)
+    fun setRule(
+        quarter: String,
+        gameClock: String,
+        shotClock: String,
+        foulOut: String,
+        turnover1: String,
+        turnover2: String
+    ) {
+        rule.apply {
+            this.quarter = quarter
+            gClock = gameClock
+            sClock = shotClock
+            this.foulOut = foulOut
+            to1 = turnover1
+            to2 = turnover2
+        }
+
+        coroutineScope.launch {
+            when(val result = HoopRemoteDataSource.setRule(rule)) {
+                is Result.Success -> {
+                }
+                is Result.Error -> {
+                    Log.d("status", "error")
+                }
+            }
+        }
     }
-    fun setRoster() {
+    private fun setRoster() {
         _status.value = LoadApiStatus.LOADING
         coroutineScope.launch {
-            val starPlayerList = mutableListOf<Player>()
-            val subPlayerList = mutableListOf<Player>()
+            val starPlayers = mutableListOf<Player>()
+            val subPlayers = mutableListOf<Player>()
             when(val result = HoopRemoteDataSource.getMatchMembers()) {
                 is Result.Success -> {
-                    _roster.value = result.data!!
-                    val lineUp = _roster.value!!
+                    val lineUp = result.data
                     lineUp.filter { !it.starting5.contains(true) }.forEachIndexed { index, player ->
-                        _substitutionPlayer.value!!.add(player)
-                        subPlayerList.add(player)
+                        _substitutionPlayer.value?.add(player)
+                        subPlayers.add(player)
                     }
                     lineUp.filter { it.starting5.contains(true) }.forEachIndexed { index, player ->
-                        starPlayerList.add(player)
+                        starPlayers.add(player)
                     }
-                    starPlayerList.sortBy { it.starting5.indexOf(true) }
-                    _startPlayer.value = starPlayerList
-                    _substitutionPlayer.value = subPlayerList
+                    starPlayers.sortBy { it.starting5.indexOf(true) }
+                    _startPlayer.value = starPlayers
+                    _substitutionPlayer.value = subPlayers
 
                     _status.value = LoadApiStatus.DONE
                 }
@@ -85,29 +100,19 @@ class ManageViewModel : ViewModel() {
         }
     }
 
-    fun refresh() {
-        _roster.value = _roster.value
-        _startPlayer.value = _startPlayer.value
-        _substitutionPlayer.value = _substitutionPlayer.value
-    }
-
     fun switchLineUp(spinnerPos: Int, pos: Int) {
-        val bufferPlayer = substitutionPlayer.value!![spinnerPos]
-        val startPlayer = startPlayer.value!![pos]
+        val subPlayer = substitutionPlayer.value?.get(spinnerPos) ?: Player()
+        val startPlayer = startPlayer.value?.get(pos) ?: Player()
 
-        val bufferLineupList = mutableListOf(false, false, false, false, false)
-
-        db.collection("Players")
-            .get().addOnCompleteListener {
-                it.result.documents.apply {
-                    bufferLineupList[pos] = true
-                    first { it["id"] == bufferPlayer.id }.reference.update("starting5", bufferLineupList)
-                    bufferLineupList[pos] = false
-                    first { it["id"] == startPlayer.id }.reference.update("starting5", bufferLineupList)
-
+        coroutineScope.launch {
+            when(val result = HoopRemoteDataSource.updateLineup(subPlayer, startPlayer, pos)) {
+                is Result.Success -> {
                     setRoster()
                 }
+                is Result.Error -> {
+                    Log.d("status", "error")
+                }
             }
+        }
     }
-
 }
