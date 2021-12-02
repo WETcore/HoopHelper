@@ -279,4 +279,10 @@ class ProfileViewModel : ViewModel() {
         }
     }
 
+    ////////////////
+    override fun onCleared() {
+        super.onCleared()
+        viewModelJob.cancel()
+    }
+
 }
