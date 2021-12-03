@@ -7,6 +7,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -14,15 +15,15 @@ import com.aqua.hoophelper.NavigationDirections
 import com.aqua.hoophelper.R
 import com.aqua.hoophelper.database.Player
 import com.aqua.hoophelper.databinding.MatchFragmentBinding
+import com.aqua.hoophelper.ext.getVmFactory
+import com.aqua.hoophelper.home.HomeViewModel
 import com.aqua.hoophelper.util.DataType
 import com.aqua.hoophelper.util.HoopInfo
 import com.aqua.hoophelper.util.LoadApiStatus
 
 class MatchFragment : Fragment() {
 
-    private val viewModel: MatchViewModel by lazy {
-        ViewModelProvider(this).get(MatchViewModel::class.java)
-    }
+    private val viewModel by  viewModels<MatchViewModel> { getVmFactory() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

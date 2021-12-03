@@ -3,6 +3,7 @@ package com.aqua.hoophelper.live
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.aqua.hoophelper.database.Event
+import com.aqua.hoophelper.database.HoopRepository
 import com.aqua.hoophelper.database.PlayerStat
 import com.aqua.hoophelper.database.remote.HoopRemoteDataSource
 import com.aqua.hoophelper.util.HoopInfo
@@ -10,10 +11,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 
-class LiveViewModel : ViewModel() {
+class LiveViewModel(private val repository: HoopRepository) : ViewModel() {
 
     // date
-    private var _events = HoopRemoteDataSource.getEvents()
+    private var _events = repository.getEvents()
     val events: LiveData<List<Event>>
         get() = _events
 
