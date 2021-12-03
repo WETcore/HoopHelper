@@ -6,18 +6,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import com.aqua.hoophelper.R
 import com.aqua.hoophelper.database.Event
 import com.aqua.hoophelper.databinding.LiveFragmentBinding
+import com.aqua.hoophelper.ext.getVmFactory
+import com.aqua.hoophelper.home.HomeViewModel
 import com.aqua.hoophelper.util.HoopInfo
 
 class LiveFragment : Fragment() {
 
-    private val viewModel: LiveViewModel by lazy {
-        ViewModelProvider(this).get(LiveViewModel::class.java)
-    }
+    private val viewModel by  viewModels<LiveViewModel> { getVmFactory() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

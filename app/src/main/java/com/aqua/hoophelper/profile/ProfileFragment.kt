@@ -10,9 +10,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.aqua.hoophelper.R
 import com.aqua.hoophelper.databinding.ProfileFragmentBinding
+import com.aqua.hoophelper.ext.getVmFactory
+import com.aqua.hoophelper.home.HomeViewModel
 import com.aqua.hoophelper.util.LoadApiStatus
 import com.aqua.hoophelper.util.User
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -20,9 +23,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class ProfileFragment : Fragment() {
 
-    private val viewModel: ProfileViewModel by lazy {
-        ViewModelProvider(this).get(ProfileViewModel::class.java)
-    }
+    private val viewModel by  viewModels<ProfileViewModel> { getVmFactory() }
 
     @SuppressLint("ResourceAsColor", "SetTextI18n")
     override fun onCreateView(

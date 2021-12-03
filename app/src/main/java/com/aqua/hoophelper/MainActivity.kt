@@ -5,13 +5,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.View
-import androidx.annotation.NonNull
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.aqua.hoophelper.databinding.ActivityMainBinding
+import com.aqua.hoophelper.ext.getVmFactory
 import com.aqua.hoophelper.util.*
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -20,9 +20,7 @@ import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity() {
 
-    private val viewModel: MainActivityViewModel by lazy {
-        ViewModelProvider(this).get(MainActivityViewModel::class.java)
-    }
+    private val viewModel by  viewModels<MainActivityViewModel> { getVmFactory() }
 
     @SuppressLint("RemoteViewLayout")
     override fun onCreate(savedInstanceState: Bundle?) {

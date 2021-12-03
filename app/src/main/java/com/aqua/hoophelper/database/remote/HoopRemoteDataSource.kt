@@ -13,7 +13,7 @@ import com.google.firebase.ktx.Firebase
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-object HoopRemoteDataSource : HoopRepository {
+object HoopRemoteDataSource : HoopDataSource {
 
     override fun getEvents(): LiveData<List<Event>> {
         val result = MutableLiveData<List<Event>>()
@@ -260,7 +260,7 @@ object HoopRemoteDataSource : HoopRepository {
             }
     }
 
-    suspend fun setTeamInfo(team: Team): Result<Boolean> = suspendCoroutine { conti ->
+    override suspend fun setTeamInfo(team: Team): Result<Boolean> = suspendCoroutine { conti ->
         val teams = FirebaseFirestore.getInstance().collection(TEAMS)
 
         team.id = teams.document().id
@@ -284,7 +284,7 @@ object HoopRemoteDataSource : HoopRepository {
             }
     }
 
-    suspend fun setCaptainInfo(player: Player): Result<Boolean> = suspendCoroutine { conti ->
+    override suspend fun setCaptainInfo(player: Player): Result<Boolean> = suspendCoroutine { conti ->
         val players = FirebaseFirestore.getInstance().collection(PLAYERS)
 
         player.id = players.document().id
@@ -310,7 +310,7 @@ object HoopRemoteDataSource : HoopRepository {
             }
     }
 
-    suspend fun setMockTeammate(player: Player): Result<Boolean> = suspendCoroutine { conti ->
+    override suspend fun setMockTeammate(player: Player): Result<Boolean> = suspendCoroutine { conti ->
         val players = FirebaseFirestore.getInstance().collection(PLAYERS)
         players.document()
             .set(player)
@@ -330,7 +330,7 @@ object HoopRemoteDataSource : HoopRepository {
             }
     }
 
-    suspend fun deletePlayer(player: Player): Result<Boolean> = suspendCoroutine { conti ->
+    override suspend fun deletePlayer(player: Player): Result<Boolean> = suspendCoroutine { conti ->
         val players = FirebaseFirestore.getInstance().collection(PLAYERS)
         players.whereEqualTo("id", player.id)
             .get().addOnCompleteListener { task ->
@@ -350,7 +350,7 @@ object HoopRemoteDataSource : HoopRepository {
             }
     }
 
-    suspend fun setInvitationInfo(invitation: Invitation): Result<Boolean> = suspendCoroutine { conti ->
+    override suspend fun setInvitationInfo(invitation: Invitation): Result<Boolean> = suspendCoroutine { conti ->
         val invitations = FirebaseFirestore.getInstance().collection(INVITATIONS)
         invitation.id = invitations.document().id
 
@@ -372,7 +372,7 @@ object HoopRemoteDataSource : HoopRepository {
             }
     }
 
-    suspend fun updateCaptain(playerId: String): Result<Boolean> = suspendCoroutine { conti ->
+    override suspend fun updateCaptain(playerId: String): Result<Boolean> = suspendCoroutine { conti ->
         val players = FirebaseFirestore.getInstance().collection(PLAYERS)
 
         players.whereEqualTo("id",playerId)
@@ -393,7 +393,7 @@ object HoopRemoteDataSource : HoopRepository {
             }
     }
 
-    suspend fun updateJerseyNumbers(number: String): Result<Boolean> = suspendCoroutine { conti ->
+    override suspend fun updateJerseyNumbers(number: String): Result<Boolean> = suspendCoroutine { conti ->
         val teams = FirebaseFirestore.getInstance().collection(TEAMS)
 
         teams.whereEqualTo("id", User.teamId)
@@ -417,7 +417,7 @@ object HoopRemoteDataSource : HoopRepository {
             }
     }
 
-    suspend fun setEvent(event: Event): Result<Boolean> = suspendCoroutine { conti ->
+    override suspend fun setEvent(event: Event): Result<Boolean> = suspendCoroutine { conti ->
         val events = FirebaseFirestore.getInstance().collection(EVENTS)
         event.eventId = events.document().id
 
@@ -439,7 +439,7 @@ object HoopRemoteDataSource : HoopRepository {
             }
     }
 
-    suspend fun deleteEvent(): Result<Boolean> = suspendCoroutine { conti ->
+    override suspend fun deleteEvent(): Result<Boolean> = suspendCoroutine { conti ->
         val events = FirebaseFirestore.getInstance().collection(EVENTS)
         events.orderBy("actualTime", Query.Direction.DESCENDING)
             .get().addOnCompleteListener { task ->
@@ -459,7 +459,7 @@ object HoopRemoteDataSource : HoopRepository {
             }
     }
 
-    suspend fun setRule(rule: Rule): Result<Boolean> = suspendCoroutine { conti ->
+    override suspend fun setRule(rule: Rule): Result<Boolean> = suspendCoroutine { conti ->
         val rules = FirebaseFirestore.getInstance().collection(RULE)
         rules.document(RULE_DOC)
             .set(rule).addOnCompleteListener { task ->
@@ -478,7 +478,7 @@ object HoopRemoteDataSource : HoopRepository {
             }
     }
 
-    suspend fun updateLineup(subPlayer: Player, startPlayer: Player, position: Int): Result<Boolean> = suspendCoroutine { conti ->
+    override suspend fun updateLineup(subPlayer: Player, startPlayer: Player, position: Int): Result<Boolean> = suspendCoroutine { conti ->
         val players = FirebaseFirestore.getInstance().collection(PLAYERS)
         val bufferLineups = mutableListOf(false, false, false, false, false)
 
@@ -504,7 +504,7 @@ object HoopRemoteDataSource : HoopRepository {
             }
     }
 
-    suspend fun setMatchInfo(match: Match): Result<Boolean> = suspendCoroutine { conti ->
+    override suspend fun setMatchInfo(match: Match): Result<Boolean> = suspendCoroutine { conti ->
         val matches = FirebaseFirestore.getInstance().collection(MATCHES)
         match.matchId = matches.document().id
         matches.document()
@@ -524,7 +524,7 @@ object HoopRemoteDataSource : HoopRepository {
             }
     }
 
-    suspend fun updateMatchStatus(match: Match): Result<Boolean> = suspendCoroutine { conti ->
+    override suspend fun updateMatchStatus(match: Match): Result<Boolean> = suspendCoroutine { conti ->
         val matches = FirebaseFirestore.getInstance().collection(MATCHES)
 
         matches.whereEqualTo("matchId", match.matchId)

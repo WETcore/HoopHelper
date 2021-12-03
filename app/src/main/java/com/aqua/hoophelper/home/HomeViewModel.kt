@@ -15,7 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel(private val repository: HoopRepository) : ViewModel() {
 
     val leaderTypes = listOf("Score", "Rebound", "Assist", "Steal", "Block")
 

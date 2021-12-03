@@ -3,10 +3,7 @@ package com.aqua.hoophelper
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.aqua.hoophelper.database.Match
-import com.aqua.hoophelper.database.Player
-import com.aqua.hoophelper.database.Result
-import com.aqua.hoophelper.database.Team
+import com.aqua.hoophelper.database.*
 import com.aqua.hoophelper.database.remote.HoopRemoteDataSource
 import com.aqua.hoophelper.util.HoopInfo
 import com.aqua.hoophelper.util.User
@@ -16,7 +13,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.util.*
 
-class MainActivityViewModel : ViewModel() {
+class MainActivityViewModel(private val repository: HoopRepository) : ViewModel() {
 
     var match = Match()
 
@@ -42,7 +39,7 @@ class MainActivityViewModel : ViewModel() {
         HoopInfo.matchId = match.matchId
 
         coroutineScope.launch {
-            when(val result = HoopRemoteDataSource.setMatchInfo(match)) {
+            when(val result = repository.setMatchInfo(match)) {
                 is Result.Success -> {
                 }
                 is Result.Error -> {
@@ -53,12 +50,12 @@ class MainActivityViewModel : ViewModel() {
     }
 
     fun showBadge(teamId: String) {
-        HoopRemoteDataSource.getMatches(teamId)
+        repository.getMatches(teamId)
     }
 
     fun exitMatch() {
         coroutineScope.launch {
-            when(val result = HoopRemoteDataSource.updateMatchStatus(match)) {
+            when(val result = repository.updateMatchStatus(match)) {
                 is Result.Success -> {
                 }
                 is Result.Error -> {

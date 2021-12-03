@@ -5,11 +5,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.aqua.hoophelper.database.Event
-import com.aqua.hoophelper.database.Match
-import com.aqua.hoophelper.database.Player
-import com.aqua.hoophelper.database.Result
-import com.aqua.hoophelper.database.Rule
+import com.aqua.hoophelper.database.*
 import com.aqua.hoophelper.database.remote.HoopRemoteDataSource
 import com.aqua.hoophelper.util.*
 import kotlinx.coroutines.CoroutineScope
@@ -19,7 +15,7 @@ import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.math.*
 
-class MatchViewModel : ViewModel() {
+class MatchViewModel(private val repository: HoopRepository) : ViewModel() {
 
     val _status = MutableLiveData<LoadApiStatus?>()
     val status: LiveData<LoadApiStatus?>
@@ -95,12 +91,12 @@ class MatchViewModel : ViewModel() {
         get() = _zone
 
     // last event
-    private var _lastEvent = HoopRemoteDataSource.getEvents()
+    private var _lastEvent = repository.getEvents()
     val lastEvent: LiveData<List<Event>>
         get() = _lastEvent
 
     // foul
-    private var _foul = HoopRemoteDataSource.getEvents()
+    private var _foul = repository.getEvents()
     private val foul: LiveData<List<Event>>
         get() = _foul
 
@@ -219,7 +215,7 @@ class MatchViewModel : ViewModel() {
         }
 
         coroutineScope.launch {
-            when(val result = HoopRemoteDataSource.setEvent(event)) {
+            when(val result = repository.setEvent(event)) {
                 is Result.Success -> {
                 }
                 is Result.Error -> {
@@ -314,7 +310,7 @@ class MatchViewModel : ViewModel() {
 
     fun cancelEvent() {
         coroutineScope.launch {
-            when (val result = HoopRemoteDataSource.deleteEvent()) {
+            when (val result = repository.deleteEvent()) {
                 is Result.Success -> {
                 }
                 is Result.Error -> {
@@ -329,7 +325,7 @@ class MatchViewModel : ViewModel() {
         coroutineScope.launch {
             val startPlayers = mutableListOf<Player>()
             val subPlayers = mutableListOf<Player>()
-            when (val result = HoopRemoteDataSource.getMatchMembers()) {
+            when (val result = repository.getMatchMembers()) {
                 is Result.Success -> {
                     result.data.let {
                         _roster.value = it
@@ -375,7 +371,7 @@ class MatchViewModel : ViewModel() {
     private fun getMatchRule() {
         _status.value = LoadApiStatus.LOADING
         coroutineScope.launch {
-            when (val result = HoopRemoteDataSource.getRule()) {
+            when (val result = repository.getRule()) {
                 is Result.Success -> {
                     rule = result.data
                     quarterLimit = rule.quarter.toInt()

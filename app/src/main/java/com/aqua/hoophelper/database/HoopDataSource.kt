@@ -3,7 +3,7 @@ package com.aqua.hoophelper.database
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 
-interface HoopRepository {
+interface HoopDataSource {
 
     fun getEvents(): LiveData<List<Event>>
     fun getMatches(teamId: String): LiveData<List<Match>>
@@ -32,4 +32,5 @@ interface HoopRepository {
     suspend fun updateLineup(subPlayer: Player, startPlayer: Player, position: Int): Result<Boolean>
     suspend fun setMatchInfo(match: Match): Result<Boolean>
     suspend fun updateMatchStatus(match: Match): Result<Boolean>
+
 }
