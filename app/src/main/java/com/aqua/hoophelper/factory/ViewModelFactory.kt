@@ -11,11 +11,6 @@ import com.aqua.hoophelper.match.MatchViewModel
 import com.aqua.hoophelper.profile.ProfileViewModel
 import com.aqua.hoophelper.team.TeamViewModel
 
-/**
- * Created by Wayne Chen on 2020-01-15.
- *
- * Factory for all ViewModels.
- */
 @Suppress("UNCHECKED_CAST")
 class ViewModelFactory constructor(
     private val repository: HoopRepository

@@ -507,6 +507,8 @@ object HoopRemoteDataSource : HoopDataSource {
     override suspend fun setMatchInfo(match: Match): Result<Boolean> = suspendCoroutine { conti ->
         val matches = FirebaseFirestore.getInstance().collection(MATCHES)
         match.matchId = matches.document().id
+        HoopInfo.matchId = match.matchId
+
         matches.document()
             .set(match).addOnCompleteListener { task ->
                 if (task.isSuccessful) {
