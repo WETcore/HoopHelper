@@ -36,7 +36,6 @@ class MainActivityViewModel(private val repository: HoopRepository) : ViewModel(
             time = cal.get(Calendar.HOUR_OF_DAY).toString()
             actualTime = Calendar.getInstance().timeInMillis
         }
-        HoopInfo.matchId = match.matchId
 
         coroutineScope.launch {
             when(val result = repository.setMatchInfo(match)) {
