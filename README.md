@@ -16,10 +16,20 @@ Recording shooting hot spots is also feasible due to draging the red dot.
 
 ### :basketball: Live stream basketball matches
 Watch the live stream when your surport team is matching
-### :basketball: Arrange lineup and Set game rule
-### :basketball: Draw your own tactic
-### :basketball: check score distribution of hot spot
+
+### :basketball: Preparing for the match
+Arrange starting 5 lineup
+
+Set basketball game rules
+
+Check score distribution of hot spots
+
+Draw basketball tactic for your team
+
 ### :basketball: manage your own team
+Create a basketball team
+
+Manage the team roster
 
 ## Implementation
 * Design Pattern
