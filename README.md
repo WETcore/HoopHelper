@@ -14,8 +14,12 @@ Clicking the stats button, 2 point shot, missing shot, rebound, turnover, etc., 
 
 Recording shooting hot spots is also feasible due to draging the red dot.
 
+<img  width="20%" src="https://github.com/WETcore/HoopHelper/blob/main/screenshots/match.gif">
+
 ### :basketball: Live stream basketball matches
 Watch the live stream when your surport team is matching
+
+<img  width="20%" src="https://github.com/WETcore/HoopHelper/blob/main/screenshots/Screenshot_1638619480.png">
 
 ### :basketball: Preparing for the match
 Arrange starting 5 lineup
@@ -26,10 +30,20 @@ Check score distribution of hot spots
 
 Draw basketball tactic for your team
 
+<img  width="20%" src="https://github.com/WETcore/HoopHelper/blob/main/screenshots/Screenshot_1638618170.png">   <img  width="20%" src="https://github.com/WETcore/HoopHelper/blob/main/screenshots/Screenshot_1638618196.png">   <img  width="20%" src="https://github.com/WETcore/HoopHelper/blob/main/screenshots/Screenshot_1638618392.png">
+
 ### :basketball: manage your own team
 Create a basketball team
 
 Manage the team roster
+
+Send invitations
+
+<img  width="20%" src="https://github.com/WETcore/HoopHelper/blob/main/screenshots/Screenshot_1638619571.png">   <img  width="19.5%" src="https://github.com/WETcore/HoopHelper/blob/main/screenshots/Screenshot_1638619569.png">   <img  width="20%" src="https://github.com/WETcore/HoopHelper/blob/main/screenshots/Screenshot_1638619617.png">   <img  width="20%" src="https://github.com/WETcore/HoopHelper/blob/main/screenshots/Screenshot_1638619623.png">
+
+### :basketball: check leader of stats
+
+<img  width="20%" src="https://github.com/WETcore/HoopHelper/blob/main/screenshots/leaderboard.gif">
 
 ## Implementation
 * Design Pattern
