@@ -2,6 +2,7 @@ package com.aqua.hoophelper.match
 
 import android.os.Bundle
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.*
 import android.widget.ArrayAdapter
 import android.widget.Toast

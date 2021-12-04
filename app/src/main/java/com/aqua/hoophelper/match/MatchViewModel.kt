@@ -164,7 +164,6 @@ class MatchViewModel(private val repository: HoopRepository) : ViewModel() {
         event.score3 = null
     }
 
-    ///////////////////////////////////////////////////////////////////////////////
     fun setEventData(mId: String, type: DataType, isCount: Boolean) {
         resetData()
         event.apply {
@@ -224,7 +223,6 @@ class MatchViewModel(private val repository: HoopRepository) : ViewModel() {
             }
         }
     }
-    ///////////////////////////////////////////////////////////////////////////////
 
     fun getDiameter(x: Float, y: Float, w: Int, h: Int): Boolean {
         Log.i("dia", "x: $x y: $y  x/w ${x / w} ${y / h}")
@@ -285,6 +283,7 @@ class MatchViewModel(private val repository: HoopRepository) : ViewModel() {
     }
 
     fun setHistoryText(it: List<Event>): String {
+        Log.d("history","${it.isNullOrEmpty()} ${HoopInfo.matchId}")
         if (it.isNullOrEmpty()) {
             return EventType.INIT.value
         } else {
